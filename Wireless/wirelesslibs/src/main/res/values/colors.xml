@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_1">#FFeeeff3</color>
+
+    <color name="gray_f4">#FFF4F4F4</color>
+    <color name="gray_f3">#FFF3F3F3</color>
+    <color name="gray_9">#FF999999</color>
+    <color name="gray_c7">#FFC7C7C7</color>
+    <color name="gray_7a">#FF7A7A7A</color>
+    <color name="gray_3">#FF333333</color>
+    <color name="gray_6">#FF666666</color>
+    <color name="gray_f9">#FFF9F9F9</color>
+    <color name="gray_ea">#FFEAEAEA</color>
+
+    <color name="yellow_f730">#FFFF7300</color>
+    
+    <color name="black">#FF000000</color>
+    <color name="blue_359df5">#FF359DF5</color>
+    <color name="radio_button_selected_color">#ff33b5e5</color>
+    <color name="radio_button_unselected_color">#e0e0e0</color>
+    <color name="gray_da">#FFDADADA</color>
+    <color name="red_e01928">#FFE01928</color>
+    <color name="gray_e5">#FFE5E5E5</color>
+    <color name="transparent">#00FFFFFF</color>
+</resources>

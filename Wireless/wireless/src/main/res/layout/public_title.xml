@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gray_f9f8f8"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/title_left_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:visibility="invisible">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close" />
+
+        </LinearLayout>
+
+        <com.qinto.logistical.mvp.phonebook.ClearEditText
+            android:id="@+id/filter_edit"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_weight="0.5"
+            android:singleLine="true"
+            android:layout_gravity="center"
+            android:background="@color/gray_efeff4"
+            android:paddingLeft="60dp"
+            android:paddingRight="20dp"
+            android:textColorHint="@color/gray_6E6E6E"
+            android:drawableLeft="@drawable/ic_close"
+            android:hint="@string/input_content"
+            android:textSize="12sp"
+            android:visibility="gone"/>
+
+
+        <TextView
+            android:id="@+id/title_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="标题"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+        <info.hoang8f.android.segmented.SegmentedGroup
+            android:id="@+id/segmented_rdo_group"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:sc_border_width="2px"
+            app:sc_checked_text_color="@color/white"
+            app:sc_corner_radius="4px"
+            app:sc_tint_color="@color/gray_3c3c3c"
+            app:sc_unchecked_tint_color="@color/white">
+
+            <RadioButton
+                android:id="@+id/left_rdo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:textSize="14sp" />
+
+            <RadioButton
+                android:id="@+id/right_rdo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:textSize="14sp" />
+        </info.hoang8f.android.segmented.SegmentedGroup>
+
+
+        <LinearLayout
+            android:id="@+id/title_right_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:paddingRight="@dimen/dp_10"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/title_right_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_6E6E6E"
+                android:textSize="16sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View style="@style/divide_line_horizontal" />
+</com.zhy.android.percent.support.PercentLinearLayout>

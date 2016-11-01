@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_dialog"
+        android:orientation="vertical"
+        app:layout_marginPercent="@string/sw_12px">
+
+        <TextView
+            android:id="@+id/dialog_title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textColor="@color/gray_3"
+            android:textStyle="bold"
+            app:layout_heightPercent="@string/sw_72px"
+            app:layout_textSizePercent="@string/sw_22px"/>
+
+        <TextView
+            android:id="@+id/dialog_message_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/gray_6"
+            app:layout_marginTopPercent="@string/sw_32px"
+            app:layout_paddingPercent="@string/sw_16px"
+            app:layout_textSizePercent="@string/sw_20px"/>
+
+        <com.zhy.android.percent.support.PercentLinearLayout
+            android:id="@+id/dialog_container_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </com.zhy.android.percent.support.PercentLinearLayout>
+
+        <com.zhy.android.percent.support.PercentLinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            app:layout_marginBottomPercent="@string/sw_48px"
+            app:layout_marginLeftPercent="@string/sw_64px"
+            app:layout_marginRightPercent="@string/sw_64px"
+            app:layout_marginTopPercent="@string/sw_32px">
+
+            <Button
+                android:id="@+id/dialog_negative_btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_dialog_positive_btn"
+                android:text="取消"
+                android:textColor="@color/white"
+                app:layout_heightPercent="@string/sw_48px"
+                app:layout_marginPercent="@string/sw_8px"
+                app:layout_textSizePercent="@string/sw_20px"
+                app:layout_widthPercent="@string/sw_150px"/>
+
+            <Button
+                android:id="@+id/dialog_positive_btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_dialog_negative_btn"
+                android:text="确定"
+                android:textColor="@color/white"
+                app:layout_heightPercent="@string/sw_48px"
+                app:layout_marginLeftPercent="@string/sw_50px"
+                app:layout_marginPercent="@string/sw_8px"
+                app:layout_textSizePercent="@string/sw_20px"
+                app:layout_widthPercent="@string/sw_150px"/>
+
+        </com.zhy.android.percent.support.PercentLinearLayout>
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+    <ImageView
+        android:id="@+id/dialog_close_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="right|top"
+        android:src="@drawable/ic_close"
+        app:layout_heightPercent="@string/sw_32px"
+        app:layout_widthPercent="@string/sw_32px"/>
+</com.zhy.android.percent.support.PercentFrameLayout>

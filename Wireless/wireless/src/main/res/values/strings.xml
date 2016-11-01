@@ -1,0 +1,489 @@
+<resources>
+    <string name="app_name">东莞无线</string>
+
+    <string name="http_error_msg">抱歉，您的网络出错啦！</string>
+    <string name="http_error_tips">暂时没有检测到网络信号，请尝试检查你的网络连接是否存在异常，恢复网络后将自动正常加载</string>
+
+    <string name="net_error_timeout">网络连接超时</string>
+    <string name="net_error_server">服务器错误</string>
+    <string name="net_error_net">网络错误</string>
+    <string name="net_error_unknow">未知错误</string>
+
+    <string name="wireless">无线</string>
+    <string name="first_news">头条</string>
+    <string name="service">服务</string>
+    <string name="buy">抢购</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <string name="main_speak_in">海运进口</string>
+    <string name="main_center">中港进出口</string>
+    <string name="main_sky">空运进出口</string>
+    <string name="main_news">资讯贸易</string>
+    <string name="main_investment">招商招聘</string>
+    <string name="main_connection">联系我们</string>
+    <string name="main_orders">我要下单</string>
+    <string name="main_mine_order">我的订单</string>
+
+    <!--查询-->
+    <string name="title_search">查询</string>
+    <string name="search_air">查空运</string>
+    <string name="search_sea">查海运</string>
+    <string name="air">空运</string>
+    <string name="car">中港</string>
+    <string name="air_in">空运进口</string>
+    <string name="air_out">空运出口</string>
+    <string name="car_in">中港进口</string>
+    <string name="car_out">中港出口</string>
+
+    <!--我的-->
+    <string name="please_login">请登录</string>
+    <string name="search_logistial">物流查询</string>
+    <string name="update_pwd">修改密码</string>
+    <string name="my_idea">意见反馈</string>
+    <string name="my_about">关于</string>
+    <string name="pwd_type">6-16位/数字/字母</string>
+    <string name="forget">忘记密码</string>
+    <string name="name">姓名：</string>
+    <string name="enter_real_name">请输入真实姓名</string>
+    <string name="email">邮箱：</string>
+    <string name="enter_email">请输入邮箱</string>
+    <string name="enter_email_type">请输入正确的邮箱</string>
+    <string name="enter_consignee">请输入真实姓名</string>
+    <string name="enter_phone">请输入手机号</string>
+    <string name="enter_right_phone">请输入正确的手机号</string>
+    <string name="checked_agreed">请勾选物流鹰用户协议</string>
+    <string name="personal_exit_text">退出账户</string>
+    <string name="username">用户名</string>
+    <string name="query_exit">退出登录?</string>
+    <string name="update_info">资料修改</string>
+    <string name="set_text1">头像</string>
+    <string name="set_name">姓名</string>
+    <string name="set_phone">手机</string>
+    <string name="set_email">邮箱</string>
+    <string name="set_company_name">公司名称</string>
+    <string name="set_image_text1">相册</string>
+    <string name="set_image_text2">拍照</string>
+    <string name="select_img">选择图片方式</string>
+    <string name="login">登录</string>
+    <string name="save">保存</string>
+    <string name="update_success">修改成功</string>
+    <string name="rest_password">重置密码</string>
+    <string name="register">注册</string>
+    <string name="old_password">旧密码：</string>
+    <string name="new_password">新密码：</string>
+    <string name="personal_my_pwd_text1">修改</string>
+    <string name="enter_old_password">请输入旧密码</string>
+    <string name="input_password">请输入密码</string>
+    <string name="input_new_password">请输入新密码</string>
+    <string name="reset_password_success">重置密码成功</string>
+    <string name="update_password_success">修改密码成功</string>
+    <string name="idea_content">请输入想要反馈的内容</string>
+    <string name="idea_commit">提交</string>
+    <string name="feed_back">意见反馈</string>
+    <string name="enter_content">请输入想要反馈的内容</string>
+    <string name="commit_success">提交反馈成功</string>
+    <string name="app_names">物流鹰V2.0</string>
+    <string name="about_we">关于我们</string>
+    <string name="register_idea">注册协议</string>
+    <string name="qq_service">QQ客服</string>
+    <string name="phone_service">电话客服</string>
+    <string name="investment">招商</string>
+    <string name="advertises">招聘</string>
+    <string name="news">行业资讯</string>
+    <string name="study">贸易知识</string>
+    <string name="re_error">没有找到相关资讯</string>
+    <string name="no_resource">没有更多数据了</string>
+    <string name="no_content">没有内容了</string>
+    <string name="info">详情</string>
+    <string name="sea_out">海运出口</string>
+    <string name="other">散货</string>
+    <string name="is_self">请选择是否自备单证</string>
+    <string name="select_service">请选择服务(多选)</string>
+    <string name="taxes">退税</string>
+    <string name="declare">报关</string>
+    <string name="order_car">订车</string>
+    <string name="order_boat">订船</string>
+    <string name="self_receipt">自备单证</string>
+    <string name="next">下一步</string>
+    <string name="select_sea_out">请选择海运出口服务</string>
+    <string name="order_info">订单详情</string>
+    <string name="order_now">立即下单</string>
+    <string name="san_huo">海运出口(散货)</string>
+    <string name="san_huo_car">中港出口(散货)</string>
+    <string name="san_huo_air">空运出口(散货)</string>
+    <string name="san_huo_content">海运出口(散货)业务,请电话咨询客服</string>
+    <string name="car_content">中港出口(散货)业务,请电话咨询客服</string>
+    <string name="air_content">空运出口(散货)业务,请电话咨询客服</string>
+    <string name="call_phone">拨打客服电话</string>
+    <string name="out">出发港</string>
+    <string name="select">请选择</string>
+    <string name="address_manager">地址管理</string>
+    <string name="add">新增</string>
+    <string name="add_address">新增地址</string>
+    <string name="commit2">保存</string>
+    <string name="set_default">设为默认</string>
+    <string name="set_address_info_text4">详细地址</string>
+    <string name="set_address_info_hint4">请输入详细地址</string>
+    <string name="select_province">请选择所在地区</string>
+    <string name="province">地区</string>
+    <string name="contact_number_format">联系电话</string>
+    <string name="enter_connect_phone">请输入联系电话</string>
+    <string name="contacts_format">联系人</string>
+    <string name="input_format">请输入联系人</string>
+    <string name="select_provinces">选择省份</string>
+    <string name="select_city">选择市</string>
+    <string name="select_country">选择区</string>
+    <string name="add_success">新增地址成功</string>
+    <string name="update_address">修改地址</string>
+    <string name="update_address_success">地址修改成功</string>
+    <string name="delete_address">长按可删除</string>
+    <string name="shipping_line">选择航运线路</string>
+    <string name="land_line">选择货运线路</string>
+    <string name="box_size">20GP</string>
+    <string name="box_size1">40GP</string>
+    <string name="box_size2">40HQ</string>
+    <string name="to_select">请按顺序选择</string>
+    <string name="order_success">下单成功</string>
+    <string name="sea_in">海运进口</string>
+    <string name="get_address">提柜地址</string>
+    <string name="out_goods">卸货地址</string>
+    <string name="land">陆运线路</string>
+    <string name="box_size_of">柜型</string>
+    <string name="time_of">拖运时间</string>
+    <string name="type">类型:</string>
+    <string name="order_state">订单状态:</string>
+    <string name="order_select">订车或报关请至少选择一项</string>
+    <string name="input_box">装货地址</string>
+    <string name="final_address">目的地</string>
+    <string name="input_content">输入搜索关键字</string>
+    <string name="search_error">没有搜索到相关结果</string>
+    <string name="air_port">机场信息</string>
+    <string name="sea_port">港口信息</string>
+    <string name="goods">货物追踪</string>
+    <string name="logistical">物流记录</string>
+    <string name="location_address">实时位置</string>
+    <string name="input_order_id">请输入订单号</string>
+    <string name="jump">进入</string>
+
+    <string name="phone">手机号</string>
+    <string name="phone2">手机号:</string>
+    <string name="phone_number_colon">手机号：</string>
+
+    <string name="input_old_password">请输入旧密码：</string>
+    <string name="validate_phone">请验证手机号码</string>
+    <string name="username_colon">用户名：</string>
+    <string name="enter_username">请输入用户名/手机号</string>
+    <string name="input_username">用户名/由字母开头和数字组成</string>
+    <string name="phone_number_error">您输入的手机号码有误，请重新输入</string>
+    <string name="password">密码</string>
+    <string name="password_colon">密码：</string>
+    <string name="update_login_password">修改登录密码</string>
+    <string name="input_new_pay_password">请输入新支付密码</string>
+    <string name="re_input_new_pay_password">请再次输入支付密码</string>
+    <string name="reset_pay_password">重置支付密码</string>
+    <string name="established_password">确认密码：</string>
+
+    <string name="enter_password">请输入用户密码</string>
+    <string name="password_length_error">密码长度为6-16位，请重新输入</string>
+    <string name="enter_re_password">请再次输入新密码</string>
+    <string name="input_re_password">请输入确认密码</string>
+
+    <string name="enter_password＿aging">请再次输入密码</string>
+    <string name="login_user_text">用户名/手机号码/邮箱</string>
+    <string name="login_pwd_text">输入密码</string>
+    <string name="forget_password">忘记密码？</string>
+
+    <string name="login_success">登录成功</string>
+
+    <string name="swipe_left_view_more">往左←滑动查看更多</string>
+    <string name="search">搜索</string>
+
+    <string name="click_get_validate_code">点击获取验证码</string>
+    <string name="enter_phone_number">输入用户手机号</string>
+    <string name="enter_validate_code">请输入验证码</string>
+    <string name="validate_code">验证码</string>
+    <string name="validate_code_colon">验证码：</string>
+    <string name="enter_password_again">再次输入密码</string>
+    <string name="re_enter_password">请重新输入密码</string>
+    <string name="pwd_error">两次密码不一致</string>
+    <string name="register_success">注册成功</string>
+    <string name="get_validate_code_success">获取验证码成功</string>
+    <string name="get_validate_code_failed">获取验证码失败</string>
+
+    <string name="enter_search_keyword">请输入要搜索的内容</string>
+    <string name="back">返回</string>
+    <string name="updating">正在更新...</string>
+    <string name="search_product">搜索商品</string>
+    <string name="category">分类</string>
+    <string name="filter">筛选</string>
+
+
+    <string name="photo">图片</string>
+    <string name="main5">我的</string>
+    <string name="main6">立即体验</string>
+    <!-- 注册——登录  ——找回密码 -->
+    <string name="user_register">用户注册</string>
+
+    <string name="register_text">账户注册</string>
+    <string name="have_user_text">已有账户</string>
+    <string name="have＿no_user_text">该账户不存在</string>
+    <string name="login_user_text2">手机号</string>
+    <string name="login_code_text">获取验证码</string>
+    <string name="register_code_text">输入验证码</string>
+    <string name="register_code_text1">输入手机验证码</string>
+    <string name="register_user_text">请输入手机号码</string>
+    <string name="forget_info_text">使用已注册手机找回密码，如用户非手机号注册或未绑定手机号，请使用网页版找回密码！</string>
+    <string name="forget_info_text2">验证通过！请输入新密码！</string>
+    <string name="forget_edit_text">绑定号码</string>
+    <string name="forget_edit_text1">请输入手机号</string>
+    <string name="forget_edit_text2">请输入验证码</string>
+    <string name="forget_edit_text3">验证码</string>
+    <string name="forget_edit_text4">已绑定号码</string>
+    <string name="forget_set_pwd_text0">当前密码</string>
+    <string name="forget_set_pwd_text1">新密码</string>
+    <string name="forget_set_pwd_text2">确认密码</string>
+    <string name="forget_set_pwd_text3">请输入新密码</string>
+    <string name="forget_set_pwd_text4">再次输入密码</string>
+    <string name="forget_set_pwd_text5">密码长度至少6个字符组成！</string>
+    <string name="forget_set_pwd_text6">请输入当前密码</string>
+    <string name="forget_set_pwd_text7">设置密码为6个数字！</string>
+    <string name="input_content_error">亲,请您先输入评论内容哦</string>
+    <string name="evaluate_success">评论成功</string>
+
+    <!-- 个人中心 -->
+    <string name="find_pwd">找回密码</string>
+    <string name="personal_sets_text">设置</string>
+
+    <string name="personal_name_text">个人中心</string>
+    <string name="personal_login_text">注册/登录</string>
+    <string name="personal_my_address_text">地址管理</string>
+    <string name="personal_my_address_text1">修改/添加</string>
+    <string name="personal_my_pwd_text">登录密码</string>
+
+    <string name="personal_my_name_text">昵称</string>
+    <string name="personal_my_name_text1">设置个性昵称</string>
+    <string name="personal_my_sex_text">性别</string>
+    <string name="personal_my_sex_text1">设置修改</string>
+    <string name="set_name_text3">由4-20个字符，可由中英文、数字、组成</string>
+    <string name="set_sex_text1">男</string>
+    <string name="set_sex_text2">女</string>
+
+    <string name="commit">确定</string>
+
+    <string name="hot_goods_top_text0">全部</string>
+    <string name="goods_info_text3">评价</string>
+    <string name="goods_info_fragment3_text1">全部评价</string>
+    <string name="goods_info_fragment3_text2">好评</string>
+    <string name="goods_info_fragment3_text3">中评</string>
+    <string name="goods_info_fragment3_text4">差评</string>
+    <string name="goods_info_fragment3_text5">嗮图</string>
+    <!-- 设置 -->
+
+    <string name="set_text2">昵称</string>
+    <string name="set_text3">性别</string>
+    <string name="set_text4">地址管理</string>
+    <string name="set_text5">交易密码</string>
+    <string name="set_text6">登录密码</string>
+    <string name="set_text7">绑定手机</string>
+    <string name="set_text8">退出账户</string>
+    <string name="set_name_text">昵称</string>
+    <string name="set_name_text2">请输入昵称</string>
+    <string name="set_sex_text3">请选择性别</string>
+
+    <string name="set_address_info_text2">联系方式</string>
+    <string name="set_address_info_text3">省市区</string>
+
+    <string name="set_address_info_text5">邮政编码</string>
+    <string name="set_address_info_hint1">请输入您的名字</string>
+    <string name="set_address_info_hint2">请输入手机号或固话</string>
+    <string name="set_address_info_hint3">请选择省市区</string>
+
+    <string name="set_address_info_hint5">请输入邮政编码</string>
+
+    <string name="menu_edit">编辑</string>
+    <string name="menu_enter">完成</string>
+    <string name="menu_del">删除</string>
+
+
+    <string-array name="application_reasons_item">
+        <item>请选择申请原因</item>
+        <item>七天无理由退款</item>
+        <item>退运费</item>
+        <item>收到商品破损</item>
+        <item>商品错发/漏发</item>
+        <item>商品需要维修</item>
+        <item>发票问题</item>
+        <item>收到的商品与描述不符</item>
+    </string-array>
+
+    <string name="submit_application_ok">提交申请成功</string>
+    <string name="submit_application_fail">提交申请失败</string>
+
+    <string name="refund_money_format"><Data><![CDATA[退款金额：<font color="#FF5C33">%1$s</font>]]></Data></string>
+    <string name="address_format">地址：%1$s</string>
+
+
+
+    <!-- 我的加盟店 -->
+    <string name="franchiser_company">公司名：</string>
+    <string name="franchiser_level">级别：&#160;&#160;</string>
+    <string name="franchiser_personal">负责人：&#160;&#160;</string>
+    <string name="franchiser_telephone">签约人电话：&#160;&#160;</string>
+    <string name="franchiser_address">地址：&#160;&#160;</string>
+    <string name="franchiser_postcodes">邮编：&#160;&#160;</string>
+    <string name="real_name">真实姓名：&#160;&#160;</string>
+    <string name="login_times">登录次数：&#160;&#160;</string>
+    <string name="telephone">电话：&#160;&#160;</string>
+    <string name="create_date">创建日期：&#160;&#160;</string>
+
+
+    <!-- 我的订单管理 -->
+    <string name="cancel_order">取消订单</string>
+    <string name="pay_immediately">立即支付</string>
+    <string name="scan_ogistics">查看物流</string>
+    <string name="pay_by_wechat">微信支付</string>
+    <string name="pay_by_transfer">转账支付</string>
+    <string name="wechat_pay_info">微信扫码支付</string>
+    <string name="pay_by_balance">余额支付</string>
+    <string name="balance_pay_info">余额安全支付</string>
+    <string name="pay_by_bank">转账支付</string>
+    <string name="bank_pay_info">转账安全支付</string>
+    <string name="pay_by_alipay">支付宝扫码支付</string>
+    <string name="alipay_pay_info">支付宝安全支付</string>
+    <string name="confirm_shipment">确认收货</string>
+    <string name="reminder_shipment">提醒发货</string>
+    <string name="server_record">售后记录</string>
+    <string name="available_balance_account">账户可用余额：</string>
+    <string name="merge_pay">合并支付</string>
+    <string name="pay_money">支付金额：</string>
+
+    <string name="title_activity_personal_center">PersonalCenterActivity</string>
+
+
+    <!--地址管理-->
+    <string name="address_edit">编辑地址</string>
+    <string name="enter_consignee_name">请输入收货人名字</string>
+    <string name="enter_consignee_mobile">请输入收货电话</string>
+    <string name="enter_consignee_address">请输入收货人详细地址</string>
+
+
+    <string name="save_address_success">地址修改成功</string>
+    <string name="add_address_success">添加地址成功</string>
+
+    <!--支付-->
+    <string name="payment">支付方式</string>
+    <string name="order_total_money">订单总金额</string>
+    <string name="already_save">已节省</string>
+    <string name="wait_payment">待支付</string>
+    <string name="next_payment">下一步：支付</string>
+    <string name="pay">支付</string>
+    <string name="pay_password">支付密码:</string>
+    <string name="enter_pay_password">请输入支付密码</string>
+    <string name="pay_password_error">支付密码有误!</string>
+    <string name="set_pay_password_first">请先设置支付密码!</string>
+
+
+
+    <!-- 编辑地址页 -->
+    <string name="edit_address">编辑地址</string>
+    <string name="consignee">收货人：</string>
+
+    <string name="connect_phone">联系电话：</string>
+
+    <string name="provincial_areas">省市区：</string>
+    <string name="enter_provincial_areas">请选择省市区</string>
+    <string name="detail_address">详细地址：</string>
+    <string name="enter_detail_address">请输入详细地址</string>
+    <string name="postcode">邮政编码：</string>
+    <string name="enter_postcode">请输入邮政编码</string>
+    <string name="enter_postcode_error">请输入6位数邮政编码</string>
+    <string name="set_default_address_success">设置默认地址成功</string>
+    <string name="delete_address_success">删除地址成功</string>
+    <string name="set_default_address">请设置默认收货地址</string>
+
+
+    <string name="manage_address">地址管理</string>
+    <string name="payment_methods">支付方式</string>
+    <string name="wechat_payment">微信支付</string>
+    <string name="total_order_amount">订单总金额</string>
+    <string name="total_goods_amount">商品总金额</string>
+    <string name="next_step_payment">下一步：支付</string>
+    <string name="to_be_paid">待支付</string>
+    <string name="message_hint">给卖家留言 最多45个字</string>
+    <string name="shopping_quantity_format">共X%1$d款商品</string>
+    <string name="total_colon">合计：</string>
+    <string name="account_available_balance_colon">账户可用余额：</string>
+    <string name="payment_amount_colon">支付金额：</string>
+    <string name="balance_payment">余额支付</string>
+    <string name="wechat_scan_code_payment">微信扫码支付</string>
+    <string name="money">金额</string>
+    <string name="see_more">查看更多</string>
+    <string name="alipay_scan_code_payment">支付宝扫码支付</string>
+    <string name="transfer_payment">转账支付</string>
+    <string name="second">秒</string>
+
+    <string name="password_re_password_not_match">您的确认密码和新密码不一致</string>
+
+    <string name="bind_mobile">请先在帐户安全绑定手机号</string>
+
+
+    <!--基本信息-->
+    <string name="basic_info">基本信息</string>
+    <string name="enter_company_name">请输入公司名</string>
+    <string name="enter_name_error">名称不能为空</string>
+    <string name="enter_addressDetailed_error">详细地址不能为空</string>
+    <string name="set_basic_info_success">设置基本信息成功</string>
+    <string name="enter_nickName_error">昵称不能为空</string>
+    <string name="enter_grader_error">性别不能为空</string>
+
+    <string name="enter_payment_password">请输入支付密码</string>
+    <string name="forget_password_ask">忘记密码？</string>
+    <string name="password_error">密码错误</string>
+    <string name="enter_verify_password">请输入验证密码</string>
+    <string name="password_error_info">密码错误,请重新输入!</string>
+    <string name="phone_has_band">该手机已绑定，请重新输入!</string>
+    <string name="enter_validate_code_error">输入验证码错误!</string>
+    <string name="error">错误</string>
+    <string name="complete">完成</string>
+    <string name="re_payment">重新支付</string>
+    <string name="payment_amount">支付金额</string>
+    <string name="payment_success">支付成功</string>
+    <string name="payment_failed">支付失败</string>
+    <string name="jumping_pay_page">正在跳转支付页面...</string>
+    <string name="scan_completed_payment">扫描二维码完成支付</string>
+    <string name="enter_shopping_count">请输入购买数量</string>
+    <string name="scan_code_payment">扫码支付</string>
+    <string name="cancel_payment">取消支付</string>
+
+    <string name="trade_price_format"><Data><![CDATA[<font color="#333333">批发价：</font><font color="#FF7300"><b>%1$s</b>/%2$s</font>]]></Data></string>
+    <string name="suggested_retail_price_format"><Data><![CDATA[<font color="#666666">建议零售价：</font><font color="#FF7300"><b>%1$s</b>/%2$s</font>]]></Data></string>
+    <string name="wholesale_quantity_format"><Data><![CDATA[<font color="#666666">%1$s(</font><font color="#FF7300">%2$d%3$s起订</font><font color="#666666">)</font>]]></Data></string>
+    <string name="wholesale_quantity_format2"><Data><![CDATA[<font color="#666666">起批量：</font><font color="#666666">%1$d%2$s起订</font>]]></Data></string>
+    <string name="more">更多</string>
+
+
+
+    <string name="scheme_total_price_format"><Data><![CDATA[<font color="#333333">商品总金额：</font><font color="#FF7300"><b>%1$s</b></font>]]></Data></string>
+    <string name="scheme_total_count_format"><Data><![CDATA[<font color="#333333">数量：</font><font color="#666666">%1$d/款</font>]]></Data></string>
+
+
+    <string name="scan_code_register">扫码注册</string>
+    <string name="account_safe">账户安全</string>
+    <string name="bind_mobile_first">请先绑定手机</string>
+    <string name="re_get_verification_code">重新获取验证码</string>
+    <string name="have_bind_mobile">已绑定手机</string>
+    <string name="go_home">去首页逛逛</string>
+
+</resources>

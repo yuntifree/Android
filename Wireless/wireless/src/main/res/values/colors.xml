@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="black_mask">#2b000000</color>
+    <color name="black_mask_70">#b2000000</color>
+    <color name="black_mask_80">#cc000000</color>
+
+    <color name="red">#FFFF0000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="red_f30">#FFFF3300</color>
+    <color name="red_f44">#FFFF4444</color>
+    <color name="red_e01928">#FFE01928</color>
+    <color name="red_e31939">#FFE31939</color>
+    <color name="red_ff3700">#FFFF3700</color>
+    <color name="red_e70012">#FFE70012</color>
+    <color name="red_f52a25">#FFF52A25</color>
+    <color name="red_fe6001">#FFFE6001</color>
+    <color name="red_ff8000">#FFFF8000</color>
+    <color name="red_eb3f4c">#FFEB3F4C</color>
+    <color name="red_ff6262">#FFFF6262</color>
+    <color name="red_df1928">#FFDF1928</color>
+    <color name="red_fff4ec">#FFFFF4EC</color>
+    <color name="red_ffe0c9">#FFFFE0C9</color>
+    <color name="red_e04c4c">#FFE04C4C</color>
+    <color name="red_dc312d">#FFDC312D</color>
+    <color name="red_f17370">#FFF17370</color>
+
+    <color name="gray_bfbfbf">#FFBFBFBF</color>
+    <color name="gray_f9f8f8">#FFF9F8F8</color>
+    <color name="gray_efeff4">#FFEFEFF4</color>
+    <color name="gray_6">#FF666666</color>
+    <color name="gray_e5e5e5">#FFE5E5E5</color>
+    <color name="gray_a5">#FFa5a5a5</color>
+    <color name="gray_3">#FF333333</color>
+    <color name="gray_c">#FFCCCCCC</color>
+    <color name="gray_80">#FF808080</color>
+    <color name="gray_7">#FF777777</color>
+    <color name="gray_9">#FF999999</color>
+    <color name="gray_f3">#FFF3F3F3</color>
+    <color name="gray_f7">#FFF7F7F7</color>
+    <color name="gray_f4">#FFF4F4F4</color>
+    <color name="gray_f2">#FFF2F2F2</color>
+    <color name="gray_da">#FFDADADA</color>
+    <color name="gray_e">#FFEEEEEE</color>
+    <color name="gray_ecdf">#FFECEDEF</color>
+    <color name="gray_ed">#FFEDEDED</color>
+    <color name="gray_e2e3e5">#FFE2E3E5</color>
+    <color name="gray_f533">#FFF5F3F3</color>
+    <color name="gray_3d425a">#FF3D425A</color>
+    <color name="gray_f1">#FFF1F1F1</color>
+    <color name="gray_e3">#FFE3E3E3</color>
+    <color name="gray_fa">#FFFAFAFA</color>
+    <color name="gray_6E6E6E">#FF6E6E6E</color>
+    <color name="gray_F6F6F6">#FFF6F6F6</color>
+    <color name="gray_4c4c4c">#FF4C4C4C</color>
+    <color name="gray_3c3c3c">#FF3C3C3C</color>
+    <color name="gray_525252">#FF525252</color>
+    <color name="gray_555555">#FF555555</color>
+
+    <color name="green_1fbd22">#FF1FBD22</color>
+    <color name="green_dbf6b8">#FFDBF6B8</color>
+    <color name="green_599e00">#FF599E00</color>
+    <color name="green_7ac281">#FF7AC281</color>
+    <color name="green_99d1ae">#FF99D1AE</color>
+    <color name="green_8fb13d">#FF8FB13D</color>
+
+    <color name="yellow_f3e2cc">#FFF3E2CC</color>
+    <color name="yellow_db5800">#FFDB5800</color>
+    <color name="yellow_ffc718">#FFFFC718</color>
+    <color name="yellow_ffbf15">#FFFFBF15</color>
+    <color name="yellow_f730">#FFFF7300</color>
+    <color name="yellow_fda429">#FFFDA429</color>
+    <color name="yellow_f8be21">#FFF8BE21</color>
+    <color name="yellow_f90">#FFFF9900</color>
+    <color name="yellow_f06c0">#FFF06C00</color>
+    <color name="yellow_fac02e">#FFFAC02E</color>
+    <color name="yellow_ff500b">#FFFF500B</color>
+    <color name="yellow_f5a816">#FFF5A816</color>
+    <color name="yellow_f69805">#FFF69805</color>
+    <color name="yellow_fbc02d">#FFFBC02D</color>
+
+    <color name="blue_2196f3">#FF2196F3</color>
+    <color name="blue_0153fb">#FF0153FB</color>
+    <color name="blue_348df9">#FF348DF9</color>
+    <color name="blue_0a8aed">#FF0A8AEd</color>
+    <color name="blue_1c96f5">#FF1C96F5</color>
+    <color name="blue_5ebdef">#FF5EBDEF</color>
+    <color name="blue_359df5">#FF359DF5</color>
+    <color name="blue_007aff">#FF007AFF</color>
+    <color name="blue_1296db">#FF1296DB</color>
+
+    <color name="blue_48cc23">#FF48CC23</color>
+
+
+
+    <color name="black_32">#FF323232</color>
+    <color name="red_d30a19">#FFD30A19</color>
+    <color name="yellow_f50b">#FFFF500B</color>
+    <color name="yellow_ea4a25">#FFEA4A25</color>
+</resources>

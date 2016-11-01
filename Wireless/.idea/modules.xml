@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Wireless.iml" filepath="$PROJECT_DIR$/Wireless.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wireless/wireless.iml" filepath="$PROJECT_DIR$/wireless/wireless.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wirelesslibs/wirelesslibs.iml" filepath="$PROJECT_DIR$/wirelesslibs/wirelesslibs.iml" />
     </modules>
   </component>
 </project>
