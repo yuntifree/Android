@@ -8,13 +8,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:orientation="horizontal" >
 
         <LinearLayout
             android:id="@+id/id_tab1_news"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/blue_1296db"
             android:gravity="center"
@@ -28,13 +28,13 @@
                 android:gravity="center"
                 android:text="新闻"
                 android:textColor="@color/white"
-                android:textSize="15dp" />
+                android:textSize="18dp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/id_tab2_video"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/blue_1296db"
             android:gravity="center"
@@ -54,7 +54,7 @@
         <LinearLayout
             android:id="@+id/id_tab3_app"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/blue_1296db"
             android:gravity="center"
@@ -74,7 +74,7 @@
         <LinearLayout
             android:id="@+id/id_tab3_game"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/blue_1296db"
             android:gravity="center"

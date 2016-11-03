@@ -53,9 +53,13 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
      */
     private void resetTextView() {
         mIdNews.setTextColor(res.getColor(R.color.blue_C0D8F4));
+        mIdNews.setTextSize(15);
         mIdVideo.setTextColor(res.getColor(R.color.blue_C0D8F4));
+        mIdVideo.setTextSize(15);
         mIdApp.setTextColor(res.getColor(R.color.blue_C0D8F4));
+        mIdApp.setTextSize(15);
         mIdGame.setTextColor(res.getColor(R.color.blue_C0D8F4));
+        mIdGame.setTextSize(15);
     }
 
     public void initData() {
@@ -95,15 +99,19 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
         switch (position) {
             case 0:
                 mIdNews.setTextColor(res.getColor(R.color.white));
+                mIdNews.setTextSize(18);
                 break;
             case 1:
                 mIdVideo.setTextColor(res.getColor(R.color.white));
+                mIdVideo.setTextSize(18);
                 break;
             case 2:
                 mIdApp.setTextColor(res.getColor(R.color.white));
+                mIdApp.setTextSize(18);
                 break;
             case 3:
                 mIdGame.setTextColor(res.getColor(R.color.white));
+                mIdGame.setTextSize(18);
                 break;
         }
     }

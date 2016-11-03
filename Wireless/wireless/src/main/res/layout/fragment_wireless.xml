@@ -1,30 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.android.percent.support.PercentLinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_f2"
+    android:orientation="vertical">
     <!--android:fitsSystemWindows="true"-->
     <!--android:clipToPadding="true"-->
     <include
-        layout="@layout/public_title"
+        layout="@layout/title_public"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_heightPercent="@string/sw_140px"/>
+        app:layout_heightPercent="@string/sw_140px" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/blue_1296db">
-
-        </LinearLayout>
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@color/blue_1296db">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/main_wifi"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:text="发现东莞城市免费WiFi"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/wifi"
+                    android:gravity="center"
+                    android:padding="30dp"
+                    android:text="WiFi管理"
+                    android:textColor="@color/gray_6"
+                    android:textSize="12sp" />
+
+                <View style="@style/divide_line_vertical" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/speed"
+                    android:gravity="center"
+                    android:padding="30dp"
+                    android:text="WiFi测速"
+                    android:textColor="@color/gray_6"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <View style="@style/divide_line_horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/map"
+                    android:gravity="center"
+                    android:padding="30dp"
+                    android:text="WiFi地图"
+                    android:textColor="@color/gray_6"
+                    android:textSize="12sp" />
+
+                <View style="@style/divide_line_vertical" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/yun"
+                    android:gravity="center"
+                    android:padding="30dp"
+                    android:text="WiFi公益"
+                    android:textColor="@color/gray_6"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:background="@color/white"
+                android:text="东莞头条"
+                android:textColor="@color/blue_1296db"
+                android:textSize="13sp" />
+
+            <ListView
+                android:id="@+id/main_news_lv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
+        </LinearLayout>
+    </ScrollView>
 </com.zhy.android.percent.support.PercentLinearLayout>

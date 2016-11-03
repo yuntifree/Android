@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.activity.LoginActivity;
+import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpCallback;
 
 public class ToastUtil {
@@ -20,7 +21,7 @@ public class ToastUtil {
         }
         mToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
         mToast.setText(text);
-        mToast.setGravity(Gravity.BOTTOM, 0, 0);
+       // mToast.setGravity(Gravity.BOTTOM, 0, 0);
         mToast.show();
     }
 
@@ -35,17 +36,38 @@ public class ToastUtil {
     }
 
     public static void showError(Context context, int error) {
-
-        if (error == 440) {
-            showMiddle(context, "登陆信息已经失效，请重新登陆");
+        if (error == 101) {
+            showMiddle(context, "登陆信息失效，请重新登陆");
             MyApplication.sApplication.setToken("");
             MyApplication.sApplication.setUser(null);
             Intent intent = new Intent(context, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             context.startActivity(intent);
             return;
-        } else if(error == 400){
-            showMiddle(context, "失败");
+        } else if(error == HttpCode.E_MISS_PARAM){
+            showMiddle(context, "缺少参数");
+            return;
+        } else if(error == HttpCode.E_INVAL_PARAM){
+            showMiddle(context, "参数异常");
+            return;
+        } else if(error == HttpCode.E_DATABASE){
+            showMiddle(context, "数据库错误");
+            return;
+        } else if(error == HttpCode.E_INNER){
+            showMiddle(context, "服务器内部错误");
+            return;
+        } else if(error == HttpCode.E_CODE){
+            showMiddle(context, "短信验证码错误");
+            return;
+        } else if(error == HttpCode.E_GET_CODE){
+            showMiddle(context, "获取短信验证码失败");
+            return;
+        } else if(error == HttpCode.E_USED_PHONE){
+            showMiddle(context, "手机号重复注册");
+            return;
+        } else if(error < 100){
+            showMiddle(context, "服务器错误");
+            return;
         }
         switch (error) {
             case OkHttpCallback.RESPONSE_ERROR_NET:
@@ -57,10 +79,10 @@ public class ToastUtil {
             case OkHttpCallback.RESPONSE_ERROR_TIMEOUT:
                 showMiddle(context, R.string.net_error_timeout);
                 break;
+            case HttpCode.HTTP_OK:
+                showMiddle(context, "成功");
+                break;
         }
-//            case HttpCode.HTTP_OK:
-//                showMiddle(context, "成功");
-//                break;
 //            case HttpCode.HTTP_ERROR:
 //                showMiddle(context, "代码错误");
 //                break;

@@ -120,7 +120,7 @@ public class StringUtils {
         if (isEmpty(imagesStr)) {
             return null;
         } else {
-            String[] images = imagesStr.split("\\|");
+            String[] images = imagesStr.split(",");
             for (int i = 0; i < images.length; i++) {
                 String img = images[i];
                 if (!img.startsWith("http:")) {

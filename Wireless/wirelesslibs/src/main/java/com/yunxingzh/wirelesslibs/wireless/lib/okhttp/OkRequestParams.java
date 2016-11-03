@@ -1,8 +1,9 @@
 package com.yunxingzh.wirelesslibs.wireless.lib.okhttp;
 
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.JsonUtils;
+
 import java.io.File;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,7 +23,7 @@ public class OkRequestParams {
 
     protected final ConcurrentHashMap<String, String> mUrlParams = new ConcurrentHashMap<String, String>();
     protected final ConcurrentHashMap<String, FileWrapper> mFileParams = new ConcurrentHashMap<String, FileWrapper>();
-    protected final ConcurrentHashMap<String, File[]> mFileArrays = new ConcurrentHashMap<String,  File[]>();
+    protected final ConcurrentHashMap<String, File[]> mFileArrays = new ConcurrentHashMap<String, File[]>();
     protected final ConcurrentHashMap<String, String> mHeaderMap = new ConcurrentHashMap<String, String>();
 
     public OkRequestParams() {
@@ -61,7 +62,7 @@ public class OkRequestParams {
     }
 
     public void put(Map<String, String> params) {
-        if (params != null && params.size() > 0 ) {
+        if (params != null && params.size() > 0) {
             mUrlParams.putAll(params);
         }
     }
@@ -119,7 +120,7 @@ public class OkRequestParams {
     }
 
     public void putHeader(Map<String, String> params) {
-        if (params != null && params.size() > 0 ) {
+        if (params != null && params.size() > 0) {
             mHeaderMap.putAll(params);
         }
     }
@@ -212,50 +213,51 @@ public class OkRequestParams {
 
     public String getParamString() {
         StringBuilder result = new StringBuilder();
-        for (ConcurrentHashMap.Entry<String, String> entry : mUrlParams.entrySet()) {
-            if (result.length() > 0)
-                result.append("&");
-            try {
-                result.append(entry.getKey());
-                result.append("=");
-                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-            } catch (Throwable e) {
-                return "";
-            }
-        }
+
+//        for (ConcurrentHashMap.Entry<String, String> entry : mUrlParams.entrySet()) {
+//            if (result.length() > 0)
+//                result.append("&");
+//            try {
+//                result.append(entry.getKey());
+//                result.append("=");
+//                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+//            } catch (Throwable e) {
+//                return "";
+//            }
+//        }
         return result.toString();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        for (ConcurrentHashMap.Entry<String, String> entry : mUrlParams.entrySet()) {
-            if (result.length() > 0)
-                result.append("&");
-
-            result.append(entry.getKey());
-            result.append("=");
-            result.append(entry.getValue());
-        }
-
-        for (ConcurrentHashMap.Entry<String, FileWrapper> entry : mFileParams.entrySet()) {
-            if (result.length() > 0)
-                result.append("&");
-
-            result.append(entry.getKey());
-            result.append("=");
-            result.append("FILE");
-        }
-
-        for (ConcurrentHashMap.Entry<String, File[]> entry : mFileArrays.entrySet()) {
-            if (result.length() > 0)
-                result.append("&");
-
-            result.append(entry.getKey());
-            result.append("=");
-            result.append(Arrays.toString(entry.getValue()));
-        }
-
-        return result.toString();
-    }
+//    @Override
+//    public String toString() {
+//        StringBuilder result = new StringBuilder();
+//        for (ConcurrentHashMap.Entry<String, String> entry : mUrlParams.entrySet()) {
+//            if (result.length() > 0)
+//                result.append("&");
+//
+//            result.append(entry.getKey());
+//            result.append("=");
+//            result.append(entry.getValue());
+//        }
+//
+//        for (ConcurrentHashMap.Entry<String, FileWrapper> entry : mFileParams.entrySet()) {
+//            if (result.length() > 0)
+//                result.append("&");
+//
+//            result.append(entry.getKey());
+//            result.append("=");
+//            result.append("FILE");
+//        }
+//
+//        for (ConcurrentHashMap.Entry<String, File[]> entry : mFileArrays.entrySet()) {
+//            if (result.length() > 0)
+//                result.append("&");
+//
+//            result.append(entry.getKey());
+//            result.append("=");
+//            result.append(Arrays.toString(entry.getValue()));
+//        }
+//
+//        return result.toString();
+//    }
 }

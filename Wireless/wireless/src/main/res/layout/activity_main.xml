@@ -33,7 +33,7 @@
             android:checked="true"
             android:drawableTop="@drawable/main_class_img_radio1_selector"
             android:gravity="center"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:text="@string/wireless"
             android:textColor="@drawable/main_class_text_selector" />
 
@@ -45,7 +45,7 @@
             android:button="@null"
             android:drawableTop="@drawable/main_class_img_radio2_selector"
             android:gravity="center"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:text="@string/first_news"
             android:textColor="@drawable/main_class_text_selector" />
 
@@ -57,7 +57,7 @@
             android:button="@null"
             android:drawableTop="@drawable/main_class_img_radio3_selector"
             android:gravity="center"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:text="@string/service"
             android:textColor="@drawable/main_class_text_selector" />
 
@@ -69,7 +69,7 @@
             android:button="@null"
             android:drawableTop="@drawable/main_class_img_radio4_selector"
             android:gravity="center"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:text="@string/buy"
             android:textColor="@drawable/main_class_text_selector" />
     </com.yunxingzh.wirelesslibs.wireless.lib.view.PercentRadioGroup>

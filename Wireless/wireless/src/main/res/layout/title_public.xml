@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/gray_f9f8f8"
+    android:background="@color/blue_1296db"
     android:orientation="vertical">
 
     <LinearLayout
@@ -22,13 +22,14 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:visibility="invisible">
+            android:paddingLeft="10dp">
 
-            <ImageView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_close" />
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:text="东莞无线" />
 
         </LinearLayout>
 
@@ -40,6 +41,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="标题"
+            android:visibility="gone"
             android:textColor="@color/black"
             android:textSize="18sp"/>
 
@@ -51,17 +53,14 @@
             android:layout_weight="1"
             android:gravity="right"
             android:orientation="vertical"
-            android:paddingRight="@dimen/dp_10"
-            android:visibility="invisible">
+            android:paddingRight="@dimen/dp_10">
 
-            <TextView
+            <ImageView
                 android:id="@+id/title_right_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/gray_6E6E6E"
-                android:textSize="16sp"/>
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/set"/>
         </LinearLayout>
     </LinearLayout>
 
-    <View style="@style/divide_line_horizontal" />
 </com.zhy.android.percent.support.PercentLinearLayout>

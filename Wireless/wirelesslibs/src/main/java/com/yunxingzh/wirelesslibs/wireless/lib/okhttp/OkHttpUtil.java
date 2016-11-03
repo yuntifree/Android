@@ -3,6 +3,7 @@ package com.yunxingzh.wirelesslibs.wireless.lib.okhttp;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.progress.ProgressRequestBody;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpCallback;
@@ -198,6 +199,8 @@ public class OkHttpUtil {
     }
 
     public static String getFinalUrl(String url, OkRequestParams params) {
+        Log.e("TAG","json="+params.getParamString());
+
         if (params != null) {
             String paramString = params.getParamString().trim();
             if (!paramString.equals("") && !paramString.equals("?")) {
@@ -205,6 +208,7 @@ public class OkHttpUtil {
                 url += paramString;
             }
         }
+
         return url;
     }
 

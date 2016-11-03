@@ -23,7 +23,7 @@ public class UserModelImpl implements IUserModel {
         params.put("truetime", truetime);
         params.put("phone", phone);
 
-        OkHttpUtil.post(Api.GET_VALIDATE_CODE, params, new OkHttpResBeanHandler<StringDto>() {
+        OkHttpUtil.post(null, params, new OkHttpResBeanHandler<StringDto>() {
             @Override
             public void onSuccess(int code, Headers headers, StringDto response) {
                 if (response.getState() == HttpCode.HTTP_OK) {
@@ -46,7 +46,7 @@ public class UserModelImpl implements IUserModel {
         params.put("phone", phone);
         params.put("password", password);
 
-        OkHttpUtil.post(Api.LOGIN, params, new OkHttpResBeanHandler<UserDto>() {
+        OkHttpUtil.post(null, params, new OkHttpResBeanHandler<UserDto>() {
             @Override
             public void onSuccess(int code, Headers headers, UserDto response) {
                 if (response.getState() == HttpCode.HTTP_OK) {
