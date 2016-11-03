@@ -15,11 +15,14 @@ import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 
 /**
- * Created by asus_ on 2016/11/1.
+ * Created by stephon_ on 2016/11/1.
  *  无线
  */
 
 public class WirelessFragment extends BaseFragment implements IHeadLineView {
+
+    private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
+    private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
 
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
@@ -39,7 +42,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView {
 
     public void initData() {
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
-        iHeadLinePresenter.getHeadLine(0,1);
+        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
     }
 
     @Override

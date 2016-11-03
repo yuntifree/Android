@@ -9,6 +9,9 @@ import android.widget.ProgressBar;
  * Created by Stephen on 2016/9/20.
  */
 public class WebViewUtil {
+
+    private final static int DOWN_LOAD_OVER = 100;
+
     public static void initWebView(WebView webView,final ProgressBar bar){
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);// 设置js可以直接打开窗口，如window.open()，默认为false
         webView.getSettings().setJavaScriptEnabled(true);// 是否允许执行js，默认为false。设置true时，会提醒可能造成XSS漏洞
@@ -21,7 +24,7 @@ public class WebViewUtil {
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress == 100) {
+                if (newProgress == DOWN_LOAD_OVER) {
                     bar.setVisibility(View.INVISIBLE);
                 } else {
                     if (View.INVISIBLE == bar.getVisibility()) {

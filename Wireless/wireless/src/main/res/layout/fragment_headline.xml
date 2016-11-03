@@ -26,7 +26,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="新闻"
+                android:text="@string/news"
                 android:textColor="@color/white"
                 android:textSize="18dp" />
         </LinearLayout>
@@ -46,7 +46,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="视频"
+                android:text="@string/video"
                 android:textColor="@color/blue_C0D8F4"
                 android:textSize="15dp" />
         </LinearLayout>
@@ -66,7 +66,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="应用"
+                android:text="@string/apps"
                 android:textColor="@color/blue_C0D8F4"
                 android:textSize="15dp" />
         </LinearLayout>
@@ -86,7 +86,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="游戏"
+                android:text="@string/games"
                 android:textColor="@color/blue_C0D8F4"
                 android:textSize="15dp" />
         </LinearLayout>

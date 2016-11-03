@@ -12,7 +12,6 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:contentDescription="@string/app_name"
         /><!--android:src="@drawable/pic_http_error"-->
 

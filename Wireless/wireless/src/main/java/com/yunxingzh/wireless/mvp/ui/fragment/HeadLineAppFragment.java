@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import com.yunxingzh.wireless.R;
 
 /**
- * Created by asus_ on 2016/11/2.
- * 头条-游戏
+ * Created by stephon_ on 2016/11/2.
+ * 头条-应用
  */
 
-public class HeadLineFourFragment extends Fragment{
+public class HeadLineAppFragment extends Fragment{
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);

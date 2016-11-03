@@ -18,11 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by asus_ on 2016/11/1.
+ * Created by stephon_ on 2016/11/1.
  * 头条
  */
 
 public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
+
+    private final static int SIZE = 15;//初始化字体size
+    private final static int FOCUS_SIZE = 18;//获得焦点后字体size
+    //viewpager's index
+    private final static int INDEX_ZERO = 0;
+    private final static int INDEX_ONE = 1;
+    private final static int INDEX_TWO = 2;
+    private final static int INDEX_THREE = 3;
 
     private TextView mIdApp,mIdGame,mIdVideo,mIdNews;
     private ViewPager mViewPager;
@@ -48,29 +56,27 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
         mIdNews = findView(view,R.id.id_news);
     }
 
-    /**
-     * 重置颜色
-     */
+    // 重置颜色
     private void resetTextView() {
         mIdNews.setTextColor(res.getColor(R.color.blue_C0D8F4));
-        mIdNews.setTextSize(15);
+        mIdNews.setTextSize(SIZE);
         mIdVideo.setTextColor(res.getColor(R.color.blue_C0D8F4));
-        mIdVideo.setTextSize(15);
+        mIdVideo.setTextSize(SIZE);
         mIdApp.setTextColor(res.getColor(R.color.blue_C0D8F4));
-        mIdApp.setTextSize(15);
+        mIdApp.setTextSize(SIZE);
         mIdGame.setTextColor(res.getColor(R.color.blue_C0D8F4));
-        mIdGame.setTextSize(15);
+        mIdGame.setTextSize(SIZE);
     }
 
     public void initData() {
-        mIdNews.setOnClickListener(new TabOnClickListener(0));
-        mIdVideo.setOnClickListener(new TabOnClickListener(1));
-        mIdApp.setOnClickListener(new TabOnClickListener(2));
-        mIdGame.setOnClickListener(new TabOnClickListener(3));
-        fragments.add(new HeadLineOneFragment());
-        fragments.add(new HeadLineTwoFragment());
-        fragments.add(new HeadLineThreeFragment());
-        fragments.add(new HeadLineFourFragment());
+        mIdNews.setOnClickListener(new TabOnClickListener(INDEX_ZERO));
+        mIdVideo.setOnClickListener(new TabOnClickListener(INDEX_ONE));
+        mIdApp.setOnClickListener(new TabOnClickListener(INDEX_TWO));
+        mIdGame.setOnClickListener(new TabOnClickListener(INDEX_THREE));
+        fragments.add(new HeadLineNewsFragment());
+        fragments.add(new HeadLineVideoFragment());
+        fragments.add(new HeadLineAppFragment());
+        fragments.add(new HeadLineGameFragment());
 
         headLineFragmentAdapter = new HeadLineFragmentAdapter(getActivity().getSupportFragmentManager(), fragments);
         mViewPager.setAdapter(headLineFragmentAdapter);
@@ -78,7 +84,7 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
     }
 
     public class TabOnClickListener implements View.OnClickListener{
-        private int index=0;
+        private int index = INDEX_ZERO;
         public TabOnClickListener(int i){
             index=i;
         }
@@ -92,29 +98,31 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
+
     //当新的页面被选中时调用
     @Override
     public void onPageSelected(int position) {
         resetTextView();
         switch (position) {
-            case 0:
+            case INDEX_ZERO:
                 mIdNews.setTextColor(res.getColor(R.color.white));
-                mIdNews.setTextSize(18);
+                mIdNews.setTextSize(FOCUS_SIZE);
                 break;
-            case 1:
+            case INDEX_ONE:
                 mIdVideo.setTextColor(res.getColor(R.color.white));
-                mIdVideo.setTextSize(18);
+                mIdVideo.setTextSize(FOCUS_SIZE);
                 break;
-            case 2:
+            case INDEX_TWO:
                 mIdApp.setTextColor(res.getColor(R.color.white));
-                mIdApp.setTextSize(18);
+                mIdApp.setTextSize(FOCUS_SIZE);
                 break;
-            case 3:
+            case INDEX_THREE:
                 mIdGame.setTextColor(res.getColor(R.color.white));
-                mIdGame.setTextSize(18);
+                mIdGame.setTextSize(FOCUS_SIZE);
                 break;
         }
     }
+
     //当滑动状态改变时调用
     @Override
     public void onPageScrollStateChanged(int state) {

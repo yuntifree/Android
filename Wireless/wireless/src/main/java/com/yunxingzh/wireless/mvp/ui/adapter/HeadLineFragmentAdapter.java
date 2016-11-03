@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.List;
 
 /**
- * Created by asus_ on 2016/11/2.
+ * Created by stephon_ on 2016/11/2.
  */
 
 public class HeadLineFragmentAdapter extends FragmentPagerAdapter{

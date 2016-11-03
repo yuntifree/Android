@@ -39,7 +39,7 @@
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:gravity="center"
-                    android:text="发现东莞城市免费WiFi"/>
+                    android:text="@string/find_wifi"/>
             </LinearLayout>
 
             <LinearLayout
@@ -55,7 +55,7 @@
                     android:drawableTop="@drawable/wifi"
                     android:gravity="center"
                     android:padding="30dp"
-                    android:text="WiFi管理"
+                    android:text="@string/wifi"
                     android:textColor="@color/gray_6"
                     android:textSize="12sp" />
 
@@ -68,9 +68,10 @@
                     android:drawableTop="@drawable/speed"
                     android:gravity="center"
                     android:padding="30dp"
-                    android:text="WiFi测速"
+                    android:text="@string/speed"
                     android:textColor="@color/gray_6"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:id="@+id/textView" />
 
             </LinearLayout>
 
@@ -89,7 +90,7 @@
                     android:drawableTop="@drawable/map"
                     android:gravity="center"
                     android:padding="30dp"
-                    android:text="WiFi地图"
+                    android:text="@string/map"
                     android:textColor="@color/gray_6"
                     android:textSize="12sp" />
 
@@ -102,7 +103,7 @@
                     android:drawableTop="@drawable/yun"
                     android:gravity="center"
                     android:padding="30dp"
-                    android:text="WiFi公益"
+                    android:text="@string/yun"
                     android:textColor="@color/gray_6"
                     android:textSize="12sp" />
 
@@ -114,7 +115,7 @@
                 android:layout_marginTop="10dp"
                 android:paddingLeft="10dp"
                 android:background="@color/white"
-                android:text="东莞头条"
+                android:text="@string/dg_head_line"
                 android:textColor="@color/blue_1296db"
                 android:textSize="13sp" />
 

@@ -21,6 +21,9 @@ import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
 
+    private final static int SECONDS = 2000;//按下的间隔秒数
+    private final static int STATUS = 0;//0 正常结束程序;1 异常关闭程序
+
     private RadioGroup main_class_group;
     private BuyingFragment buyingFragment;
     private HeadLineFragment headlineFragment;
@@ -96,12 +99,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-            if ((System.currentTimeMillis() - exitTime) > 2000) {
-                ToastUtil.showMiddle(this, "再按一次退出程序");
+            if ((System.currentTimeMillis() - exitTime) > SECONDS) {
+                ToastUtil.showMiddle(this, R.string.enter_exit);
                 exitTime = System.currentTimeMillis();
             } else {
                 finish();
-                System.exit(0);
+                System.exit(STATUS);
             }
             return true;
         }

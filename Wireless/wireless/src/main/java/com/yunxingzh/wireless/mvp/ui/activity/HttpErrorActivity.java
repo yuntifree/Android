@@ -19,7 +19,9 @@ import java.util.TimerTask;
  */
 public class HttpErrorActivity extends Activity {
 
-	private static final int MSG_TIMER_RUNNING = 1;
+	private final static int MSG_TIMER_RUNNING = 1;
+	private final static int DELAY = 1000;
+	private final static int PERIOD = 5000;
 
 	private Timer mTimer = new Timer();
 	private Handler mHandler = new WeakHandler(this);
@@ -29,7 +31,7 @@ public class HttpErrorActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_http_error);
-		mTimer.schedule(mTimerTask, 1000, 5000);
+		mTimer.schedule(mTimerTask, DELAY, PERIOD);
 	}
 
 	TimerTask mTimerTask = new TimerTask() {

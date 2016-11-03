@@ -1,7 +1,7 @@
 package com.yunxingzh.wirelesslibs.wireless.lib.api;
 
 /**
- * Created by Carey on 2016/5/27.
+ * Created by stephon on 2016/5/27.
  */
 public class HttpCode {
     //网络请求状态码
@@ -10,6 +10,7 @@ public class HttpCode {
     public static final int E_INVAL_PARAM = 2; //参数异常
     public static final int E_DATABASE = 3; //数据库错误
     public static final int E_INNER = 4; //服务器内部错误
+    public static final int E_SERVER = 100; //服务器错误
     public static final int E_TOKEN = 101; // token验证失败
     public static final int E_CODE = 102; //短信验证码错误
     public static final int E_GET_CODE = 103; //获取短信验证码失败

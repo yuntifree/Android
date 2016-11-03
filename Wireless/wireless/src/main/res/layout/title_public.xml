@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:text="东莞无线" />
+                android:text="@string/dg_wifi" />
 
         </LinearLayout>
 

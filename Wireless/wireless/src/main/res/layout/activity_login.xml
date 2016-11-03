@@ -14,7 +14,7 @@
         android:layout_marginTop="50dp"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:text="欢迎使用东莞无线城市WiFi\n   请先验证您的手机号码"/>
+        android:text="@string/welcome"/>
 
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"

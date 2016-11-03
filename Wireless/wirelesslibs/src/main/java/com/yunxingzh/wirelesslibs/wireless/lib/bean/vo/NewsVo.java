@@ -5,7 +5,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 import java.util.List;
 
 /**
- * Created by asus_ on 2016/11/3.
+ * Created by stephon_ on 2016/11/3.
  */
 
 public class NewsVo {
