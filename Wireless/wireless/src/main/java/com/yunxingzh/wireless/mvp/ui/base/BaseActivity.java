@@ -39,7 +39,7 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
         mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
-   /* @Override
+    /* @Override
     protected void onStart() {
         super.onStart();
         if (MyApplication.sApplication.isExit()) {

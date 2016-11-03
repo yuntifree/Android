@@ -22,8 +22,6 @@ import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
  */
 public class LoginActivity extends NetWorkBaseActivity implements ILoginView, View.OnClickListener {
 
-    private TextView mTitleNameTv, mRegisterTv,mLoginForgetPwdTv;
-    private LinearLayout mTitleLeftLay;
     private EditText mLoPwdEt,mLoPhoneEt;
     private Button mLoLoginBtn;
     private ILoginPresenter iLoginPresenter;
@@ -37,15 +35,6 @@ public class LoginActivity extends NetWorkBaseActivity implements ILoginView, Vi
     }
 
     public void initView(){
-        mRegisterTv = findView(R.id.login_reigster_tv);
-        mRegisterTv.setOnClickListener(this);
-        mLoginForgetPwdTv = findView(R.id.login_forget_pwd_tv);
-        mLoginForgetPwdTv.setOnClickListener(this);
-        mTitleNameTv = findView(R.id.title_name_tv);
-        mTitleNameTv.setText(R.string.login);
-        mTitleLeftLay = findView(R.id.title_left_lay);
-        mTitleLeftLay.setVisibility(View.VISIBLE);
-        mTitleLeftLay.setOnClickListener(this);
         mLoPwdEt = findView(R.id.lo_pwd_et);
         mLoPhoneEt = findView(R.id.lo_phone_et);
         mLoLoginBtn = findView(R.id.lo_login_btn);
@@ -58,13 +47,7 @@ public class LoginActivity extends NetWorkBaseActivity implements ILoginView, Vi
 
     @Override
     public void onClick(View view) {
-        if (view == mRegisterTv){
-           // startActivity(RegisterActivity.class);
-        }else if(view == mTitleLeftLay){
-            finish();
-        }else if(view == mLoginForgetPwdTv){
-           // startActivity(ForgetPwdActivity.class);
-        }else if(view == mLoLoginBtn){
+       if(view == mLoLoginBtn){
             iLoginPresenter.showLogin(getPhone(), StringUtils.getMD5(getPwd()));
         }
     }

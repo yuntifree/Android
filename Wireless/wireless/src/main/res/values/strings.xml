@@ -13,8 +13,8 @@
     <string name="first_news">头条</string>
     <string name="service">服务</string>
     <string name="buy">抢购</string>
-
-
+    <string name="validate_code">验证码</string>
+    <string name="login">开启智慧城市之旅</string>
 
 
 
@@ -76,7 +76,7 @@
     <string name="set_image_text1">相册</string>
     <string name="set_image_text2">拍照</string>
     <string name="select_img">选择图片方式</string>
-    <string name="login">登录</string>
+
     <string name="save">保存</string>
     <string name="update_success">修改成功</string>
     <string name="rest_password">重置密码</string>
@@ -213,7 +213,7 @@
     <string name="click_get_validate_code">点击获取验证码</string>
     <string name="enter_phone_number">输入用户手机号</string>
     <string name="enter_validate_code">请输入验证码</string>
-    <string name="validate_code">验证码</string>
+
     <string name="validate_code_colon">验证码：</string>
     <string name="enter_password_again">再次输入密码</string>
     <string name="re_enter_password">请重新输入密码</string>

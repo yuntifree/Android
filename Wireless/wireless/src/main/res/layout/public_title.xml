@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.android.percent.support.PercentLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -31,23 +32,6 @@
 
         </LinearLayout>
 
-        <com.qinto.logistical.mvp.phonebook.ClearEditText
-            android:id="@+id/filter_edit"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_weight="0.5"
-            android:singleLine="true"
-            android:layout_gravity="center"
-            android:background="@color/gray_efeff4"
-            android:paddingLeft="60dp"
-            android:paddingRight="20dp"
-            android:textColorHint="@color/gray_6E6E6E"
-            android:drawableLeft="@drawable/ic_close"
-            android:hint="@string/input_content"
-            android:textSize="12sp"
-            android:visibility="gone"/>
-
-
         <TextView
             android:id="@+id/title_name_tv"
             android:layout_width="match_parent"
@@ -58,39 +42,6 @@
             android:text="标题"
             android:textColor="@color/black"
             android:textSize="18sp"/>
-
-        <info.hoang8f.android.segmented.SegmentedGroup
-            android:id="@+id/segmented_rdo_group"
-            android:layout_width="150dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            app:sc_border_width="2px"
-            app:sc_checked_text_color="@color/white"
-            app:sc_corner_radius="4px"
-            app:sc_tint_color="@color/gray_3c3c3c"
-            app:sc_unchecked_tint_color="@color/white">
-
-            <RadioButton
-                android:id="@+id/left_rdo"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:button="@null"
-                android:gravity="center"
-                android:textSize="14sp" />
-
-            <RadioButton
-                android:id="@+id/right_rdo"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:button="@null"
-                android:gravity="center"
-                android:textSize="14sp" />
-        </info.hoang8f.android.segmented.SegmentedGroup>
-
 
         <LinearLayout
             android:id="@+id/title_right_lay"

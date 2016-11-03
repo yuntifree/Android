@@ -4,22 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/blue_1296db"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/public_title"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_heightPercent="@string/sw_150px"/>
-
-    <ImageView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/ic_close"/>
+        android:layout_marginTop="50dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:text="欢迎使用东莞无线城市WiFi\n   请先验证您的手机号码"/>
 
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
@@ -50,7 +45,7 @@
             android:background="@null"
             android:drawableLeft="@drawable/ic_close"
             android:drawablePadding="10dp"
-            android:hint="@string/pwd_type"
+            android:hint="@string/validate_code"
             android:inputType="textPassword"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -64,37 +59,10 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="15dp"
-            android:background="@drawable/ic_close"
+            android:background="@drawable/style_login_btn"
             android:text="@string/login"
             android:textColor="@color/white"
             android:textSize="18sp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/login_reigster_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/register"
-                android:textColor="@color/gray_9"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:id="@+id/login_forget_pwd_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/forget_password"
-                android:textColor="@color/gray_9"
-                android:textSize="14sp"/>
-        </LinearLayout>
 
     </com.zhy.android.percent.support.PercentLinearLayout>
 

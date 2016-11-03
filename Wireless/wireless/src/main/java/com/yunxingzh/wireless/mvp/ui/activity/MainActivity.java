@@ -10,7 +10,7 @@ import android.widget.RadioGroup;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.fragment.BuyingFragment;
-import com.yunxingzh.wireless.mvp.ui.fragment.HeadlineFragment;
+import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.ServiceFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.WirelessFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
@@ -23,7 +23,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     private RadioGroup main_class_group;
     private BuyingFragment buyingFragment;
-    private HeadlineFragment headlineFragment;
+    private HeadLineFragment headlineFragment;
     private ServiceFragment serviceFragment;
     private WirelessFragment wirelessFragment;
     private Fragment currentFragment;
@@ -61,7 +61,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 break;
             case R.id.two_radio:
                 if (headlineFragment == null) {
-                    headlineFragment = new HeadlineFragment();
+                    headlineFragment = new HeadLineFragment();
                 }
                 showFragment(headlineFragment);//头条
                 break;
