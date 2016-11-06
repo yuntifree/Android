@@ -1,5 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,12 +9,15 @@ import android.view.KeyEvent;
 import android.widget.RadioGroup;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.fragment.BuyingFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.ServiceFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.WirelessFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 /***
  * 首页底部导航
@@ -37,6 +41,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        if (StringUtils.isEmpty(MyApplication.sApplication.getToken())){
+//            startActivity(new Intent(this,RegisterActivity.class));
+//            finish();
+//            return;
+//        }
         initView();
         initData();
     }

@@ -7,6 +7,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.model.IHeadLineModel;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkRequestParams;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpResBeanHandler;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.JsonUtils;
 
 import okhttp3.Headers;
 
@@ -16,10 +17,11 @@ import okhttp3.Headers;
 
 public class IHeadLineModelImpl implements IHeadLineModel {
     @Override
-    public void getHeadLine(int type, int seq, final onGetHeadLineListener listener) {
+    public void getHeadLine(int uid, String token, int term, double version, long ts,
+                            int nettype,int type, int seq, final onGetHeadLineListener listener) {
+        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,type,seq);
         OkRequestParams params = new OkRequestParams();
-        params.put("type", type);
-        params.put("seq", seq);
+        params.put("key", jsonStr);
 
         OkHttpUtil.post(Api.NEWS_LIST, params, new OkHttpResBeanHandler<NewsVo>() {
             @Override

@@ -166,18 +166,18 @@ public class OkRequestParams {
         }
     }
 
-    public RequestBody getRequestBody() {
-        try {
-            if (mFileParams.size() > 0 || mFileArrays.size() > 0) {
-                return createMultipartBuilderBody();
-            } else {
-                return createEncodingBuilderBody();
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    public RequestBody getRequestBody(OkRequestParams params) {
+//        try {
+//            if (mFileParams.size() > 0 || mFileArrays.size() > 0) {
+//                return createMultipartBuilderBody();
+//            } /*else {
+//                return createEncodingBuilderBody();
+//            }*/
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+ //   }
 
     private RequestBody createMultipartBuilderBody() throws Throwable {
         MultipartBody.Builder builder = new MultipartBody.Builder();
@@ -213,7 +213,6 @@ public class OkRequestParams {
 
     public String getParamString() {
         StringBuilder result = new StringBuilder();
-
 //        for (ConcurrentHashMap.Entry<String, String> entry : mUrlParams.entrySet()) {
 //            if (result.length() > 0)
 //                result.append("&");

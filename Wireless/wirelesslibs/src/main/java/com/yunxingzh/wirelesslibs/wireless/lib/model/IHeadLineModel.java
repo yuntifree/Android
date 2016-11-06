@@ -20,5 +20,6 @@ public interface IHeadLineModel {
      * @param seq 序列号，分页拉取用
      * @param listener
      */
-    void getHeadLine(int type, int seq, onGetHeadLineListener listener);
+    void getHeadLine(int uid, String token, int term, double version, long ts,
+                     int nettype,int type, int seq, onGetHeadLineListener listener);
 }

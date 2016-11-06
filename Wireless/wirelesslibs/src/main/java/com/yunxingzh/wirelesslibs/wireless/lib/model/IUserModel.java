@@ -11,28 +11,26 @@ public interface IUserModel {
         void onValidateCodeSuccess();
         void onValidateCodeFailed(int error);
         void onValidateCodeFailed(String errorMsg);
-
     }
 
-    interface onLoginListener{
-        void onLoginSuccess(UserInfoVo userVo);
-        void onLoginFailed(int error);
-        void onLoginFailed(String errorMsg);
+    interface onRegisterListener{
+        void onRegisterSuccess(UserInfoVo userVo);
+        void onRegisterFailed(int error);
+        void onRegisterFailed(String errorMsg);
     }
 
     /****
      * 获取短信验证码
-     * @param yzm
-     * @param truetime
      * @param phone
      * @param listener
      */
-    void getValidateCode(String yzm, String truetime, String phone, onValidateCodeListener listener);
+    void getValidateCode(int term,double version,long ts,int nettype,int type, String phone, onValidateCodeListener listener);
 
     /***
      * 登录
-     * @param phone
-     * @param password
+     * @param
+     * @param
      */
-    void login(String phone, String password, onLoginListener listener);
+    void register(int term,double version,long ts,int nettype,String username,String password,
+               int code,String model,String channel,String udid,onRegisterListener listener);
 }

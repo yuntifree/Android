@@ -39,8 +39,8 @@ public class StringUtils {
     /***
      * 获取当前的时间戳
      */
-    public static String getCurrentTime() {
-        return (System.currentTimeMillis() / 1000L + 1)+"";
+    public static long getCurrentTime() {
+        return (System.currentTimeMillis() / 1000L + 1);
     }
 
 

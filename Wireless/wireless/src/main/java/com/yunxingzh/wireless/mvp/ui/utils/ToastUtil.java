@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MyApplication;
-import com.yunxingzh.wireless.mvp.ui.activity.LoginActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
 import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpCallback;
 
@@ -21,7 +21,7 @@ public class ToastUtil {
         }
         mToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
         mToast.setText(text);
-       // mToast.setGravity(Gravity.BOTTOM, 0, 0);
+        //mToast.setGravity(Gravity.BOTTOM, 0, 0);
         mToast.show();
     }
 
@@ -40,7 +40,7 @@ public class ToastUtil {
             showMiddle(context, R.string.lost_token);
             MyApplication.sApplication.setToken("");
             MyApplication.sApplication.setUser(null);
-            Intent intent = new Intent(context, LoginActivity.class);
+            Intent intent = new Intent(context, RegisterActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             context.startActivity(intent);
             return;

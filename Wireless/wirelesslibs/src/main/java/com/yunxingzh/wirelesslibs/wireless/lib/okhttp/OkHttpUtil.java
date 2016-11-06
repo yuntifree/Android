@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -24,6 +25,7 @@ import okhttp3.Response;
  */
 public class OkHttpUtil {
 
+    public static final MediaType JSON=MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = OkHttpUtil.class.getSimpleName();
     public static final int DEFAULT_CONNECT_TIMEOUT = 20 * 1000;
     public static final int DEFAULT_WRITE_TIMEOUT = 10 * 1000;
@@ -52,40 +54,40 @@ public class OkHttpUtil {
                 .build();
     }
 
+//
+//    public static <T> void get(String url, OkHttpCallback<T> okHttpCallback) {
+//        get(url, null, okHttpCallback);
+//    }
 
-    public static <T> void get(String url, OkHttpCallback<T> okHttpCallback) {
-        get(url, null, okHttpCallback);
-    }
-
-    public static <T> void get(String url, OkRequestParams params, OkHttpCallback<T> okHttpCallback) {
-        get(url, params, null, okHttpCallback);
-    }
-
-    public static <T> void get(String url, Object tag, OkHttpCallback<T> okHttpCallback) {
-        get(url, null, tag, okHttpCallback);
-    }
+//    public static <T> void get(String url, OkRequestParams params, OkHttpCallback<T> okHttpCallback) {
+//        get(url, params, null, okHttpCallback);
+//    }
+//
+//    public static <T> void get(String url, Object tag, OkHttpCallback<T> okHttpCallback) {
+//        get(url, null, tag, okHttpCallback);
+//    }
 
     public OkHttpUtil() {
         super();
     }
 
-    public static <T> void get(String url, OkRequestParams params, Object tag, OkHttpCallback<T> okHttpCallback) {
-        OkHttpLog.d(TAG, getFinalUrl(url, params));
-
-        Call call = null;
-        Callback callback = getCallBack(okHttpCallback);
-        try {
-            RequestBody requestBody = getRequestBody(params);
-            Headers headers = getRequestHeaders(params);
-            Request request = getRequest(getFinalUrl(url, params), requestBody, headers, tag);
-
-            call = mOkHttpClient.newCall(request);
-            call.enqueue(callback);
-        } catch (Throwable e) {
-            e.printStackTrace();
-            callback.onFailure(call, new IOException("get", e));
-        }
-    }
+//    public static <T> void get(String url, OkRequestParams params, Object tag, OkHttpCallback<T> okHttpCallback) {
+//        OkHttpLog.d(TAG, getFinalUrl(url, params));
+//
+//        Call call = null;
+//        Callback callback = getCallBack(okHttpCallback);
+//        try {
+//            RequestBody requestBody = getRequestBody(params);
+//            Headers headers = getRequestHeaders(params);
+//            Request request = getRequest(getFinalUrl(url, params), requestBody, headers, tag);
+//
+//            call = mOkHttpClient.newCall(request);
+//            call.enqueue(callback);
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//            callback.onFailure(call, new IOException("get", e));
+//        }
+//    }
 
     public static <T> void post(String url, OkHttpCallback<T> okHttpCallback) {
         post(url, null, okHttpCallback);
@@ -199,7 +201,6 @@ public class OkHttpUtil {
     }
 
     public static String getFinalUrl(String url, OkRequestParams params) {
-        Log.e("TAG","json="+params.getParamString());
 
         if (params != null) {
             String paramString = params.getParamString().trim();
@@ -216,14 +217,14 @@ public class OkHttpUtil {
         return params == null ? null : params.getRequestHeaders();
     }
 
-    private static RequestBody getRequestBody(OkRequestParams params) {
-        return params == null ? null : params.getRequestBody();
+    private static OkRequestParams getRequestBody(OkRequestParams params) {
+        return params == null ? null : params;
     }
 
     private static <T> RequestBody getRequestBody(OkRequestParams params, boolean isProgress, OkHttpCallback<T> okHttpCallback) {
-        RequestBody requestBody = getRequestBody(params);
-        if (requestBody != null && isProgress && okHttpCallback != null) {
-            requestBody = new ProgressRequestBody(requestBody, okHttpCallback);
+        RequestBody requestBody = RequestBody.create(JSON,params.getUrlParams().get("key"));
+        if (isProgress && okHttpCallback != null) {
+            requestBody = new ProgressRequestBody(params, okHttpCallback);
         }
         return requestBody;
     }

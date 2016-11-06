@@ -2,77 +2,80 @@ package com.yunxingzh.wirelesslibs.wireless.lib.bean.vo;
 
 import java.io.Serializable;
 
-/**
- * 用户基本信息
- *
- * @author Comsys-Carey
- * @ClassName: UserInfoVo
- * @Description:
- * @date 2016-5-24 下午1:25:52
- */
 public class UserInfoVo implements Serializable {
+    private int errno;//错误码
+    private String desc;//错误信息
+    private UserData data;
 
-    private String token;
-    private String email;
-    private String realname;
-    private String phone;
-    private String head_image;
-    private String companyname;
-    private String truetime;
-
-    public String getHead_image() {
-        return head_image;
+    public int getErrno() {
+        return errno;
     }
 
-    public void setHead_image(String head_image) {
-        this.head_image = head_image;
+    public void setErrno(int errno) {
+        this.errno = errno;
     }
 
-    public String getEmail() {
-        return email;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
-    public String getRealname() {
-        return realname;
+    public UserData getData() {
+        return data;
     }
 
-    public void setRealname(String realname) {
-        this.realname = realname;
+    public void setData(UserData data) {
+        this.data = data;
     }
 
-    public String getPhone() {
-        return phone;
-    }
+    public class UserData{
+        private int uid;//用户id
+        private String token;
+        private String privdata;//用于刷新token
+        private int expire;// 过期时间(单位秒)
+        private String wifipass;//wifi密码
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+        public int getUid() {
+            return uid;
+        }
 
-    public String getCompanyname() {
-        return companyname;
-    }
+        public void setUid(int uid) {
+            this.uid = uid;
+        }
 
-    public void setCompanyname(String companyname) {
-        this.companyname = companyname;
-    }
+        public String getToken() {
+            return token;
+        }
 
-    public String getTruetime() {
-        return truetime;
-    }
+        public void setToken(String token) {
+            this.token = token;
+        }
 
-    public void setTruetime(String truetime) {
-        this.truetime = truetime;
-    }
+        public String getPrivdata() {
+            return privdata;
+        }
 
-    public String getToken() {
-        return token;
-    }
+        public void setPrivdata(String privdata) {
+            this.privdata = privdata;
+        }
 
-    public void setToken(String token) {
-        this.token = token;
+        public int getExpire() {
+            return expire;
+        }
+
+        public void setExpire(int expire) {
+            this.expire = expire;
+        }
+
+        public String getWifipass() {
+            return wifipass;
+        }
+
+        public void setWifipass(String wifipass) {
+            this.wifipass = wifipass;
+        }
     }
 }

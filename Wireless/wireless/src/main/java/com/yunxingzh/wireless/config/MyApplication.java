@@ -56,7 +56,7 @@ public class MyApplication extends Application {
         if (StringUtils.isEmpty(mToken)) {
             mToken = SPUtils.get(sApplication, Constants.SP_KEY_TOKEN, "");
 //            if (StringUtils.isEmpty(mToken)) {
-//                startActivity(new Intent(sApplication, LoginActivity.class));
+//                startActivity(new Intent(sApplication, RegisterActivity.class));
 //            }
         }
         return mToken;

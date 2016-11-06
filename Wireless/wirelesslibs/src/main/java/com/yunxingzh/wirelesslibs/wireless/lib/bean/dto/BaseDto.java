@@ -2,26 +2,26 @@ package com.yunxingzh.wirelesslibs.wireless.lib.bean.dto;
 
 public class BaseDto<T> {
 	
-	private int state;
+	private int errno;
 
-	private String msg;
+	private String desc;
 
 	private T data;
 
-	public int getState() {
-		return state;
+	public int getErrno() {
+		return errno;
 	}
 
-	public void setState(int state) {
-		this.state = state;
+	public void setErrno(int errno) {
+		this.errno = errno;
 	}
 
-	public String getMsg() {
-		return msg;
+	public String getDesc() {
+		return desc;
 	}
 
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 
 	public T getData() {

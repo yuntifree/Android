@@ -1,5 +1,7 @@
 package com.yunxingzh.wirelesslibs.wireless.lib.okhttp.progress;
 
+import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkRequestParams;
+
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -15,12 +17,18 @@ import okio.Sink;
  */
 public class ProgressRequestBody extends RequestBody {
 
-    protected final RequestBody requestBody;
+    protected RequestBody requestBody;
+    protected OkRequestParams requestBodys;
     protected final ProgressListener progressListener;
     protected BufferedSink bufferedSink;
 
     public ProgressRequestBody(RequestBody requestBody, ProgressListener progressListener) {
         this.requestBody = requestBody;
+        this.progressListener = progressListener;
+    }
+
+    public ProgressRequestBody(OkRequestParams requestBodys, ProgressListener progressListener) {
+        this.requestBodys = requestBodys;
         this.progressListener = progressListener;
     }
 
