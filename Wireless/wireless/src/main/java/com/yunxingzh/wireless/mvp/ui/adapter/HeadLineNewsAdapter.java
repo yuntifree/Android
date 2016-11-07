@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import java.util.List;
 
@@ -27,16 +28,22 @@ public class HeadLineNewsAdapter extends BaseAdapter {
     private final int TYPE_ONE = 0;
     private final int TYPE_TWO = 1;
     private int currentType;
+    private boolean isMainNews;
 
-    public HeadLineNewsAdapter(Context context, List<NewsVo.Data.NewsData> dataList) {
+    public HeadLineNewsAdapter(Context context, List<NewsVo.Data.NewsData> dataList, boolean isMainNews) {
         this.context = context;
         this.dataList = dataList;
+        this.isMainNews = isMainNews;
         inflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return dataList.size();
+        if (isMainNews) {
+            return 3;
+        } else {
+            return dataList.size();
+        }
     }
 
     @Override
@@ -68,11 +75,21 @@ public class HeadLineNewsAdapter extends BaseAdapter {
                 viewHolderOne = (ViewHolderOne) convertView.getTag();
             }
 
-            Glide.with(context).load(result.getImages()).into(viewHolderOne.mTypeOneLeftImg);
-            Glide.with(context).load(result.getImages()).into(viewHolderOne.mTypeOneMiddleImg);
-            Glide.with(context).load(result.getImages()).into(viewHolderOne.mTypeOneRightImg);
+            List<String> imgs = result.getImages();
+            if (imgs.size() == 1) {
+                Glide.with(context).load(imgs.get(0)).placeholder(R.drawable.img_default).into(viewHolderOne.mTypeOneLeftImg);
+            } else if(imgs.size() == 2){
+                Glide.with(context).load(imgs.get(0)).placeholder(R.drawable.img_default).into(viewHolderOne.mTypeOneLeftImg);
+                Glide.with(context).load(imgs.get(1)).placeholder(R.drawable.img_default).into(viewHolderOne.mTypeOneMiddleImg);
+            } else if(imgs.size() == 3){
+                Glide.with(context).load(imgs.get(0)).placeholder(R.drawable.img_default).into(viewHolderOne.mTypeOneLeftImg);
+                Glide.with(context).load(imgs.get(1)).placeholder(R.drawable.img_default).into(viewHolderOne.mTypeOneMiddleImg);
+                Glide.with(context).load(imgs.get(2)).placeholder(R.drawable.img_default).into(viewHolderOne.mTypeOneRightImg);
+            }
+
+
             viewHolderOne.mTypeOneTitle.setText(result.getTitle());
-            viewHolderOne.mTypeOneTime.setText(result.getTitle());
+            viewHolderOne.mTypeOneTime.setText(result.getCtime());
 
         } else if (currentType == TYPE_TWO) { //加载第二种布局
             ViewHolderTwo viewHolderTwo;
@@ -94,14 +111,12 @@ public class HeadLineNewsAdapter extends BaseAdapter {
     }
 
     class ViewHolderOne {
-
-        public ImageView mTypeOneLeftImg,mTypeOneMiddleImg,mTypeOneRightImg;
-        public TextView mTypeOneTitle,mTypeOneTime;
+        public ImageView mTypeOneLeftImg, mTypeOneMiddleImg, mTypeOneRightImg;
+        public TextView mTypeOneTitle, mTypeOneTime;
     }
 
     class ViewHolderTwo {
-
-        public TextView mTypeTwoTime,mTypeTwoTitle;
+        public TextView mTypeTwoTime, mTypeTwoTitle;
         public ImageView mTypeTwoImg;
     }
 

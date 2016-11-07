@@ -31,7 +31,7 @@ public class UserInfoVo implements Serializable {
         this.data = data;
     }
 
-    public class UserData{
+    public class UserData implements Serializable {
         private int uid;//用户id
         private String token;
         private String privdata;//用于刷新token

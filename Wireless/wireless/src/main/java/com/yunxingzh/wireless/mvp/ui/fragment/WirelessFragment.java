@@ -5,27 +5,35 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
+import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
+import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
+
+import java.util.List;
 
 /**
  * Created by stephon_ on 2016/11/1.
  *  无线
  */
 
-public class WirelessFragment extends BaseFragment implements IHeadLineView {
+public class WirelessFragment extends BaseFragment implements IHeadLineView,AdapterView.OnItemClickListener {
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
 
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
+    private HeadLineNewsAdapter headLineNewsAdapter;
+
+    private List<NewsVo.Data.NewsData> newsList;
 
     @Nullable
     @Override
@@ -47,6 +55,18 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView {
 
     @Override
     public void getHeadLineSuccess(NewsVo newsVo) {
+        if (newsVo != null){
+            newsList = newsVo.getData().getInfos();
+        }
+        headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(),newsList,true);
+        View footView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_for_main_news,null);
+        mMainNewsLv.addFooterView(footView);
+        mMainNewsLv.setAdapter(headLineNewsAdapter);
+        mMainNewsLv.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }
 }

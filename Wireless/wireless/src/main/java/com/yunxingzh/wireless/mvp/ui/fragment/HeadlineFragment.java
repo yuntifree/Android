@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineFragmentAdapter;
+import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineFragmentPagerAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
 
     private TextView mIdApp,mIdGame,mIdVideo,mIdNews;
     private ViewPager mViewPager;
-    private HeadLineFragmentAdapter headLineFragmentAdapter;
+    private HeadLineFragmentPagerAdapter headLineFragmentAdapter;
     private List<Fragment> fragments = new ArrayList<>();
     private Resources res;
 
@@ -78,7 +78,7 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
         fragments.add(new HeadLineAppFragment());
         fragments.add(new HeadLineGameFragment());
 
-        headLineFragmentAdapter = new HeadLineFragmentAdapter(getActivity().getSupportFragmentManager(), fragments);
+        headLineFragmentAdapter = new HeadLineFragmentPagerAdapter(getActivity().getSupportFragmentManager(), fragments);
         mViewPager.setAdapter(headLineFragmentAdapter);
         mViewPager.setOnPageChangeListener(this);
     }

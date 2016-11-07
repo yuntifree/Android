@@ -112,8 +112,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="3dp"
                 android:layout_marginTop="10dp"
-                android:paddingLeft="10dp"
                 android:background="@color/white"
                 android:text="@string/dg_head_line"
                 android:textColor="@color/blue_1296db"
@@ -122,7 +122,10 @@
             <ListView
                 android:id="@+id/main_news_lv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="550dp"
+                android:listSelector="@color/white"
+                android:divider="@color/gray_9"
+                android:dividerHeight="0.1dp"
                 android:background="@color/white" />
         </LinearLayout>
     </ScrollView>

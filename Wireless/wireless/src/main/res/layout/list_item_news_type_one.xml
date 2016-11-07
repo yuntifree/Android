@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="10dp"
     android:orientation="vertical">
 
     <TextView
@@ -15,6 +16,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -22,8 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:scaleType="fitXY"
-            android:layout_weight="1"
-            android:src="@drawable/new_img" />
+            android:layout_weight="1"/>
 
         <ImageView
             android:id="@+id/type_one_middle_img"
@@ -31,8 +32,7 @@
             android:layout_height="80dp"
             android:layout_weight="1"
             android:scaleType="fitXY"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/new_img" />
+            android:layout_marginLeft="5dp" />
 
         <ImageView
             android:id="@+id/type_one_right_img"
@@ -40,8 +40,7 @@
             android:layout_height="80dp"
             android:layout_weight="1"
             android:scaleType="fitXY"
-            android:layout_marginLeft="5dp"
-            android:src="@drawable/new_img" />
+            android:layout_marginLeft="5dp" />
     </LinearLayout>
 
     <TextView
@@ -49,6 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="东莞阳光网    8:34"
+        android:layout_marginTop="5dp"
         android:textColor="@color/gray_6E6E6E"
         android:textSize="12sp" />
 </LinearLayout>

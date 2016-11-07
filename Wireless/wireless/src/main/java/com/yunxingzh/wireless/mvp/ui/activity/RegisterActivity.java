@@ -15,6 +15,7 @@ import com.yunxingzh.wireless.mvp.presenter.impl.RegisterPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.NetWorkBaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IRegisterView;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 /**
@@ -60,7 +61,7 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
                 setCode(R.string.input_code);
                 return;
             }
-            iLoginPresenter.register(getPhone(),"",Integer.parseInt(getCode()));//密码是？？？？
+            iLoginPresenter.register(getPhone(), StringUtils.getMD5(getCode()),Integer.parseInt(getCode()));
         } else if (view == mGetValidateCodeBtn){
             iLoginPresenter.getValidateCode(TYPE, getPhone());
         }

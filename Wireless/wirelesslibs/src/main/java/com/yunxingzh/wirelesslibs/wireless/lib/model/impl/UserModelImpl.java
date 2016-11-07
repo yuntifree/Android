@@ -4,6 +4,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.api.Api;
 import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.dto.StringDto;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.dto.UserDto;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.UserInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.IUserModel;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkRequestParams;
@@ -47,11 +48,11 @@ public class UserModelImpl implements IUserModel {
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 
-        OkHttpUtil.post(Api.REGISTER, params, new OkHttpResBeanHandler<UserDto>() {
+        OkHttpUtil.post(Api.REGISTER, params, new OkHttpResBeanHandler<UserInfoVo>() {
             @Override
-            public void onSuccess(int code, Headers headers, UserDto response) {
+            public void onSuccess(int code, Headers headers, UserInfoVo response) {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
-                    listener.onRegisterSuccess(response.getData());
+                    listener.onRegisterSuccess(response);
                 } else {
                     listener.onRegisterFailed(response.getDesc());
                 }

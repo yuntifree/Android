@@ -8,13 +8,15 @@ import android.view.ViewGroup;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
+import com.yunxingzh.wireless.mvp.view.IServiceView;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.ServiceVo;
 
 /**
  * Created by stephon_ on 2016/11/1.
  * 服务
  */
 
-public class ServiceFragment extends BaseFragment {
+public class ServiceFragment extends BaseFragment implements IServiceView{
 
     @Nullable
     @Override
@@ -30,6 +32,11 @@ public class ServiceFragment extends BaseFragment {
     }
 
     public void initData() {
+
+    }
+
+    @Override
+    public void getServiceSuccess(ServiceVo serviceVo) {
 
     }
 }

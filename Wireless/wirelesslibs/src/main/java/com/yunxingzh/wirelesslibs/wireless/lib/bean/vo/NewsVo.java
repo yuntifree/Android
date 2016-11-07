@@ -63,7 +63,7 @@ public class NewsVo {
              */
             private int seq;//分页用
             private String title;//应用名或新闻title
-            private String images;//图片url
+            private List<String> images;//图片url
             private String source;//新闻来源
             private String ctime;//时间
             private String dst; //源地址或应用下载地址
@@ -90,15 +90,11 @@ public class NewsVo {
                 this.title = title;
             }
 
-            public String getImages() {
-                return StringUtils.getFirstImage(this.images);
+            public List<String> getImages() {
+                return images;
             }
 
-            public String[] getImageList() {
-                return StringUtils.getImages(images);
-            }
-
-            public void setImages(String images) {
+            public void setImages(List<String> images) {
                 this.images = images;
             }
 

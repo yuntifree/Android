@@ -27,7 +27,7 @@ public interface IUserModel {
     void getValidateCode(int term,double version,long ts,int nettype,int type, String phone, onValidateCodeListener listener);
 
     /***
-     * 登录
+     * 注册
      * @param
      * @param
      */
