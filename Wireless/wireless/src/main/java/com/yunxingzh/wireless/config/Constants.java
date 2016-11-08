@@ -14,5 +14,5 @@ public class Constants {
 
     public static final int ITEM_HEIGHT = 10;//recylerview的item间隔
     public static final int PAGE_SIZE = 5;
-
+    public static final int LISTVIEW_ITEM_HEIGHT = 50;
 }

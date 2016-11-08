@@ -55,7 +55,8 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
             iLoginView.showProgress();
             iUserModel.register(0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
                     StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),username,password,code,
-                    AppUtils.getPhoneModel(),AppUtils.getChannelName(MyApplication.sApplication),MyApplication.sApplication.getMark(),this);
+                    AppUtils.getPhoneModel(),AppUtils.getChannelName(MyApplication.sApplication) == null ? "" : AppUtils.getChannelName(MyApplication.sApplication),
+                    MyApplication.sApplication.getMark(),this);
         }
     }
 

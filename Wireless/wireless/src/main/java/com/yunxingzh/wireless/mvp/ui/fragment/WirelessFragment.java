@@ -9,11 +9,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
+import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 
@@ -62,11 +64,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView,Adap
         View footView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_for_main_news,null);
         mMainNewsLv.addFooterView(footView);
         mMainNewsLv.setAdapter(headLineNewsAdapter);
+        Utility.setListViewHeight(mMainNewsLv, Constants.LISTVIEW_ITEM_HEIGHT);
         mMainNewsLv.setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+       ToastUtil.showMiddle(getActivity(),""+position);
     }
 }

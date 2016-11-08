@@ -143,7 +143,7 @@ public class AppUtils {
 		if (ctx == null) {
 			return null;
 		}
-		String channelName = null;
+		String channelName = "";
 		try {
 			PackageManager packageManager = ctx.getPackageManager();
 			if (packageManager != null) {

@@ -1,5 +1,7 @@
 package com.yunxingzh.wireless.mvp.ui.adapter;
 
+import android.view.View;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yunxingzh.wireless.R;
@@ -20,6 +22,7 @@ public class HeadLineGameAdapter extends BaseQuickAdapter<NewsVo.Data> {
 
     @Override
     protected void convert(BaseViewHolder baseViewHolder, NewsVo.Data newsVo) {
+
        // Glide.with(mContext).load(newsVo.getImage()).placeholder(R.drawable.img_default).into((ImageView) baseViewHolder.getView(R.id.item_image));
 //        baseViewHolder.setText(R.id.item_title, newsVo.getTitle());
 //        baseViewHolder.setText(R.id.item_date, newsVo.getTruetime());

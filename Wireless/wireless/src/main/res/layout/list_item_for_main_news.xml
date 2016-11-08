@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@color/gray_e3"
+        android:layout_margin="10dp"
         android:padding="13dp"
         android:text="@string/get_more"
         android:textColor="@color/gray_6E6E6E"

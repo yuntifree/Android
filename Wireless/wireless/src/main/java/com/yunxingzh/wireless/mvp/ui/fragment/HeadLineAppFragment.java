@@ -56,12 +56,12 @@ public class HeadLineAppFragment extends BaseFragment implements IHeadLineView,S
 
     public void initData() {
         // headLineAppAdapter = new HeadLineAppAdapter(new ArrayList<>());
-        headLineAppAdapter.openLoadMore(Constants.PAGE_SIZE);
-        headLineAppAdapter.setOnLoadMoreListener(this);
-        mListRv.setAdapter(headLineAppAdapter);
-
-        iHeadLinePresenter = new HeadLinePresenterImpl(this);
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
+//        headLineAppAdapter.openLoadMore(Constants.PAGE_SIZE);
+//        headLineAppAdapter.setOnLoadMoreListener(this);
+//        mListRv.setAdapter(headLineAppAdapter);
+//
+//        iHeadLinePresenter = new HeadLinePresenterImpl(this);
+//        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
 
         mListRv.addOnItemTouchListener(new OnItemClickListener() {
             @Override
