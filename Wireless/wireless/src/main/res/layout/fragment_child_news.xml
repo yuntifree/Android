@@ -4,9 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/head_line_lv"
+    <com.yunxingzh.wirelesslibs.refresh.SwipeRefreshLayout
+        android:id="@+id/swipe_ly"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white" />
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/head_line_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:divider="@color/gray_bfbfbf"
+            android:dividerHeight="0.1dp"
+            android:listSelector="@color/white" />
+    </com.yunxingzh.wirelesslibs.refresh.SwipeRefreshLayout>
 </LinearLayout>

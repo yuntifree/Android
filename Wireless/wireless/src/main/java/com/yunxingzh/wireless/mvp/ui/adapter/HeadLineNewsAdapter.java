@@ -23,7 +23,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
     private Context context;
     private List<NewsVo.Data.NewsData> dataList;
     private LayoutInflater inflater;
-    private final int TYPE_COUNT = 2;
+    private final int TYPE_COUNT = 4;
     private final int TYPE_ONE = 1;
     private final int TYPE_TWO = 2;
     private final int TYPE_THREE = 3;

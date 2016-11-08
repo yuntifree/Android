@@ -15,7 +15,6 @@ public class Utility {
     public static void setListViewHeight(ListView listView, int attHeight) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
-            // pre-condition
             return;
         }
 
