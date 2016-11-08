@@ -68,6 +68,7 @@ public class NewsVo {
             private String ctime;//时间
             private String dst; //源地址或应用下载地址
             private int stype;//0-新闻 1-视频 2-应用 3-游戏
+            private int play;//播放次数
             /**
              * 应用游戏
              */
@@ -144,6 +145,14 @@ public class NewsVo {
 
             public void setInstall(String install) {
                 this.install = install;
+            }
+
+            public int getPlay() {
+                return play;
+            }
+
+            public void setPlay(int play) {
+                this.play = play;
             }
         }
     }

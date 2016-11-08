@@ -1,7 +1,5 @@
 package com.yunxingzh.wireless.mvp.ui.adapter;
 
-import android.view.View;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yunxingzh.wireless.R;
@@ -17,7 +15,7 @@ import java.util.List;
 public class HeadLineGameAdapter extends BaseQuickAdapter<NewsVo.Data> {
 
     public HeadLineGameAdapter(List<NewsVo.Data> data) {
-        super(R.layout.list_item_news, data);
+        super(R.layout.list_item_videos, data);
     }
 
     @Override

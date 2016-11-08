@@ -58,13 +58,13 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     }
 
     public void initData() {
-       // headLineVideoAdapter = new HeadLineVideoAdapter(new ArrayList<>());
-//        headLineVideoAdapter.openLoadMore(Constants.PAGE_SIZE);
-//        headLineVideoAdapter.setOnLoadMoreListener(this);
-//        mListRv.setAdapter(headLineVideoAdapter);
-//
-//        iHeadLinePresenter = new HeadLinePresenterImpl(this);
-//        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
+        headLineVideoAdapter = new HeadLineVideoAdapter(new ArrayList<NewsVo.Data.NewsData>());
+        headLineVideoAdapter.openLoadMore(Constants.PAGE_SIZE);
+        headLineVideoAdapter.setOnLoadMoreListener(this);
+        mListRv.setAdapter(headLineVideoAdapter);
+
+        iHeadLinePresenter = new HeadLinePresenterImpl(this);
+        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
 
         mListRv.addOnItemTouchListener(new OnItemClickListener() {
             @Override
@@ -84,17 +84,17 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         mSwipeRefreshLay.setRefreshing(false);
         if (newsVoList != null) {
             newsVo = newsVoList;
-//            if (newsVoList.getP().equals("2")) {
-//                headLineVideoAdapter.setNewData(newsVoList.getData());
-//            } else {
-//                headLineVideoAdapter.addData(newsVoList.getData());
-//            }
-//
-//            if (newsVoList.getData().size() == 0) {
-//                // 数据全部加载完毕就调用 loadComplete
-//                headLineVideoAdapter.loadComplete();
-//                ToastUtil.showMiddle(getActivity(), R.string.no_resource);
-//            }
+            if (newsVoList.getData().getHasmore() == 1) {
+                headLineVideoAdapter.setNewData(newsVoList.getData().getInfos());
+            } else {
+                headLineVideoAdapter.addData(newsVoList.getData().getInfos());
+            }
+
+            if (newsVoList.getData().getHasmore() == 0) {
+                // 数据全部加载完毕就调用 loadComplete
+                headLineVideoAdapter.loadComplete();
+                ToastUtil.showMiddle(getActivity(), R.string.no_resource);
+            }
         } else {
             ToastUtil.showMiddle(getActivity(), R.string.re_error);
         }

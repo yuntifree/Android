@@ -23,6 +23,7 @@
             android:id="@+id/type_three_left_img"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:layout_weight="1"/>
 
@@ -30,6 +31,7 @@
             android:id="@+id/type_three_middle_img"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:adjustViewBounds="true"
             android:layout_weight="1"
             android:scaleType="centerCrop"
             android:layout_marginLeft="5dp" />
@@ -39,6 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:layout_marginLeft="5dp" />
     </LinearLayout>

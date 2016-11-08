@@ -66,7 +66,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
             ViewHolderOne viewHolderOne;
             if (convertView == null) {
                 viewHolderOne = new ViewHolderOne();
-                convertView = inflater.inflate(R.layout.list_item_news_type_one, null);
+                convertView = inflater.inflate(R.layout.list_item_news_type_advier, null);
                 viewHolderOne.mTypeOneTime = (TextView) convertView.findViewById(R.id.type_one_time);
                 viewHolderOne.mTypeOneTitle = (TextView) convertView.findViewById(R.id.type_one_title);
                 viewHolderOne.mTypeOneImg = (ImageView) convertView.findViewById(R.id.type_one_img);
@@ -75,14 +75,14 @@ public class HeadLineNewsAdapter extends BaseAdapter {
                 viewHolderOne = (ViewHolderOne) convertView.getTag();
             }
             Glide.with(context).load(result.getImages().get(0)).placeholder(R.drawable.img_default).into(viewHolderOne.mTypeOneImg);
-            viewHolderOne.mTypeOneTime.setText(result.getCtime());
+            viewHolderOne.mTypeOneTime.setText(result.getSource() +"    "+ result.getCtime());
             viewHolderOne.mTypeOneTitle.setText(result.getTitle());
 
         } else if (currentType == TYPE_ONE || currentType == TYPE_TWO) { //加载第二种布局（一张或二张）
             ViewHolderTwo viewHolderTwo;
             if (convertView == null) {
                 viewHolderTwo = new ViewHolderTwo();
-                convertView = inflater.inflate(R.layout.list_item_news_type_two, null);
+                convertView = inflater.inflate(R.layout.list_item_news_type_two_img, null);
                 viewHolderTwo.mTypeTwoTime = (TextView) convertView.findViewById(R.id.type_two_time);
                 viewHolderTwo.mTypeTwoTitle = (TextView) convertView.findViewById(R.id.type_two_title);
                 viewHolderTwo.mTypeTwoImg = (ImageView) convertView.findViewById(R.id.type_two_img);
@@ -91,13 +91,13 @@ public class HeadLineNewsAdapter extends BaseAdapter {
                 viewHolderTwo = (ViewHolderTwo) convertView.getTag();
             }
             Glide.with(context).load(result.getImages().get(0)).placeholder(R.drawable.img_default).into(viewHolderTwo.mTypeTwoImg);
-            viewHolderTwo.mTypeTwoTime.setText(result.getCtime());
+            viewHolderTwo.mTypeTwoTime.setText(result.getSource() +"    "+ result.getCtime());
             viewHolderTwo.mTypeTwoTitle.setText(result.getTitle());
         } else if (currentType == TYPE_THREE) {//加载第三种布局（三张图片）
             ViewHolderThree viewHolderThree;
             if (convertView == null) {
                 viewHolderThree = new ViewHolderThree();
-                convertView = inflater.inflate(R.layout.list_item_news_type_three, null);
+                convertView = inflater.inflate(R.layout.list_item_news_type_three_img, null);
                 viewHolderThree.mTypeThreeLeftImg = (ImageView) convertView.findViewById(R.id.type_three_left_img);
                 viewHolderThree.mTypeThreeMiddleImg = (ImageView) convertView.findViewById(R.id.type_three_middle_img);
                 viewHolderThree.mTypeThreeRightImg = (ImageView) convertView.findViewById(R.id.type_three_right_img);
@@ -121,20 +121,21 @@ public class HeadLineNewsAdapter extends BaseAdapter {
             }
 
             viewHolderThree.mTypeThreeTitle.setText(result.getTitle());
-            viewHolderThree.mTypeThreeTime.setText(result.getCtime());
+            viewHolderThree.mTypeThreeTime.setText(result.getSource() +"    "+ result.getCtime());
         } else if(currentType == TYPE_NULL){//无图片
-            ViewHolderZero viewHolderZero;
+            ViewHolderOne viewHolderZero;
             if (convertView == null) {
-                viewHolderZero = new ViewHolderZero();
-                convertView = inflater.inflate(R.layout.list_item_news_type_zero, null);
-                viewHolderZero.mTypeZeroTime = (TextView) convertView.findViewById(R.id.type_zero_time);
-                viewHolderZero.mTypeZeroTitle = (TextView) convertView.findViewById(R.id.type_zero_title);
+                viewHolderZero = new ViewHolderOne();
+                convertView = inflater.inflate(R.layout.list_item_news_type_advier, null);
+                viewHolderZero.mTypeOneTime = (TextView) convertView.findViewById(R.id.type_one_time);
+                viewHolderZero.mTypeOneTitle = (TextView) convertView.findViewById(R.id.type_one_title);
                 convertView.setTag(viewHolderZero);
             } else {
-                viewHolderZero = (ViewHolderZero) convertView.getTag();
+                viewHolderZero = (ViewHolderOne) convertView.getTag();
             }
-            viewHolderZero.mTypeZeroTime.setText(result.getCtime());
-            viewHolderZero.mTypeZeroTitle.setText(result.getTitle());
+            viewHolderZero.mTypeOneImg.setVisibility(View.GONE);
+            viewHolderZero.mTypeOneTime.setText(result.getSource() +"    "+ result.getCtime());
+            viewHolderZero.mTypeOneTitle.setText(result.getTitle());
         }
         return convertView;
     }
@@ -142,10 +143,6 @@ public class HeadLineNewsAdapter extends BaseAdapter {
     class ViewHolderOne {
         public ImageView mTypeOneImg;
         public TextView mTypeOneTitle, mTypeOneTime;
-    }
-
-    class ViewHolderZero {
-        public TextView mTypeZeroTitle, mTypeZeroTime;
     }
 
     class ViewHolderTwo {

@@ -15,7 +15,7 @@ import java.util.List;
 public class HeadLineAppAdapter extends BaseQuickAdapter<NewsVo.Data> {
 
     public HeadLineAppAdapter(List<NewsVo.Data> data) {
-        super(R.layout.list_item_news, data);
+        super(R.layout.list_item_videos, data);
     }
 
     @Override
