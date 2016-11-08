@@ -17,6 +17,7 @@ import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wirelesslibs.refresh.SwipeRefreshLayout;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  * 头条-新闻
  */
 
-public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, AdapterView.OnItemClickListener,SwipeRefreshLayout.OnRefreshListener,SwipeRefreshLayout.OnLoadListener {
+public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -35,6 +36,9 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private HeadLineNewsAdapter headLineNewsAdapter;
 
     private List<NewsVo.Data.NewsData> newsList;
+    private NewsVo.Data data;
+    private int lastPosition;
+    private int allSize;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child_news, container, false);
@@ -45,11 +49,12 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     public void initView(View view) {
         mMainNewsLv = findView(view, R.id.head_line_lv);
-        swipeRefreshLayout = findView(view,R.id.swipe_ly);
+        mMainNewsLv.setOnItemClickListener(this);
+        swipeRefreshLayout = findView(view, R.id.swipe_ly);
         swipeRefreshLayout.setOnLoadListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColors(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        swipeRefreshLayout.setColors(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light);
         swipeRefreshLayout.setMode(SwipeRefreshLayout.Mode.BOTH);
         swipeRefreshLayout.setLoadNoFull(false);
     }
@@ -67,21 +72,48 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void getHeadLineSuccess(NewsVo newsVo) {
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setLoading(false);
+        data = newsVo.getData();
         if (newsVo != null) {
             newsList = newsVo.getData().getInfos();
+
+            allSize = mMainNewsLv.getCount();
+            lastPosition = mMainNewsLv.getLastVisiblePosition();
         }
-        headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsList, false);
-        mMainNewsLv.setAdapter(headLineNewsAdapter);
-        mMainNewsLv.setOnItemClickListener(this);
+
+//        if (newsList == null) {
+//            newsList = new ArrayList<NewsVo.Data.NewsData>();
+//        }
+
+//        if (data.getHasmore() == 1) {
+//            newsList.clear();
+//        }
+
+        if (data.getInfos() != null) {
+            newsList.addAll(data.getInfos());
+            if (headLineNewsAdapter == null) {
+                headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsList, false);
+                mMainNewsLv.setAdapter(headLineNewsAdapter);
+            }
+            headLineNewsAdapter.notifyDataSetChanged();
+        } else {
+            ToastUtil.showMiddle(getActivity(), R.string.no_news);
+        }
     }
 
     @Override
     public void onRefresh() {
-
+        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
     }
 
     @Override
     public void onLoad() {
-
+        if (data.getHasmore() == 0) {
+            swipeRefreshLayout.setLoading(false);
+            ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
+        } else {
+            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, lastPosition);
+        }
     }
 }

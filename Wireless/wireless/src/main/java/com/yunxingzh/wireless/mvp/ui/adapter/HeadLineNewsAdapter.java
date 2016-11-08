@@ -24,10 +24,11 @@ public class HeadLineNewsAdapter extends BaseAdapter {
     private List<NewsVo.Data.NewsData> dataList;
     private LayoutInflater inflater;
     private final int TYPE_COUNT = 4;
-    private final int TYPE_ONE = 1;
-    private final int TYPE_TWO = 2;
-    private final int TYPE_THREE = 3;
-    private final int TYPE_NULL = 0;
+    private final int TYPE_ONE = 1;//一张图片
+    private final int TYPE_TWO = 2;//二张图片
+    private final int TYPE_THREE = 3;//三张图片
+    private final int TYPE_NULL = 0;//没有图片
+    private final int TYPE_ADVIER= 5;//广告
     private int currentType;
     private boolean isMainNews;
 
@@ -61,7 +62,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         NewsVo.Data.NewsData result = dataList.get(position);
         currentType = getItemViewType(position);
-        if (currentType == TYPE_ONE) { //加载第一种布局
+        if (currentType == TYPE_ADVIER) { //加载第一种布局(广告)
             ViewHolderOne viewHolderOne;
             if (convertView == null) {
                 viewHolderOne = new ViewHolderOne();
@@ -77,7 +78,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
             viewHolderOne.mTypeOneTime.setText(result.getCtime());
             viewHolderOne.mTypeOneTitle.setText(result.getTitle());
 
-        } else if (currentType == TYPE_TWO) { //加载第二种布局
+        } else if (currentType == TYPE_ONE || currentType == TYPE_TWO) { //加载第二种布局（一张或二张）
             ViewHolderTwo viewHolderTwo;
             if (convertView == null) {
                 viewHolderTwo = new ViewHolderTwo();
@@ -92,7 +93,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
             Glide.with(context).load(result.getImages().get(0)).placeholder(R.drawable.img_default).into(viewHolderTwo.mTypeTwoImg);
             viewHolderTwo.mTypeTwoTime.setText(result.getCtime());
             viewHolderTwo.mTypeTwoTitle.setText(result.getTitle());
-        } else if (currentType == TYPE_THREE) {//加载第三种布局
+        } else if (currentType == TYPE_THREE) {//加载第三种布局（三张图片）
             ViewHolderThree viewHolderThree;
             if (convertView == null) {
                 viewHolderThree = new ViewHolderThree();
@@ -121,6 +122,19 @@ public class HeadLineNewsAdapter extends BaseAdapter {
 
             viewHolderThree.mTypeThreeTitle.setText(result.getTitle());
             viewHolderThree.mTypeThreeTime.setText(result.getCtime());
+        } else if(currentType == TYPE_NULL){//无图片
+            ViewHolderZero viewHolderZero;
+            if (convertView == null) {
+                viewHolderZero = new ViewHolderZero();
+                convertView = inflater.inflate(R.layout.list_item_news_type_zero, null);
+                viewHolderZero.mTypeZeroTime = (TextView) convertView.findViewById(R.id.type_zero_time);
+                viewHolderZero.mTypeZeroTitle = (TextView) convertView.findViewById(R.id.type_zero_title);
+                convertView.setTag(viewHolderZero);
+            } else {
+                viewHolderZero = (ViewHolderZero) convertView.getTag();
+            }
+            viewHolderZero.mTypeZeroTime.setText(result.getCtime());
+            viewHolderZero.mTypeZeroTitle.setText(result.getTitle());
         }
         return convertView;
     }
@@ -128,6 +142,10 @@ public class HeadLineNewsAdapter extends BaseAdapter {
     class ViewHolderOne {
         public ImageView mTypeOneImg;
         public TextView mTypeOneTitle, mTypeOneTime;
+    }
+
+    class ViewHolderZero {
+        public TextView mTypeZeroTitle, mTypeZeroTime;
     }
 
     class ViewHolderTwo {
@@ -147,16 +165,22 @@ public class HeadLineNewsAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        int type = dataList.get(position).getImages().size();//根据图片size确定item布局
-        switch (type) {
-            case TYPE_ONE:
-                return TYPE_ONE;
-            case TYPE_NULL:
-            case TYPE_TWO:
-                return TYPE_TWO;
-            case TYPE_THREE:
-                return TYPE_THREE;
+        int type;
+        if (dataList.get(position).getStype() == 1) {//广告
+            type = TYPE_ADVIER;
+            return TYPE_ADVIER;
+        } else {//新闻
+            type = dataList.get(position).getImages().size();//根据图片size确定item布局
+            switch (type) {
+                case TYPE_NULL://无图片
+                    return TYPE_NULL;
+                case TYPE_ONE://一张或二张图片
+                case TYPE_TWO:
+                    return TYPE_TWO;
+                case TYPE_THREE://三章图片
+                    return TYPE_THREE;
+            }
+            return -1;
         }
-        return -1;
     }
 }
