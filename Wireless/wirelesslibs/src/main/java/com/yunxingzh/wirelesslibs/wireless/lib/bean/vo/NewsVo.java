@@ -61,6 +61,7 @@ public class NewsVo {
             /**
              * 新闻视频
              */
+            private int id;
             private int seq;//分页用
             private String title;//应用名或新闻title
             private List<String> images;//图片url
@@ -153,6 +154,14 @@ public class NewsVo {
 
             public void setPlay(int play) {
                 this.play = play;
+            }
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
             }
         }
     }

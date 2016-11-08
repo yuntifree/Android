@@ -1,5 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,6 +16,7 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
+import com.yunxingzh.wireless.mvp.ui.activity.VideoPlayActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineVideoAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.SpacesItemDecoration;
@@ -23,13 +25,14 @@ import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by stephon_ on 2016/11/2.
  * 头条-视频
  */
 
-public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView ,SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener{
+public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
     private final static int HEAD_LINE_TYPE = 1;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -39,7 +42,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private HeadLineVideoAdapter headLineVideoAdapter;
     //下拉刷新
     private SwipeRefreshLayout mSwipeRefreshLay;
-    private NewsVo newsVo;
+    private List<NewsVo.Data.NewsData> newsVo;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     }
 
     public void initView(View view) {
-        mListRv = findView(view,R.id.list_rv);
+        mListRv = findView(view, R.id.list_rv);
         mListRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         mListRv.addItemDecoration(new SpacesItemDecoration(Constants.ITEM_HEIGHT));
         mSwipeRefreshLay = findView(view, R.id.swipe_refresh_news);
@@ -64,17 +67,14 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         mListRv.setAdapter(headLineVideoAdapter);
 
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
+        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
 
         mListRv.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-//                List<NewsVo.NewsDataVo> dataList = baseQuickAdapter.getData();
-//                NewsVo.NewsDataVo newsVo = dataList.get(i);
-//                Intent intent = new Intent(getActivity(), AboutWebViewActivity.class);
-//                intent.putExtra(Constants.FLAG_WEBVIEW,Constants.FLAG_ADVERTISES_PAGE);
-//                intent.putExtra("url",newsVo.getUrl());
-//                startActivity(intent);
+                List<NewsVo.Data.NewsData> data = baseQuickAdapter.getData();
+                iHeadLinePresenter.videoPlayerCount(data.get(i).getId());//记录播放次数
+                startActivity(VideoPlayActivity.class,Constants.VIDEO_URL,data.get(i).getDst());
             }
         });
     }
@@ -83,7 +83,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     public void getHeadLineSuccess(NewsVo newsVoList) {
         mSwipeRefreshLay.setRefreshing(false);
         if (newsVoList != null) {
-            newsVo = newsVoList;
+            newsVo = newsVoList.getData().getInfos();
             if (newsVoList.getData().getHasmore() == 1) {
                 headLineVideoAdapter.setNewData(newsVoList.getData().getInfos());
             } else {
@@ -102,11 +102,17 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     @Override
     public void onRefresh() {
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
+        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
     }
 
     @Override
     public void onLoadMoreRequested() {
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
+        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+    }
+
+    public void startActivity(Class activity,String key,String videoUrl) {
+        Intent intent = new Intent(getActivity(), activity);
+        intent.putExtra(key, videoUrl);
+        startActivity(intent);
     }
 }

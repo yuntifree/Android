@@ -40,7 +40,7 @@ public class JsonUtils {
     }
 
     public static String jsonStirngForMain(int uid, String token, int term, double version, long ts,
-                                          int nettype,int type,int seq) {
+                                          int nettype,int type,int seq,int id) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("uid", uid);
@@ -52,6 +52,7 @@ public class JsonUtils {
             JSONObject data = new JSONObject();
             data.put("type", type);
             data.put("seq", seq);
+            data.put("id", id);
             jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();

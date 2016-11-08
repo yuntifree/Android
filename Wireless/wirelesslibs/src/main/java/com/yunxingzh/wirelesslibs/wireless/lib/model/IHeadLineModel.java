@@ -14,6 +14,12 @@ public interface IHeadLineModel {
         void onGetHeadLineFailed(String errorMsg);
     }
 
+    interface onVideoPlayerCountListener{
+        void onVideoPlayerCountSuccess();
+        void onVideoPlayerCountFailed(int error);
+        void onVideoPlayerCountFailed(String errorMsg);
+    }
+
     /***
      * 获取头条（新闻，视频，应用，游戏）内容
      * @param type 0-新闻 1-视频 2-应用 3-游戏
@@ -22,4 +28,11 @@ public interface IHeadLineModel {
      */
     void getHeadLine(int uid, String token, int term, double version, long ts,
                      int nettype,int type, int seq, onGetHeadLineListener listener);
+
+    /***
+     * 记录点击播放次数
+     * @param listener
+     */
+    void videoPlayerCount(int uid, String token, int term, double version, long ts,
+                     int nettype,int id, onVideoPlayerCountListener listener);
 }

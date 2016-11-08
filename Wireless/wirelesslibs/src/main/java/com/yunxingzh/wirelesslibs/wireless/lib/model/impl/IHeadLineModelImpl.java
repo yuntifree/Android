@@ -19,7 +19,7 @@ public class IHeadLineModelImpl implements IHeadLineModel {
     @Override
     public void getHeadLine(int uid, String token, int term, double version, long ts,
                             int nettype,int type, int seq, final onGetHeadLineListener listener) {
-        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,type,seq);
+        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,type,seq,0);
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 
@@ -36,6 +36,29 @@ public class IHeadLineModelImpl implements IHeadLineModel {
             @Override
             public void onFailure(int code, Headers headers, int error, Throwable t) {
                 listener.onGetHeadLineFailed(error);
+            }
+        });
+    }
+
+    @Override
+    public void videoPlayerCount(int uid, String token, int term, double version, long ts, int nettype, int id, final onVideoPlayerCountListener listener) {
+        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,0,0,id);
+        OkRequestParams params = new OkRequestParams();
+        params.put("key", jsonStr);
+
+        OkHttpUtil.post(Api.NEWS_LIST, params, new OkHttpResBeanHandler<NewsVo>() {
+            @Override
+            public void onSuccess(int code, Headers headers, NewsVo response) {
+                if (response.getErrno() == HttpCode.HTTP_OK) {
+                    listener.onVideoPlayerCountSuccess();
+                } else {
+                    listener.onVideoPlayerCountFailed(response.getDesc());
+                }
+            }
+
+            @Override
+            public void onFailure(int code, Headers headers, int error, Throwable t) {
+                listener.onVideoPlayerCountFailed(error);
             }
         });
     }

@@ -102,6 +102,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         }
     }
 
+
     @Override
     public void onRefresh() {
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);

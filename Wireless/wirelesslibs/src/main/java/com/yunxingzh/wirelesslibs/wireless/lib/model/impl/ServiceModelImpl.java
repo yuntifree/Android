@@ -19,7 +19,7 @@ import okhttp3.Headers;
 public class ServiceModelImpl implements IServiceModel{
     @Override
     public void getService(int uid, String token, int term, double version, long ts, int nettype, final onGetServiceListener listener) {
-        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,0,0);
+        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,0,0,0);
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 

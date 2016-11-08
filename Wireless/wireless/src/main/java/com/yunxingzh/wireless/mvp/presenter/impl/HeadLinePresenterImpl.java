@@ -13,7 +13,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
  * Created by stephon on 2016/11/3.
  */
 
-public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.onGetHeadLineListener {
+public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.onGetHeadLineListener,IHeadLineModel.onVideoPlayerCountListener {
 
     private IHeadLineView iHeadLineView;
     private IHeadLineModel iHeadLineModel;
@@ -30,6 +30,16 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
             iHeadLineModel.getHeadLine(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
                     0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
                     StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),type,seq,this);
+        }
+    }
+
+    @Override
+    public void videoPlayerCount(int id) {
+        if (iHeadLineView != null){
+            iHeadLineView.showProgress();
+            iHeadLineModel.videoPlayerCount(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
+                    0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
+                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),id,this);
         }
     }
 
@@ -51,6 +61,30 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
 
     @Override
     public void onGetHeadLineFailed(String errorMsg) {
+        if(iHeadLineView != null){
+            iHeadLineView.hideProgress();
+            iHeadLineView.showErrorMsg(errorMsg);
+        }
+    }
+
+    @Override
+    public void onVideoPlayerCountSuccess() {
+        if (iHeadLineView != null){
+            iHeadLineView.hideProgress();
+            iHeadLineView.videoPlayerCountSuccess();
+        }
+    }
+
+    @Override
+    public void onVideoPlayerCountFailed(int error) {
+        if(iHeadLineView != null){
+            iHeadLineView.hideProgress();
+            iHeadLineView.showError(error);
+        }
+    }
+
+    @Override
+    public void onVideoPlayerCountFailed(String errorMsg) {
         if(iHeadLineView != null){
             iHeadLineView.hideProgress();
             iHeadLineView.showErrorMsg(errorMsg);
