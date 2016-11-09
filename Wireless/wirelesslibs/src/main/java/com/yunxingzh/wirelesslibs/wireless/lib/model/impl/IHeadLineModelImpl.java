@@ -2,6 +2,7 @@ package com.yunxingzh.wirelesslibs.wireless.lib.model.impl;
 
 import com.yunxingzh.wirelesslibs.wireless.lib.api.Api;
 import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.dto.StringDto;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.IHeadLineModel;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
@@ -46,9 +47,9 @@ public class IHeadLineModelImpl implements IHeadLineModel {
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 
-        OkHttpUtil.post(Api.NEWS_LIST, params, new OkHttpResBeanHandler<NewsVo>() {
+        OkHttpUtil.post(Api.VIDEO_COUNT, params, new OkHttpResBeanHandler<StringDto>() {
             @Override
-            public void onSuccess(int code, Headers headers, NewsVo response) {
+            public void onSuccess(int code, Headers headers, StringDto response) {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
                     listener.onVideoPlayerCountSuccess();
                 } else {

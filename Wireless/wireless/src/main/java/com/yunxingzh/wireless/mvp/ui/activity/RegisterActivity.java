@@ -5,9 +5,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.presenter.IRegisterPresenter;
@@ -21,7 +24,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 /**
  * Created by Stephen on 2016/9/8.
  */
-public class RegisterActivity extends NetWorkBaseActivity implements IRegisterView, View.OnClickListener {
+public class RegisterActivity extends NetWorkBaseActivity implements IRegisterView, View.OnClickListener,TextWatcher {
 
     private final static int TYPE = 0;//验证类型 0-(注册)
     private final static int MILLISECOND = 1000;//毫秒
@@ -29,7 +32,8 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
     private final static int TIME = SECOND * MILLISECOND;
 
     private EditText mValidateCodeEt, mLoPhoneEt;
-    private Button mLoRegisterBtn, mGetValidateCodeBtn;
+    private Button mLoRegisterBtn;
+    private TextView mGetValidateCodeBtn;
     private IRegisterPresenter iLoginPresenter;
     private TimeCount mTimeCount;
 
@@ -43,6 +47,7 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
 
     public void initView() {
         mValidateCodeEt = findView(R.id.validate_code_et);
+        mValidateCodeEt.addTextChangedListener(this);
         mLoPhoneEt = findView(R.id.lo_phone_et);
         mGetValidateCodeBtn = findView(R.id.get_validate_code_btn);
         mGetValidateCodeBtn.setOnClickListener(this);
@@ -87,6 +92,19 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
         startActivity(intent);
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        mLoRegisterBtn.setTextColor(Color.parseColor("#ffffff"));
+    }
+
     class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
@@ -102,8 +120,7 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
         @Override
         public void onTick(long millisUntilFinished) {//计时过程显示
             mGetValidateCodeBtn.setEnabled(false);
-            mGetValidateCodeBtn.setBackgroundResource(R.drawable.style_login_btn);
-            mGetValidateCodeBtn.setBackgroundColor(Color.parseColor("#e5e5e5"));
+            mGetValidateCodeBtn.setBackgroundResource(R.drawable.validate_code_style);
             mGetValidateCodeBtn.setText(millisUntilFinished / MILLISECOND + getString(R.string.second));
         }
     }

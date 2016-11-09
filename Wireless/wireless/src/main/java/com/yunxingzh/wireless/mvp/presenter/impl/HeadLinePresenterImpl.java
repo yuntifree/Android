@@ -71,7 +71,6 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     public void onVideoPlayerCountSuccess() {
         if (iHeadLineView != null){
             iHeadLineView.hideProgress();
-            iHeadLineView.videoPlayerCountSuccess();
         }
     }
 

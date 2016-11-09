@@ -31,7 +31,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private final static int STATUS = 0;//0 正常结束程序;1 异常关闭程序
 
     private RadioGroup main_class_group;
-    private BuyingFragment buyingFragment;
+   // private BuyingFragment buyingFragment;
     private HeadLineFragment headlineFragment;
     private ServiceFragment serviceFragment;
     private WirelessFragment wirelessFragment;
@@ -85,12 +85,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 }
                 showFragment(serviceFragment);//服务
                 break;
-            case R.id.four_radio:
-                if (buyingFragment == null) {
-                    buyingFragment = new BuyingFragment();
-                }
-                showFragment(buyingFragment);//抢购
-                break;
+//            case R.id.four_radio:
+//                if (buyingFragment == null) {
+//                    buyingFragment = new BuyingFragment();
+//                }
+//                showFragment(buyingFragment);//抢购
+//                break;
         }
     }
 
