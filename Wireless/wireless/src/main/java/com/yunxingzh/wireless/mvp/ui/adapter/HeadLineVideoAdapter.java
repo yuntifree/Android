@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class HeadLineVideoAdapter extends BaseQuickAdapter<NewsVo.Data.NewsData>
     protected void convert(BaseViewHolder baseViewHolder, NewsVo.Data.NewsData newsVo) {
         Glide.with(mContext).load(newsVo.getImages().get(0)).placeholder(R.drawable.img_default).into((ImageView) baseViewHolder.getView(R.id.video_img));
         baseViewHolder.setText(R.id.video_title, newsVo.getTitle());
-        baseViewHolder.setText(R.id.video_time, newsVo.getSource()+"    "+newsVo.getCtime());
+        baseViewHolder.setText(R.id.video_time, newsVo.getSource()+"    "+ StringUtils.formatDate(newsVo.getCtime()));
         baseViewHolder.setText(R.id.video_play_count,  "播放次数:"+newsVo.getPlay());
     }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
                 viewHolderOne = (ViewHolderOne) convertView.getTag();
             }
             Glide.with(context).load(result.getImages().get(0)).placeholder(R.drawable.img_default).into(viewHolderOne.mTypeOneImg);
-            viewHolderOne.mTypeOneTime.setText(result.getSource() +"    "+ result.getCtime());
+            viewHolderOne.mTypeOneTime.setText(result.getSource() +"    "+ StringUtils.formatDate(result.getCtime()));
             viewHolderOne.mTypeOneTitle.setText(result.getTitle());
 
         } else if (currentType == TYPE_ONE || currentType == TYPE_TWO) { //加载第二种布局（一张或二张）
@@ -91,7 +92,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
                 viewHolderTwo = (ViewHolderTwo) convertView.getTag();
             }
             Glide.with(context).load(result.getImages().get(0)).placeholder(R.drawable.img_default).into(viewHolderTwo.mTypeTwoImg);
-            viewHolderTwo.mTypeTwoTime.setText(result.getSource() +"    "+ result.getCtime());
+            viewHolderTwo.mTypeTwoTime.setText(result.getSource() +"    "+ StringUtils.formatDate(result.getCtime()));
             viewHolderTwo.mTypeTwoTitle.setText(result.getTitle());
         } else if (currentType == TYPE_THREE) {//加载第三种布局（三张图片）
             ViewHolderThree viewHolderThree;
@@ -121,7 +122,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
             }
 
             viewHolderThree.mTypeThreeTitle.setText(result.getTitle());
-            viewHolderThree.mTypeThreeTime.setText(result.getSource() +"    "+ result.getCtime());
+            viewHolderThree.mTypeThreeTime.setText(result.getSource() +"    "+ StringUtils.formatDate(result.getCtime()));
         } else if(currentType == TYPE_NULL){//无图片
             ViewHolderOne viewHolderOne;
             if (convertView == null) {
@@ -135,7 +136,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
                 viewHolderOne = (ViewHolderOne) convertView.getTag();
             }
             viewHolderOne.mTypeOneImg.setVisibility(View.GONE);
-            viewHolderOne.mTypeOneTime.setText(result.getSource() +"    "+ result.getCtime());
+            viewHolderOne.mTypeOneTime.setText(result.getSource() +"    "+ StringUtils.formatDate(result.getCtime()));
             viewHolderOne.mTypeOneTitle.setText(result.getTitle());
         }
         return convertView;

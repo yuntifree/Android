@@ -55,6 +55,7 @@
         <activity
             android:name="com.yunxingzh.wireless.mvp.ui.activity.VideoPlayActivity"
             android:screenOrientation="landscape"
+            android:hardwareAccelerated="true"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
     </application>

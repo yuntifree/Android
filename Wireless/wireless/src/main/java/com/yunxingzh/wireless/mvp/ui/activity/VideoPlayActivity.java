@@ -70,7 +70,12 @@ public class VideoPlayActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                view.loadUrl("javascript:try{autoplay();}catch(e){}");
+                view.loadUrl("javascript:(function() {" +
+                        " var videos = document.getElementsByTagName('video'); " +
+                        "for(var i=0;i<videos.length;i++){" +
+                        "videos.play();" +
+                        "}" +
+                        "})()");
                // view.loadUrl("javascript:(function() {alert(1);}})()");
             }
         });
@@ -84,7 +89,7 @@ public class VideoPlayActivity extends BaseActivity {
                 super.onShowCustomView(view, callback);
             }
         });
-        webView.loadUrl("file:///android_asset/video.html");
+        webView.loadUrl(playUrl);
     }
 
     @Override

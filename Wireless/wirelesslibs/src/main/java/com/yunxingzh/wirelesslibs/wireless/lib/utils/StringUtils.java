@@ -4,6 +4,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -176,5 +179,19 @@ public class StringUtils {
         } catch (UnsupportedEncodingException e) {
             return "";
         }
+    }
+
+    /**
+     * 格式化日期显示
+     */
+    public static String formatDate(String mDate){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date d= null;
+        try {
+            d = formatter.parse(mDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return formatter.format(d);
     }
 }
