@@ -1,17 +1,21 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
+import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
@@ -23,18 +27,21 @@ import java.util.List;
 
 /**
  * Created by stephon_ on 2016/11/1.
- *  无线
+ * 无线
  */
 
-public class WirelessFragment extends BaseFragment implements IHeadLineView,AdapterView.OnItemClickListener {
+public class WirelessFragment extends BaseFragment implements IHeadLineView, AdapterView.OnItemClickListener,View.OnClickListener {
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
 
+    private TextView mTitleLeftContent;
+    private ImageView mTitleReturnIv;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private HeadLineNewsAdapter headLineNewsAdapter;
 
+    private View footView;
     private List<NewsVo.Data.NewsData> newsList;
 
     @Nullable
@@ -47,22 +54,27 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView,Adap
     }
 
     public void initView(View view) {
-        mMainNewsLv = findView(view,R.id.main_news_lv);
+        mTitleReturnIv = findView(view, R.id.title_return_iv);
+        mTitleReturnIv.setVisibility(View.GONE);
+        mTitleLeftContent = findView(view, R.id.title_left_content);
+        mTitleLeftContent.setVisibility(View.VISIBLE);
+        mMainNewsLv = findView(view, R.id.main_news_lv);
     }
 
     public void initData() {
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
+        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
     }
 
     @Override
     public void getHeadLineSuccess(NewsVo newsVo) {
-        if (newsVo != null){
+        if (newsVo != null) {
             newsList = newsVo.getData().getInfos();
         }
-        headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(),newsList,true);
-        View footView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_for_main_news,null);
+        headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsList, true);
+        footView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_for_main_news, null);
         mMainNewsLv.addFooterView(footView);
+        footView.setOnClickListener(this);
         mMainNewsLv.setAdapter(headLineNewsAdapter);
         Utility.setListViewHeight(mMainNewsLv, Constants.LISTVIEW_ITEM_HEIGHT);
         mMainNewsLv.setOnItemClickListener(this);
@@ -70,6 +82,21 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView,Adap
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       ToastUtil.showMiddle(getActivity(),""+position);
+        startActivity(WebViewActivity.class, Constants.URL,newsList.get(position).getDst(),Constants.TITLE,newsList.get(position).getTitle());
+    }
+
+    public void startActivity(Class activity,String key,String videoUrl,String titleKey,String title) {
+        Intent intent = new Intent(getActivity(), activity);
+        intent.putExtra(key, videoUrl);
+        intent.putExtra(titleKey, title);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (footView == v){
+            ToastUtil.showMiddle(getActivity(),"sd");
+           // startActivity(new Intent(getActivity(),HeadLineNewsFragment.class));
+        }
     }
 }

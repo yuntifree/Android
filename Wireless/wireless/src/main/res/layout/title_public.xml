@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.android.percent.support.PercentLinearLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/blue_1296db"
@@ -25,11 +24,19 @@
             android:paddingLeft="10dp">
 
             <TextView
+                android:id="@+id/title_left_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="16sp"
+                android:visibility="gone"
                 android:text="@string/dg_wifi" />
+
+            <ImageView
+                android:id="@+id/title_return_iv"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/return_img"/>
 
         </LinearLayout>
 
@@ -41,6 +48,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="标题"
+            android:singleLine="true"
             android:visibility="gone"
             android:textColor="@color/black"
             android:textSize="18sp"/>
@@ -56,11 +64,11 @@
             android:paddingRight="@dimen/dp_10">
 
             <ImageView
-                android:id="@+id/title_right_tv"
+                android:id="@+id/title_right_iv"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/set"/>
         </LinearLayout>
     </LinearLayout>
 
-</com.zhy.android.percent.support.PercentLinearLayout>
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +9,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
+import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
@@ -67,7 +70,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ToastUtil.showMiddle(getActivity(), "" + position);
+        startActivity(WebViewActivity.class, Constants.URL,data.getInfos().get(position).getDst(),Constants.TITLE,data.getInfos().get(position).getTitle());
     }
 
     @Override
@@ -116,5 +119,12 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         } else {
             iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, lastPosition);
         }
+    }
+
+    public void startActivity(Class activity,String key,String videoUrl,String titleKey,String title) {
+        Intent intent = new Intent(getActivity(), activity);
+        intent.putExtra(key, videoUrl);
+        intent.putExtra(titleKey, title);
+        startActivity(intent);
     }
 }

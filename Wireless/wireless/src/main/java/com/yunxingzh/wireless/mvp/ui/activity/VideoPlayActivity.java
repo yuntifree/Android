@@ -1,14 +1,10 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
@@ -25,9 +21,11 @@ import com.yunxingzh.wireless.mvp.ui.utils.WebViewUtil;
 
 public class VideoPlayActivity extends BaseActivity {
 
+    private View title;
     private WebView webView;
     private ProgressBar mProgressBar;
     private String playUrl;
+    private int loadCount;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,13 +37,15 @@ public class VideoPlayActivity extends BaseActivity {
 
     public void initView() {
         webView = findView(R.id.webView);
+        title = findView(R.id.title);
+        title.setVisibility(View.GONE);
         mProgressBar = findView(R.id.progress_bar);
     }
 
     public void initData() {
         playUrl = getIntent().getStringExtra(Constants.VIDEO_URL);
-
         WebViewUtil.initWebView(webView, mProgressBar);
+        loadCount = 0;
         webView.setWebViewClient(new WebViewClient() {
             /**
              * 当前网页的链接仍在webView中跳转
@@ -69,26 +69,16 @@ public class VideoPlayActivity extends BaseActivity {
              */
             @Override
             public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                view.loadUrl("javascript:(function() {" +
-                        " var videos = document.getElementsByTagName('video'); " +
-                        "for(var i=0;i<videos.length;i++){" +
-                        "videos.play();" +
-                        "}" +
-                        "})()");
-               // view.loadUrl("javascript:(function() {alert(1);}})()");
+                //super.onPageFinished(view, url);
+                //view.loadUrl("javascript:try{autoplay();}catch(e){}");
+                loadCount++;
+                if (loadCount > 1) {
+                    view.loadUrl("javascript:(function() { var videos = document.getElementsByTagName('video'); for(var i=0;i<videos.length;i++){videos[i].play();}})()");
+                }
+                mProgressBar.setVisibility(View.GONE);
             }
         });
 
-        webView.setWebChromeClient(new WebChromeClient() {
-            /**
-             * 显示自定义视图，无此方法视频不能播放
-             */
-            @Override
-            public void onShowCustomView(View view, CustomViewCallback callback) {
-                super.onShowCustomView(view, callback);
-            }
-        });
         webView.loadUrl(playUrl);
     }
 
@@ -100,4 +90,9 @@ public class VideoPlayActivity extends BaseActivity {
         super.onPause();
     }
 
+    @Override
+    protected void onDestroy() {
+        webView.destroy();
+        super.onDestroy();
+    }
 }

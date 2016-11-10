@@ -16,4 +16,6 @@ public class Constants {
     public static final int PAGE_SIZE = 5;
     public static final int LISTVIEW_ITEM_HEIGHT = 50;
     public static final String VIDEO_URL = "video_url";
+    public static final String URL = "url";
+    public static final String TITLE = "title";
 }
