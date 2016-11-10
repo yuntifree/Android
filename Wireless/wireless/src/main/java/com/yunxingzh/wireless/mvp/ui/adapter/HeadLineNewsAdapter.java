@@ -123,19 +123,20 @@ public class HeadLineNewsAdapter extends BaseAdapter {
             viewHolderThree.mTypeThreeTitle.setText(result.getTitle());
             viewHolderThree.mTypeThreeTime.setText(result.getSource() +"    "+ result.getCtime());
         } else if(currentType == TYPE_NULL){//无图片
-            ViewHolderOne viewHolderZero;
+            ViewHolderOne viewHolderOne;
             if (convertView == null) {
-                viewHolderZero = new ViewHolderOne();
+                viewHolderOne = new ViewHolderOne();
                 convertView = inflater.inflate(R.layout.list_item_news_type_advier, null);
-                viewHolderZero.mTypeOneTime = (TextView) convertView.findViewById(R.id.type_one_time);
-                viewHolderZero.mTypeOneTitle = (TextView) convertView.findViewById(R.id.type_one_title);
-                convertView.setTag(viewHolderZero);
+                viewHolderOne.mTypeOneImg = (ImageView) convertView.findViewById(R.id.type_one_img);
+                viewHolderOne.mTypeOneTime = (TextView) convertView.findViewById(R.id.type_one_time);
+                viewHolderOne.mTypeOneTitle = (TextView) convertView.findViewById(R.id.type_one_title);
+                convertView.setTag(viewHolderOne);
             } else {
-                viewHolderZero = (ViewHolderOne) convertView.getTag();
+                viewHolderOne = (ViewHolderOne) convertView.getTag();
             }
-            viewHolderZero.mTypeOneImg.setVisibility(View.GONE);
-            viewHolderZero.mTypeOneTime.setText(result.getSource() +"    "+ result.getCtime());
-            viewHolderZero.mTypeOneTitle.setText(result.getTitle());
+            viewHolderOne.mTypeOneImg.setVisibility(View.GONE);
+            viewHolderOne.mTypeOneTime.setText(result.getSource() +"    "+ result.getCtime());
+            viewHolderOne.mTypeOneTitle.setText(result.getTitle());
         }
         return convertView;
     }
@@ -167,7 +168,11 @@ public class HeadLineNewsAdapter extends BaseAdapter {
             type = TYPE_ADVIER;
             return TYPE_ADVIER;
         } else {//新闻
-            type = dataList.get(position).getImages().size();//根据图片size确定item布局
+            if (dataList.get(position).getImages() == null){
+                type = TYPE_NULL;
+            } else {
+                type = dataList.get(position).getImages().size();//根据图片size确定item布局
+            }
             switch (type) {
                 case TYPE_NULL://无图片
                     return TYPE_NULL;
