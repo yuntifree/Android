@@ -28,6 +28,7 @@ public class VideoPlayActivity extends BaseActivity {
     private WebView webView;
     private ProgressBar mProgressBar;
     private String playUrl;
+    private int loadCount;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,8 +45,8 @@ public class VideoPlayActivity extends BaseActivity {
 
     public void initData() {
         playUrl = getIntent().getStringExtra(Constants.VIDEO_URL);
-
         WebViewUtil.initWebView(webView, mProgressBar);
+        loadCount = 0;
         webView.setWebViewClient(new WebViewClient() {
             /**
              * 当前网页的链接仍在webView中跳转
@@ -69,22 +70,16 @@ public class VideoPlayActivity extends BaseActivity {
              */
             @Override
             public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                view.loadUrl("javascript:try{autoplay();}catch(e){}");
-               // view.loadUrl("javascript:(function() {alert(1);}})()");
+                //super.onPageFinished(view, url);
+                //view.loadUrl("javascript:try{autoplay();}catch(e){}");
+                loadCount++;
+                if (loadCount > 1) {
+                    view.loadUrl("javascript:(function() { var videos = document.getElementsByTagName('video'); alert(videos.length); for(var i=0;i<videos.length;i++){videos[i].play();}})()");
+                }
             }
         });
 
-        webView.setWebChromeClient(new WebChromeClient() {
-            /**
-             * 显示自定义视图，无此方法视频不能播放
-             */
-            @Override
-            public void onShowCustomView(View view, CustomViewCallback callback) {
-                super.onShowCustomView(view, callback);
-            }
-        });
-        webView.loadUrl("file:///android_asset/video.html");
+        webView.loadUrl(playUrl);
     }
 
     @Override
