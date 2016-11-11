@@ -19,6 +19,10 @@
     <string name="map">WiFi地图</string>
     <string name="yun">WiFi公益</string>
     <string name="wifi">WiFi管理</string>
+    <string name="find_more">发现更多小伙伴</string>
+    <string name="speed_font">速度如何一测便知</string>
+    <string name="map_content">全城覆盖随意行走</string>
+    <string name="yun_content">一键扫描惠及全民</string>
     <string name="speed">WiFi测速</string>
     <string name="find_wifi">发现东莞城市免费WiFi</string>
     <string name="welcome">欢迎使用东莞无线</string>

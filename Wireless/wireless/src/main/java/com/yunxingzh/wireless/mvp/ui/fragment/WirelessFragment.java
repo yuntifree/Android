@@ -3,6 +3,8 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
 
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+
     private TextView mTitleLeftContent;
     private ImageView mTitleReturnIv;
     private ListView mMainNewsLv;
@@ -62,6 +67,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     }
 
     public void initData() {
+        fragmentManager = getFragmentManager();
+
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
     }
@@ -95,8 +102,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     @Override
     public void onClick(View v) {
         if (footView == v){
-            ToastUtil.showMiddle(getActivity(),"sd");
-           // startActivity(new Intent(getActivity(),HeadLineNewsFragment.class));
+//            fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null)
+//                    .replace(R.id.main_fragment_parent, new HeadLineFragment());
+//            fragmentTransaction.commit();
         }
     }
 }

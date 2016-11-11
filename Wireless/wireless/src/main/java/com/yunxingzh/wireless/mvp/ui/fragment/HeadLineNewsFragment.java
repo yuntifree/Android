@@ -38,10 +38,8 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private IHeadLinePresenter iHeadLinePresenter;
     private HeadLineNewsAdapter headLineNewsAdapter;
 
-    private List<NewsVo.Data.NewsData> newsList;
+    private List<NewsVo.Data.NewsData> newsListNext;
     private NewsVo.Data data;
-    private int lastPosition;
-    private int allSize;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child_news, container, false);
@@ -77,26 +75,18 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     public void getHeadLineSuccess(NewsVo newsVo) {
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setLoading(false);
-        data = newsVo.getData();
         if (newsVo != null) {
-            newsList = newsVo.getData().getInfos();
-
-            allSize = mMainNewsLv.getCount();
-            lastPosition = mMainNewsLv.getLastVisiblePosition();
+            data = newsVo.getData();
         }
 
-//        if (newsList == null) {
-//            newsList = new ArrayList<NewsVo.Data.NewsData>();
-//        }
-
-//        if (data.getHasmore() == 1) {
-//            newsList.clear();
-//        }
+        if (newsListNext == null) {
+            newsListNext = new ArrayList<NewsVo.Data.NewsData>();
+        }
 
         if (data.getInfos() != null) {
-            newsList.addAll(data.getInfos());
+            newsListNext.addAll(data.getInfos());
             if (headLineNewsAdapter == null) {
-                headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsList, false);
+                headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsListNext, false);
                 mMainNewsLv.setAdapter(headLineNewsAdapter);
             }
             headLineNewsAdapter.notifyDataSetChanged();
@@ -109,6 +99,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     @Override
     public void onRefresh() {
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+        newsListNext.clear();
     }
 
     @Override
@@ -117,7 +108,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
             swipeRefreshLayout.setLoading(false);
             ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
         } else {
-            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, lastPosition);
+            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, data.getInfos().get(19).getSeq());
         }
     }
 

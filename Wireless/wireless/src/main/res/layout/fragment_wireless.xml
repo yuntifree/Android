@@ -25,53 +25,106 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="260dp"
-                android:orientation="vertical"
+                android:background="@drawable/main_bg"
                 android:gravity="center"
-                android:background="@color/blue_1296db">
+                android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/main_wifi"/>
+                    android:src="@drawable/main_wifi" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
                     android:gravity="center"
-                    android:text="@string/find_wifi"/>
+                    android:text="@string/find_wifi"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="93dp"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:drawableTop="@drawable/wifi"
                     android:gravity="center"
-                    android:padding="30dp"
-                    android:text="@string/wifi"
-                    android:textColor="@color/gray_6"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:src="@drawable/wifi" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/wifi"
+                            android:textColor="@color/gray_323232"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/find_more"
+                            android:textColor="@color/gray_646464"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <View style="@style/divide_line_vertical" />
 
-                <TextView
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:drawableTop="@drawable/speed"
                     android:gravity="center"
-                    android:padding="30dp"
-                    android:text="@string/speed"
-                    android:textColor="@color/gray_6"
-                    android:textSize="12sp"
-                    android:id="@+id/textView" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:src="@drawable/speed" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/speed"
+                            android:textColor="@color/gray_323232"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/speed_font"
+                            android:textColor="@color/gray_646464"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -79,43 +132,96 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="93dp"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:drawableTop="@drawable/map"
                     android:gravity="center"
-                    android:padding="30dp"
-                    android:text="@string/map"
-                    android:textColor="@color/gray_6"
-                    android:textSize="12sp" />
+                    android:paddingLeft="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:src="@drawable/map" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/map"
+                            android:textColor="@color/gray_323232"
+                            android:textSize="16sp"
+                            android:id="@+id/textView" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/map_content"
+                            android:textColor="@color/gray_646464"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <View style="@style/divide_line_vertical" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:drawableTop="@drawable/yun"
                     android:gravity="center"
-                    android:padding="30dp"
-                    android:text="@string/yun"
-                    android:textColor="@color/gray_6"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:src="@drawable/yun" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/yun"
+                            android:textColor="@color/gray_323232"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/yun_content"
+                            android:textColor="@color/gray_646464"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingTop="3dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
+                android:paddingLeft="8dp"
+                android:paddingTop="3dp"
                 android:text="@string/dg_head_line"
                 android:textColor="@color/blue_1296db"
                 android:textSize="13sp" />
@@ -124,10 +230,10 @@
                 android:id="@+id/main_news_lv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:listSelector="@color/white"
+                android:background="@color/white"
                 android:divider="@color/gray_bfbfbf"
                 android:dividerHeight="0.1dp"
-                android:background="@color/white" />
+                android:listSelector="@color/white" />
         </LinearLayout>
     </ScrollView>
 </com.zhy.android.percent.support.PercentLinearLayout>

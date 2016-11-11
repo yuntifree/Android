@@ -85,12 +85,9 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         if (newsVoList != null) {
             newsVo = newsVoList.getData().getInfos();
             if (newsVoList.getData().getHasmore() == 1) {
-                headLineVideoAdapter.setNewData(newsVoList.getData().getInfos());
-            } else {
                 headLineVideoAdapter.addData(newsVoList.getData().getInfos());
-            }
-
-            if (newsVoList.getData().getHasmore() == 0) {
+               // headLineVideoAdapter.setNewData(newsVoList.getData().getInfos());
+            } else {
                 // 数据全部加载完毕就调用 loadComplete
                 headLineVideoAdapter.loadComplete();
                 ToastUtil.showMiddle(getActivity(), R.string.no_resource);
@@ -103,11 +100,12 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     @Override
     public void onRefresh() {
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+        newsVo.clear();
     }
 
     @Override
     public void onLoadMoreRequested() {
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, newsVo.get(19).getSeq());
     }
 
     public void startActivity(Class activity,String key,String videoUrl) {
