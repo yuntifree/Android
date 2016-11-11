@@ -1,6 +1,8 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,9 +23,11 @@ import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
+import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 
 import java.util.List;
@@ -32,16 +37,21 @@ import java.util.List;
  * 无线
  */
 
-public class WirelessFragment extends BaseFragment implements IHeadLineView, AdapterView.OnItemClickListener,View.OnClickListener {
+public class WirelessFragment extends BaseFragment implements IHeadLineView, AdapterView.OnItemClickListener,View.OnClickListener, ScrollViewListener{
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
+    private final static int PULL_HEIGHT = 10;
+    private final static int HEIGHT = 0;
+    private final static int ITEM = 0;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
-    private TextView mTitleLeftContent;
-    private ImageView mTitleReturnIv;
+    private LinearLayout mNoticeLay;
+    private MyScrollView scrollView;
+    private TextView mTitleLeftContent,mNoticeTv;
+    private ImageView mTitleReturnIv,mShowMoreIv;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private HeadLineNewsAdapter headLineNewsAdapter;
@@ -59,16 +69,21 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     }
 
     public void initView(View view) {
+        scrollView = findView(view,R.id.scrollView);
+        scrollView.setScrollViewListener(this);
         mTitleReturnIv = findView(view, R.id.title_return_iv);
         mTitleReturnIv.setVisibility(View.GONE);
         mTitleLeftContent = findView(view, R.id.title_left_content);
         mTitleLeftContent.setVisibility(View.VISIBLE);
         mMainNewsLv = findView(view, R.id.main_news_lv);
+        mNoticeTv  = findView(view, R.id.notice_tv);
+        mNoticeLay = findView(view, R.id.notice_lay);
+        mShowMoreIv = findView(view, R.id.show_more_iv);
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     public void initData() {
         fragmentManager = getFragmentManager();
-
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
     }
@@ -77,6 +92,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     public void getHeadLineSuccess(NewsVo newsVo) {
         if (newsVo != null) {
             newsList = newsVo.getData().getInfos();
+            mNoticeTv.setText(newsList.get(ITEM).getTitle());
         }
         headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsList, true);
         footView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_for_main_news, null);
@@ -105,6 +121,18 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
 //            fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null)
 //                    .replace(R.id.main_fragment_parent, new HeadLineFragment());
 //            fragmentTransaction.commit();
+        }
+    }
+
+    @Override
+    public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
+        if (y > PULL_HEIGHT){ //下拉高度大于10
+            mNoticeLay.setVisibility(View.GONE);
+            mShowMoreIv.setVisibility(View.INVISIBLE);
+        } else if(y == HEIGHT){
+            mNoticeLay.setVisibility(View.VISIBLE);
+            mNoticeTv.setText(R.string.head_line);
+            mShowMoreIv.setVisibility(View.VISIBLE);
         }
     }
 }

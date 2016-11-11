@@ -13,7 +13,8 @@
         android:layout_height="0dp"
         app:layout_heightPercent="@string/sw_140px" />
 
-    <ScrollView
+    <com.yunxingzh.wireless.mvp.ui.utils.MyScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -24,7 +25,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="260dp"
+                android:layout_height="300dp"
                 android:background="@drawable/main_bg"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -45,7 +46,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="93dp"
+                android:layout_height="98dp"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -132,7 +133,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="93dp"
+                android:layout_height="98dp"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -141,8 +142,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp">
 
                     <ImageView
                         android:layout_width="46dp"
@@ -156,13 +157,13 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/textView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/map"
                             android:textColor="@color/gray_323232"
-                            android:textSize="16sp"
-                            android:id="@+id/textView" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -191,49 +192,76 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="5dp"
+                        android:gravity="center"
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_gravity="left"
+                            android:layout_marginTop="30dp"
                             android:text="@string/yun"
                             android:textColor="@color/gray_323232"
                             android:textSize="16sp" />
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_gravity="left"
+                            android:layout_marginBottom="10dp"
                             android:text="@string/yun_content"
                             android:textColor="@color/gray_646464"
                             android:textSize="10sp" />
+
+                        <ImageView
+                            android:id="@+id/show_more_iv"
+                            android:layout_width="80dp"
+                            android:layout_height="24dp"
+                            android:paddingBottom="3dp"
+                            android:src="@drawable/more" />
+
                     </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
+            <View style="@style/divide_line_horizontal" />
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/notice_lay"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:paddingLeft="8dp"
-                android:paddingTop="3dp"
-                android:text="@string/dg_head_line"
-                android:textColor="@color/blue_1296db"
-                android:textSize="13sp" />
+                android:layout_height="20dp"
+                android:background="@color/blue_def2fe"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="2.5dp"
+                    android:src="@drawable/notice" />
+
+                <TextView
+                    android:id="@+id/notice_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="东莞虎门一火车"
+                    android:lines="1"
+                    android:textColor="@color/blue_4a90e2"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
             <ListView
                 android:id="@+id/main_news_lv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:divider="@color/gray_bfbfbf"
+                android:divider="@color/gray_da"
                 android:dividerHeight="0.1dp"
                 android:listSelector="@color/white" />
+
         </LinearLayout>
-    </ScrollView>
+    </com.yunxingzh.wireless.mvp.ui.utils.MyScrollView>
 </com.zhy.android.percent.support.PercentLinearLayout>

@@ -27,11 +27,11 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
 
     private final static int SIZE = 15;//初始化字体size
     private final static int FOCUS_SIZE = 18;//获得焦点后字体size
-    //viewpager's index
+
     private final static int INDEX_ZERO = 0;
     private final static int INDEX_ONE = 1;
-    private final static int INDEX_TWO = 2;
-    private final static int INDEX_THREE = 3;
+//    private final static int INDEX_TWO = 2;
+//    private final static int INDEX_THREE = 3;
 
     private TextView mIdApp,mIdGame,mIdVideo,mIdNews;
     private ViewPager mViewPager;
@@ -51,8 +51,8 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
 
     public void initView(View view) {
         mViewPager = findView(view,R.id.id_viewpager);
-        mIdApp = findView(view,R.id.id_app);
-        mIdGame = findView(view,R.id.id_game);
+       // mIdApp = findView(view,R.id.id_app);
+       // mIdGame = findView(view,R.id.id_game);
         mIdVideo = findView(view,R.id.id_video);
         mIdNews = findView(view,R.id.id_news);
     }
@@ -63,21 +63,21 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
         mIdNews.setTextSize(SIZE);
         mIdVideo.setTextColor(res.getColor(R.color.blue_C0D8F4));
         mIdVideo.setTextSize(SIZE);
-        mIdApp.setTextColor(res.getColor(R.color.blue_C0D8F4));
-        mIdApp.setTextSize(SIZE);
-        mIdGame.setTextColor(res.getColor(R.color.blue_C0D8F4));
-        mIdGame.setTextSize(SIZE);
+      //  mIdApp.setTextColor(res.getColor(R.color.blue_C0D8F4));
+       // mIdApp.setTextSize(SIZE);
+       // mIdGame.setTextColor(res.getColor(R.color.blue_C0D8F4));
+      //  mIdGame.setTextSize(SIZE);
     }
 
     public void initData() {
         mIdNews.setOnClickListener(new TabOnClickListener(INDEX_ZERO));
         mIdVideo.setOnClickListener(new TabOnClickListener(INDEX_ONE));
-        mIdApp.setOnClickListener(new TabOnClickListener(INDEX_TWO));
-        mIdGame.setOnClickListener(new TabOnClickListener(INDEX_THREE));
+//        mIdApp.setOnClickListener(new TabOnClickListener(INDEX_TWO));
+//        mIdGame.setOnClickListener(new TabOnClickListener(INDEX_THREE));
         fragments.add(new HeadLineNewsFragment());
         fragments.add(new HeadLineVideoFragment());
-        fragments.add(new HeadLineAppFragment());
-        fragments.add(new HeadLineGameFragment());
+//        fragments.add(new HeadLineAppFragment());
+//        fragments.add(new HeadLineGameFragment());
 
         headLineFragmentAdapter = new HeadLineFragmentPagerAdapter(getActivity().getSupportFragmentManager(), fragments);
         mViewPager.setAdapter(headLineFragmentAdapter);
@@ -113,14 +113,14 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
                 mIdVideo.setTextColor(res.getColor(R.color.white));
                 mIdVideo.setTextSize(FOCUS_SIZE);
                 break;
-            case INDEX_TWO:
-                mIdApp.setTextColor(res.getColor(R.color.white));
-                mIdApp.setTextSize(FOCUS_SIZE);
-                break;
-            case INDEX_THREE:
-                mIdGame.setTextColor(res.getColor(R.color.white));
-                mIdGame.setTextSize(FOCUS_SIZE);
-                break;
+//            case INDEX_TWO:
+//                mIdApp.setTextColor(res.getColor(R.color.white));
+//                mIdApp.setTextSize(FOCUS_SIZE);
+//                break;
+//            case INDEX_THREE:
+//                mIdGame.setTextColor(res.getColor(R.color.white));
+//                mIdGame.setTextSize(FOCUS_SIZE);
+//                break;
         }
     }
 

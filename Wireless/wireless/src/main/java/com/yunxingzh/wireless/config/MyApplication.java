@@ -1,7 +1,9 @@
 package com.yunxingzh.wireless.config;
 
 import android.app.Application;
+import android.content.Intent;
 
+import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.AreaDataVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.UserInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
