@@ -62,8 +62,8 @@
         android:text="东莞一火车"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="@color/gray_3c3c3c"
-        android:textSize="14sp" />
+        android:textColor="@color/gray_262626"
+        android:textSize="16sp" />
 
     <View style="@style/divide_line_horizontal"
         android:layout_marginTop="5dp"

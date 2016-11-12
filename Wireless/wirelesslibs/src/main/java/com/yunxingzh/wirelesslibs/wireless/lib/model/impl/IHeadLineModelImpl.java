@@ -42,8 +42,8 @@ public class IHeadLineModelImpl implements IHeadLineModel {
     }
 
     @Override
-    public void videoPlayerCount(int uid, String token, int term, double version, long ts, int nettype, int id, final onVideoPlayerCountListener listener) {
-        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,0,0,id);
+    public void clickCount(int uid, String token, int term, double version, long ts, int nettype, int id,int type, final onClickCountListener listener) {
+        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,type,0,id);
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 
@@ -51,15 +51,15 @@ public class IHeadLineModelImpl implements IHeadLineModel {
             @Override
             public void onSuccess(int code, Headers headers, StringDto response) {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
-                    listener.onVideoPlayerCountSuccess();
+                    listener.onClickCountSuccess();
                 } else {
-                    listener.onVideoPlayerCountFailed(response.getDesc());
+                    listener.onClickCountFailed(response.getDesc());
                 }
             }
 
             @Override
             public void onFailure(int code, Headers headers, int error, Throwable t) {
-                listener.onVideoPlayerCountFailed(error);
+                listener.onClickCountFailed(error);
             }
         });
     }

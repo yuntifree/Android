@@ -30,10 +30,44 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageView
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/main_wifi" />
+                    android:layout_height="230dp"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/circle_three_tv"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:background="@drawable/main_circle_three"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textColor="@color/blue_009CFB"
+                        />
+
+                    <TextView
+                        android:id="@+id/circle_second_tv"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:background="@drawable/main_circle_second"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textColor="@color/blue_009CFB"
+                         />
+
+                    <TextView
+                        android:id="@+id/connect_tv"
+                        android:layout_width="104dp"
+                        android:layout_height="104dp"
+                        android:background="@drawable/main_circle"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="一键连接"
+                        android:textColor="@color/blue_009CFB"
+                        android:textSize="13sp" />
+
+                </FrameLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -41,7 +75,29 @@
                     android:gravity="center"
                     android:text="@string/find_wifi"
                     android:textColor="@color/white"
+                    android:layout_marginBottom="10dp"
                     android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|left"
+                        android:text="18°C"
+                        android:textColor="@color/gray_98ffffff"
+                        android:textSize="18sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="多云"
+                        android:textColor="@color/gray_98ffffff"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -51,6 +107,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/main_wifi_manager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -88,7 +145,6 @@
                 </LinearLayout>
 
                 <View style="@style/divide_line_vertical" />
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -224,8 +280,8 @@
 
                     </LinearLayout>
                 </LinearLayout>
-
             </LinearLayout>
+
             <View style="@style/divide_line_horizontal" />
 
             <LinearLayout
@@ -247,8 +303,8 @@
                     android:id="@+id/notice_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="东莞虎门一火车"
                     android:lines="1"
+                    android:text="东莞虎门一火车"
                     android:textColor="@color/blue_4a90e2"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -257,6 +313,7 @@
                 android:id="@+id/main_news_lv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:divider="@color/gray_da"
                 android:dividerHeight="0.1dp"

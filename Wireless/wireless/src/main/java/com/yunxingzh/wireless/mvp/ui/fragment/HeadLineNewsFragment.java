@@ -32,6 +32,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
+    private final static int CLICK_COUNT = 1;//记录点击次数；0-视频，1-新闻，2-广告展示；3-广告点击
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView mMainNewsLv;
@@ -68,6 +69,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        iHeadLinePresenter.clickCount(data.getInfos().get(position).getId(),CLICK_COUNT);
         startActivity(WebViewActivity.class, Constants.URL,data.getInfos().get(position).getDst(),Constants.TITLE,data.getInfos().get(position).getTitle());
     }
 

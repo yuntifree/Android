@@ -10,6 +10,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,7 +53,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
 
     private LinearLayout mNoticeLay;
     private MyScrollView scrollView;
-    private TextView mTitleLeftContent,mNoticeTv;
+    private TextView mTitleLeftContent,mNoticeTv,mConnectTv,mCircleSecondTv,mCircleThreeTv;
     private ImageView mTitleReturnIv,mShowMoreIv;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
@@ -79,9 +82,15 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mNoticeTv  = findView(view, R.id.notice_tv);
         mNoticeLay = findView(view, R.id.notice_lay);
         mShowMoreIv = findView(view, R.id.show_more_iv);
+        mConnectTv = findView(view, R.id.connect_tv);
+        mConnectTv.setOnClickListener(this);
+        mCircleSecondTv = findView(view, R.id.circle_second_tv);
+        mCircleThreeTv = findView(view, R.id.circle_three_tv);
+        AnimationSet alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
+        mCircleSecondTv.startAnimation(alphaAnimation);
+        mCircleThreeTv.startAnimation(alphaAnimation);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     public void initData() {
         fragmentManager = getFragmentManager();
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
@@ -117,7 +126,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
 
     @Override
     public void onClick(View v) {
-        if (footView == v){
+        if (mConnectTv == v){//一键连接
+
+        }else if (footView == v){
 //            fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null)
 //                    .replace(R.id.main_fragment_parent, new HeadLineFragment());
 //            fragmentTransaction.commit();

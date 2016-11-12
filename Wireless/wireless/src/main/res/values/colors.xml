@@ -60,11 +60,14 @@
     <color name="gray_555555">#FF555555</color>
     <color name="gray_5A5A5A">#FF5A5A5A</color>
     <color name="gray_9affffff">#9affffff</color>
+    <color name="gray_98ffffff">#98ffffff</color>
     <color name="gray_b4b4b4">#b4b4b4</color>
     <color name="gray_323232">#323232</color>
     <color name="gray_646464">#646464</color>
     <color name="gray_dcdcdc">#dcdcdc</color>
-
+    <color name="gray_262626">#262626</color>
+    <color name="gray_434343">#434343</color>
+    <color name="gray_848484">#848484</color>
 
 
     <color name="green_1fbd22">#FF1FBD22</color>

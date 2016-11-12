@@ -27,6 +27,6 @@ public class HeadLineVideoAdapter extends BaseQuickAdapter<NewsVo.Data.NewsData>
         Glide.with(mContext).load(newsVo.getImages().get(0)).placeholder(R.drawable.img_default).into((ImageView) baseViewHolder.getView(R.id.video_img));
         baseViewHolder.setText(R.id.video_title, newsVo.getTitle());
         baseViewHolder.setText(R.id.video_time, newsVo.getSource()+"    "+ StringUtils.formatDate(newsVo.getCtime()));
-        baseViewHolder.setText(R.id.video_play_count,  "播放次数:"+newsVo.getPlay());
+        baseViewHolder.setText(R.id.video_play_count,  newsVo.getPlay()+"次播放");
     }
 }

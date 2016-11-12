@@ -73,7 +73,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 List<NewsVo.Data.NewsData> data = baseQuickAdapter.getData();
-                iHeadLinePresenter.videoPlayerCount(data.get(i).getId());//记录播放次数
+                iHeadLinePresenter.clickCount(data.get(i).getId(),HEAD_LINE_SEQ);//记录播放次数
                 startActivity(VideoPlayActivity.class,Constants.VIDEO_URL,data.get(i).getDst());
             }
         });

@@ -14,10 +14,10 @@ public interface IHeadLineModel {
         void onGetHeadLineFailed(String errorMsg);
     }
 
-    interface onVideoPlayerCountListener{
-        void onVideoPlayerCountSuccess();
-        void onVideoPlayerCountFailed(int error);
-        void onVideoPlayerCountFailed(String errorMsg);
+    interface onClickCountListener{
+        void onClickCountSuccess();
+        void onClickCountFailed(int error);
+        void onClickCountFailed(String errorMsg);
     }
 
     /***
@@ -30,9 +30,9 @@ public interface IHeadLineModel {
                      int nettype,int type, int seq, onGetHeadLineListener listener);
 
     /***
-     * 记录点击播放次数
+     * 记录点击次数
      * @param listener
      */
-    void videoPlayerCount(int uid, String token, int term, double version, long ts,
-                     int nettype,int id, onVideoPlayerCountListener listener);
+    void clickCount(int uid, String token, int term, double version, long ts,
+                     int nettype,int id,int type, onClickCountListener listener);
 }
