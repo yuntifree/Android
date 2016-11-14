@@ -37,6 +37,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="g5ncGI823tvjrjcXtrYDpYrYxOMcGNeq" />
+
         <activity android:name=".mvp.ui.activity.MainActivity"
             android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait">
@@ -65,6 +69,11 @@
 
         <activity
             android:name="com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+
+        <activity
+            android:name="com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
 

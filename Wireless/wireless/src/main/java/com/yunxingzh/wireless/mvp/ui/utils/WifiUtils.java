@@ -5,6 +5,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.provider.ContactsContract;
 
 import com.yunxingzh.wireless.R;
 
@@ -48,7 +49,6 @@ public class WifiUtils {
     //开启WIFI
     public void wifiOpen() {
         if (!localWifiManager.isWifiEnabled()) {
-            ToastUtil.showMiddle(context, R.string.opening);
             localWifiManager.setWifiEnabled(true);
         }
     }
@@ -71,11 +71,9 @@ public class WifiUtils {
     }
 
     //得到Wifi配置好的信息
-    public void getConfiguration() {
+    public List<WifiConfiguration> getConfiguration() {
         wifiConfigList = localWifiManager.getConfiguredNetworks();//得到配置好的网络信息
-        for (int i = 0; i < wifiConfigList.size(); i++) {
-//            Log.i("getConfiguration",wifiConfigList.get(i).SSID);
-        }
+       return wifiConfigList;
     }
 
     //判定指定WIFI是否已经配置好,依据WIFI的地址BSSID,返回NetId
@@ -126,7 +124,7 @@ public class WifiUtils {
         return wifiId;
     }
 
-    //连接指定Id的WIFI
+    //连接指定networkId的WIFI
     public boolean connectWifi(int wifiId) {
         for (int i = 0; i < wifiConfigList.size(); i++) {
             WifiConfiguration wifi = wifiConfigList.get(i);

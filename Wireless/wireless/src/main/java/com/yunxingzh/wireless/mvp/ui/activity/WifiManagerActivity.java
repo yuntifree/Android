@@ -1,14 +1,14 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.net.wifi.ScanResult;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
+import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -23,9 +23,8 @@ import com.yunxingzh.wireless.mvp.ui.adapter.WifiManagerAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
+import com.yunxingzh.wireless.mvp.ui.utils.WifiPswDialog;
 import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -45,6 +44,8 @@ public class WifiManagerActivity extends BaseActivity implements View.OnClickLis
     private WifiManagerAdapter wifiManagerAdapter;
     private List<ScanResult> scanResultList;
     private WifiUtils wifiMa;
+    private List<WifiConfiguration> wifiConfigurationList;//已经输入密码连接过的wifi
+    private String wifiPassword = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,84 +78,106 @@ public class WifiManagerActivity extends BaseActivity implements View.OnClickLis
         }
         mWifiRv.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, final View view, int i) {
                 List<ScanResult> scanResult = baseQuickAdapter.getData();
-                WifiInfo info = wifiMa.getCurrentWifiInfo();
-
-                if (scanResult.get(i).BSSID.equals(info.getBSSID())) {//是否当前连接的wifi
-                    int netWorkId = wifiMa.isConfiguration(scanResult.get(i).BSSID);
-                    ToastUtil.showMiddle(WifiManagerActivity.this, "显示当前wifi详情");
-                } else {
-                    if (netWorkId != -1) {
-                        if (localWifiUtils.ConnectWifi(wifiItemId)) {//连接指定WIFI
-                            arg1.setBackgroundResource(R.color.green);
-                        }
-                    } else {//没有配置好信息，配置
-                        WifiPswDialog pswDialog = new WifiPswDialog(ControlPCMainActivity.this, new OnCustomDialogListener() {
-                            @Override
-                            public void back(String str) {
-                                wifiPassword = str;
-                                if (wifiPassword != null) {
-                                    int netId = localWifiUtils.AddWifiConfig(wifiResultList, wifiItemSSID, wifiPassword);
-                                    if (netId != -1) {
-                                        localWifiUtils.getConfiguration();//添加了配置信息，要重新得到配置信息
-                                        if (localWifiUtils.ConnectWifi(netId)) {
-                                            selectedItem.setBackgroundResource(R.color.green);
-                                        }
-                                    } else {
-                                        Toast.makeText(ControlPCMainActivity.this, "网络连接错误", Toast.LENGTH_SHORT).show();
-                                        selectedItem.setBackgroundResource(R.color.burlywood);
+                //WifiInfo info = wifiMa.getCurrentWifiInfo();
+                final int netWorkId = wifiMa.isConfiguration(scanResult.get(i).BSSID);
+                //final String itemId = scanResult.get(i).BSSID;
+//                if (scanResult.get(i).BSSID.equals(info.getBSSID())) {//是否当前连接的wifi
+//                    ToastUtil.showMiddle(WifiManagerActivity.this, "显示当前wifi详情");
+//                } else {
+                if (netWorkId != -1) {
+                    if (wifiMa.connectWifi(netWorkId)) {//连接指定WIFI
+                        view.setBackgroundResource(R.color.red);
+                        ToastUtil.showMiddle(WifiManagerActivity.this, "显示当前wifi详情");
+                    }
+                } else {//没有配置好信息，配置
+                    WifiPswDialog pswDialog = new WifiPswDialog(WifiManagerActivity.this, new WifiPswDialog.OnCustomDialogListener() {
+                        @Override
+                        public void back(String str) {
+                            wifiPassword = str;
+                            if (wifiPassword != null) {
+                                int netId = wifiMa.addWifiConfig(scanResultList, String.valueOf(netWorkId), wifiPassword);
+                                if (netId != -1) {
+                                    wifiMa.getConfiguration();//添加了配置信息，要重新得到配置信息
+                                    if (wifiMa.connectWifi(netId)) {
+                                        view.setBackgroundResource(R.color.green_1fbd22);
                                     }
                                 } else {
-                                    selectedItem.setBackgroundResource(R.color.burlywood);
+                                    ToastUtil.showMiddle(WifiManagerActivity.this, R.string.internet_error);
+                                    view.setBackgroundResource(R.color.yellow_db5800);
                                 }
+                            } else {
+                                view.setBackgroundResource(R.color.blue_00A0FB);
                             }
-                        });
-                    }
+                        }
+                    });
+                    pswDialog.show();
                 }
-            });
-        }
-
-        @Override
-        public void onClick (View v){
-            if(mTitleReturnIv == v){
-                finish();
             }
-        }
+        });
+    }
 
-        @Override
-        public void onRefresh () {
+    @Override
+    public void onClick(View v) {
+        if (mTitleReturnIv == v) {
+            finish();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        if (scanResultList != null) {
             scanResultList.clear();
-            mSwipeWifi.setRefreshing(false);
-            initWifi();
         }
+        ToastUtil.showMiddle(this, R.string.refreshing);
+        new Thread(new RefreshWifiThread()).start();
+    }
 
+    public class RefreshWifiThread implements Runnable {
         @Override
-        public void onCheckedChanged (CompoundButton buttonView,boolean isChecked){
-            if (isChecked) {
-                initWifi();
-            } else {
-                wifiMa.wifiClose();
-                scanResultList.clear();
-                mWifiRv.swapAdapter(wifiManagerAdapter, true);//刷新列表
+        public void run() {
+            try {
+                //耗时操作
+                wifiMa.wifiOpen();
+                wifiMa.wifiStartScan();//开始扫描
+                Thread.sleep(3000);
+                Message message = new Message();
+                message.what = 1;
+
+                scanResultList = wifiMa.getScanResults();//得到扫描结果
+                refreshWifiHandler.sendMessage(message);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
+    }
 
-    public void initWifi() {
-        wifiMa.wifiOpen();
-        wifiMa.wifiStartScan();//开始扫描
-        //wifiMa.getWifiState():0正在关闭,1WIFi不可用,2正在打开,3可用,4状态不可用
-        while (wifiMa.getWifiState() != WifiManager.WIFI_STATE_ENABLED) {//等待Wifi开启
-            Log.i("WifiState", String.valueOf(wifiMa.getWifiState()));
+    final Handler refreshWifiHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    mSwipeWifi.setRefreshing(false);
+                    wifiMa.getConfiguration();
+                    wifiManagerAdapter = new WifiManagerAdapter(scanResultList);
+                    mWifiRv.setAdapter(wifiManagerAdapter);
+                    mWifiRv.swapAdapter(wifiManagerAdapter, true);//刷新列表
+                    break;
+            }
         }
-        try {
-            Thread.sleep(800);//休眠0.8s，不休眠则会在程序首次开启WIFI时候，处理getScanResults结果，wifiResultList.size()发生异常
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    };
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            ToastUtil.showMiddle(this, R.string.opening);
+            new Thread(new RefreshWifiThread()).start();
+        } else {
+            wifiMa.wifiClose();
+            scanResultList.clear();
+            mWifiRv.swapAdapter(wifiManagerAdapter, true);//刷新列表
         }
-        scanResultList = wifiMa.getScanResults();//得到扫描结果
-        wifiMa.getConfiguration();
-        wifiManagerAdapter = new WifiManagerAdapter(scanResultList);
-        mWifiRv.setAdapter(wifiManagerAdapter);
     }
 }

@@ -25,6 +25,7 @@ import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
@@ -52,7 +53,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
-    private LinearLayout mNoticeLay,mMainWifiManager;
+    private LinearLayout mNoticeLay,mMainWifiManager,mMainMapLay;
     private MyScrollView scrollView;
     private TextView mTitleLeftContent,mNoticeTv,mConnectTv,mCircleSecondTv,mCircleThreeTv;
     private ImageView mTitleReturnIv,mShowMoreIv,mTitleRightIv;
@@ -92,6 +93,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mCircleThreeTv = findView(view, R.id.circle_three_tv);
         mMainWifiManager = findView(view, R.id.main_wifi_manager);
         mMainWifiManager.setOnClickListener(this);
+        mMainMapLay = findView(view, R.id.main_map_lay);
+
         alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
         mCircleSecondTv.startAnimation(alphaAnimation);
         mCircleThreeTv.startAnimation(alphaAnimation);
@@ -127,12 +130,14 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     public void onClick(View v) {
         if (mConnectTv == v){//一键连接
 
-        }else if (footView == v){//查看更多新闻
+        } else if (footView == v){//查看更多新闻
 //            fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null)
 //                    .replace(R.id.main_fragment_parent, new HeadLineFragment());
 //            fragmentTransaction.commit();
-        }else if(mMainWifiManager == v){//wifi管理
+        } else if(mMainWifiManager == v){//wifi管理
             startActivity(WifiManagerActivity.class,"","","","");
+        } else if (mMainMapLay == v){//wifi地图
+            startActivity(WifiMapActivity.class,"","","","");
         }
     }
 
