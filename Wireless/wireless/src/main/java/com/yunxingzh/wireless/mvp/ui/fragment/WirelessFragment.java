@@ -24,6 +24,7 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
@@ -51,13 +52,14 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
-    private LinearLayout mNoticeLay;
+    private LinearLayout mNoticeLay,mMainWifiManager;
     private MyScrollView scrollView;
     private TextView mTitleLeftContent,mNoticeTv,mConnectTv,mCircleSecondTv,mCircleThreeTv;
-    private ImageView mTitleReturnIv,mShowMoreIv;
+    private ImageView mTitleReturnIv,mShowMoreIv,mTitleRightIv;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private HeadLineNewsAdapter headLineNewsAdapter;
+    private AnimationSet alphaAnimation;
 
     private View footView;
     private List<NewsVo.Data.NewsData> newsList;
@@ -72,6 +74,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     }
 
     public void initView(View view) {
+        mTitleRightIv = findView(view,R.id.title_right_iv);
+        mTitleRightIv.setVisibility(View.VISIBLE);
         scrollView = findView(view,R.id.scrollView);
         scrollView.setScrollViewListener(this);
         mTitleReturnIv = findView(view, R.id.title_return_iv);
@@ -86,7 +90,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mConnectTv.setOnClickListener(this);
         mCircleSecondTv = findView(view, R.id.circle_second_tv);
         mCircleThreeTv = findView(view, R.id.circle_three_tv);
-        AnimationSet alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
+        mMainWifiManager = findView(view, R.id.main_wifi_manager);
+        mMainWifiManager.setOnClickListener(this);
+        alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
         mCircleSecondTv.startAnimation(alphaAnimation);
         mCircleThreeTv.startAnimation(alphaAnimation);
     }
@@ -117,21 +123,16 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         startActivity(WebViewActivity.class, Constants.URL,newsList.get(position).getDst(),Constants.TITLE,newsList.get(position).getTitle());
     }
 
-    public void startActivity(Class activity,String key,String videoUrl,String titleKey,String title) {
-        Intent intent = new Intent(getActivity(), activity);
-        intent.putExtra(key, videoUrl);
-        intent.putExtra(titleKey, title);
-        startActivity(intent);
-    }
-
     @Override
     public void onClick(View v) {
         if (mConnectTv == v){//一键连接
 
-        }else if (footView == v){
+        }else if (footView == v){//查看更多新闻
 //            fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null)
 //                    .replace(R.id.main_fragment_parent, new HeadLineFragment());
 //            fragmentTransaction.commit();
+        }else if(mMainWifiManager == v){//wifi管理
+            startActivity(WifiManagerActivity.class,"","","","");
         }
     }
 
@@ -145,5 +146,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
             mNoticeTv.setText(R.string.head_line);
             mShowMoreIv.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void startActivity(Class activity,String key,String videoUrl,String titleKey,String title) {
+        Intent intent = new Intent(getActivity(), activity);
+        intent.putExtra(key, videoUrl);
+        intent.putExtra(titleKey, title);
+        startActivity(intent);
     }
 }

@@ -50,7 +50,7 @@
             android:text="标题"
             android:singleLine="true"
             android:visibility="gone"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="18sp"/>
 
         <LinearLayout
@@ -63,10 +63,21 @@
             android:orientation="vertical"
             android:paddingRight="@dimen/dp_10">
 
+            <ToggleButton
+                android:id="@+id/switch_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/wifi_state_selector"
+                android:layout_gravity="right"
+                android:visibility="gone"
+                android:textOff=""
+                android:textOn="" />
+
             <ImageView
                 android:id="@+id/title_right_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:src="@drawable/set"/>
         </LinearLayout>
     </LinearLayout>

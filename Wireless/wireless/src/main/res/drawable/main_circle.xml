@@ -5,7 +5,7 @@
     android:useLevel="false">
 
     <!-- 实心 -->
-    <solid android:color="@color/white" />
+    <solid android:color="@color/blue_def2fe" />
     <!-- 圆角 -->
     <corners android:radius="360dp" />
     <!-- 边距 -->

@@ -63,6 +63,11 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
 
+        <activity
+            android:name="com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+
     </application>
 
 </manifest>
