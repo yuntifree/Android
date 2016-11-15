@@ -16,7 +16,7 @@ import okhttp3.Headers;
  * Created by stephon on 2016/11/3.
  */
 
-public class IHeadLineModelImpl implements IHeadLineModel {
+public class HeadLineModelImpl implements IHeadLineModel {
     @Override
     public void getHeadLine(int uid, String token, int term, double version, long ts,
                             int nettype,int type, int seq, final onGetHeadLineListener listener) {

@@ -52,18 +52,18 @@ public class WifiMapActivity extends BaseActivity implements View.OnClickListene
     public void initData() {
         baiduMap = mapView.getMap();
         //定义Maker坐标点
-        LatLng point = new LatLng(Double.parseDouble(wei), Double.parseDouble(jing));
-        MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
-        baiduMap.animateMapStatus(status);
+       // LatLng point = new LatLng(Double.parseDouble(wei), Double.parseDouble(jing));
+        //MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
+       // baiduMap.animateMapStatus(status);
         //构建Marker图标
-        BitmapDescriptor bitmap = BitmapDescriptorFactory
-                .fromResource(R.drawable.address_car);
+      //  BitmapDescriptor bitmap = BitmapDescriptorFactory
+        //        .fromResource(R.drawable.address_car);
         //构建MarkerOption，用于在地图上添加Marker
-        OverlayOptions option = new MarkerOptions()
-                .position(point)
-                .icon(bitmap);
+      //  OverlayOptions option = new MarkerOptions()
+         //       .position(point)
+        //        .icon(bitmap);
         //在地图上添加Marker，并显示
-        baiduMap.addOverlay(option);
+      //  baiduMap.addOverlay(option);
     }
 
     @Override

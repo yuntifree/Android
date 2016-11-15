@@ -29,7 +29,7 @@ public class WifiUtils {
         if (localWifiManager == null) {
             localWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         }
-       this.context = context;
+        this.context = context;
     }
 
     /**
@@ -73,16 +73,19 @@ public class WifiUtils {
     //得到Wifi配置好的信息
     public List<WifiConfiguration> getConfiguration() {
         wifiConfigList = localWifiManager.getConfiguredNetworks();//得到配置好的网络信息
-       return wifiConfigList;
+        return wifiConfigList;
     }
 
     //判定指定WIFI是否已经配置好,依据WIFI的地址BSSID,返回NetId
     public int isConfiguration(String SSID) {
+        int id = 0;
         for (int i = 0; i < wifiConfigList.size(); i++) {
-            // Log.i(wifiConfigList.get(i).SSID,String.valueOf( wifiConfigList.get(i).networkId));
-            if (wifiConfigList.get(i).SSID.equals(SSID)) {//地址相同
-                return wifiConfigList.get(i).networkId;
+            String[] splitStr = wifiConfigList.get(i).SSID.split("\"\"");
+            if (splitStr.equals(SSID)) {//地址相同
+                id = wifiConfigList.get(i).networkId;
+                break;
             }
+            return id;
         }
         return -1;
     }

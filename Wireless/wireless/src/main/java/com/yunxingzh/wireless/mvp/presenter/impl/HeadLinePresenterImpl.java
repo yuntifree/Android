@@ -5,7 +5,7 @@ import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.IHeadLineModel;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.IHeadLineModelImpl;
+import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.HeadLineModelImpl;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
@@ -20,7 +20,7 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
 
     public HeadLinePresenterImpl(IHeadLineView view) {
         iHeadLineView = view;
-        iHeadLineModel = new IHeadLineModelImpl();
+        iHeadLineModel = new HeadLineModelImpl();
     }
 
     @Override

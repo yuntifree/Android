@@ -12,4 +12,6 @@ public class Api {
     public static final String NEWS_LIST = WEB_HOST + "hot";//获取新闻 -视频 -应用 -游戏
     public static final String SERVICE = WEB_HOST + "services";//服务
     public static final String VIDEO_COUNT = WEB_HOST + "report_play";//记录视频播放次数
+    public static final String GET_WIFI_LIST = WEB_HOST + "fetch_wifi";//获取wifi列表
+
 }

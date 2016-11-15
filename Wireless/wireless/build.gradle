@@ -25,5 +25,6 @@ dependencies {
     compile project(':wirelesslibs')
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/dg360wifisdk_v1.0.1.jar')
 }
 

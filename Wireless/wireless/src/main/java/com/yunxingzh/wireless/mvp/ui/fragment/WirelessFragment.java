@@ -94,6 +94,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mMainWifiManager = findView(view, R.id.main_wifi_manager);
         mMainWifiManager.setOnClickListener(this);
         mMainMapLay = findView(view, R.id.main_map_lay);
+        mMainMapLay.setOnClickListener(this);
 
         alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
         mCircleSecondTv.startAnimation(alphaAnimation);

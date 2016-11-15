@@ -19,12 +19,16 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.mvp.presenter.IWifiManagerPresenter;
 import com.yunxingzh.wireless.mvp.ui.adapter.WifiManagerAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.WifiPswDialog;
 import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
+import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.LocationUtils;
 
 import java.util.List;
 
@@ -33,7 +37,7 @@ import java.util.List;
  * wifi管理
  */
 
-public class WifiManagerActivity extends BaseActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,
+public class WifiManagerActivity extends BaseActivity implements IWifiManagerView, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,
         CompoundButton.OnCheckedChangeListener {
 
     private TextView mTitleNameTv;
@@ -46,6 +50,9 @@ public class WifiManagerActivity extends BaseActivity implements View.OnClickLis
     private WifiUtils wifiMa;
     private List<WifiConfiguration> wifiConfigurationList;//已经输入密码连接过的wifi
     private String wifiPassword = null;
+
+    private List<WifiVo.WifiData.MWifiInfo> mWifiInfos;
+    private IWifiManagerPresenter iWifiManagerPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +79,7 @@ public class WifiManagerActivity extends BaseActivity implements View.OnClickLis
     }
 
     public void initData() {
+        LocationUtils.initLocation(this);
         wifiMa = new WifiUtils(this);
         if (wifiMa.getWlanState()) {
             mSwitchBtn.setChecked(true);
@@ -81,11 +89,8 @@ public class WifiManagerActivity extends BaseActivity implements View.OnClickLis
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, final View view, int i) {
                 List<ScanResult> scanResult = baseQuickAdapter.getData();
                 //WifiInfo info = wifiMa.getCurrentWifiInfo();
-                final int netWorkId = wifiMa.isConfiguration(scanResult.get(i).BSSID);
-                //final String itemId = scanResult.get(i).BSSID;
-//                if (scanResult.get(i).BSSID.equals(info.getBSSID())) {//是否当前连接的wifi
-//                    ToastUtil.showMiddle(WifiManagerActivity.this, "显示当前wifi详情");
-//                } else {
+                final int netWorkId = wifiMa.isConfiguration(scanResult.get(i).SSID);
+
                 if (netWorkId != -1) {
                     if (wifiMa.connectWifi(netWorkId)) {//连接指定WIFI
                         view.setBackgroundResource(R.color.red);
@@ -134,6 +139,11 @@ public class WifiManagerActivity extends BaseActivity implements View.OnClickLis
         new Thread(new RefreshWifiThread()).start();
     }
 
+    @Override
+    public void getWifiSuccess(WifiVo wifiVo) {
+        mWifiInfos = wifiVo.getData().getInfos();
+    }
+
     public class RefreshWifiThread implements Runnable {
         @Override
         public void run() {
@@ -144,6 +154,8 @@ public class WifiManagerActivity extends BaseActivity implements View.OnClickLis
                 Thread.sleep(3000);
                 Message message = new Message();
                 message.what = 1;
+
+                iWifiManagerPresenter.getWifi(LocationUtils.longitude,LocationUtils.latitude);//从服务器获取附近wifi
 
                 scanResultList = wifiMa.getScanResults();//得到扫描结果
                 refreshWifiHandler.sendMessage(message);
@@ -160,7 +172,7 @@ public class WifiManagerActivity extends BaseActivity implements View.OnClickLis
             switch (msg.what) {
                 case 1:
                     mSwipeWifi.setRefreshing(false);
-                    wifiMa.getConfiguration();
+                    wifiConfigurationList = wifiMa.getConfiguration();//得到已经配置好的列表
                     wifiManagerAdapter = new WifiManagerAdapter(scanResultList);
                     mWifiRv.setAdapter(wifiManagerAdapter);
                     mWifiRv.swapAdapter(wifiManagerAdapter, true);//刷新列表
