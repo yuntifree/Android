@@ -3,6 +3,7 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.IHeadLineModel;
@@ -16,7 +17,8 @@ import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
  * Created by stephon on 2016/11/3.
  */
 
-public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.onGetHeadLineListener,IHeadLineModel.onClickCountListener,IWeatherNewsModel.onWeatherNewsListener {
+public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.onGetHeadLineListener,IHeadLineModel.onClickCountListener,
+        IWeatherNewsModel.onWeatherNewsListener,IHeadLineModel.onGetFontInfoListener {
 
     private IWeatherNewsModel iWeatherNewsModel;
     private IHeadLineView iHeadLineView;
@@ -50,6 +52,16 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
 
     @Override
     public void weatherNews() {
+        if (iHeadLineView != null){
+            iHeadLineView.showProgress();
+            iWeatherNewsModel.weatherNews(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
+                    0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
+                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),this);
+        }
+    }
+
+    @Override
+    public void getFontInfo() {
         if (iHeadLineView != null){
             iHeadLineView.showProgress();
             iWeatherNewsModel.weatherNews(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
@@ -123,6 +135,30 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
 
     @Override
     public void onWeatherNewsFailed(String errorMsg) {
+        if (iHeadLineView != null){
+            iHeadLineView.hideProgress();
+            iHeadLineView.showErrorMsg(errorMsg);
+        }
+    }
+
+    @Override
+    public void onGetFontInfoSuccess(FontInfoVo fontInfoVo) {
+        if (iHeadLineView != null){
+            iHeadLineView.hideProgress();
+            iHeadLineView.getFontInfoSuccess(fontInfoVo);
+        }
+    }
+
+    @Override
+    public void onGetFontInfoFailed(int error) {
+        if (iHeadLineView != null){
+            iHeadLineView.hideProgress();
+            iHeadLineView.showError(error);
+        }
+    }
+
+    @Override
+    public void onGetFontInfoFailed(String errorMsg) {
         if (iHeadLineView != null){
             iHeadLineView.hideProgress();
             iHeadLineView.showErrorMsg(errorMsg);

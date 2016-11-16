@@ -33,36 +33,33 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="230dp"
-                    android:layout_marginBottom="10dp"
-                    >
+                    android:layout_marginBottom="10dp">
 
                     <TextView
                         android:id="@+id/circle_three_tv"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
+                        android:layout_gravity="center"
                         android:background="@drawable/main_circle_three"
                         android:gravity="center"
-                        android:layout_gravity="center"
-                        android:textColor="@color/blue_009CFB"
-                        />
+                        android:textColor="@color/blue_009CFB" />
 
                     <TextView
                         android:id="@+id/circle_second_tv"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
+                        android:layout_gravity="center"
                         android:background="@drawable/main_circle_second"
                         android:gravity="center"
-                        android:layout_gravity="center"
-                        android:textColor="@color/blue_009CFB"
-                         />
+                        android:textColor="@color/blue_009CFB" />
 
                     <TextView
                         android:id="@+id/connect_tv"
                         android:layout_width="104dp"
                         android:layout_height="104dp"
+                        android:layout_gravity="center"
                         android:background="@drawable/main_circle"
                         android:gravity="center"
-                        android:layout_gravity="center"
                         android:text="一键连接"
                         android:textColor="@color/blue_009CFB"
                         android:textSize="13sp" />
@@ -72,10 +69,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:gravity="center"
                     android:text="@string/find_wifi"
                     android:textColor="@color/white"
-                    android:layout_marginBottom="10dp"
                     android:textSize="16sp" />
 
                 <LinearLayout
@@ -83,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -90,6 +88,7 @@
                         android:text="18°C"
                         android:textColor="@color/gray_98ffffff"
                         android:textSize="18sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -319,6 +318,9 @@
                 android:divider="@color/gray_da"
                 android:dividerHeight="0.1dp"
                 android:listSelector="@color/white" />
+
+
+            <include layout="@layout/activity_main_font_info" />
 
         </LinearLayout>
     </com.yunxingzh.wireless.mvp.ui.utils.MyScrollView>

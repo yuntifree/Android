@@ -33,6 +33,7 @@ import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 
@@ -66,6 +67,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
 
     private View footView;
     private List<NewsVo.Data.NewsData> newsList;
+
+    private FontInfoVo.FontData.BannersVo bannersVo;
+    private FontInfoVo.FontData.UserVo userVo;
 
     @Nullable
     @Override
@@ -127,6 +131,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     @Override
     public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {
         weatherNewsVo.getData().getWeather();
+    }
+
+    @Override
+    public void getFontInfoSuccess(FontInfoVo fontInfoVo) {
+        bannersVo = fontInfoVo.getData().getBanner();
+        userVo = fontInfoVo.getData().getUser();
     }
 
     @Override

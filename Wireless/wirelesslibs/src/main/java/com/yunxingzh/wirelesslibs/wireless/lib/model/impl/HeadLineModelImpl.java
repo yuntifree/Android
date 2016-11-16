@@ -3,6 +3,7 @@ package com.yunxingzh.wirelesslibs.wireless.lib.model.impl;
 import com.yunxingzh.wirelesslibs.wireless.lib.api.Api;
 import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.dto.StringDto;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.IHeadLineModel;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
@@ -70,11 +71,11 @@ public class HeadLineModelImpl implements IHeadLineModel {
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 
-        OkHttpUtil.post(Api.GET_FONT_INFO, params, new OkHttpResBeanHandler<StringDto>() {
+        OkHttpUtil.post(Api.GET_FONT_INFO, params, new OkHttpResBeanHandler<FontInfoVo>() {
             @Override
-            public void onSuccess(int code, Headers headers, StringDto response) {
+            public void onSuccess(int code, Headers headers, FontInfoVo response) {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
-                    listener.onGetFontInfoSuccess();
+                    listener.onGetFontInfoSuccess(response);
                 } else {
                     listener.onGetFontInfoFailed(response.getDesc());
                 }

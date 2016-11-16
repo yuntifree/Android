@@ -34,6 +34,65 @@ public class FontInfoVo {
     }
 
     public class FontData{
-        
+        private UserVo user;
+        private BannersVo banner;
+
+        public UserVo getUser() {
+            return user;
+        }
+
+        public void setUser(UserVo user) {
+            this.user = user;
+        }
+
+        public BannersVo getBanner() {
+            return banner;
+        }
+
+        public void setBanner(BannersVo banner) {
+            this.banner = banner;
+        }
+
+        public class UserVo{
+            private int total;
+            private int save;
+
+            public int getTotal() {
+                return total;
+            }
+
+            public void setTotal(int total) {
+                this.total = total;
+            }
+
+            public int getSave() {
+                return save;
+            }
+
+            public void setSave(int save) {
+                this.save = save;
+            }
+        }
+
+        public class BannersVo{
+            private String img;
+            private String dst;
+
+            public String getImg() {
+                return img;
+            }
+
+            public void setImg(String img) {
+                this.img = img;
+            }
+
+            public String getDst() {
+                return dst;
+            }
+
+            public void setDst(String dst) {
+                this.dst = dst;
+            }
+        }
     }
 }

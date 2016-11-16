@@ -1,5 +1,6 @@
 package com.yunxingzh.wireless.mvp.view;
 
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 
@@ -10,4 +11,5 @@ import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 public interface IHeadLineView extends IBaseView{
     void getHeadLineSuccess(NewsVo newsVo);
     void weatherNewsSuccess(WeatherNewsVo weatherNewsVo);
+    void getFontInfoSuccess(FontInfoVo fontInfoVo);
 }

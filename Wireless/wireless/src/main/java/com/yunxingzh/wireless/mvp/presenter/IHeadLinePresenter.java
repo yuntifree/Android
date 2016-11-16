@@ -8,4 +8,5 @@ public interface IHeadLinePresenter {
     void getHeadLine(int type, int seq);
     void clickCount(int id,int type);
     void weatherNews();
+    void getFontInfo();
 }

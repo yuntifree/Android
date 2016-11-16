@@ -1,5 +1,6 @@
 package com.yunxingzh.wirelesslibs.wireless.lib.model;
 
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 
 /**
@@ -21,7 +22,7 @@ public interface IHeadLineModel {
     }
 
     interface onGetFontInfoListener{
-        void onGetFontInfoSuccess();
+        void onGetFontInfoSuccess(FontInfoVo fontInfoVo);
         void onGetFontInfoFailed(int error);
         void onGetFontInfoFailed(String errorMsg);
     }
