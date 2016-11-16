@@ -1,12 +1,14 @@
 package com.yunxingzh.wireless.mvp.ui.adapter;
 
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiInfo;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
@@ -17,6 +19,8 @@ import java.util.List;
  */
 
 public class WifiManagerAdapter extends BaseQuickAdapter<ScanResult> {
+
+    private WifiUtils info;
 
     public WifiManagerAdapter(List<ScanResult> data) {
         super(R.layout.list_item_wifi_manager, data);
@@ -34,5 +38,11 @@ public class WifiManagerAdapter extends BaseQuickAdapter<ScanResult> {
         } else {
             Glide.with(mContext).load(R.drawable.signal_password1).placeholder(R.drawable.signal_password0).into((ImageView) baseViewHolder.getView(R.id.wifi_signal));
         }
+
+//        info = new WifiUtils();
+//        info.getCurrentWifiInfo();//当前连接的wifi信息
+//        if (info.getSSID().equals(wifiConfigurationList.get(i).SSID)) {
+//
+//        }
     }
 }

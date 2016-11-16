@@ -22,7 +22,9 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +98,12 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             ToastUtil.showMiddle(getActivity(), R.string.re_error);
         }
     }
+
+    @Override
+    public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {}
+
+    @Override
+    public void getFontInfoSuccess(FontInfoVo fontInfoVo) {}
 
     @Override
     public void onRefresh() {

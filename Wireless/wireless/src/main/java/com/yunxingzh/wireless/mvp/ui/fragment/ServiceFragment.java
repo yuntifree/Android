@@ -7,7 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.mvp.presenter.IServicePresenter;
+import com.yunxingzh.wireless.mvp.presenter.impl.ServicePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
+import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.ServiceVo;
 
@@ -17,6 +20,8 @@ import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.ServiceVo;
  */
 
 public class ServiceFragment extends BaseFragment implements IServiceView{
+
+    private IServicePresenter iServicePresenter;
 
     @Nullable
     @Override
@@ -32,11 +37,12 @@ public class ServiceFragment extends BaseFragment implements IServiceView{
     }
 
     public void initData() {
-
+        iServicePresenter = new ServicePresenterImpl(this);
+        iServicePresenter.getService();
     }
 
     @Override
     public void getServiceSuccess(ServiceVo serviceVo) {
-
+        ToastUtil.showMiddle(getActivity(),"");
     }
 }

@@ -19,7 +19,9 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 
 /**
  * Created by stephon_ on 2016/11/2.
@@ -96,6 +98,12 @@ public class HeadLineGameFragment extends BaseFragment implements IHeadLineView,
             ToastUtil.showMiddle(getActivity(), R.string.re_error);
         }
     }
+
+    @Override
+    public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {}
+
+    @Override
+    public void getFontInfoSuccess(FontInfoVo fontInfoVo) {}
 
     @Override
     public void onRefresh() {

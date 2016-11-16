@@ -11,7 +11,9 @@ public class Api {
     public static final String REGISTER = WEB_HOST + "register";//注册
     public static final String NEWS_LIST = WEB_HOST + "hot";//获取新闻 -视频 -应用 -游戏
     public static final String SERVICE = WEB_HOST + "services";//服务
-    public static final String VIDEO_COUNT = WEB_HOST + "report_play";//记录视频播放次数
+    public static final String CLICK_COUNT = WEB_HOST + "report_click";//记录点击次数
     public static final String GET_WIFI_LIST = WEB_HOST + "fetch_wifi";//获取wifi列表
+    public static final String GET_WEATHER_NEWS = WEB_HOST + "get_weather_news";//首页天气及新闻
+    public static final String GET_FONT_INFO = WEB_HOST + "get_front_info";//首页底部内容
 
 }
