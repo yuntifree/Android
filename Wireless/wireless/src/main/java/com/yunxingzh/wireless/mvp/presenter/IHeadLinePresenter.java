@@ -7,4 +7,5 @@ package com.yunxingzh.wireless.mvp.presenter;
 public interface IHeadLinePresenter {
     void getHeadLine(int type, int seq);
     void clickCount(int id,int type);
+    void weatherNews();
 }

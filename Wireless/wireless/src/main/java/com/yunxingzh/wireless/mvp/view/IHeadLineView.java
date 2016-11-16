@@ -1,6 +1,7 @@
 package com.yunxingzh.wireless.mvp.view;
 
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 
 /**
  * Created by stephon on 2016/11/3.
@@ -8,4 +9,5 @@ import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 
 public interface IHeadLineView extends IBaseView{
     void getHeadLineSuccess(NewsVo newsVo);
+    void weatherNewsSuccess(WeatherNewsVo weatherNewsVo);
 }

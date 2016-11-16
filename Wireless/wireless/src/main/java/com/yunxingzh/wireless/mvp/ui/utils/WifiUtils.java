@@ -8,6 +8,7 @@ import android.net.wifi.WifiManager;
 import android.provider.ContactsContract;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.MyApplication;
 
 import java.util.List;
 
@@ -76,16 +77,14 @@ public class WifiUtils {
         return wifiConfigList;
     }
 
-    //判定指定WIFI是否已经配置好,依据WIFI的地址BSSID,返回NetId
+    //判定指定WIFI是否已经配置好,依据WIFI的地址SSID,返回NetId
     public int isConfiguration(String SSID) {
-        int id = 0;
         for (int i = 0; i < wifiConfigList.size(); i++) {
-            String[] splitStr = wifiConfigList.get(i).SSID.split("\"\"");
-            if (splitStr.equals(SSID)) {//地址相同
-                id = wifiConfigList.get(i).networkId;
-                break;
+            String splitStr = wifiConfigList.get(i).SSID;
+            String result = splitStr.replaceAll("\"", "");
+            if (result.equals(SSID)) {//地址相同
+                return wifiConfigList.get(i).networkId;
             }
-            return id;
         }
         return -1;
     }

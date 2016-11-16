@@ -34,6 +34,7 @@ import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private final static int PULL_HEIGHT = 10;
     private final static int HEIGHT = 0;
     private final static int ITEM = 0;
+    private final static int NEWS = 1;//新闻点击上报
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -123,7 +125,16 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     }
 
     @Override
+    public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {
+        weatherNewsVo.getData().getWeather();
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (newsList.get(position).getImages().size() == NEWS){//图片size=1表示点击的是广告
+            iHeadLinePresenter.clickCount(newsList.get(position).getId(),NEWS);
+        }
+        iHeadLinePresenter.clickCount(newsList.get(position).getId(),NEWS);
         startActivity(WebViewActivity.class, Constants.URL,newsList.get(position).getDst(),Constants.TITLE,newsList.get(position).getTitle());
     }
 

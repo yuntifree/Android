@@ -20,6 +20,12 @@ public interface IHeadLineModel {
         void onClickCountFailed(String errorMsg);
     }
 
+    interface onGetFontInfoListener{
+        void onGetFontInfoSuccess();
+        void onGetFontInfoFailed(int error);
+        void onGetFontInfoFailed(String errorMsg);
+    }
+
     /***
      * 获取头条（新闻，视频，应用，游戏）内容
      * @param type 0-新闻 1-视频 2-应用 3-游戏
@@ -35,4 +41,11 @@ public interface IHeadLineModel {
      */
     void clickCount(int uid, String token, int term, double version, long ts,
                      int nettype,int id,int type, onClickCountListener listener);
+
+    /***
+     * 拉下半页的信息
+     * @param listener
+     */
+    void getFontInfo(int uid, String token, int term, double version, long ts,
+                    int nettype,onGetFontInfoListener listener);
 }
