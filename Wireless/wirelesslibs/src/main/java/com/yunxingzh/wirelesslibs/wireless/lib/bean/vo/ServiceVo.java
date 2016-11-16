@@ -36,16 +36,7 @@ public class ServiceVo {
     }
 
     public class DataVo{
-        private List<TopMenuData> top;
         private List<ServiceData> services;
-
-        public List<TopMenuData> getTop() {
-            return top;
-        }
-
-        public void setTop(List<TopMenuData> top) {
-            this.top = top;
-        }
 
         public List<ServiceData> getServices() {
             return services;
@@ -55,38 +46,9 @@ public class ServiceVo {
             this.services = services;
         }
 
-        public class TopMenuData{
-            private String title;
-            private String icon;
-            private String dst;//跳转地址
-
-            public String getTitle() {
-                return title;
-            }
-
-            public void setTitle(String title) {
-                this.title = title;
-            }
-
-            public String getIcon() {
-                return icon;
-            }
-
-            public void setIcon(String icon) {
-                this.icon = icon;
-            }
-
-            public String getDst() {
-                return dst;
-            }
-
-            public void setDst(String dst) {
-                this.dst = dst;
-            }
-        }
-
         public class ServiceData{
             private String title;
+            private String icon;
             private List<ServiceChildData> items;
 
             public String getTitle() {
@@ -105,9 +67,16 @@ public class ServiceVo {
                 this.items = items;
             }
 
+            public String getIcon() {
+                return icon;
+            }
+
+            public void setIcon(String icon) {
+                this.icon = icon;
+            }
+
             public class ServiceChildData{
                 private String title;
-                private String icon;
                 private String dst;
 
                 public String getTitle() {
@@ -116,14 +85,6 @@ public class ServiceVo {
 
                 public void setTitle(String title) {
                     this.title = title;
-                }
-
-                public String getIcon() {
-                    return icon;
-                }
-
-                public void setIcon(String icon) {
-                    this.icon = icon;
                 }
 
                 public String getDst() {

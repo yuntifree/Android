@@ -36,9 +36,11 @@ import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wirelesslibs.convenientbanner.ConvenientBanner;
 import com.yunxingzh.wirelesslibs.convenientbanner.holder.CBViewHolderCreator;
+import com.yunxingzh.wirelesslibs.convenientbanner.listener.OnItemClickListener;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,6 +166,15 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
                 }
             }, imageList);
         }
+        //banner图跳转
+        mAdRotationBanner.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                if (!StringUtils.isEmpty(bannersVo.getImg())){
+                    startActivity(WebViewActivity.class,Constants.URL,bannersVo.getDst(),"","");
+                }
+            }
+        });
     }
 
     @Override

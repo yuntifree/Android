@@ -1,19 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_f5f5f5"
+    android:orientation="vertical">
 
     <include
         layout="@layout/title_service"
         android:layout_width="match_parent"
-        android:layout_height="45dp"/>
+        android:layout_height="45dp" />
 
-    <ListView
-        android:id="@+id/service_lv"
+    <com.yunxingzh.wireless.mvp.ui.utils.MyScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@color/gray_f5f5f5"
-        android:dividerHeight="10dp"/>
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="95dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/cooperation"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:text="@string/cooperation"
+                    android:textColor="@color/gray_3c3c3c"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/second_hand"
+                    android:gravity="center"
+                    android:drawablePadding="5dp"
+                    android:text="@string/second_hands"
+                    android:textColor="@color/gray_3c3c3c"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/housing"
+                    android:gravity="center"
+                    android:drawablePadding="5dp"
+                    android:text="@string/housing"
+                    android:textColor="@color/gray_3c3c3c"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/housekeeping"
+                    android:gravity="center"
+                    android:drawablePadding="5dp"
+                    android:text="@string/house_keeping"
+                    android:textColor="@color/gray_3c3c3c"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/service_more"
+                    android:gravity="center"
+                    android:drawablePadding="5dp"
+                    android:text="@string/service_more"
+                    android:textColor="@color/gray_3c3c3c"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/service_parent_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </com.yunxingzh.wireless.mvp.ui.utils.MyScrollView>
 </com.zhy.android.percent.support.PercentLinearLayout>
