@@ -22,6 +22,7 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 
@@ -100,6 +101,9 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     @Override
     public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {}
+
+    @Override
+    public void getFontInfoSuccess(FontInfoVo fontInfoVo) {}
 
     @Override
     public void onRefresh() {

@@ -64,7 +64,7 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     public void getFontInfo() {
         if (iHeadLineView != null){
             iHeadLineView.showProgress();
-            iWeatherNewsModel.weatherNews(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
+            iHeadLineModel.getFontInfo(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
                     0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
                     StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),this);
         }

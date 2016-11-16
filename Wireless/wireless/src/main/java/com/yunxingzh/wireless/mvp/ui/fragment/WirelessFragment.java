@@ -27,16 +27,20 @@ import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
+import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
+import com.yunxingzh.wirelesslibs.convenientbanner.ConvenientBanner;
+import com.yunxingzh.wirelesslibs.convenientbanner.holder.CBViewHolderCreator;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +48,7 @@ import java.util.List;
  * 无线
  */
 
-public class WirelessFragment extends BaseFragment implements IHeadLineView, AdapterView.OnItemClickListener,View.OnClickListener, ScrollViewListener{
+public class WirelessFragment extends BaseFragment implements IHeadLineView, AdapterView.OnItemClickListener, View.OnClickListener, ScrollViewListener {
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -56,10 +60,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
-    private LinearLayout mNoticeLay,mMainWifiManager,mMainMapLay;
+    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay;
     private MyScrollView scrollView;
-    private TextView mTitleLeftContent,mNoticeTv,mConnectTv,mCircleSecondTv,mCircleThreeTv;
-    private ImageView mTitleReturnIv,mShowMoreIv,mTitleRightIv;
+    private TextView mTitleLeftContent, mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv,mConnectCountTv,mEconomizeTv;
+    private ImageView mTitleReturnIv, mShowMoreIv, mTitleRightIv;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private HeadLineNewsAdapter headLineNewsAdapter;
@@ -71,6 +75,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private FontInfoVo.FontData.BannersVo bannersVo;
     private FontInfoVo.FontData.UserVo userVo;
 
+    private ConvenientBanner mAdRotationBanner;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,16 +87,16 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     }
 
     public void initView(View view) {
-        mTitleRightIv = findView(view,R.id.title_right_iv);
+        mTitleRightIv = findView(view, R.id.title_right_iv);
         mTitleRightIv.setVisibility(View.VISIBLE);
-        scrollView = findView(view,R.id.scrollView);
+        scrollView = findView(view, R.id.scrollView);
         scrollView.setScrollViewListener(this);
         mTitleReturnIv = findView(view, R.id.title_return_iv);
         mTitleReturnIv.setVisibility(View.GONE);
         mTitleLeftContent = findView(view, R.id.title_left_content);
         mTitleLeftContent.setVisibility(View.VISIBLE);
         mMainNewsLv = findView(view, R.id.main_news_lv);
-        mNoticeTv  = findView(view, R.id.notice_tv);
+        mNoticeTv = findView(view, R.id.notice_tv);
         mNoticeLay = findView(view, R.id.notice_lay);
         mShowMoreIv = findView(view, R.id.show_more_iv);
         mConnectTv = findView(view, R.id.connect_tv);
@@ -101,6 +107,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mMainWifiManager.setOnClickListener(this);
         mMainMapLay = findView(view, R.id.main_map_lay);
         mMainMapLay.setOnClickListener(this);
+        mAdRotationBanner = findView(view, R.id.banner_img);
+        mConnectCountTv = findView(view, R.id.connect_count_tv);
+        mEconomizeTv = findView(view, R.id.economize_tv);
 
         alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
         mCircleSecondTv.startAnimation(alphaAnimation);
@@ -110,6 +119,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     public void initData() {
         fragmentManager = getFragmentManager();
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
+        mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
     }
 
@@ -126,59 +136,88 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mMainNewsLv.setAdapter(headLineNewsAdapter);
         Utility.setListViewHeight(mMainNewsLv, Constants.LISTVIEW_ITEM_HEIGHT);
         mMainNewsLv.setOnItemClickListener(this);
+
+        iHeadLinePresenter.weatherNews();
     }
 
     @Override
     public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {
         weatherNewsVo.getData().getWeather();
+
+        iHeadLinePresenter.getFontInfo();
     }
 
     @Override
     public void getFontInfoSuccess(FontInfoVo fontInfoVo) {
         bannersVo = fontInfoVo.getData().getBanner();
         userVo = fontInfoVo.getData().getUser();
+        mConnectCountTv.setText(userVo.getTotal()+"");
+        mEconomizeTv.setText(userVo.getSave()+"");
+
+        if (bannersVo != null) {
+            List<String> imageList = new ArrayList<String>();
+            imageList.add(bannersVo.getImg());
+            mAdRotationBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
+                @Override
+                public NetworkImageHolderView createHolder() {
+                    return new NetworkImageHolderView();
+                }
+            }, imageList);
+        }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (newsList.get(position).getImages().size() == NEWS){//图片size=1表示点击的是广告
-            iHeadLinePresenter.clickCount(newsList.get(position).getId(),NEWS);
+        if (newsList.get(position).getImages().size() == NEWS) {//图片size=1表示点击的是广告
+            iHeadLinePresenter.clickCount(newsList.get(position).getId(), NEWS);
         }
-        iHeadLinePresenter.clickCount(newsList.get(position).getId(),NEWS);
-        startActivity(WebViewActivity.class, Constants.URL,newsList.get(position).getDst(),Constants.TITLE,newsList.get(position).getTitle());
+        iHeadLinePresenter.clickCount(newsList.get(position).getId(), NEWS);
+        startActivity(WebViewActivity.class, Constants.URL, newsList.get(position).getDst(), Constants.TITLE, newsList.get(position).getTitle());
     }
 
     @Override
     public void onClick(View v) {
-        if (mConnectTv == v){//一键连接
+        if (mConnectTv == v) {//一键连接
 
-        } else if (footView == v){//查看更多新闻
+        } else if (footView == v) {//查看更多新闻
 //            fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null)
 //                    .replace(R.id.main_fragment_parent, new HeadLineFragment());
 //            fragmentTransaction.commit();
-        } else if(mMainWifiManager == v){//wifi管理
-            startActivity(WifiManagerActivity.class,"","","","");
-        } else if (mMainMapLay == v){//wifi地图
-            startActivity(WifiMapActivity.class,"","","","");
+        } else if (mMainWifiManager == v) {//wifi管理
+            startActivity(WifiManagerActivity.class, "", "", "", "");
+        } else if (mMainMapLay == v) {//wifi地图
+            startActivity(WifiMapActivity.class, "", "", "", "");
         }
     }
 
     @Override
     public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
-        if (y > PULL_HEIGHT){ //下拉高度大于10
+        if (y > PULL_HEIGHT) { //下拉高度大于10
             mNoticeLay.setVisibility(View.GONE);
             mShowMoreIv.setVisibility(View.INVISIBLE);
-        } else if(y == HEIGHT){
+        } else if (y == HEIGHT) {
             mNoticeLay.setVisibility(View.VISIBLE);
             mNoticeTv.setText(R.string.head_line);
             mShowMoreIv.setVisibility(View.VISIBLE);
         }
     }
 
-    public void startActivity(Class activity,String key,String videoUrl,String titleKey,String title) {
+    public void startActivity(Class activity, String key, String videoUrl, String titleKey, String title) {
         Intent intent = new Intent(getActivity(), activity);
         intent.putExtra(key, videoUrl);
         intent.putExtra(titleKey, title);
         startActivity(intent);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mAdRotationBanner.stopTurning();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdRotationBanner.startTurning(1500);
     }
 }

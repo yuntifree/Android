@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.android.percent.support.PercentLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ImageView
+    <com.yunxingzh.wirelesslibs.convenientbanner.ConvenientBanner
+        android:id="@+id/banner_img"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/abc_btn_check_material" />
+        app:canLoop="true"/>
 
     <LinearLayout
         android:id="@+id/notice_lay"
@@ -31,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lines="1"
-            android:text="东莞虎门一火车"
+            android:text="更多推荐"
             android:textColor="@color/blue_4a90e2"
             android:textSize="12sp" />
     </LinearLayout>
@@ -47,9 +49,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/buying"
+            android:drawableTop="@drawable/font_news"
             android:gravity="center"
-            android:text="东莞头条"
+            android:text="@string/dg_head_line"
             android:textColor="@color/gray_3c3c3c"
             android:textSize="14sp" />
 
@@ -57,9 +59,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/buying"
+            android:drawableTop="@drawable/font_video"
             android:gravity="center"
-            android:text="东莞头条"
+            android:text="@string/hot_video"
             android:textColor="@color/gray_3c3c3c"
             android:textSize="14sp" />
 
@@ -67,9 +69,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/buying"
+            android:drawableTop="@drawable/font_service"
             android:gravity="center"
-            android:text="东莞头条"
+            android:text="@string/font_service"
             android:textColor="@color/gray_3c3c3c"
             android:textSize="14sp" />
     </LinearLayout>
@@ -85,9 +87,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/buying"
+            android:drawableTop="@drawable/font_zhihui"
             android:gravity="center"
-            android:text="东莞头条"
+            android:text="@string/zhihui_service"
             android:textColor="@color/gray_3c3c3c"
             android:textSize="14sp" />
 
@@ -95,9 +97,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/buying"
+            android:drawableTop="@drawable/font_playing"
             android:gravity="center"
-            android:text="东莞头条"
+            android:text="@string/playing"
             android:textColor="@color/gray_3c3c3c"
             android:textSize="14sp" />
 
@@ -105,9 +107,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/buying"
+            android:drawableTop="@drawable/font_buying"
             android:gravity="center"
-            android:text="东莞头条"
+            android:text="@string/buying"
             android:textColor="@color/gray_3c3c3c"
             android:textSize="14sp" />
     </LinearLayout>
@@ -158,9 +160,12 @@
                 android:textSize="12sp" />
 
             <TextView
+                android:id="@+id/connect_count_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:textColor="@color/blue_009CFB"
                 android:textSize="20sp" />
 
@@ -187,9 +192,12 @@
                 android:textSize="12sp" />
 
             <TextView
+                android:id="@+id/economize_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:textColor="@color/blue_009CFB"
                 android:textSize="20sp" />
 
@@ -201,4 +209,4 @@
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</com.zhy.android.percent.support.PercentLinearLayout>
