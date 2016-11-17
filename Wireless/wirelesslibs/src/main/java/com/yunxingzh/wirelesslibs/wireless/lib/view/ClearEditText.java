@@ -84,6 +84,8 @@ public class ClearEditText extends EditText implements View.OnTouchListener, Vie
         return mOnTouchListener != null && mOnTouchListener.onTouch(view, motionEvent);
     }
 
+
+
     @Override
     public final void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
         if (isFocused()) {

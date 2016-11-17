@@ -39,7 +39,7 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="HhFBlbtOLgX8oua3wky3NYeDfUkLLdk0" />
+            android:value="ApVU11hbcEgzGQGW63SM3NjI6GmG8PHC" />
 
         <activity android:name=".mvp.ui.activity.MainActivity"
             android:theme="@android:style/Theme.NoTitleBar"
@@ -74,6 +74,11 @@
 
         <activity
             android:name="com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+
+        <activity
+            android:name="com.yunxingzh.wireless.mvp.ui.activity.SearchActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
 

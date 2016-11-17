@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue_1296db">
+
+        <!--禁止EditText获得焦点
+         android:focusable="true"
+        android:focusableInTouchMode="true"-->
+
+        <com.yunxingzh.wirelesslibs.wireless.lib.view.ClearEditText
+            android:id="@+id/search_et"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/style_search_second"
+            android:drawableLeft="@drawable/search_black"
+            android:paddingLeft="10dp"
+            android:hint="@string/input_content"
+            android:textColorHint="@color/gray_b4b4b4"
+            android:paddingRight="20dp"
+            android:singleLine="true"
+            android:textColor="@color/gray_3c3c3c"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/search_btn"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_weight="3"
+            android:background="@drawable/style_search"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>

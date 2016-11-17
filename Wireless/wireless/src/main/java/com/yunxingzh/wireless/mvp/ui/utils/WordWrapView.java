@@ -15,8 +15,8 @@ public class WordWrapView extends ViewGroup {
 
     private static final int PADDING_HOR = 10;//水平方向padding
     private static final int PADDING_VERTICAL = 5;//垂直方向padding
-    private static final int SIDE_MARGIN = 10;//左右间距
-    private static final int TEXT_MARGIN = 10;
+    private static final int SIDE_MARGIN = 20;//左右间距
+    private static final int TEXT_MARGIN = 20;
 
     public WordWrapView(Context context) {
         super(context);

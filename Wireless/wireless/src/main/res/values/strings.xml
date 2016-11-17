@@ -76,7 +76,7 @@
     <string name="housing">租房</string>
     <string name="second_hands">二手</string>
     <string name="cooperation">招聘</string>
-
+    <string name="search">搜索</string>
 
 
 
@@ -225,7 +225,7 @@
     <string name="order_select">订车或报关请至少选择一项</string>
     <string name="input_box">装货地址</string>
     <string name="final_address">目的地</string>
-    <string name="input_content">输入搜索关键字</string>
+    <string name="input_content">搜索或输入网址</string>
     <string name="search_error">没有搜索到相关结果</string>
     <string name="air_port">机场信息</string>
     <string name="sea_port">港口信息</string>

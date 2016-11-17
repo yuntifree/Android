@@ -3,7 +3,9 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -51,6 +53,17 @@ public class WebViewActivity extends NetWorkBaseActivity implements View.OnClick
         title = getIntent().getStringExtra(Constants.TITLE);
         mTitleNameTv.setText(title);
         WebViewUtil.initWebView(myWebView, myProgressBar);
+        myWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return false;
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return false;
+            }
+        });
         myWebView.loadUrl(mUrl);
     }
 

@@ -1,5 +1,9 @@
 package com.yunxingzh.wirelesslibs.wireless.lib.utils;
 
+import android.content.Context;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -8,8 +12,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by carey on 2016/5/31 0031.
@@ -59,6 +67,25 @@ public class StringUtils {
         // 把转换后的货币String类型返回
         return format.format(price);
     }
+
+    /**
+     * 定时弹出软键盘
+     */
+    public static void popUpKeyboard(final View view){
+        view.setFocusable(true);
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+                           public void run() {
+                               InputMethodManager inputManager =
+                                       (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                               inputManager.showSoftInput(view, 0);
+                           }
+                       },
+                998);
+    }
+
 
     /**
      * 验证邮箱
