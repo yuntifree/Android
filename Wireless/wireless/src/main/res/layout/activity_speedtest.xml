@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:domo="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_speedtest"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <include
+        layout="@layout/title_public"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tv_t_speed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:shadowColor="#4d000000"
+            android:shadowDx="4"
+            android:shadowDy="4"
+            android:shadowRadius="6"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="145dp"
+                android:layout_marginTop="145dp"
+                android:background="#ffffffff" />
+
+            <com.yunxingzh.wireless.mvp.view.RotatePointer
+                android:id="@+id/rp_tspeed_pointer"
+                android:layout_width="300dp"
+                android:layout_height="290dp"
+                android:layout_centerInParent="true"
+                android:background="@color/transparent"
+                android:visibility="gone"
+                domo:barColor="#000000"
+                domo:barWidth="8dp"
+                domo:circleColor="#ffffff"
+                domo:clockwise="true"
+                domo:firstspinColor="@color/blue"
+                domo:progress="0"
+                domo:rotateImageDrawable="@drawable/btn_tspeed_pointer"
+                domo:secondspinColor="@color/blue"
+                domo:space="5"
+                domo:spinWidth="10dp"
+                domo:startAngle="180"
+                domo:sweepAngle="180" />
+
+            <Button
+                android:text="Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="33dp"
+                android:id="@+id/btn_tspeed_start" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -23,6 +23,7 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.SpeedtestActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
@@ -62,7 +63,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
-    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay;
+    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest;
     private MyScrollView scrollView;
     private TextView mTitleLeftContent, mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv, mConnectCountTv, mEconomizeTv;
     private ImageView mTitleReturnIv, mShowMoreIv, mTitleRightIv;
@@ -113,6 +114,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mAdRotationBanner = findView(view, R.id.banner_img);
         mConnectCountTv = findView(view, R.id.connect_count_tv);
         mEconomizeTv = findView(view, R.id.economize_tv);
+        mMainSpeedtest = findView(view, R.id.main_speedtest_lay);
+        mMainSpeedtest.setOnClickListener(this);
 
         alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
         mCircleSecondTv.startAnimation(alphaAnimation);
@@ -204,6 +207,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
             intent.setClass(getActivity(), ScanCodeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
+        } else if (mMainSpeedtest == v) { // wifi 测速
+            startActivity(SpeedtestActivity.class, "", "", "", "");
         }
     }
 

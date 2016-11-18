@@ -1,9 +1,13 @@
 package com.yunxingzh.wireless.config;
 
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 
+import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
+import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.AreaDataVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.UserInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
@@ -12,12 +16,22 @@ import com.yunxingzh.wirelesslibs.wireless.lib.utils.DeviceUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
+import com.yunxingzh.wireless.service.FWService;
+
 /**
  * Created by Carey on 2016/5/25.
  */
 public class MyApplication extends Application {
+    private static final String TAG = "Application";
 
+    //TODO: change to private and getInstance
     public static MyApplication sApplication;
+    private static String mCurrentProcessName;
+
+    public static MyApplication getInstance() { return sApplication; }
+    private static final String UI_PROCESS_NAME = "com.yunxingzh.wireless";
+    private static final String SERVICE_PROCESS_NAME = "com.yunxingzh.wireless.service";
+
     private boolean isExit = false;
     private String mMark;
     private String mToken;
@@ -29,7 +43,20 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sApplication = this;
-        OkHttpUtil.init(sApplication);
+        if (isUIApplication(this)) {
+            Logg.d(TAG, "on create in ui thread");
+            try {
+                startService(new Intent(this, FWService.class));
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+            FWManager.init(this);
+            OkHttpUtil.init(sApplication);
+            startService();
+            bindService();
+        } else {
+            Logg.d(TAG, "on create in service thread");
+        }
     }
 
     public boolean isExit() {
@@ -105,5 +132,50 @@ public class MyApplication extends Application {
     public void loginOut() {
         MyApplication.sApplication.setToken("");
         MyApplication.sApplication.setUser(null);
+    }
+
+    public static boolean isUIApplication(Context context) {
+        return UI_PROCESS_NAME.equals(getCurrentProcessName(context));
+    }
+
+    public static boolean isServiceApplication(Context context) {
+        return SERVICE_PROCESS_NAME.equals(getCurrentProcessName(context));
+    }
+
+    private void startService() {
+        String cmd = "am startservice --user 0 -n com.yunxingzh.wireless/.service.FWService";
+        try {
+            Runtime runtime = Runtime.getRuntime();
+            runtime.exec(cmd);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            try {
+                startService(new Intent(this, FWService.class));
+            } catch (Throwable e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    private void bindService(){
+        FWManager.getInstance().bindService(this);
+    }
+
+    private static String getCurrentProcessName(Context context) {
+        if (mCurrentProcessName == null) {
+            synchronized (Application.class) {
+                if (mCurrentProcessName == null) {
+                    int myPid = android.os.Process.myPid();
+                    ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+                    for (ActivityManager.RunningAppProcessInfo appProcessInfo : activityManager.getRunningAppProcesses()) {
+                        if (appProcessInfo.pid == myPid) {
+                            mCurrentProcessName = appProcessInfo.processName;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return mCurrentProcessName;
     }
 }

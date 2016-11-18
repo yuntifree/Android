@@ -30,5 +30,4 @@ public final class ViewfinderResultPointCallback implements ResultPointCallback 
   public void foundPossibleResultPoint(ResultPoint point) {
     viewfinderView.addPossibleResultPoint(point);
   }
-
 }

@@ -151,7 +151,8 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:id="@+id/main_speedtest_lay">
 
                     <ImageView
                         android:layout_width="46dp"

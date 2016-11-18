@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RotatePointer">
+        <attr name="rotateImageDrawable" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="Progress_Arc">
+        <attr name="startAngle" format="float" />
+        <attr name="sweepAngle" format="float" />
+        <attr name="firstsweepAngle" format="float"/>
+        <attr name="secondsweepAngle" format="float"/>
+        <attr name="space" format="float"/>
+        <attr name="firstspinColor" format="color" />
+        <attr name="secondspinColor" format="color" />
+        <attr name="barWidth" format="dimension"/>
+        <attr name="barColor" format="color"/>
+        <attr name="spinWidth" format="dimension"/>
+        <attr name="spinHeight" format="dimension"/>
+        <attr name="circleColor" format="color"/>
+        <attr name="borderColor" format="color"/>
+        <attr name="borderWidth" format="dimension"/>
+        <attr name="progress" format="float"/>
+        <attr name="clockwise" format="boolean"/>
+    </declare-styleable>
+</resources>
