@@ -77,8 +77,13 @@
     <string name="second_hands">二手</string>
     <string name="cooperation">招聘</string>
     <string name="search">搜索</string>
-
-
+    <string name="barcode_file_scan_failed_hint">萌照？不识别啊！</string>
+    <string name="scan_time_too_long">扫描时间过长</string>
+    <string name="qrcode">二维码</string>
+    <string name="barcode">条形码</string>
+    <string name="align_qrcode">将二维码放入框内，即可扫描</string>
+    <string name="align_barcode">对准条形码</string>
+    <string name="safecenter_barcode">扫一扫</string>
 
 
 

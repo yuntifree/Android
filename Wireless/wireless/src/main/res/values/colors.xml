@@ -72,9 +72,11 @@
     <color name="gray_f5f5f5">#f5f5f5</color>
     <color name="gray_5a5a5a">#5a5a5a</color>
     <color name="gray_98fcfcfc">#98fcfcfc</color>
+    <color name="grey">#c1c4c1</color>
 
 
 
+    <color name="barcode_green">#00ff26</color>
     <color name="green_1fbd22">#FF1FBD22</color>
     <color name="green_dbf6b8">#FFDBF6B8</color>
     <color name="green_599e00">#FF599E00</color>

@@ -1,24 +1,18 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.view.ClearEditText;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by stephon on 2016/11/17.
@@ -47,18 +41,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     public void initData() {
         //定时弹出软键盘
-//        mSearchEt.setFocusable(true);
-//        mSearchEt.setFocusableInTouchMode(true);
-//        mSearchEt.requestFocus();
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
-//           public void run() {
-//               InputMethodManager inputManager =
-//                   (InputMethodManager) mSearchEt.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        inputManager.showSoftInput(mSearchEt, 0);
-//                      }
-//                },
-//                998);
         StringUtils.popUpKeyboard(mSearchEt);
     }
 
@@ -78,20 +60,18 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        if (mSearchEt.getText().length() != 0) {
-            mSearchBtn.setText(R.string.cancel);
-        } else {
-            mSearchBtn.setText(R.string.search);
-        }
     }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+        if (mSearchEt.getText().length() != 0) {
+            mSearchBtn.setText(R.string.search);
+        } else {
+            mSearchBtn.setText(R.string.cancel);
+        }
     }
 
     @Override
     public void afterTextChanged(Editable s) {
-
     }
 }

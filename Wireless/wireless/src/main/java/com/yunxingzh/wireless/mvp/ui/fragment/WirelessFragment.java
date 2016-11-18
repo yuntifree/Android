@@ -23,6 +23,8 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
+import com.yunxingzh.wireless.mvp.ui.activity.MipcaActivityCapture;
+import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
@@ -91,6 +93,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     public void initView(View view) {
         mTitleRightIv = findView(view, R.id.title_right_iv);
         mTitleRightIv.setVisibility(View.VISIBLE);
+        mTitleRightIv.setOnClickListener(this);
         scrollView = findView(view, R.id.scrollView);
         scrollView.setScrollViewListener(this);
         mTitleReturnIv = findView(view, R.id.title_return_iv);
@@ -198,6 +201,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
             startActivity(WifiManagerActivity.class, "", "", "", "");
         } else if (mMainMapLay == v) {//wifi地图
             startActivity(WifiMapActivity.class, "", "", "", "");
+        } else if(mTitleRightIv == v){//扫码连接东莞wifi
+            startActivity(MipcaActivityCapture.class,"","","","");
         }
     }
 
