@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 /**
  * Created by stephon on 2016/11/16.
- * 自定义父控件(使子控件自动换行)
+ * 自定义父控件(使子控件自动换行)-流式布局
  */
 
 public class WordWrapView extends ViewGroup {

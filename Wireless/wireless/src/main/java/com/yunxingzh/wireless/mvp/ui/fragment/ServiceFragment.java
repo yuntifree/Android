@@ -108,7 +108,6 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             mServiceTitle = new TextView(getActivity());
             mServiceTitle.setTextColor(getResources().getColor(R.color.gray_3c3c3c));
             mServiceTitle.setTextSize(14);
-            mServiceTitle.setGravity(Gravity.CENTER);
             mServiceTitle.setText(dataVoList.get(i).getTitle());
 
             View lineSmall = new View(getActivity());
@@ -119,20 +118,29 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             line.setMinimumHeight(20);
             line.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
 
-            mItemTop.addView(mServiceImg, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 20, 20, 0, 20));
+            mItemTop.addView(mServiceImg, getLayoutParams(Gravity.CENTER, 26, 26, 20, 20, 0, 20));
             mItemTop.addView(mServiceTitle, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 10, 20, 0, 20));
 
             int size = dataVoList.get(i).getItems().size();
             childDatas = dataVoList.get(i).getItems();
 
-            WordWrapView childLay = new WordWrapView(getActivity());
+            LinearLayout childLayOne = new LinearLayout(getActivity());
+            LinearLayout childLayTwo = new LinearLayout(getActivity());
+          //  LinearLayout childLayThree = new LinearLayout(getActivity());
             for (int j = 0; j < size; j++) {
                 final TextView views = new TextView(getActivity());
                 views.setText(childDatas.get(j).getTitle());
                 views.setTextSize(14);
                 views.setTextColor(getResources().getColor(R.color.gray_5a5a5a));
                 views.setTag(childDatas.get(j));
-                childLay.addView(views, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 20, 20, 0, 0));
+                if (j <= 2){
+                    childLayOne.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 50, 0, 0, 0));
+                } else if (j <= 5){
+                    childLayTwo.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 50, 0, 0, 0));
+                } /*else {
+                    childLayThree.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 50, 0, 0, 0));
+                }*/
+
                 views.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -143,8 +151,11 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             }
             mServiceItem.addView(mItemTop);
             mServiceItem.addView(lineSmall, getLayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1, 0, 0, 0, 0));
-            mServiceItem.addView(childLay, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 20, 0, 20));
-            mServiceItem.addView(line, getLayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 20, 0, 20, 0, 0));
+            mServiceItem.addView(childLayOne, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 30, 0, 0));
+            mServiceItem.addView(childLayTwo, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 30, 0, 30));
+          //  mServiceItem.addView(childLayThree, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 30, 0, 30));
+
+            mServiceItem.addView(line, getLayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
             mServiceParentGroup.addView(mServiceItem);
         }
     }

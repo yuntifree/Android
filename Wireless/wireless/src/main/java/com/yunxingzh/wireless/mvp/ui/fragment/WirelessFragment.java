@@ -1,8 +1,8 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
-import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -23,7 +22,6 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
-import com.yunxingzh.wireless.mvp.ui.activity.MipcaActivityCapture;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
@@ -32,7 +30,6 @@ import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
@@ -60,13 +57,14 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private final static int HEIGHT = 0;
     private final static int ITEM = 0;
     private final static int NEWS = 1;//新闻点击上报
+    private final static int SCANNIN_GREQUEST_CODE = 1;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
     private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay;
     private MyScrollView scrollView;
-    private TextView mTitleLeftContent, mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv,mConnectCountTv,mEconomizeTv;
+    private TextView mTitleLeftContent, mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv, mConnectCountTv, mEconomizeTv;
     private ImageView mTitleReturnIv, mShowMoreIv, mTitleRightIv;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
@@ -156,8 +154,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     public void getFontInfoSuccess(FontInfoVo fontInfoVo) {
         bannersVo = fontInfoVo.getData().getBanner();
         userVo = fontInfoVo.getData().getUser();
-        mConnectCountTv.setText(userVo.getTotal()+"");
-        mEconomizeTv.setText(userVo.getSave()+"");
+        mConnectCountTv.setText(userVo.getTotal() + "");
+        mEconomizeTv.setText(userVo.getSave() + "");
 
         if (bannersVo != null) {
             List<String> imageList = new ArrayList<String>();
@@ -173,8 +171,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mAdRotationBanner.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                if (!StringUtils.isEmpty(bannersVo.getImg())){
-                    startActivity(WebViewActivity.class,Constants.URL,bannersVo.getDst(),"","");
+                if (!StringUtils.isEmpty(bannersVo.getImg())) {
+                    startActivity(WebViewActivity.class, Constants.URL, bannersVo.getDst(), "", "");
                 }
             }
         });
@@ -201,8 +199,29 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
             startActivity(WifiManagerActivity.class, "", "", "", "");
         } else if (mMainMapLay == v) {//wifi地图
             startActivity(WifiMapActivity.class, "", "", "", "");
-        } else if(mTitleRightIv == v){//扫码连接东莞wifi
-            startActivity(MipcaActivityCapture.class,"","","","");
+        } else if (mTitleRightIv == v) {//扫码连接东莞wifi
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), ScanCodeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case SCANNIN_GREQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    Bundle bundle = data.getExtras();
+                    String s =bundle.getString("result");
+                    System.out.print(s);
+                    //显示扫描到的内容
+                    // mTextView.setText(bundle.getString("result"));
+                    //显示
+                    //  mImageView.setImageBitmap((Bitmap) data.getParcelableExtra("bitmap"));
+                }
+                break;
         }
     }
 

@@ -14,7 +14,10 @@ import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.yunxingzh.wireless.R;
@@ -22,9 +25,10 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 
 /**
  * Created by stephon on 2016/11/14.
+ * wifi地图
  */
 
-public class WifiMapActivity extends BaseActivity implements View.OnClickListener{
+public class WifiMapActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView mTitleNameTv;
     private ImageView mTitleReturnIv;
@@ -36,7 +40,7 @@ public class WifiMapActivity extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         //此方法要再setContentView方法之前实现
         SDKInitializer.initialize(getApplicationContext());
-        setContentView(R.layout.activity_wifi_manager);
+        setContentView(R.layout.activity_wifi_map);
         initView();
         initData();
     }
@@ -53,18 +57,18 @@ public class WifiMapActivity extends BaseActivity implements View.OnClickListene
     public void initData() {
         baiduMap = mapView.getMap();
         //定义Maker坐标点
-       // LatLng point = new LatLng(Double.parseDouble(wei), Double.parseDouble(jing));
-        //MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
-       // baiduMap.animateMapStatus(status);
-        //构建Marker图标
-      //  BitmapDescriptor bitmap = BitmapDescriptorFactory
-        //        .fromResource(R.drawable.address_car);
+        LatLng point = new LatLng(22.59436,113.35957);
+        MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
+        baiduMap.animateMapStatus(status);
+       // 构建Marker图标
+        BitmapDescriptor bitmap = BitmapDescriptorFactory
+                .fromResource(R.drawable.mine);
         //构建MarkerOption，用于在地图上添加Marker
-      //  OverlayOptions option = new MarkerOptions()
-         //       .position(point)
-        //        .icon(bitmap);
+        OverlayOptions option = new MarkerOptions()
+                .position(point)
+                .icon(bitmap);
         //在地图上添加Marker，并显示
-      //  baiduMap.addOverlay(option);
+        baiduMap.addOverlay(option);
     }
 
     @Override
