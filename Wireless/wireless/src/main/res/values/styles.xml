@@ -19,5 +19,13 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:background">@color/gray_dcdcdc</item>
     </style>
+    <style name="Button" parent="@style/Widget.AppCompat.Button.Borderless"/>
+    <style name="Button.Blue" parent="Button"></style>
+
+    <style name="Button.Blue.Hollow" parent="Button.Blue">
+        <item name="android:background">@drawable/btn_blue_hollow</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>
