@@ -134,9 +134,9 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 views.setTextColor(getResources().getColor(R.color.gray_5a5a5a));
                 views.setTag(childDatas.get(j));
                 if (j <= 2){
-                    childLayOne.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 50, 0, 0, 0));
+                    childLayOne.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 80, 0, 0, 0));
                 } else if (j <= 5){
-                    childLayTwo.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 50, 0, 0, 0));
+                    childLayTwo.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 80, 0, 0, 0));
                 } /*else {
                     childLayThree.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 50, 0, 0, 0));
                 }*/

@@ -90,12 +90,10 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
     public void initData() {
         locationUtils = LocationUtils.getInstance(this);
-        locationUtils.getLocation();
         locationUtils.startMonitor();//开始定位
 
         iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
 
-        iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
 
         wifiMa = new WifiUtils(this);
         if (wifiMa.getWlanState()) {
@@ -166,6 +164,9 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
             try {
                 //耗时操作
                 wifiMa.wifiOpen();
+
+                //setMyLocationEnabled(true)
+                iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
 
                 wifiMa.wifiStartScan();//开始扫描
                 Thread.sleep(3000);

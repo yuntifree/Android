@@ -15,5 +15,6 @@ public class Api {
     public static final String GET_WIFI_LIST = WEB_HOST + "fetch_wifi";//获取wifi列表
     public static final String GET_WEATHER_NEWS = WEB_HOST + "get_weather_news";//首页天气及新闻
     public static final String GET_FONT_INFO = WEB_HOST + "get_front_info";//首页底部内容
+    public static final String GET_WIFI_MAP = WEB_HOST + "get_nearby_aps";//获取地图周围热点
 
 }
