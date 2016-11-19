@@ -64,7 +64,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
 
     private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest;
     private MyScrollView scrollView;
-    private TextView mTitleLeftContent, mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv, mConnectCountTv, mEconomizeTv;
+    private TextView mTitleLeftContent, mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv, mConnectCountTv,
+            mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
     private ImageView mTitleReturnIv, mShowMoreIv, mTitleRightIv;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
@@ -116,6 +117,19 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mEconomizeTv = findView(view, R.id.economize_tv);
         mMainSpeedtest = findView(view, R.id.main_speedtest_lay);
         mMainSpeedtest.setOnClickListener(this);
+
+        mFontNewsTv = findView(view, R.id.font_news_tv);
+        mFontNewsTv.setOnClickListener(this);
+        mFontVideoTv = findView(view, R.id.font_video_tv);
+        mFontNewsTv.setOnClickListener(this);
+        mFontServiceTv = findView(view, R.id.font_service_tv);
+        mFontNewsTv.setOnClickListener(this);
+        mFontZhiTv = findView(view, R.id.font_zhi_tv);
+        mFontNewsTv.setOnClickListener(this);
+        mFontPlayingTv = findView(view, R.id.font_playing_tv);
+        mFontNewsTv.setOnClickListener(this);
+        mFontBuyingTv = findView(view, R.id.font_buying_tv);
+        mFontNewsTv.setOnClickListener(this);
 
         alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
         mCircleSecondTv.startAnimation(alphaAnimation);
@@ -207,6 +221,18 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
             startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
         } else if (mMainSpeedtest == v) { // wifi 测速
             startActivity(SpeedtestActivity.class, "", "", "", "");
+        } else if (mFontNewsTv == v) { // 东莞头条
+            onJumpListener.onJump();//利用接口回调-fragment间的跳转
+        } else if (mFontVideoTv == v) { //热门视频
+            onJumpListener.onJump();//利用接口回调-fragment间的跳转
+        } else if (mFontServiceTv == v) { //同城服务
+
+        } else if (mFontZhiTv == v) { //智慧服务
+
+        } else if (mFontPlayingTv == v) { //同城直播
+
+        } else if (mFontBuyingTv == v) { //抢购
+
         }
     }
 
@@ -217,7 +243,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
             case SCANNIN_GREQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
-                    String s =bundle.getString("result");
+                    String s = bundle.getString("result");
                     System.out.print(s);
                     //显示扫描到的内容
                     // mTextView.setText(bundle.getString("result"));
@@ -260,11 +286,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     }
 
     //接口回调-fragment间的跳转
-    public void SetJumpListener(OnJumpListener onJump){
+    public void SetJumpListener(OnJumpListener onJump) {
         this.onJumpListener = onJump;
     }
 
-    public interface OnJumpListener{
+    public interface OnJumpListener {
         void onJump();
     }
 }

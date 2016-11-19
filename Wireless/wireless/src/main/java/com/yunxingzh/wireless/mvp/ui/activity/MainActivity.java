@@ -20,6 +20,8 @@ import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.fragment.BuyingFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineFragment;
+import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineNewsFragment;
+import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineVideoFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.ServiceFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.WirelessFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
@@ -31,27 +33,27 @@ import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
  * 首页底部导航
  */
 
-public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener,WirelessFragment.OnJumpListener {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, WirelessFragment.OnJumpListener {
 
     private final static int SECONDS = 2000;//按下的间隔秒数
     private final static int STATUS = 0;//0 正常结束程序;1 异常关闭程序
 
     private RadioGroup main_class_group;
-   // private BuyingFragment buyingFragment;
+    // private BuyingFragment buyingFragment;
     private HeadLineFragment headlineFragment;
     private ServiceFragment serviceFragment;
     private WirelessFragment wirelessFragment;
     private Fragment currentFragment;
     private FragmentManager fragmentManager;
     private long exitTime = 0;
-    private RadioButton mTwoRadio;
+    private RadioButton mTwoRadio, mOneRadio, mThreeRadio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (StringUtils.isEmpty(MyApplication.sApplication.getToken())){
-            startActivity(new Intent(this,RegisterActivity.class));
+        if (StringUtils.isEmpty(MyApplication.sApplication.getToken())) {
+            startActivity(new Intent(this, RegisterActivity.class));
             finish();
             return;
         }
@@ -63,6 +65,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         main_class_group = findView(R.id.main_class_group);
         main_class_group.setOnCheckedChangeListener(this);
         mTwoRadio = findView(R.id.two_radio);
+        mOneRadio = findView(R.id.one_radio);
+        mThreeRadio = findView(R.id.three_radio);
     }
 
     public void initData() {
@@ -138,14 +142,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             headlineFragment = new HeadLineFragment();
         }
         showFragment(headlineFragment);//头条
-        mTwoRadio.setTextColor(getResources().getColor(R.color.blue_1296db));
-        Drawable drawable=this.getResources().getDrawable(R.drawable.news);
-        mTwoRadio.setCompoundDrawablesRelativeWithIntrinsicBounds(null,drawable,null,null);
-    }
 
-    public void getColors(boolean oneFragment,boolean twoFragment,boolean threeFragment){
-        if(oneFragment){
-
-        }
+//        mTwoRadio.setTextColor(getResources().getColor(R.color.blue_1296db));
+//        mTwoRadio.setCompoundDrawablesRelativeWithIntrinsicBounds(null,getResources().getDrawable(R.drawable.news),null,null);
+//        mOneRadio.setTextColor(getResources().getColor(R.color.gray_bfbfbf));
+//        mOneRadio.setCompoundDrawablesRelativeWithIntrinsicBounds(null,getResources().getDrawable(R.drawable.un_wireless),null,null);
     }
 }

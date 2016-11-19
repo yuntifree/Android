@@ -118,7 +118,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             line.setMinimumHeight(20);
             line.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
 
-            mItemTop.addView(mServiceImg, getLayoutParams(Gravity.CENTER, 26, 26, 20, 20, 0, 20));
+            mItemTop.addView(mServiceImg, getLayoutParams(Gravity.CENTER, 55, 55, 20, 20, 0, 20));
             mItemTop.addView(mServiceTitle, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 10, 20, 0, 20));
 
             int size = dataVoList.get(i).getItems().size();
@@ -129,15 +129,29 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
           //  LinearLayout childLayThree = new LinearLayout(getActivity());
             for (int j = 0; j < size; j++) {
                 final TextView views = new TextView(getActivity());
-                views.setText(childDatas.get(j).getTitle());
+                String title = childDatas.get(j).getTitle();
+                int marginLeft = 90;
+                views.setText(title);
                 views.setTextSize(14);
                 views.setTextColor(getResources().getColor(R.color.gray_5a5a5a));
                 views.setTag(childDatas.get(j));
                 if (j <= 2){
-                    childLayOne.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 80, 0, 0, 0));
+                    if(title.equals("汽车票")) {
+                        marginLeft = 140;
+                    } else if(title.equals("水费")){
+                        marginLeft = 100;
+                    }
+                    childLayOne.addView(views, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, marginLeft, 0, 0, 0));
                 } else if (j <= 5){
-                    childLayTwo.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 80, 0, 0, 0));
-                } /*else {
+                    if (title.equals("举报投诉")) {
+                        marginLeft = 60;
+                    } else if(title.equals("便民打车")) {
+                        marginLeft = 115;
+                    } else if(title.equals("煤气费")) {
+                        marginLeft = 150;
+                    }
+                    childLayTwo.addView(views, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, marginLeft, 0, 0, 0));
+                }/*else {
                     childLayThree.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 50, 0, 0, 0));
                 }*/
 
