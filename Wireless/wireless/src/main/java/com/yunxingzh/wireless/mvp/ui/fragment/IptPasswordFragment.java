@@ -15,6 +15,10 @@ import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 
+/***
+ * wifi管理-密码连接dialog
+ */
+
 public class IptPasswordFragment extends Fragment {
 
     private static final String EXTRA_ACCESS_POINT = "extra_access_point";

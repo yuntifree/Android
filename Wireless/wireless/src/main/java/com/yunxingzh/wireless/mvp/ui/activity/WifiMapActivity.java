@@ -6,8 +6,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,6 +30,7 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.inner.GeoPoint;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.presenter.IWifiMapPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiMapPresenterImpl;
@@ -36,6 +39,8 @@ import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiMapView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiMapVo;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -55,7 +60,8 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     private IWifiMapPresenter iWifiMapPresenter;
     private List<WifiMapVo.WifiMapData.WifiMapInfo> wifiMapInfo;
 
-    private RelativeLayout mMarkerInfoLy;//详细信息的 布局
+    private boolean flag = true;
+    private InfoWindow mInfoWindow;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -167,65 +173,56 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         public boolean onMarkerClick ( final Marker marker){
             //获得marker中的数据
             WifiMapVo.WifiMapData.WifiMapInfo info = (WifiMapVo.WifiMapData.WifiMapInfo) marker.getExtraInfo().get("info");
-            InfoWindow mInfoWindow;
+
+            //计算p1、p2两点之间的直线距离，单位：米
+//            GeoPoint p1LL = new GeoPoint(39971802, 116347927);
+//            GeoPoint p2LL = new GeoPoint(39892131, 116498555);
+           // DistanceUtil. getDistance(p1, p2);
+            double distance = LocationUtils.getDistance(22.933103,113.903870,info.getLatitude(),info.getLongitude());
+
             //生成一个TextView用户在地图中显示InfoWindow
-            TextView location = new TextView(getApplicationContext());
-            location.setBackgroundResource(R.drawable.wifi_info);
-            location.setPadding(30, 20, 30, 50);
-            location.setText(info.getAddress());
+            LinearLayout markerLayout = new LinearLayout(getApplicationContext());
+            markerLayout.setOrientation(LinearLayout.HORIZONTAL);
+            markerLayout.setGravity(Gravity.CENTER);
+            markerLayout.setBackgroundResource(R.drawable.wifi_info);
+
+            TextView address = new TextView(getApplicationContext());
+            address.setTextColor(getResources().getColor(R.color.gray_b4b4b4));
+            address.setTextSize(10);
+            address.setText(info.getAddress());
+
+            TextView distances = new TextView(getApplicationContext());
+            distances.setTextColor(getResources().getColor(R.color.blue_00a6f9));
+            distances.setTextSize(10);
+            distances.setText(new DecimalFormat("#").format(distance * 100)+"m");
+
+            ImageView  addressImg = new ImageView(getApplicationContext());
+            addressImg.setImageResource(R.drawable.ico_location);
+            ImageView  distancesImg = new ImageView(getApplicationContext());
+            distancesImg.setImageResource(R.drawable.ico_walk);
+
+            markerLayout.addView(addressImg);
+            markerLayout.addView(address);
+            markerLayout.addView(distancesImg);
+            markerLayout.addView(distances);
             //将marker所在的经纬度的信息转化成屏幕上的坐标
             final LatLng ll = marker.getPosition();
             Point p = baiduMap.getProjection().toScreenLocation(ll);
-            p.y -= 47;
+            p.y -= 90;
             LatLng llInfo = baiduMap.getProjection().fromScreenLocation(p);
-//            //为弹出的InfoWindow添加点击事件
-//            mInfoWindow = new InfoWindow(location, llInfo,new InfoWindow.OnInfoWindowClickListener() {
-//                        @Override
-//                        public void onInfoWindowClick() {
-//                            //隐藏InfoWindow
-//                            baiduMap.hideInfoWindow();
-//                        }
-//                    });
-//            //显示InfoWindow
-//            baiduMap.showInfoWindow(mInfoWindow);
-//            //设置详细信息布局为可见
-//            mMarkerInfoLy.setVisibility(View.VISIBLE);
-            //根据商家信息为详细信息布局设置信息
-           // popupInfo(mMarkerInfoLy, info);
+           //为弹出的InfoWindow添加点击事件
+            mInfoWindow = new InfoWindow(markerLayout,llInfo,0);
+            if (flag){
+                //显示InfoWindow
+                baiduMap.showInfoWindow(mInfoWindow);
+                flag = false;
+            } else {
+                baiduMap.hideInfoWindow();
+                flag = true;
+            }
             return true;
             }
         });
-    }
-
-    //根据info为布局上的控件设置信息
-//    protected void popupInfo(RelativeLayout mMarkerLy, WifiMapVo.WifiMapData.WifiMapInfo info){
-//        ViewHolder viewHolder = null;
-//        if (mMarkerLy.getTag() == null){
-//            viewHolder = new ViewHolder();
-//            viewHolder.addressImg = (ImageView) mMarkerLy
-//                    .findViewById(R.id.info_img);
-//            viewHolder.distanceImg = (ImageView) mMarkerLy
-//                    .findViewById(R.id.info_name);
-//            viewHolder.infoDistance = (TextView) mMarkerLy
-//                    .findViewById(R.id.info_distance);
-//            viewHolder.infoAddress = (TextView) mMarkerLy
-//                    .findViewById(R.id.info_zan);
-//
-//            mMarkerLy.setTag(viewHolder);
-//        }
-//        viewHolder = (ViewHolder) mMarkerLy.getTag();
-//        viewHolder.addressImg.setImageResource(info.getImgId());
-//        viewHolder.distanceImg.setImageResource(info.getDistance());
-//        viewHolder.infoDistance.setText(info.getZan() + "");
-//        viewHolder.infoAddress.setText(info.getName());
-//    }
-
-    // 复用弹出面板mMarkerLy的控件
-    private class ViewHolder{
-        ImageView addressImg;
-        ImageView distanceImg;
-        TextView infoAddress;
-        TextView infoDistance;
     }
 
     @Override

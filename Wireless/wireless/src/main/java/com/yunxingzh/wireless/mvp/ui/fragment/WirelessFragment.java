@@ -2,7 +2,6 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -79,6 +78,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private FontInfoVo.FontData.UserVo userVo;
 
     private ConvenientBanner mAdRotationBanner;
+    private OnJumpListener onJumpListener;
 
     @Nullable
     @Override
@@ -195,9 +195,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         if (mConnectTv == v) {//一键连接
 
         } else if (footView == v) {//查看更多新闻
-//            fragmentTransaction = fragmentManager.beginTransaction().addToBackStack(null)
-//                    .replace(R.id.main_fragment_parent, new HeadLineFragment());
-//            fragmentTransaction.commit();
+            onJumpListener.onJump();//利用接口回调-fragment间的跳转
         } else if (mMainWifiManager == v) {//wifi管理
             startActivity(WifiManagerActivity.class, "", "", "", "");
         } else if (mMainMapLay == v) {//wifi地图
@@ -224,7 +222,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
                     //显示扫描到的内容
                     // mTextView.setText(bundle.getString("result"));
                     //显示
-                    //  mImageView.setImageBitmap((Bitmap) data.getParcelableExtra("bitmap"));
+                    // mImageView.setImageBitmap((Bitmap) data.getParcelableExtra("bitmap"));
                 }
                 break;
         }
@@ -259,5 +257,14 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     public void onResume() {
         super.onResume();
         mAdRotationBanner.startTurning(1500);
+    }
+
+    //接口回调-fragment间的跳转
+    public void SetJumpListener(OnJumpListener onJump){
+        this.onJumpListener = onJump;
+    }
+
+    public interface OnJumpListener{
+        void onJump();
     }
 }
