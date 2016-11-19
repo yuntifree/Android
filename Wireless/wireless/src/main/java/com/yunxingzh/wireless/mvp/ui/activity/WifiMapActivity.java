@@ -154,6 +154,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                     //在地图上添加Marker，并显示
                     baiduMap.addOverlay(option);
                     iWifiMapPresenter.getWifiMap(113.903870, 22.933103);//获取周围热点lon,lat
+                    initMarkerClickEvent();
                     break;
             }
         }

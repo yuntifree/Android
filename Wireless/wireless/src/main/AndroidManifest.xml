@@ -82,6 +82,12 @@
         <activity
             android:name=".mvp.ui.activity.SpeedtestActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.DialogActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/BottomDialog" >
+        </activity>
 
         <!--定位所需服务-->
        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote"/><![CDATA[
@@ -101,6 +107,10 @@
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
+        <service
+            android:name=".service.FWService"
+            android:exported="true"
+            android:process="org.focusapp.wifi.service" />
     </application>
 
 </manifest>

@@ -26,6 +26,7 @@
     <color name="red_e04c4c">#FFE04C4C</color>
     <color name="red_dc312d">#FFDC312D</color>
     <color name="red_f17370">#FFF17370</color>
+    <color name="orange">#FF9900</color>
 
     <color name="gray_bfbfbf">#FFBFBFBF</color>
     <color name="gray_f9f8f8">#FFF9F8F8</color>
@@ -77,6 +78,7 @@
 
 
     <color name="barcode_green">#00ff26</color>
+    <color name="green">#009900</color>
     <color name="green_1fbd22">#FF1FBD22</color>
     <color name="green_dbf6b8">#FFDBF6B8</color>
     <color name="green_599e00">#FF599E00</color>
@@ -121,7 +123,7 @@
     <color name="blue_5EC0FC">#5EC0FC</color>
     <color name="blue_1AA6FB">#1AA6FB</color>
     <color name="blue">#288dff</color>
-
+    <color name="colorPrimary">#25bfff</color>
 
 
     <color name="blue_48cc23">#FF48CC23</color>
