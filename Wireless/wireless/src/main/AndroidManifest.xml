@@ -80,7 +80,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name=".mvp.ui.activity.SpeedtestActivity"
+            android:name=".mvp.ui.activity.SpeedTestActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.DialogActivity"

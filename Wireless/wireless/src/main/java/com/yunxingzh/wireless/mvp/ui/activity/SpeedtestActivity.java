@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.MemoryFile;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -13,6 +14,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -37,10 +39,14 @@ import java.util.concurrent.Executors;
 import com.yunxingzh.wireless.utility.NetUtil;
 import com.yunxingzh.wireless.utility.Util;
 import com.yunxingzh.wireless.utility.IOUtil;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
 
-public class SpeedtestActivity extends AppCompatActivity {
 
-    private static final String TAG = "SpeedtestActivity";
+/***
+ * wifi测速
+ */
+public class SpeedTestActivity extends AppCompatActivity implements View.OnClickListener{
+
     private static String mApkUrl = "";
 
     protected static final int MSG_RESULT = 102;
@@ -68,12 +74,18 @@ public class SpeedtestActivity extends AppCompatActivity {
     private RotatePointer mRotatePointer;
     private ExecutorService mExecutorService;
 
+    private View dialogView;
+    private TextView mMyQueryBtn,mMyCancelBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speedtest);
-
         initView();
+        int netType = AppUtils.getNetWorkType(this);
+        if (netType == 1 || netType == 2 || netType == 3){
+            showMyDialog();
+        }
     }
     // init view components
     private void initView() {
@@ -95,6 +107,12 @@ public class SpeedtestActivity extends AppCompatActivity {
                 initThread();
             }
         });
+
+        dialogView = LayoutInflater.from(this).inflate(R.layout.my_dialog,null);
+        mMyQueryBtn = (TextView) dialogView.findViewById(R.id.my_query);
+        mMyQueryBtn.setOnClickListener(this);
+        mMyCancelBtn = (TextView) dialogView.findViewById(R.id.my_cancel);
+        mMyCancelBtn.setOnClickListener(this);
     }
 
     private void initThread() {
@@ -110,16 +128,25 @@ public class SpeedtestActivity extends AppCompatActivity {
         startTestSpeed();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void showMyDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        builder.create().show();
+    }
 
+    @Override
+    public void onClick(View v) {
+        if (mMyQueryBtn == v){
+            startTestSpeed();
+        } else if (mMyCancelBtn == v){
+            finish();
+        }
     }
 
     private void startTestSpeed() {
         //先判断是否是WIFI环境
         if (!NetUtil.isConnectedWifi(MyApplication.getInstance())) {
-            Util.showToast(SpeedtestActivity.this, "您的WiFi已断开，无法测速");
+            Util.showToast(SpeedTestActivity.this, "您的WiFi已断开，无法测速");
             shutdownAll();
             return;
         }
@@ -170,7 +197,7 @@ public class SpeedtestActivity extends AppCompatActivity {
             tag = "网速碉堡了<br/>即刻下载推荐应用畅享高速WiFi";
             desc = "很快";
         }
-        Util.showToast(SpeedtestActivity.this, tag + desc);
+        Util.showToast(SpeedTestActivity.this, tag + desc);
     }
 
 
