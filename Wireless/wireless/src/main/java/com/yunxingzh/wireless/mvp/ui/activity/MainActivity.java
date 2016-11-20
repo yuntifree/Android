@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
@@ -16,6 +19,7 @@ import android.widget.RadioGroup;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.fragment.BuyingFragment;
@@ -29,11 +33,14 @@ import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.UserInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 /***
  * 首页底部导航
  */
 
-public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, WirelessFragment.OnJumpListener {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
 
     private final static int SECONDS = 2000;//按下的间隔秒数
     private final static int STATUS = 0;//0 正常结束程序;1 异常关闭程序
@@ -46,7 +53,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private Fragment currentFragment;
     private FragmentManager fragmentManager;
     private long exitTime = 0;
-    private RadioButton mTwoRadio, mOneRadio, mThreeRadio;
+    private RadioButton mHeadLineRadio, mWirelessRadio, mServiceRadio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,35 +71,38 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void initView() {
         main_class_group = findView(R.id.main_class_group);
         main_class_group.setOnCheckedChangeListener(this);
-        mTwoRadio = findView(R.id.two_radio);
-        mOneRadio = findView(R.id.one_radio);
-        mThreeRadio = findView(R.id.three_radio);
+        mHeadLineRadio = findView(R.id.head_line_radio);
+        mWirelessRadio = findView(R.id.wireless_radio);
+        mServiceRadio = findView(R.id.service_radio);
     }
 
     public void initData() {
+        //注册EventBus
+        EventBus.getDefault().register(this);
+
         fragmentManager = getSupportFragmentManager();
         wirelessFragment = new WirelessFragment();
         currentFragment = wirelessFragment;
         fragmentManager.beginTransaction().replace(R.id.main_fragment_parent, currentFragment).commit();
-        wirelessFragment.SetJumpListener(this);//接口回调-fragment间的跳转
+        // wirelessFragment.SetJumpListener(this);//接口回调-fragment间的跳转
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
-            case R.id.one_radio:
+            case R.id.wireless_radio:
                 if (wirelessFragment == null) {
                     wirelessFragment = new WirelessFragment();
                 }
                 showFragment(wirelessFragment);//无线
                 break;
-            case R.id.two_radio:
+            case R.id.head_line_radio:
                 if (headlineFragment == null) {
                     headlineFragment = new HeadLineFragment();
                 }
                 showFragment(headlineFragment);//头条
                 break;
-            case R.id.three_radio:
+            case R.id.service_radio:
                 if (serviceFragment == null) {
                     serviceFragment = new ServiceFragment();
                 }
@@ -105,6 +115,23 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 //                showFragment(buyingFragment);//抢购
 //                break;
         }
+    }
+
+    @Subscribe
+    public void onEventMainThread(EventBusType event) {
+        if (event.getMsg() == Constants.HEAD_LINE) {
+            mHeadLineRadio.setChecked(true);
+        }
+        if (event.getMsg() == Constants.HEAD_LINE && event.getChildMsg() == Constants.VIDEO) {//首页先跳转到头条父fragment
+            mHeadLineRadio.setChecked(true);
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
     public Fragment showFragment(Fragment fragment) {
@@ -120,6 +147,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         return currentFragment;
     }
 
+    //代码实现控件添加drawableTop
+//        mTwoRadio.setCompoundDrawablesRelativeWithIntrinsicBounds(null,getResources().getDrawable(R.drawable.news),null,null);
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -133,19 +163,5 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-    @Override
-    public void onJump() {
-        if (headlineFragment == null) {
-            headlineFragment = new HeadLineFragment();
-        }
-        showFragment(headlineFragment);//头条
-
-//        mTwoRadio.setTextColor(getResources().getColor(R.color.blue_1296db));
-//        mTwoRadio.setCompoundDrawablesRelativeWithIntrinsicBounds(null,getResources().getDrawable(R.drawable.news),null,null);
-//        mOneRadio.setTextColor(getResources().getColor(R.color.gray_bfbfbf));
-//        mOneRadio.setCompoundDrawablesRelativeWithIntrinsicBounds(null,getResources().getDrawable(R.drawable.un_wireless),null,null);
     }
 }

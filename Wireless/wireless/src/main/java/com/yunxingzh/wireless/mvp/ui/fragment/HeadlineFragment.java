@@ -12,8 +12,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineFragmentPagerAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
+import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +76,9 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
     }
 
     public void initData() {
+        //注册EventBus
+        EventBus.getDefault().register(this);
+
         mIdNews.setOnClickListener(new TabOnClickListener(INDEX_ZERO));
         mIdVideo.setOnClickListener(new TabOnClickListener(INDEX_ONE));
 //        mIdApp.setOnClickListener(new TabOnClickListener(INDEX_TWO));
@@ -92,6 +101,22 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
         public void onClick(View v) {
             mViewPager.setCurrentItem(index);//选择某一页
         }
+    }
+
+    @Subscribe
+    public void onEventMainThread(EventBusType event) {
+        if (event.getMsg() == Constants.HEAD_LINE){//首页先跳转到头条父fragment
+            mViewPager.setCurrentItem(INDEX_ZERO);
+        }
+        if(event.getMsg() == Constants.HEAD_LINE && event.getChildMsg() == Constants.VIDEO){
+            mViewPager.setCurrentItem(INDEX_ONE);//再指定视频Fragment
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
     //当前页面被滑动时调用

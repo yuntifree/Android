@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
@@ -30,6 +31,7 @@ import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
+import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
@@ -40,6 +42,8 @@ import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +83,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private FontInfoVo.FontData.UserVo userVo;
 
     private ConvenientBanner mAdRotationBanner;
-    private OnJumpListener onJumpListener;
 
     @Nullable
     @Override
@@ -121,15 +124,15 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mFontNewsTv = findView(view, R.id.font_news_tv);
         mFontNewsTv.setOnClickListener(this);
         mFontVideoTv = findView(view, R.id.font_video_tv);
-        mFontNewsTv.setOnClickListener(this);
+        mFontVideoTv.setOnClickListener(this);
         mFontServiceTv = findView(view, R.id.font_service_tv);
-        mFontNewsTv.setOnClickListener(this);
+        mFontServiceTv.setOnClickListener(this);
         mFontZhiTv = findView(view, R.id.font_zhi_tv);
-        mFontNewsTv.setOnClickListener(this);
+        mFontZhiTv.setOnClickListener(this);
         mFontPlayingTv = findView(view, R.id.font_playing_tv);
-        mFontNewsTv.setOnClickListener(this);
+        mFontPlayingTv.setOnClickListener(this);
         mFontBuyingTv = findView(view, R.id.font_buying_tv);
-        mFontNewsTv.setOnClickListener(this);
+        mFontBuyingTv.setOnClickListener(this);
 
         alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
         mCircleSecondTv.startAnimation(alphaAnimation);
@@ -209,7 +212,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         if (mConnectTv == v) {//一键连接
 
         } else if (footView == v) {//查看更多新闻
-            onJumpListener.onJump();//利用接口回调-fragment间的跳转
+            EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mMainWifiManager == v) {//wifi管理
             startActivity(WifiManagerActivity.class, "", "", "", "");
         } else if (mMainMapLay == v) {//wifi地图
@@ -222,9 +225,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         } else if (mMainSpeedtest == v) { // wifi 测速
             startActivity(SpeedtestActivity.class, "", "", "", "");
         } else if (mFontNewsTv == v) { // 东莞头条
-            onJumpListener.onJump();//利用接口回调-fragment间的跳转
+            EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mFontVideoTv == v) { //热门视频
-            onJumpListener.onJump();//利用接口回调-fragment间的跳转
+            EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE,Constants.VIDEO));
+
         } else if (mFontServiceTv == v) { //同城服务
 
         } else if (mFontZhiTv == v) { //智慧服务
@@ -283,14 +287,5 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     public void onResume() {
         super.onResume();
         mAdRotationBanner.startTurning(1500);
-    }
-
-    //接口回调-fragment间的跳转
-    public void SetJumpListener(OnJumpListener onJump) {
-        this.onJumpListener = onJump;
-    }
-
-    public interface OnJumpListener {
-        void onJump();
     }
 }

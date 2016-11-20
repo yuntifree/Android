@@ -18,4 +18,10 @@ public class Constants {
     public static final String VIDEO_URL = "video_url";
     public static final String URL = "url";
     public static final String TITLE = "title";
+
+    public static final int WIRELESS = 1;//无线
+    public static final int HEAD_LINE = 2;//头条
+    public static final int SERVICE = 3;//服务
+    public static final int VIDEO = 4;//视频
+
 }
