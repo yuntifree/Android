@@ -2,7 +2,6 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,10 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.FWManager;
@@ -33,7 +28,7 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
-import com.yunxingzh.wireless.mvp.ui.utils.WifiPswDialog;
+import com.yunxingzh.wireless.mvp.ui.utils.SpeedTestDialog;
 import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
 import com.yunxingzh.wireless.utility.Logg;
@@ -133,29 +128,29 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
                         ToastUtil.showMiddle(WifiManagerActivity.this, "显示当前wifi详情");
                     }
                 } else {//没有配置好信息，配置
-                    WifiPswDialog pswDialog = new WifiPswDialog(WifiManagerActivity.this, new WifiPswDialog.OnCustomDialogListener() {
-                        @Override
-                        public void back(String str) {
-                            wifiPassword = str;
-                            if (wifiPassword != null) {
-                                int netId = wifiMa.addWifiConfig(scanResultList, String.valueOf(netWorkId), wifiPassword);
-                                if (netId != -1) {
-                                    wifiMa.getConfiguration();//添加了配置信息，要重新得到配置信息
-                                    if (wifiMa.connectWifi(netId)) {
-                                        view.setBackgroundResource(R.color.green_1fbd22);
-                                    }
-                                } else {
-                                    ToastUtil.showMiddle(WifiManagerActivity.this, R.string.internet_error);
-                                    view.setBackgroundResource(R.color.red);
-                                }
-                            } else {
-                                view.setBackgroundResource(R.color.yellow_db5800);
-                            }
-                        }
-                    });
-                    pswDialog.show();
+//                    SpeedTestDialog pswDialog = new SpeedTestDialog(WifiManagerActivity.this, new SpeedTestDialog.OnCustomDialogListener() {
+//                        @Override
+//                        public void back(String str) {
+//                            wifiPassword = str;
+//                            if (wifiPassword != null) {
+//                                int netId = wifiMa.addWifiConfig(scanResultList, String.valueOf(netWorkId), wifiPassword);
+//                                if (netId != -1) {
+//                                    wifiMa.getConfiguration();//添加了配置信息，要重新得到配置信息
+//                                    if (wifiMa.connectWifi(netId)) {
+//                                        view.setBackgroundResource(R.color.green_1fbd22);
+//                                    }
+//                                } else {
+//                                    ToastUtil.showMiddle(WifiManagerActivity.this, R.string.internet_error);
+//                                    view.setBackgroundResource(R.color.red);
+//                                }
+//                            } else {
+//                                view.setBackgroundResource(R.color.yellow_db5800);
+//                            }
+//                        }
+//                    });
+//                    pswDialog.show();
                 }
-            }
+           }
         });
     }
 

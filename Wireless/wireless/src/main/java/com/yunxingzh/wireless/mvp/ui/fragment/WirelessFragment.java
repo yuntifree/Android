@@ -23,7 +23,7 @@ import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
-import com.yunxingzh.wireless.mvp.ui.activity.SpeedtestActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.SpeedTestActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
@@ -223,14 +223,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
         } else if (mMainSpeedtest == v) { // wifi 测速
-            startActivity(SpeedtestActivity.class, "", "", "", "");
+            startActivity(SpeedTestActivity.class, "", "", "", "");
         } else if (mFontNewsTv == v) { // 东莞头条
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mFontVideoTv == v) { //热门视频
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE,Constants.VIDEO));
-
         } else if (mFontServiceTv == v) { //同城服务
-
+            EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
         } else if (mFontZhiTv == v) { //智慧服务
 
         } else if (mFontPlayingTv == v) { //同城直播

@@ -60,6 +60,10 @@
     <string name="input_pwd">请输入密码</string>
     <string name="pwd">密码:</string>
     <string name="cancel">取消</string>
+    <string name="query_speed">继续测速</string>
+    <string name="cancel_speed">取消测速</string>
+    <string name="stop_speed">停止测速</string>
+    <string name="re_speed">重新测速</string>
     <string name="query">确定</string>
     <string name="internet_error">网络连接错误</string>
     <string name="hot">WiFi地图</string>
@@ -79,6 +83,20 @@
     <string name="search">搜索</string>
     <string name="safecenter_barcode">扫一扫</string>
     <string name="scan_error">扫描失败,请重试</string>
+    <string name="start_speed">开始测速</string>
+    <string name="phone">手机号</string>
+    <string name="input_content">搜索或输入网址</string>
+    <string name="enter_phone">请输入手机号</string>
+    <string name="enter_right_phone">请输入正确的手机号</string>
+    <string name="re_error">没有获取到相关新闻</string>
+    <string name="no_resource">没有更多数据了</string>
+    <string name="i_kown">我知道了</string>
+    <string name="speeding">正在测速</string>
+    <string name="wait">请稍等片刻...</string>
+
+
+
+
 
     <!--WiFi-->
     <string name="state_unkown">unkown error</string>
@@ -108,157 +126,7 @@
     <string name="share_tips">分享给小伙伴</string>
     <string name="disconnect">断开连接</string>
 
+    <string name="net_work">你当前wifi正处于断开状态哦</string>
 
-    <string name="main_speak_in">海运进口</string>
-    <string name="main_center">中港进出口</string>
-    <string name="main_sky">空运进出口</string>
-    <string name="main_news">资讯贸易</string>
-    <string name="main_investment">招商招聘</string>
-    <string name="main_connection">联系我们</string>
-    <string name="main_orders">我要下单</string>
-    <string name="main_mine_order">我的订单</string>
-
-    <!--查询-->
-    <string name="title_search">查询</string>
-    <string name="search_air">查空运</string>
-    <string name="search_sea">查海运</string>
-    <string name="air">空运</string>
-    <string name="car">中港</string>
-    <string name="air_in">空运进口</string>
-    <string name="air_out">空运出口</string>
-    <string name="car_in">中港进口</string>
-    <string name="car_out">中港出口</string>
-
-    <!--我的-->
-    <string name="please_login">请登录</string>
-    <string name="search_logistial">物流查询</string>
-    <string name="update_pwd">修改密码</string>
-    <string name="my_idea">意见反馈</string>
-    <string name="my_about">关于</string>
-    <string name="pwd_type">6-16位/数字/字母</string>
-    <string name="forget">忘记密码</string>
-    <string name="name">姓名：</string>
-    <string name="enter_real_name">请输入真实姓名</string>
-    <string name="email">邮箱：</string>
-    <string name="enter_email">请输入邮箱</string>
-    <string name="enter_email_type">请输入正确的邮箱</string>
-    <string name="enter_consignee">请输入真实姓名</string>
-    <string name="enter_phone">请输入手机号</string>
-    <string name="enter_right_phone">请输入正确的手机号</string>
-    <string name="checked_agreed">请勾选物流鹰用户协议</string>
-    <string name="personal_exit_text">退出账户</string>
-    <string name="username">用户名</string>
-    <string name="query_exit">退出登录?</string>
-    <string name="update_info">资料修改</string>
-    <string name="set_text1">头像</string>
-    <string name="set_name">姓名</string>
-    <string name="set_phone">手机</string>
-    <string name="set_email">邮箱</string>
-    <string name="set_company_name">公司名称</string>
-    <string name="set_image_text1">相册</string>
-    <string name="set_image_text2">拍照</string>
-    <string name="select_img">选择图片方式</string>
-
-    <string name="save">保存</string>
-    <string name="update_success">修改成功</string>
-    <string name="rest_password">重置密码</string>
-    <string name="register">注册</string>
-    <string name="old_password">旧密码：</string>
-    <string name="new_password">新密码：</string>
-    <string name="personal_my_pwd_text1">修改</string>
-    <string name="enter_old_password">请输入旧密码</string>
-    <string name="input_new_password">请输入新密码</string>
-    <string name="reset_password_success">重置密码成功</string>
-    <string name="update_password_success">修改密码成功</string>
-    <string name="idea_content">请输入想要反馈的内容</string>
-    <string name="idea_commit">提交</string>
-    <string name="feed_back">意见反馈</string>
-    <string name="enter_content">请输入想要反馈的内容</string>
-    <string name="commit_success">提交反馈成功</string>
-    <string name="app_names">物流鹰V2.0</string>
-    <string name="about_we">关于我们</string>
-    <string name="register_idea">注册协议</string>
-    <string name="qq_service">QQ客服</string>
-    <string name="phone_service">电话客服</string>
-    <string name="investment">招商</string>
-    <string name="advertises">招聘</string>
-    <string name="study">贸易知识</string>
-    <string name="re_error">没有找到相关资讯</string>
-    <string name="no_resource">没有更多数据了</string>
-    <string name="no_content">没有内容了</string>
-    <string name="info">详情</string>
-    <string name="sea_out">海运出口</string>
-    <string name="other">散货</string>
-    <string name="is_self">请选择是否自备单证</string>
-    <string name="select_service">请选择服务(多选)</string>
-    <string name="taxes">退税</string>
-    <string name="declare">报关</string>
-    <string name="order_car">订车</string>
-    <string name="order_boat">订船</string>
-    <string name="self_receipt">自备单证</string>
-    <string name="next">下一步</string>
-    <string name="select_sea_out">请选择海运出口服务</string>
-    <string name="order_info">订单详情</string>
-    <string name="order_now">立即下单</string>
-    <string name="san_huo">海运出口(散货)</string>
-    <string name="san_huo_car">中港出口(散货)</string>
-    <string name="san_huo_air">空运出口(散货)</string>
-    <string name="san_huo_content">海运出口(散货)业务,请电话咨询客服</string>
-    <string name="car_content">中港出口(散货)业务,请电话咨询客服</string>
-    <string name="air_content">空运出口(散货)业务,请电话咨询客服</string>
-    <string name="call_phone">拨打客服电话</string>
-    <string name="out">出发港</string>
-    <string name="select">请选择</string>
-    <string name="address_manager">地址管理</string>
-    <string name="add">新增</string>
-    <string name="add_address">新增地址</string>
-    <string name="commit2">保存</string>
-    <string name="set_default">设为默认</string>
-    <string name="set_address_info_text4">详细地址</string>
-    <string name="set_address_info_hint4">请输入详细地址</string>
-    <string name="select_province">请选择所在地区</string>
-    <string name="province">地区</string>
-    <string name="contact_number_format">联系电话</string>
-    <string name="enter_connect_phone">请输入联系电话</string>
-    <string name="contacts_format">联系人</string>
-    <string name="input_format">请输入联系人</string>
-    <string name="select_provinces">选择省份</string>
-    <string name="select_city">选择市</string>
-    <string name="select_country">选择区</string>
-    <string name="add_success">新增地址成功</string>
-    <string name="update_address">修改地址</string>
-    <string name="update_address_success">地址修改成功</string>
-    <string name="delete_address">长按可删除</string>
-    <string name="shipping_line">选择航运线路</string>
-    <string name="land_line">选择货运线路</string>
-    <string name="box_size">20GP</string>
-    <string name="box_size1">40GP</string>
-    <string name="box_size2">40HQ</string>
-    <string name="to_select">请按顺序选择</string>
-    <string name="order_success">下单成功</string>
-    <string name="sea_in">海运进口</string>
-    <string name="get_address">提柜地址</string>
-    <string name="out_goods">卸货地址</string>
-    <string name="land">陆运线路</string>
-    <string name="box_size_of">柜型</string>
-    <string name="time_of">拖运时间</string>
-    <string name="type">类型:</string>
-    <string name="order_state">订单状态:</string>
-    <string name="order_select">订车或报关请至少选择一项</string>
-    <string name="input_box">装货地址</string>
-    <string name="final_address">目的地</string>
-    <string name="input_content">搜索或输入网址</string>
-    <string name="search_error">没有搜索到相关结果</string>
-    <string name="air_port">机场信息</string>
-    <string name="sea_port">港口信息</string>
-    <string name="goods">货物追踪</string>
-    <string name="logistical">物流记录</string>
-    <string name="location_address">实时位置</string>
-    <string name="input_order_id">请输入订单号</string>
-    <string name="jump">进入</string>
-
-    <string name="phone">手机号</string>
-    <string name="phone2">手机号:</string>
-    <string name="phone_number_colon">手机号：</string>
 
 </resources>

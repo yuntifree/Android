@@ -1,29 +1,31 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.net.TrafficStats;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.MemoryFile;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.view.Window;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.mvp.ui.utils.SpeedTestDialog;
 import com.yunxingzh.wireless.mvp.view.RotatePointer;
+import com.yunxingzh.wireless.utility.NetUtil;
+import com.yunxingzh.wireless.utility.Util;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -34,13 +36,12 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.yunxingzh.wireless.utility.NetUtil;
-import com.yunxingzh.wireless.utility.Util;
-import com.yunxingzh.wireless.utility.IOUtil;
 
-public class SpeedtestActivity extends AppCompatActivity {
+/***
+ * wifi测速
+ */
+public class SpeedTestActivity extends BaseActivity implements View.OnClickListener{
 
-    private static final String TAG = "SpeedtestActivity";
     private static String mApkUrl = "";
 
     protected static final int MSG_RESULT = 102;
@@ -63,22 +64,30 @@ public class SpeedtestActivity extends AppCompatActivity {
     private TimerTask task;
     private Timer timer;
 
-    private Button mBtnStart;
+    private TextView mBtnStart;
     private TextView mSpeed;
     private RotatePointer mRotatePointer;
     private ExecutorService mExecutorService;
 
+    private TextView mTitleNameTv,mMiddleContentTv,mMiddleSpeedTv;
+    private ImageView mTitleReturnIv;
+    private LinearLayout mMiddleNoticeLay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         setContentView(R.layout.activity_speedtest);
-
         initView();
     }
     // init view components
     private void initView() {
+        mTitleReturnIv = (ImageView) findViewById(R.id.title_return_iv);
+        mTitleReturnIv.setOnClickListener(this);
+        mTitleNameTv = (TextView) findViewById(R.id.title_name_tv);
+        mTitleNameTv.setVisibility(View.VISIBLE);
+        mTitleNameTv.setText(R.string.app_name);
         mRotatePointer = (RotatePointer) findViewById(R.id.rp_tspeed_pointer);
-        mRotatePointer.setVisibility(View.VISIBLE);
         mRotatePointer.setPointer(mRotatePointer);
         mRotatePointer.setPointerRotate(180);
         mRotatePointer.setfirstSweepAngle(180);
@@ -86,13 +95,24 @@ public class SpeedtestActivity extends AppCompatActivity {
         mRotatePointer.setSecondSpinColor(Color.GREEN);
         mRotatePointer.setsecondSweepAngle(0);
         mRotatePointer.setSecondSpinColor(0xFF0063D2);
+        mMiddleNoticeLay = (LinearLayout) findViewById(R.id.middle_notice_lay);
+        mMiddleSpeedTv = (TextView) findViewById(R.id.middle_speed_tv);
+        mMiddleContentTv = (TextView) findViewById(R.id.middle_content_tv);
 
         mSpeed = (TextView) findViewById(R.id.tv_t_speed);
-        mBtnStart = (Button) findViewById(R.id.btn_tspeed_start);
+        mBtnStart = (TextView) findViewById(R.id.btn_tspeed_start);
         mBtnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initThread();
+                if (mBtnStart.getText().equals("开始测速")){
+                    initThread();
+                } else if(mBtnStart.getText().equals("停止测速")){
+                    shutdownAll();
+                    mMiddleNoticeLay.setVisibility(View.INVISIBLE);
+                    mBtnStart.setText(R.string.re_speed);
+                } else if(mBtnStart.getText().equals("重新测速")){
+                    startTestSpeed();
+                }
             }
         });
     }
@@ -104,26 +124,35 @@ public class SpeedtestActivity extends AppCompatActivity {
         }
         mExecutorService = Executors.newScheduledThreadPool(3);
         mSpeed.setText(getTimeString(Util.speedMethodNormal(0)));
-        mBtnStart.setVisibility(View.GONE);
         mSpeed.setVisibility(View.VISIBLE);
 
         startTestSpeed();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
+    public void onClick(View v) {
+        if (mTitleReturnIv == v){//返回
+            finish();
+        }
     }
 
     private void startTestSpeed() {
-        //先判断是否是WIFI环境
-        if (!NetUtil.isConnectedWifi(MyApplication.getInstance())) {
-            Util.showToast(SpeedtestActivity.this, "您的WiFi已断开，无法测速");
+        int netType = AppUtils.getNetWorkType(this);
+        if (netType == 1 || netType == 2 || netType == 3 || netType == -1){
+            SpeedTestDialog mDialog = new SpeedTestDialog(SpeedTestActivity.this);
+            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mDialog.show();
             shutdownAll();
             return;
         }
-
+        //先判断是否是WIFI环境
+//        if (!NetUtil.isConnectedWifi(MyApplication.getInstance())) {
+//            Util.showToast(SpeedTestActivity.this, "您的WiFi已断开，无法测速");
+//            shutdownAll();
+//            return;
+//        }
+        mMiddleNoticeLay.setVisibility(View.VISIBLE);
+        mBtnStart.setText(R.string.stop_speed);
         mList.clear();
         mListSpeed.clear();
         mRotatePointer.setsecondSweepAngle(0);
@@ -166,11 +195,15 @@ public class SpeedtestActivity extends AppCompatActivity {
             tag = "当前网速可流畅玩游戏";
             desc = "流畅";
         } else if (speed >= 150 * 1024) {
-            //tag = "当前网速可流畅看视频";
-            tag = "网速碉堡了<br/>即刻下载推荐应用畅享高速WiFi";
+            tag = "当前网速可流畅看视频";
+            //tag = "网速碉堡了\n即刻下载推荐应用畅享高速WiFi";
             desc = "很快";
         }
-        Util.showToast(SpeedtestActivity.this, tag + desc);
+        mMiddleSpeedTv.setText(String.valueOf(speed).substring(0,3)+"KB/s");
+        mMiddleContentTv.setText(tag);
+        mBtnStart.setText(R.string.re_speed);
+       // Util.showToast(SpeedTestActivity.this, tag + desc);
+
     }
 
 

@@ -4,9 +4,9 @@
     android:id="@+id/activity_speedtest"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:layout_gravity="center"
+    android:background="@color/blue_009CFB"
+    android:orientation="vertical">
 
     <include
         layout="@layout/title_public"
@@ -16,8 +16,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_t_speed"
@@ -33,45 +32,63 @@
             android:textColor="@color/white"
             android:textSize="40sp" />
 
-        <RelativeLayout
+        <com.yunxingzh.wireless.mvp.view.RotatePointer
+            android:id="@+id/rp_tspeed_pointer"
+            android:layout_width="380dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            domo:barColor="#000000"
+            domo:barWidth="8dp"
+            domo:circleColor="#ffffff"
+            domo:clockwise="true"
+            domo:firstspinColor="@color/blue"
+            domo:progress="0"
+            domo:rotateImageDrawable="@drawable/btn_tspeed_pointer"
+            domo:secondspinColor="@color/blue"
+            domo:space="5"
+            domo:spinWidth="10dp"
+            domo:startAngle="180"
+            domo:sweepAngle="180" />
+
+        <LinearLayout
+            android:id="@+id/middle_notice_lay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60dp"
+            android:visibility="invisible"
+            android:orientation="vertical">
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="145dp"
-                android:layout_marginTop="145dp"
-                android:background="#ffffffff" />
-
-            <com.yunxingzh.wireless.mvp.view.RotatePointer
-                android:id="@+id/rp_tspeed_pointer"
-                android:layout_width="300dp"
-                android:layout_height="290dp"
-                android:layout_centerInParent="true"
-                android:background="@color/transparent"
-                android:visibility="gone"
-                domo:barColor="#000000"
-                domo:barWidth="8dp"
-                domo:circleColor="#ffffff"
-                domo:clockwise="true"
-                domo:firstspinColor="@color/blue"
-                domo:progress="0"
-                domo:rotateImageDrawable="@drawable/btn_tspeed_pointer"
-                domo:secondspinColor="@color/blue"
-                domo:space="5"
-                domo:spinWidth="10dp"
-                domo:startAngle="180"
-                domo:sweepAngle="180" />
-
-            <Button
-                android:text="Button"
+            <TextView
+                android:id="@+id/middle_speed_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="33dp"
-                android:id="@+id/btn_tspeed_start" />
-        </RelativeLayout>
+                android:layout_gravity="center"
+                android:text="@string/speeding"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/middle_content_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/wait"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btn_tspeed_start"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/border_speed"
+            android:gravity="center"
+            android:text="@string/start_speed"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </LinearLayout>

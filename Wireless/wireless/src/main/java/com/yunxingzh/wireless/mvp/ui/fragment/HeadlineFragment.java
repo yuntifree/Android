@@ -105,11 +105,11 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
 
     @Subscribe
     public void onEventMainThread(EventBusType event) {
-        if (event.getMsg() == Constants.HEAD_LINE){//首页先跳转到头条父fragment
+        if (event.getMsg() == Constants.HEAD_LINE){//跳转到头条父fragment(头条)
             mViewPager.setCurrentItem(INDEX_ZERO);
         }
         if(event.getMsg() == Constants.HEAD_LINE && event.getChildMsg() == Constants.VIDEO){
-            mViewPager.setCurrentItem(INDEX_ONE);//再指定视频Fragment
+            mViewPager.setCurrentItem(INDEX_ONE);//跳转视频Fragment
         }
     }
 
