@@ -6,11 +6,11 @@ import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -35,7 +35,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 
 /***
  * wifi测速
@@ -80,6 +79,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         setContentView(R.layout.activity_speedtest);
         initView();
     }
+
     // init view components
     private void initView() {
         mTitleReturnIv = (ImageView) findViewById(R.id.title_return_iv);
@@ -131,19 +131,19 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (mTitleReturnIv == v){//返回
+        if (mTitleReturnIv == v) {//返回
             finish();
         }
     }
 
+
     private void startTestSpeed() {
+
         int netType = AppUtils.getNetWorkType(this);
-        if (netType == 1 || netType == 2 || netType == 3 || netType == -1){
+        if (netType == 1 || netType == 2 || netType == 3 || netType == -1) {
             SpeedTestDialog mDialog = new SpeedTestDialog(SpeedTestActivity.this);
             mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mDialog.show();
-            shutdownAll();
-            return;
         }
         //先判断是否是WIFI环境
 //        if (!NetUtil.isConnectedWifi(MyApplication.getInstance())) {
@@ -199,11 +199,11 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             //tag = "网速碉堡了\n即刻下载推荐应用畅享高速WiFi";
             desc = "很快";
         }
+
         mMiddleSpeedTv.setText(String.valueOf(speed).substring(0,3)+"KB/s");
         mMiddleContentTv.setText(tag);
         mBtnStart.setText(R.string.re_speed);
        // Util.showToast(SpeedTestActivity.this, tag + desc);
-
     }
 
 

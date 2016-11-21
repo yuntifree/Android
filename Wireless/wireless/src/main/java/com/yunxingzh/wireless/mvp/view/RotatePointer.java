@@ -192,7 +192,7 @@ public class RotatePointer extends ImageView {
 		//RectF spinBounds = new RectF(0,0,getWidth(),getHeight());
 		
 		if(this.bkgndBmp==null || bkgndBmp.isRecycled())
-			bkgndBmp = BitmapFactory.decodeResource(getResources(), R.drawable.image_tspeed_scale);
+			bkgndBmp = BitmapFactory.decodeResource(getResources(), R.drawable.speed_test);
 		
 		bmd.setBounds(centerX - (mTempWidth / 2), centerY
 				- (mTempHeigh / 2),  centerX + (mTempWidth / 2),

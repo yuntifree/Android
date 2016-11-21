@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:gravity="center"
+    android:padding="10dp"
+    android:background="@drawable/border_dialog"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/buying" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/net_work"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/gray_969696"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/my_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:gravity="center"
+            android:background="@drawable/border_dialog_style"
+            android:layout_weight="1"
+            android:textColor="@color/blue_009CFB"
+            android:text="@string/cancel_speed" />
+
+        <TextView
+            android:id="@+id/my_query"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/style_search"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:text="@string/query_speed" />
+    </LinearLayout>
+</LinearLayout>

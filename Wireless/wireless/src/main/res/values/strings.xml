@@ -64,6 +64,7 @@
     <string name="cancel_speed">取消测速</string>
     <string name="stop_speed">停止测速</string>
     <string name="re_speed">重新测速</string>
+
     <string name="query">确定</string>
     <string name="internet_error">网络连接错误</string>
     <string name="hot">WiFi地图</string>
@@ -127,6 +128,7 @@
     <string name="disconnect">断开连接</string>
 
     <string name="net_work">你当前wifi正处于断开状态哦</string>
+
 
 
 </resources>

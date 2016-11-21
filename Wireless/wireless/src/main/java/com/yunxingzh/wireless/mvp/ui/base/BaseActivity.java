@@ -37,6 +37,7 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        ToastUtil.showMiddle(this,"sssssss");
     }
 
     /* @Override

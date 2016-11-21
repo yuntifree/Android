@@ -137,20 +137,21 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 String title = childDatas.get(j).getTitle();
                 views.setText(title);
                 views.setTextSize(14);
+                views.setGravity(Gravity.CENTER);
                 views.setTextColor(getResources().getColor(R.color.gray_5a5a5a));
                 views.setTag(childDatas.get(j));
                 if (j <= 2){
-                    childLayOne.addView(views, getLayoutParams(1,Gravity.CENTER_VERTICAL, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                    childLayOne.addView(views, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                 } else if (j <= 5){
-                    childLayTwo.addView(views, getLayoutParams(1,Gravity.CENTER_VERTICAL, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                    childLayTwo.addView(views, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                 }
                 //当一行不足3个子view时实例一个空view来占位
                 if (size == 2 && j == 1){
                     nullView = new TextView(getActivity());
-                    childLayOne.addView(nullView, getLayoutParams(1,Gravity.CENTER_VERTICAL, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                    childLayOne.addView(nullView, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                 } else if (size == 5 && j == 4){
                     nullView = new TextView(getActivity());
-                    childLayTwo.addView(nullView, getLayoutParams(1,Gravity.CENTER_VERTICAL, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                    childLayTwo.addView(nullView, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                 }/*else {
                     childLayThree.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 50, 0, 0, 0));
                 }*/
@@ -165,8 +166,8 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             }
             mServiceItem.addView(mItemTop);
             mServiceItem.addView(lineSmall, getLayoutParams(0,0, LinearLayout.LayoutParams.MATCH_PARENT, 1, 0, 0, 0, 0));
-            mServiceItem.addView(childLayOne, getLayoutParams(0,Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 55, 30, 0, 0));
-            mServiceItem.addView(childLayTwo, getLayoutParams(0,Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 55, 30, 0, 30));
+            mServiceItem.addView(childLayOne, getLayoutParams(0,Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 30, 0, 0));
+            mServiceItem.addView(childLayTwo, getLayoutParams(0,Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 30, 0, 30));
           //  mServiceItem.addView(childLayThree, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 30, 0, 30));
 
             mServiceItem.addView(line, getLayoutParams(0,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
