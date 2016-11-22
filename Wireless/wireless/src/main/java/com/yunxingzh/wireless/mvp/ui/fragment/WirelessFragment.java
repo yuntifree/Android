@@ -70,16 +70,15 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private final static int ITEM = 0;
     private final static int NEWS = 1;//新闻点击上报
     private final static int SCANNIN_GREQUEST_CODE = 1;
-    private static final int DG_SDK_TIME_OUT = 5*1000;
+    private static final int DG_SDK_TIME_OUT = 5 * 1000;
 
     private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
 
-    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest;
+    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest,mMainHeadImg;
     private MyScrollView scrollView;
-    private TextView mTitleLeftContent, mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv, mConnectCountTv,
+    private TextView mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv, mConnectCountTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
-    private ImageView mTitleReturnIv, mShowMoreIv, mTitleRightIv,mWeatherImgBottom,mWeatherImgTop;
+    private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private HeadLineNewsAdapter headLineNewsAdapter;
@@ -109,10 +108,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mTitleRightIv.setOnClickListener(this);
         scrollView = findView(view, R.id.scrollView);
         scrollView.setScrollViewListener(this);
-        mTitleReturnIv = findView(view, R.id.title_return_iv);
-        mTitleReturnIv.setVisibility(View.GONE);
-        mTitleLeftContent = findView(view, R.id.title_left_content);
-        mTitleLeftContent.setVisibility(View.VISIBLE);
         mMainNewsLv = findView(view, R.id.main_news_lv);
         mNoticeTv = findView(view, R.id.notice_tv);
         mNoticeLay = findView(view, R.id.notice_lay);
@@ -132,6 +127,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mMainSpeedtest.setOnClickListener(this);
         mMainTemperature = findView(view, R.id.main_temperature);
         mMainWeather = findView(view, R.id.main_weather);
+        mMainHeadImg = findView(view, R.id.main_head_img);
 
         mFontNewsTv = findView(view, R.id.font_news_tv);
         mFontNewsTv.setOnClickListener(this);
@@ -148,8 +144,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mWeatherImgBottom = findView(view, R.id.weather_img_bottom);
         mWeatherImgTop = findView(view, R.id.weather_img_top);
 
-        setAnimation(mWeatherImgBottom,0,60,0,0);
-        setAnimation(mWeatherImgTop,60,0,0,0);
+        setAnimation(mWeatherImgBottom, 0, 60, 0, 0);
+        setAnimation(mWeatherImgTop, 60, 0, 0, 0);
 
         alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
         mCircleSecondTv.startAnimation(alphaAnimation);
@@ -178,6 +174,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         Utility.setListViewHeight(mMainNewsLv, Constants.LISTVIEW_ITEM_HEIGHT);
         mMainNewsLv.setOnItemClickListener(this);
         //时间
+        String hour = StringUtils.getTime();
+        int h = Integer.parseInt(hour);
+        if (h >= 6 && h < 19) {
+            mMainHeadImg.setBackgroundResource(R.drawable.main_bg);
+        } else {
+            mMainHeadImg.setBackgroundResource(R.drawable.main_bg_night);
+        }
     }
 
     @Override
@@ -188,7 +191,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mMainTemperature.setText(weatherNewsData.getTemp() + "°C");
         mMainWeather.setText(info);
         //类型 0-晴 1-阴 2-雨 3-雪
-        switch (type){
+        switch (type) {
             case Constants.SUNNY:
                 mWeatherImgBottom.setImageResource(0);
                 mWeatherImgTop.setImageResource(R.drawable.sunny);
@@ -251,7 +254,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0) {//注册成功
-                WifiInterface.wifiLogon(validateHandler,MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(),DG_SDK_TIME_OUT);//wifi认证
+                WifiInterface.wifiLogon(validateHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
             } else {
                 ToastUtil.showMiddle(getActivity(), R.string.register_faild);
             }
@@ -285,7 +288,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
 
                     break;
                 default:
-                    ToastUtil.showMiddle(getActivity(),"checkEnv:"+checkResult);
+                    ToastUtil.showMiddle(getActivity(), "checkEnv:" + checkResult);
                     break;
             }
 
@@ -347,8 +350,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         }
     }
 
-    public void setAnimation(View view,float fromX,float toX,float fromY,float toY){
-        TranslateAnimation translateAnimation = new TranslateAnimation(fromX,toX,fromY,toY);
+    public void setAnimation(View view, float fromX, float toX, float fromY, float toY) {
+        TranslateAnimation translateAnimation = new TranslateAnimation(fromX, toX, fromY, toY);
         translateAnimation.setDuration(2000);
         translateAnimation.setFillAfter(true);
         translateAnimation.setFillBefore(false);

@@ -44,7 +44,7 @@
             domo:clockwise="true"
             domo:firstspinColor="@color/blue"
             domo:progress="0"
-            domo:rotateImageDrawable="@drawable/btn_tspeed_pointer"
+            domo:rotateImageDrawable="@drawable/needle"
             domo:secondspinColor="@color/blue"
             domo:space="5"
             domo:spinWidth="10dp"

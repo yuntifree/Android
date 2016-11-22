@@ -138,7 +138,6 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
 
 
     private void startTestSpeed() {
-
         int netType = AppUtils.getNetWorkType(this);
         if (netType == 1 || netType == 2 || netType == 3 || netType == -1) {
             SpeedTestDialog mDialog = new SpeedTestDialog(SpeedTestActivity.this);
@@ -200,7 +199,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             desc = "很快";
         }
 
-        mMiddleSpeedTv.setText(String.valueOf(speed).substring(0,3)+"KB/s");
+        mMiddleSpeedTv.setText(getTimeString(Util.speedMethodNormal(speed)));
         mMiddleContentTv.setText(tag);
         mBtnStart.setText(R.string.re_speed);
        // Util.showToast(SpeedTestActivity.this, tag + desc);

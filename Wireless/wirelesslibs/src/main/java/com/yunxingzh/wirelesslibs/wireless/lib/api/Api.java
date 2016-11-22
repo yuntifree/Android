@@ -17,7 +17,4 @@ public class Api {
     public static final String GET_FONT_INFO = WEB_HOST + "get_front_info";//首页底部内容
     public static final String GET_WIFI_MAP = WEB_HOST + "get_nearby_aps";//获取地图周围热点
 
-    public static final String CHECK_NET = WEB_HOST + "checkEnv";//连接东莞wifi之前先检查网络状况
-    public static final String USER_VALIDATE = WEB_HOST + "wifiLogon";//连接东莞wifi用户认证
-
 }

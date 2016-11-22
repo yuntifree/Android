@@ -7,11 +7,6 @@
     android:orientation="vertical">
     <!--android:fitsSystemWindows="true"-->
     <!--android:clipToPadding="true"-->
-    <include
-        layout="@layout/title_public"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_heightPercent="@string/sw_140px" />
 
     <com.yunxingzh.wireless.mvp.ui.utils.MyScrollView
         android:id="@+id/scrollView"
@@ -23,13 +18,35 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <LinearLayout
+                android:id="@+id/main_head_img"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="346dp"
                 android:background="@drawable/main_bg"
                 android:gravity="center"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dg_wifi"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/title_right_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/zxing" />
+                </LinearLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -47,14 +64,14 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="right"
                             android:layout_marginLeft="280dp"
-                            android:scaleType="matrix"/>
+                            android:scaleType="matrix" />
 
                         <ImageView
                             android:id="@+id/weather_img_bottom"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="50dp"
-                            android:scaleType="matrix"/>
+                            android:scaleType="matrix" />
 
                     </LinearLayout>
 
@@ -117,8 +134,8 @@
                         android:id="@+id/main_weather"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="多云"
                         android:layout_marginLeft="5dp"
+                        android:text="多云"
                         android:textColor="@color/gray_98ffffff"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -172,13 +189,13 @@
                 <View style="@style/divide_line_vertical" />
 
                 <LinearLayout
+                    android:id="@+id/main_speedtest_lay"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="horizontal"
-                    android:id="@+id/main_speedtest_lay">
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="46dp"

@@ -107,6 +107,15 @@ public class StringUtils {
     }
 
     /**
+     * 获取当前时间(时：小写的“h”是12小时制，大写的“H”是24小时制)
+     * @return
+     */
+    public static String getTime(){
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("HH");
+        return sDateFormat.format(new Date());
+    }
+
+    /**
      * 格式化价格字符串 返回(￥00.00)
      *
      * @param priceStr
