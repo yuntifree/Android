@@ -149,6 +149,11 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 if (size == 2 && j == 1){
                     nullView = new TextView(getActivity());
                     childLayOne.addView(nullView, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                } else if (size == 4 && j == 3){
+                    nullView = new TextView(getActivity());
+                    TextView nullViewTwo = new TextView(getActivity());
+                    childLayTwo.addView(nullView, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                    childLayTwo.addView(nullViewTwo, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                 } else if (size == 5 && j == 4){
                     nullView = new TextView(getActivity());
                     childLayTwo.addView(nullView, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
@@ -173,6 +178,12 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             mServiceItem.addView(line, getLayoutParams(0,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
             mServiceParentGroup.addView(mServiceItem);
         }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        iServicePresenter.getService();
     }
 
     public void startActivity(Class activity, String key, String value, String titleKey, String titleValue) {

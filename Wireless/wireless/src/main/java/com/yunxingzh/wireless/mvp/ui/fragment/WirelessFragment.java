@@ -17,9 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dgwx.app.lib.bl.WifiInterface;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
@@ -31,7 +33,6 @@ import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
@@ -81,7 +82,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
 
     private FontInfoVo.FontData.BannersVo bannersVo;
     private FontInfoVo.FontData.UserVo userVo;
-
+    private TextView mMainTemperature,mMainWeather;
+    private WeatherNewsVo.WeatherNewsData.WeatherVo weatherNewsData;
     private ConvenientBanner mAdRotationBanner;
 
     @Nullable
@@ -120,6 +122,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mEconomizeTv = findView(view, R.id.economize_tv);
         mMainSpeedtest = findView(view, R.id.main_speedtest_lay);
         mMainSpeedtest.setOnClickListener(this);
+        mMainTemperature = findView(view, R.id.main_temperature);
+        mMainWeather = findView(view, R.id.main_weather);
 
         mFontNewsTv = findView(view, R.id.font_news_tv);
         mFontNewsTv.setOnClickListener(this);
@@ -144,6 +148,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+        iHeadLinePresenter.weatherNews();
     }
 
     @Override
@@ -159,14 +164,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mMainNewsLv.setAdapter(headLineNewsAdapter);
         Utility.setListViewHeight(mMainNewsLv, Constants.LISTVIEW_ITEM_HEIGHT);
         mMainNewsLv.setOnItemClickListener(this);
-
-        iHeadLinePresenter.weatherNews();
     }
 
     @Override
     public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {
-        weatherNewsVo.getData().getWeather();
-
+        weatherNewsData = weatherNewsVo.getData().getWeather();
+        mMainTemperature.setText(weatherNewsData.getTemp()+"°C");
+        mMainWeather.setText(weatherNewsData.getInfo());
         iHeadLinePresenter.getFontInfo();
     }
 
@@ -210,6 +214,18 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     @Override
     public void onClick(View v) {
         if (mConnectTv == v) {//一键连接
+            WifiInterface.init(getActivity());
+            WifiInterface.initEnv("http://192.168.100.4:880/wsmp/interface","无线东莞DG—FREE","ROOT_VNO");
+            int checkResult = WifiInterface.checkEnv(MyApplication.sApplication.getTimeOut());
+            switch (checkResult){
+                case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
+                    WifiInterface.wifiRegister(null,MyApplication.sApplication.getUserName(),MyApplication.sApplication.getWifiPwd(),5*1000);
+                    break;
+                case Constants.VALIDATE_SUCCESS://1、已经认证成功。
+
+                    break;
+            }
+
 
         } else if (footView == v) {//查看更多新闻
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
@@ -231,7 +247,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         } else if (mFontServiceTv == v) { //同城服务
             EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
         } else if (mFontZhiTv == v) { //智慧服务
-
+            EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
         } else if (mFontPlayingTv == v) { //同城直播
 
         } else if (mFontBuyingTv == v) { //抢购

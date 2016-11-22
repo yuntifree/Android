@@ -82,6 +82,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/main_temperature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center|left"
@@ -90,9 +91,11 @@
                         android:textSize="18sp" />
 
                     <TextView
+                        android:id="@+id/main_weather"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="多云"
+                        android:layout_marginLeft="5dp"
                         android:textColor="@color/gray_98ffffff"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -235,6 +238,7 @@
                 <View style="@style/divide_line_vertical" />
 
                 <LinearLayout
+                    android:id="@+id/main_spirited_lay"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"

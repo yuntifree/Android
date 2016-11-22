@@ -30,11 +30,11 @@
             android:shadowDy="4"
             android:shadowRadius="6"
             android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:textSize="30sp" />
 
         <com.yunxingzh.wireless.mvp.view.RotatePointer
             android:id="@+id/rp_tspeed_pointer"
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_gravity="center"
             android:background="@color/transparent"

@@ -49,4 +49,5 @@ public interface IHeadLineModel {
      */
     void getFontInfo(int uid, String token, int term, double version, long ts,
                     int nettype,onGetFontInfoListener listener);
+
 }

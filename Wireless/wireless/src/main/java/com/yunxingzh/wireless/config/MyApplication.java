@@ -35,6 +35,9 @@ public class MyApplication extends Application {
     private boolean isExit = false;
     private String mMark;
     private String mToken;
+    private String wifiPwd;
+    private String userName;
+    private int timeout;
     private UserInfoVo mUser;
 
     private AreaDataVo mAreaDataVo;
@@ -95,6 +98,44 @@ public class MyApplication extends Application {
         mToken = token;
         SPUtils.put(sApplication, Constants.SP_KEY_TOKEN, token);
     }
+
+    public void setWifiPwd(String wifiPwd) {
+        this.wifiPwd = wifiPwd;
+        SPUtils.put(sApplication, Constants.SP_WIFI_PWD, wifiPwd);
+    }
+
+    public String getWifiPwd() {
+        if (wifiPwd == null) {
+            wifiPwd = SPUtils.get(sApplication, Constants.SP_WIFI_PWD,"");
+        }
+        return wifiPwd;
+    }
+
+    public void setTimeOut(int timeout) {
+        this.timeout = timeout;
+        SPUtils.put(sApplication, Constants.SP_TIME_OUT, timeout);
+    }
+
+    public int getTimeOut() {
+        if (timeout == 0) {
+            timeout = SPUtils.get(sApplication, Constants.SP_TIME_OUT,0);
+        }
+        return timeout;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+        SPUtils.put(sApplication, Constants.SP_TIME_OUT, userName);
+    }
+
+    public String getUserName() {
+        if (userName == null) {
+            userName = SPUtils.get(sApplication, Constants.SP_USER_NAME,"");
+        }
+        return userName;
+    }
+
+
 
     public UserInfoVo getUser() {
         if (mUser == null) {

@@ -8,6 +8,8 @@ public class BaseDto<T> {
 
 	private T data;
 
+	private int passOr;
+
 	public int getErrno() {
 		return errno;
 	}
@@ -30,5 +32,13 @@ public class BaseDto<T> {
 
 	public void setData(T data) {
 		this.data = data;
+	}
+
+	public int getPassOr() {
+		return passOr;
+	}
+
+	public void setPassOr(int passOr) {
+		this.passOr = passOr;
 	}
 }

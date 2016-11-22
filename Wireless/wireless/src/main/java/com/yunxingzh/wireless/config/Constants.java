@@ -3,6 +3,9 @@ package com.yunxingzh.wireless.config;
 public class Constants {
     public static final String SP_KEY_MARK = "UUID";
     public static final String SP_KEY_TOKEN = "Token";
+    public static final String SP_WIFI_PWD = "wifiPwd";
+    public static final String SP_TIME_OUT = "timeout";
+    public static final String SP_USER_NAME = "userName";
     public static final String SP_KEY_MACHINE = "MachineId";
     public static final String SP_KEY_USER = "sp_key_user";
     public static final String SP_KEY_AREA = "sp_key_area";
@@ -23,5 +26,10 @@ public class Constants {
     public static final int HEAD_LINE = 2;//头条
     public static final int SERVICE = 3;//服务
     public static final int VIDEO = 4;//视频
+
+
+    //0、网络正常，可以发起调用认证、下线等接口。1、已经认证成功。
+    public static final int NET_OK = 0;
+    public static final int VALIDATE_SUCCESS = 1;
 
 }

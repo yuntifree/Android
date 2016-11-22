@@ -193,10 +193,11 @@ public class RotatePointer extends ImageView {
 		
 		if(this.bkgndBmp==null || bkgndBmp.isRecycled())
 			bkgndBmp = BitmapFactory.decodeResource(getResources(), R.drawable.speed_test);
-		
-		bmd.setBounds(centerX - (mTempWidth / 2), centerY
-				- (mTempHeigh / 2),  centerX + (mTempWidth / 2),
-				centerY + (mTempHeigh / 2));
+
+        //改变指针整体大小
+		bmd.setBounds(centerX - (mTempWidth / 4), centerY
+				- (mTempHeigh / 4),  centerX + (mTempWidth / 4),
+				centerY + (mTempHeigh / 4));
 		
 		//绘制刻度
 //		if(bkgndBmp!=null && bkgndBmp.isRecycled()==false)
@@ -252,6 +253,7 @@ public class RotatePointer extends ImageView {
         int xOffset = layout_width - minValue;
         int yOffset = layout_height - minValue;
 
+        //调整扇形大小
         paddingTop = this.getPaddingTop() + (yOffset / 2);
         paddingBottom = this.getPaddingBottom() + (yOffset / 2);
         paddingLeft = this.getPaddingLeft() + (xOffset / 2);
