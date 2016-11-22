@@ -32,4 +32,10 @@ public class Constants {
     public static final int NET_OK = 0;
     public static final int VALIDATE_SUCCESS = 1;
 
+    //类型 0-晴 1-阴 2-雨 3-雪
+    public static final int SUNNY = 0;
+    public static final int CLOUDY = 1;
+    public static final int RAIN = 2;
+    public static final int SNOW = 3;
+
 }

@@ -3,14 +3,19 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dgwx.app.lib.bl.WifiInterface;
+import com.dgwx.app.lib.common.util.SettingUtility;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
@@ -33,6 +39,7 @@ import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
+import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
@@ -63,6 +70,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private final static int ITEM = 0;
     private final static int NEWS = 1;//新闻点击上报
     private final static int SCANNIN_GREQUEST_CODE = 1;
+    private static final int DG_SDK_TIME_OUT = 5*1000;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -71,7 +79,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     private MyScrollView scrollView;
     private TextView mTitleLeftContent, mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv, mConnectCountTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
-    private ImageView mTitleReturnIv, mShowMoreIv, mTitleRightIv;
+    private ImageView mTitleReturnIv, mShowMoreIv, mTitleRightIv,mWeatherImgBottom,mWeatherImgTop;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private HeadLineNewsAdapter headLineNewsAdapter;
@@ -82,7 +90,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
 
     private FontInfoVo.FontData.BannersVo bannersVo;
     private FontInfoVo.FontData.UserVo userVo;
-    private TextView mMainTemperature,mMainWeather;
+    private TextView mMainTemperature, mMainWeather;
     private WeatherNewsVo.WeatherNewsData.WeatherVo weatherNewsData;
     private ConvenientBanner mAdRotationBanner;
 
@@ -137,6 +145,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mFontPlayingTv.setOnClickListener(this);
         mFontBuyingTv = findView(view, R.id.font_buying_tv);
         mFontBuyingTv.setOnClickListener(this);
+        mWeatherImgBottom = findView(view, R.id.weather_img_bottom);
+        mWeatherImgTop = findView(view, R.id.weather_img_top);
+
+        setAnimation(mWeatherImgBottom,0,60,0,0);
+        setAnimation(mWeatherImgTop,60,0,0,0);
 
         alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
         mCircleSecondTv.startAnimation(alphaAnimation);
@@ -164,13 +177,35 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         mMainNewsLv.setAdapter(headLineNewsAdapter);
         Utility.setListViewHeight(mMainNewsLv, Constants.LISTVIEW_ITEM_HEIGHT);
         mMainNewsLv.setOnItemClickListener(this);
+        //时间
     }
 
     @Override
     public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {
         weatherNewsData = weatherNewsVo.getData().getWeather();
-        mMainTemperature.setText(weatherNewsData.getTemp()+"°C");
-        mMainWeather.setText(weatherNewsData.getInfo());
+        String info = weatherNewsData.getInfo();
+        int type = weatherNewsData.getType();
+        mMainTemperature.setText(weatherNewsData.getTemp() + "°C");
+        mMainWeather.setText(info);
+        //类型 0-晴 1-阴 2-雨 3-雪
+        switch (type){
+            case Constants.SUNNY:
+                mWeatherImgBottom.setImageResource(0);
+                mWeatherImgTop.setImageResource(R.drawable.sunny);
+                break;
+            case Constants.CLOUDY:
+                mWeatherImgBottom.setImageResource(R.drawable.cloudy);
+                mWeatherImgTop.setImageResource(R.drawable.cloudy);
+                break;
+            case Constants.RAIN:
+                mWeatherImgBottom.setImageResource(R.drawable.rain);
+                mWeatherImgTop.setImageResource(R.drawable.rain);
+                break;
+            case Constants.SNOW:
+                mWeatherImgBottom.setImageResource(R.drawable.snow);
+                mWeatherImgTop.setImageResource(R.drawable.snow);
+                break;
+        }
         iHeadLinePresenter.getFontInfo();
     }
 
@@ -211,21 +246,48 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         startActivity(WebViewActivity.class, Constants.URL, newsList.get(position).getDst(), Constants.TITLE, newsList.get(position).getTitle());
     }
 
+    public Handler registerHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {//注册成功
+                WifiInterface.wifiLogon(validateHandler,MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(),DG_SDK_TIME_OUT);//wifi认证
+            } else {
+                ToastUtil.showMiddle(getActivity(), R.string.register_faild);
+            }
+        }
+    };
+
+    public Handler validateHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {//认证成功
+                ToastUtil.showMiddle(getActivity(), R.string.validate_success);
+
+            } else {
+                ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+            }
+        }
+    };
+
     @Override
     public void onClick(View v) {
         if (mConnectTv == v) {//一键连接
             WifiInterface.init(getActivity());
-            WifiInterface.initEnv("http://192.168.100.4:880/wsmp/interface","无线东莞DG—FREE","ROOT_VNO");
-            int checkResult = WifiInterface.checkEnv(MyApplication.sApplication.getTimeOut());
-            switch (checkResult){
+            WifiInterface.initEnv("http://192.168.100.4:880/wsmp/interface", "无线东莞DG—FREE", "ROOT_VNO");
+            int checkResult = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
+            switch (checkResult) {
                 case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
-                    WifiInterface.wifiRegister(null,MyApplication.sApplication.getUserName(),MyApplication.sApplication.getWifiPwd(),5*1000);
+                    WifiInterface.wifiRegister(registerHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);
                     break;
                 case Constants.VALIDATE_SUCCESS://1、已经认证成功。
 
                     break;
+                default:
+                    ToastUtil.showMiddle(getActivity(),"checkEnv:"+checkResult);
+                    break;
             }
-
 
         } else if (footView == v) {//查看更多新闻
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
@@ -243,7 +305,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         } else if (mFontNewsTv == v) { // 东莞头条
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mFontVideoTv == v) { //热门视频
-            EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE,Constants.VIDEO));
+            EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE, Constants.VIDEO));
         } else if (mFontServiceTv == v) { //同城服务
             EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
         } else if (mFontZhiTv == v) { //智慧服务
@@ -283,6 +345,16 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
             mNoticeTv.setText(R.string.head_line);
             mShowMoreIv.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void setAnimation(View view,float fromX,float toX,float fromY,float toY){
+        TranslateAnimation translateAnimation = new TranslateAnimation(fromX,toX,fromY,toY);
+        translateAnimation.setDuration(2000);
+        translateAnimation.setFillAfter(true);
+        translateAnimation.setFillBefore(false);
+        translateAnimation.setRepeatCount(-1);
+        translateAnimation.setRepeatMode(Animation.REVERSE);//设置反方向执行
+        view.startAnimation(translateAnimation);
     }
 
     public void startActivity(Class activity, String key, String videoUrl, String titleKey, String title) {
