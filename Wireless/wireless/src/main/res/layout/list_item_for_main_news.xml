@@ -11,6 +11,7 @@
         android:layout_height="32dp"
         android:layout_gravity="center"
         android:gravity="center"
+        android:layout_margin="10dp"
         android:background="@color/blue_63C7FF"
         android:text="@string/get_more"
         android:textColor="@color/white"

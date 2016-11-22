@@ -221,7 +221,7 @@ public class StringUtils {
      * 格式化日期显示
      */
     public static String formatDate(String mDate){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date d= null;
         try {
             d = formatter.parse(mDate);
