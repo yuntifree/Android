@@ -116,8 +116,8 @@
     <string name="state_offlining">offline...</string>
     <string name="state_disconnected">disconnected</string>
     <string name="section_state_connected">已连接</string>
-    <string name="section_state_freewifi">Free WiFi</string>
-    <string name="section_state_password">Password Need</string>
+    <string name="section_state_freewifi">免费WiFi</string>
+    <string name="section_state_password">需要密码</string>
     <string name="input_password">input password</string>
     <string name="password_error">invald password!</string>
     <string name="state_auth_error">auth error</string>

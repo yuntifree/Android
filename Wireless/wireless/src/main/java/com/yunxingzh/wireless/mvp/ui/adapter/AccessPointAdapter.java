@@ -48,6 +48,8 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     private List<Integer> sections;
     private HashMap<String, AccessData> mAccessDatas;
 
+    private int mFreeApCount;
+
     public AccessPointAdapter(Context context) {
         this.mContext = context;
         mAccessPoints = new ArrayList<AccessPoint>();
@@ -88,9 +90,12 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
                 mNoauthPoints.add(ap);
             }
         }
+        mFreeApCount = mFocusPoints.size();
+        mFocusPoints.addAll(mNoauthPoints);
         if(mCurrentAPoint != null) sections.add(TYPE_CURRENT_AP);
         if(mFocusPoints.size() > 0) sections.add(TYPE_FOCUS_AP);
-        if(mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
+
+        //if(mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
 
         notifyDataSetChanged();
         if(refreshPWD) refreshPassword();
@@ -108,8 +113,8 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             return 1;
         } else if(type == TYPE_FOCUS_AP){
             return mFocusPoints.size();
-        } else if(type == TYPE_NOAUTH_AP){
-            return mNoauthPoints.size();
+//        } else if(type == TYPE_NOAUTH_AP){
+//            return mNoauthPoints.size();
         }
         return 0;
     }
@@ -151,11 +156,11 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     protected void onBindItemViewHolder(ItemViewHolder holder, int section, int position) {
         int type = sections.get(section);
         if(type == TYPE_CURRENT_AP){
-            holder.setAccessPoint(mCurrentAPoint, type);
+            holder.setAccessPoint(mCurrentAPoint, type, position);
         } else if(type == TYPE_FOCUS_AP){
-            holder.setAccessPoint(mFocusPoints.get(position), type);
-        } else if(type == TYPE_NOAUTH_AP){
-            holder.setAccessPoint(mNoauthPoints.get(position), type);
+            holder.setAccessPoint(mFocusPoints.get(position), type, position);
+//        } else if(type == TYPE_NOAUTH_AP){
+//            holder.setAccessPoint(mNoauthPoints.get(position), type);
         }
     }
 
@@ -222,7 +227,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             mSubicon = (ImageView) itemView.findViewById(R.id.iv_subicon);
         }
 
-        public void setAccessPoint(AccessPoint ap, int type){
+        public void setAccessPoint(AccessPoint ap, int type, int position){
             this.accessPoint = ap;
             this.type = type;
 
@@ -238,16 +243,21 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
                     mSubicon.setVisibility(View.GONE);
                 }
             } else if(type == TYPE_FOCUS_AP){
-                mSubtitle.setVisibility(View.GONE);
+                mSubtitle.setVisibility(View.VISIBLE);
+                if (position < mFreeApCount) {
+                    mSubtitle.setText("免费WiFi");
+                } else {
+                    mSubtitle.setText("需要密码");
+                }
                 if(!ap.isOpen()){
                     mSubicon.setVisibility(View.VISIBLE);
                     mSubicon.setImageResource(R.drawable.tag_focus);
                 } else {
                     mSubicon.setVisibility(View.GONE);
                 }
-            } else if(type == TYPE_NOAUTH_AP){
-                mSubtitle.setVisibility(View.GONE);
-                mSubicon.setVisibility(View.GONE);
+//            } else if(type == TYPE_NOAUTH_AP){
+//                mSubtitle.setVisibility(View.GONE);
+//                mSubicon.setVisibility(View.GONE);
             }
 
             int percent = ap.signal.percent();
