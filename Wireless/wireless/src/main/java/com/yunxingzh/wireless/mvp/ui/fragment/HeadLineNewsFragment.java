@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
@@ -22,6 +23,9 @@ import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +34,7 @@ import java.util.List;
  * 头条-新闻
  */
 
-public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
+public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener, SwipeRefreshLayout.OnLoadListener {
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -53,7 +57,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     public void initView(View view) {
         mMainNewsLv = findView(view, R.id.head_line_lv);
-        mMainNewsLv.setOnItemClickListener(this);
         swipeRefreshLayout = findView(view, R.id.swipe_ly);
         swipeRefreshLayout.setOnLoadListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -64,15 +67,25 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     }
 
     public void initData() {
+        //注册EventBus
+        EventBus.getDefault().register(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         swipeRefreshLayout.setRefreshing(true);
     }
 
+    @Subscribe
+    public void onEventMainThread(EventBusType event) {
+        int index = event.getMsg();
+        if (index != -1){
+            iHeadLinePresenter.clickCount(data.getInfos().get(index).getId(),CLICK_COUNT);
+        }
+    }
+
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        iHeadLinePresenter.clickCount(data.getInfos().get(position).getId(),CLICK_COUNT);
-        startActivity(WebViewActivity.class, Constants.URL,data.getInfos().get(position).getDst(),Constants.TITLE,data.getInfos().get(position).getTitle());
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
     @Override

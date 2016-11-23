@@ -22,6 +22,7 @@ public class Constants {
     public static final String URL = "url";
     public static final String TITLE = "title";
 
+    //eventBus flag
     public static final int WIRELESS = 1;//无线
     public static final int HEAD_LINE = 2;//头条
     public static final int SERVICE = 3;//服务

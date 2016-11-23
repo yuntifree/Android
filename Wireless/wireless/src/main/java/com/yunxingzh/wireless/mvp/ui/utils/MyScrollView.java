@@ -43,4 +43,12 @@ public class MyScrollView extends ScrollView {
             scrollViewListener.onScrollChanged(this, x, y, oldx, oldy);
         }
     }
+
+    /**
+     * 滑动事件 控制滑动速度
+     */
+    @Override
+    public void fling(int velocityY) {
+        super.fling(velocityY / 4);
+    }
 }

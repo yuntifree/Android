@@ -52,6 +52,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ import java.util.List;
  * 无线
  */
 
-public class WirelessFragment extends BaseFragment implements IHeadLineView, AdapterView.OnItemClickListener, View.OnClickListener, ScrollViewListener {
+public class WirelessFragment extends BaseFragment implements IHeadLineView, View.OnClickListener, ScrollViewListener {
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -74,7 +75,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
 
     private FragmentManager fragmentManager;
 
-    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest,mMainHeadImg;
+    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest, mMainHeadImg;
     private MyScrollView scrollView;
     private TextView mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv, mConnectCountTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
@@ -153,6 +154,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
     }
 
     public void initData() {
+        //注册EventBus
+        EventBus.getDefault().register(this);
         fragmentManager = getFragmentManager();
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
@@ -172,7 +175,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         footView.setOnClickListener(this);
         mMainNewsLv.setAdapter(headLineNewsAdapter);
         Utility.setListViewHeight(mMainNewsLv, Constants.LISTVIEW_ITEM_HEIGHT);
-        mMainNewsLv.setOnItemClickListener(this);
         //时间
         String hour = StringUtils.getTime();
         int h = Integer.parseInt(hour);
@@ -240,13 +242,21 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Ada
         });
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (newsList.get(position).getImages().size() == NEWS) {//图片size=1表示点击的是广告
-            iHeadLinePresenter.clickCount(newsList.get(position).getId(), NEWS);
+    @Subscribe
+    public void onEventMainThread(EventBusType event) {
+        int index = event.getMsg();
+        if (index != -1) {
+            if (newsList.get(index).getImages().size() == NEWS) {//图片size=1表示点击的是广告
+                iHeadLinePresenter.clickCount(newsList.get(index).getId(), NEWS);
+            }
+            iHeadLinePresenter.clickCount(newsList.get(index).getId(), NEWS);
         }
-        iHeadLinePresenter.clickCount(newsList.get(position).getId(), NEWS);
-        startActivity(WebViewActivity.class, Constants.URL, newsList.get(position).getDst(), Constants.TITLE, newsList.get(position).getTitle());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
     public Handler registerHandler = new Handler() {
