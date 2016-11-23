@@ -13,7 +13,7 @@ public enum WifiState {
     CONNECTING_IPADDR(R.string.state_ipaddr),
     LOGINING(R.string.state_logining),
     CHECKING(R.string.state_checking),
-    CONNECTED(R.string.state_connected),
+    CONNECTED(R.string.section_state_connected),
     OFFLINEING(R.string.state_offlining),
     DISCONNECTED(R.string.state_disconnected),
 

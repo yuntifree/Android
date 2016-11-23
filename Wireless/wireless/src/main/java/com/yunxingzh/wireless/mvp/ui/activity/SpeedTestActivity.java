@@ -43,11 +43,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
 
     private static String mApkUrl = "";
 
-    public static final int NETWORK_CLASS_UNKNOWN = -1;//未知网络类型
     public static final int NETWORK_WIFI = 0;//wifi 连接
-    public static final int NETWORK_CLASS_4G = 1;//"4G" 连接
-    public static final int NETWORK_CLASS_3G = 2;//"3G" 连接
-    public static final int NETWORK_CLASS_2G = 3;//"2G" 连接
 
     protected static final int MSG_RESULT = 102;
     protected static final int MSG_TANGLE = 103;
@@ -145,7 +141,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
 
     private void startTestSpeed() {
         int netType = AppUtils.getNetWorkType(this);
-        if (netType == NETWORK_CLASS_4G || netType == NETWORK_CLASS_3G || netType == NETWORK_CLASS_2G || netType == NETWORK_CLASS_UNKNOWN) {
+        if (netType != NETWORK_WIFI) {
             SpeedTestDialog mDialog = new SpeedTestDialog(SpeedTestActivity.this);
             mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mDialog.show();

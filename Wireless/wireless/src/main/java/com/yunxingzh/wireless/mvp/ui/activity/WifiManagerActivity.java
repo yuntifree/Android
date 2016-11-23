@@ -23,12 +23,10 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IWifiManagerPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiManagerPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.AccessPointAdapter;
-import com.yunxingzh.wireless.mvp.ui.adapter.WifiManagerAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
-import com.yunxingzh.wireless.mvp.ui.utils.SpeedTestDialog;
 import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
 import com.yunxingzh.wireless.utility.Logg;
@@ -58,7 +56,6 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     private ToggleButton mSwitchBtn;
     private SwipeRefreshLayout mSwipeWifi;
     private RecyclerView mWifiRv;
-    private WifiManagerAdapter wifiManagerAdapter;
     private AccessPointAdapter mAdapter;
     private List<ScanResult> scanResultList;
     private WifiUtils wifiMa;
@@ -91,7 +88,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         mSwitchBtn.setVisibility(View.VISIBLE);
         mSwitchBtn.setOnCheckedChangeListener(this);
         mWifiRv.setLayoutManager(new LinearLayoutManager(this));
-        mWifiRv.addItemDecoration(new SpacesItemDecoration(Constants.ITEM_HEIGHT));
+        mWifiRv.addItemDecoration(new SpacesItemDecoration(0));
         mSwipeWifi.setOnRefreshListener(this);
 
         mAdapter = new AccessPointAdapter(this);
@@ -255,7 +252,6 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
                 //耗时操作
                 wifiMa.wifiOpen();
 
-                //setMyLocationEnabled(true)
                 iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
 
                 wifiMa.wifiStartScan();//开始扫描
@@ -264,45 +260,45 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
                 message.what = 1;
 
                 scanResultList = wifiMa.getScanResults();//得到扫描结果
-                refreshWifiHandler.sendMessage(message);
+              //  refreshWifiHandler.sendMessage(message);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    final Handler refreshWifiHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        switch (msg.what) {
-            case 1:
-                mSwipeWifi.setRefreshing(false);
-                wifiConfigurationList = wifiMa.getConfiguration();//得到已经配置好的列表
-                wifiManagerAdapter = new WifiManagerAdapter(scanResultList);
-                mWifiRv.setAdapter(wifiManagerAdapter);
-                mWifiRv.swapAdapter(wifiManagerAdapter, true);//刷新列表
-                break;
-        }
-        }
-    };
+//    final Handler refreshWifiHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//        super.handleMessage(msg);
+//        switch (msg.what) {
+//            case 1:
+//                mSwipeWifi.setRefreshing(false);
+//                wifiConfigurationList = wifiMa.getConfiguration();//得到已经配置好的列表
+//                wifiManagerAdapter = new WifiManagerAdapter(scanResultList);
+//                mWifiRv.setAdapter(wifiManagerAdapter);
+//                mWifiRv.swapAdapter(wifiManagerAdapter, true);//刷新列表
+//                break;
+//        }
+//        }
+//    };
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             ToastUtil.showMiddle(this, R.string.opening);
-            new Thread(new RefreshWifiThread()).start();
+           // new Thread(new RefreshWifiThread()).start();
         } else {
             wifiMa.wifiClose();
-            scanResultList.clear();
-            mWifiRv.swapAdapter(wifiManagerAdapter, true);//刷新列表
+           // scanResultList.clear();
+          //  mWifiRv.swapAdapter(wifiManagerAdapter, true);//刷新列表
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //locationUtils.stopMonitor();
+        locationUtils.stopMonitor();
         FWManager.getInstance().removeWifiObserver(wifiObserver);
     }
 }

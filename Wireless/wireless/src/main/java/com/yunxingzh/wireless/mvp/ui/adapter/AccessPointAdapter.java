@@ -33,7 +33,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         AccessPointAdapter.HeaderViewHolder, AccessPointAdapter.ItemViewHolder, AccessPointAdapter.FooterViewHolder> {
     private static String TAG = "AccessPointAdapter";
     public static int TYPE_CURRENT_AP = 0;
-    public static int TYPE_FOCUS_AP = 1;
     public static int TYPE_NOAUTH_AP = 2;
 
     private Context mContext;
@@ -47,6 +46,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     private List<AccessPoint> mNoauthPoints;
     private List<Integer> sections;
     private HashMap<String, AccessData> mAccessDatas;
+    private TextView mSubtitle;
 
     public AccessPointAdapter(Context context) {
         this.mContext = context;
@@ -89,7 +89,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             }
         }
         if(mCurrentAPoint != null) sections.add(TYPE_CURRENT_AP);
-        if(mFocusPoints.size() > 0) sections.add(TYPE_FOCUS_AP);
         if(mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
 
         notifyDataSetChanged();
@@ -106,8 +105,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         int type = sections.get(section);
         if(type == TYPE_CURRENT_AP){
             return 1;
-        } else if(type == TYPE_FOCUS_AP){
-            return mFocusPoints.size();
         } else if(type == TYPE_NOAUTH_AP){
             return mNoauthPoints.size();
         }
@@ -152,8 +149,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         int type = sections.get(section);
         if(type == TYPE_CURRENT_AP){
             holder.setAccessPoint(mCurrentAPoint, type);
-        } else if(type == TYPE_FOCUS_AP){
-            holder.setAccessPoint(mFocusPoints.get(position), type);
         } else if(type == TYPE_NOAUTH_AP){
             holder.setAccessPoint(mNoauthPoints.get(position), type);
         }
@@ -207,7 +202,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         private int type;
 
         private TextView mSSID;
-        private TextView mSubtitle;
         private ImageView mIcon;
         private ImageView mSubicon;
 
@@ -233,31 +227,23 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
                 mSubtitle.setText(context.getResources().getString(mCurrentState.resId));
                 if(mCurrentState == WifiState.CONNECTED){
                     mSubicon.setVisibility(View.VISIBLE);
-                    mSubicon.setImageResource(R.drawable.tag_connected);
-                } else {
-                    mSubicon.setVisibility(View.GONE);
-                }
-            } else if(type == TYPE_FOCUS_AP){
-                mSubtitle.setVisibility(View.GONE);
-                if(!ap.isOpen()){
-                    mSubicon.setVisibility(View.VISIBLE);
-                    mSubicon.setImageResource(R.drawable.tag_focus);
+                    mSubicon.setImageResource(R.drawable.connected);
                 } else {
                     mSubicon.setVisibility(View.GONE);
                 }
             } else if(type == TYPE_NOAUTH_AP){
-                mSubtitle.setVisibility(View.GONE);
+               // mSubtitle.setVisibility(View.GONE);
                 mSubicon.setVisibility(View.GONE);
             }
 
             int percent = ap.signal.percent();
             int iconId;
             if(percent > 90){
-                iconId = type == TYPE_CURRENT_AP || type == TYPE_FOCUS_AP ? R.drawable.signal_free3 : R.drawable.signal_password3;
+                iconId = type == TYPE_CURRENT_AP ? R.drawable.signal_free3 : R.drawable.signal_password3;
             } else if(percent > 60){
-                iconId = type == TYPE_CURRENT_AP || type == TYPE_FOCUS_AP ? R.drawable.signal_free2 : R.drawable.signal_password2;
+                iconId = type == TYPE_CURRENT_AP ? R.drawable.signal_free2 : R.drawable.signal_password2;
             } else {
-                iconId = type == TYPE_CURRENT_AP || type == TYPE_FOCUS_AP ? R.drawable.signal_free1 : R.drawable.signal_password1;
+                iconId = type == TYPE_CURRENT_AP ? R.drawable.signal_free1 : R.drawable.signal_password1;
             }
             mIcon.setImageResource(iconId);
         }
@@ -266,8 +252,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         public void onClick(View v) {
             if(type == TYPE_CURRENT_AP){
 
-            } else if(type == TYPE_FOCUS_AP){
-                FWManager.getInstance().connect(accessPoint);
             } else if(type == TYPE_NOAUTH_AP){
                 DialogActivity.showInuptPWD(context, accessPoint, false);
             }
@@ -282,21 +266,20 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder{
         private Context context;
-        private TextView mSection;
+        //private TextView mSection;
 
         public HeaderViewHolder(View itemView, Context context) {
             super(itemView);
             this.context = context;
-            mSection = (TextView) itemView.findViewById(R.id.tv_section);
+           // mSection = (TextView) itemView.findViewById(R.id.tv_section);
         }
 
         public void setSection(int type){
-            if(type == TYPE_CURRENT_AP){
-                mSection.setText(context.getResources().getString(R.string.section_state_connected));
-            } else if(type == TYPE_FOCUS_AP){
-                mSection.setText(context.getResources().getString(R.string.section_state_freewifi));
-            } else if(type == TYPE_NOAUTH_AP){
-                mSection.setText(context.getResources().getString(R.string.section_state_password));
+            if(type == TYPE_CURRENT_AP){//已经连接的
+               // mSection.setText(context.getResources().getString(R.string.section_state_connected));
+            } else if(type == TYPE_NOAUTH_AP){//需要密码连接的
+                mSubtitle.setText(R.string.need_pwd);
+                // mSection.setText(context.getResources().getString(R.string.section_state_password));
             }
         }
     }

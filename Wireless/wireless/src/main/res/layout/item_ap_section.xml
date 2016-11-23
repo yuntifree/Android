@@ -5,6 +5,7 @@
     android:paddingTop="19dp"
     android:paddingLeft="19dp"
     android:background="?android:attr/selectableItemBackground">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,4 +13,5 @@
         android:textColor="#888999"
         android:text="SSID"
         android:id="@+id/tv_section" />
+
 </LinearLayout>
