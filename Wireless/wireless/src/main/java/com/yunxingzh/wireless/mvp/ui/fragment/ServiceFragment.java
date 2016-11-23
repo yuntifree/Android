@@ -7,8 +7,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -19,6 +22,7 @@ import com.yunxingzh.wireless.mvp.presenter.impl.ServicePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.SearchActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
+import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.ServiceVo;
 
@@ -33,12 +37,10 @@ import java.util.List;
 public class ServiceFragment extends BaseFragment implements IServiceView, View.OnClickListener {
 
     private TextView mSearchTv;
-    private TextView mServiceTitle, mServiceMoreTv, mHouseKeepingTv, mHousingTv, mSecondHandsTv, mCooperationTv;
-    private ImageView mServiceImg;
-    private LinearLayout mServiceParentGroup, mServiceItem, mItemTop;
+    private TextView mServiceMoreTv, mHouseKeepingTv, mHousingTv, mSecondHandsTv, mCooperationTv;
+    private LinearLayout mServiceParentGroup;
     private IServicePresenter iServicePresenter;
     private List<ServiceVo.DataVo.ServiceData> dataVoList;
-    private List<ServiceVo.DataVo.ServiceData.ServiceChildData> childDatas;
 
     @Nullable
     @Override
@@ -92,17 +94,17 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         dataVoList = serviceVo.getData().getServices();
 
         for (int i = 0; i < dataVoList.size(); i++) {
-            mServiceItem = new LinearLayout(getActivity());//item最外层layout
+            LinearLayout mServiceItem = new LinearLayout(getActivity());//item最外层layout
             mServiceItem.setBackgroundColor(getResources().getColor(R.color.white));
             mServiceItem.setOrientation(LinearLayout.VERTICAL);
 
-            mItemTop = new LinearLayout(getActivity());//item顶部layout
+            LinearLayout mItemTop = new LinearLayout(getActivity());//item顶部layout
             mItemTop.setOrientation(LinearLayout.HORIZONTAL);
 
-            mServiceImg = new ImageView(getActivity());
+            ImageView mServiceImg = new ImageView(getActivity());
             Glide.with(getActivity()).load(dataVoList.get(i).getIcon()).placeholder(R.drawable.ic_close).into(mServiceImg);
 
-            mServiceTitle = new TextView(getActivity());
+            TextView mServiceTitle = new TextView(getActivity());
             mServiceTitle.setTextColor(getResources().getColor(R.color.gray_3c3c3c));
             mServiceTitle.setTextSize(14);
             mServiceTitle.setText(dataVoList.get(i).getTitle());
@@ -115,60 +117,47 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             line.setMinimumHeight(20);
             line.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
 
-            mItemTop.addView(mServiceImg, getLayoutParams(0,Gravity.CENTER, 55, 55, 20, 20, 0, 20));
-            mItemTop.addView(mServiceTitle, getLayoutParams(0,Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 10, 20, 0, 20));
+            mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 55, 55, 20, 20, 0, 20));
+            mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 10, 20, 0, 20));
 
             int size = dataVoList.get(i).getItems().size();
-            childDatas = dataVoList.get(i).getItems();
+            List<ServiceVo.DataVo.ServiceData.ServiceChildData> childDatas = dataVoList.get(i).getItems();
 
-            LinearLayout childLayOne = new LinearLayout(getActivity());
-            LinearLayout childLayTwo = new LinearLayout(getActivity());
-          //  LinearLayout childLayThree = new LinearLayout(getActivity());
-            TextView nullView;
-            for (int j = 0; j < size; j++) {
-                final TextView views = new TextView(getActivity());
-                String title = childDatas.get(j).getTitle();
-                views.setText(title);
-                views.setTextSize(14);
-                views.setGravity(Gravity.CENTER);
-                views.setTextColor(getResources().getColor(R.color.gray_5a5a5a));
-                views.setTag(childDatas.get(j));
-                if (j <= 2){
-                    childLayOne.addView(views, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
-                } else if (j <= 5){
-                    childLayTwo.addView(views, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
-                }
-                //当一行不足3个子view时实例一个空view来占位
-                if (size == 2 && j == 1){
-                    nullView = new TextView(getActivity());
-                    childLayOne.addView(nullView, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
-                } else if (size == 4 && j == 3){
-                    nullView = new TextView(getActivity());
-                    TextView nullViewTwo = new TextView(getActivity());
-                    childLayTwo.addView(nullView, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
-                    childLayTwo.addView(nullViewTwo, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
-                } else if (size == 5 && j == 4){
-                    nullView = new TextView(getActivity());
-                    childLayTwo.addView(nullView, getLayoutParams(1,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
-                }/*else {
-                    childLayThree.addView(views, getLayoutParams(Gravity.CENTER|Gravity.LEFT, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 50, 0, 0, 0));
-                }*/
+            int num = ((size % 3) > 0) ? 1 : 0;
+            int lines = size / 3 + num;//得到行数
 
-                views.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ServiceVo.DataVo.ServiceData.ServiceChildData dv = (ServiceVo.DataVo.ServiceData.ServiceChildData) v.getTag();
-                        startActivity(WebViewActivity.class, Constants.URL, dv.getDst(), Constants.TITLE, dv.getTitle());
-                    }
-                });
-            }
             mServiceItem.addView(mItemTop);
-            mServiceItem.addView(lineSmall, getLayoutParams(0,0, LinearLayout.LayoutParams.MATCH_PARENT, 1, 0, 0, 0, 0));
-            mServiceItem.addView(childLayOne, getLayoutParams(0,Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 30, 0, 0));
-            mServiceItem.addView(childLayTwo, getLayoutParams(0,Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 30, 0, 30));
-          //  mServiceItem.addView(childLayThree, getLayoutParams(Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 30, 0, 30));
+            mServiceItem.addView(lineSmall, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, 1, 0, 0, 0, 0));
 
-            mServiceItem.addView(line, getLayoutParams(0,0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+            for (int j = 0; j < lines; j++) {//循环行数
+                LinearLayout childLay = new LinearLayout(getActivity());
+                for (int k = 0; k < 3; k++) {//循环子item
+                    int positon = j * 3 + k;
+                    if (positon >= size) {//一行不足3个时填充空view
+                        TextView nullView = new TextView(getActivity());
+                        childLay.addView(nullView, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                    } else {
+                        TextView views = new TextView(getActivity());
+                        String title = childDatas.get(positon).getTitle();
+                        views.setText(title);
+                        views.setTextSize(14);
+                        views.setGravity(Gravity.CENTER);
+                        views.setTextColor(getResources().getColor(R.color.gray_5a5a5a));
+                        views.setTag(childDatas.get(positon));
+                        views.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ServiceVo.DataVo.ServiceData.ServiceChildData dv = (ServiceVo.DataVo.ServiceData.ServiceChildData) v.getTag();
+                                startActivity(WebViewActivity.class, Constants.URL, dv.getDst(), Constants.TITLE, dv.getTitle());
+                            }
+                        });
+                        childLay.addView(views, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                    }
+                }
+                mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 20, 0, 20));
+            }
+
+            mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
             mServiceParentGroup.addView(mServiceItem);
         }
     }
@@ -186,7 +175,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         startActivity(intent);
     }
 
-    public LinearLayout.LayoutParams getLayoutParams(int weight,int isGravity, int width, int height, int left, int top, int right, int bottom) {
+    public LinearLayout.LayoutParams getLayoutParams(int weight, int isGravity, int width, int height, int left, int top, int right, int bottom) {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
         lp.gravity = isGravity;
         lp.weight = weight;
