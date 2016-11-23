@@ -98,6 +98,13 @@
     <string name="validate_faild">认证失败</string>
     <string name="validate_success">认证成功</string>
     <string name="need_pwd">需要密码</string>
+    <string name="free_wifi">免费WiFi</string>
+
+
+
+
+
+
 
 
 
@@ -109,7 +116,7 @@
     <string name="state_server_confirm">cloud confirm...</string>
     <string name="state_connecting">connecting...</string>
     <string name="state_auth">Auth...</string>
-    <string name="state_ipaddr">get ip address...</string>
+    <string name="state_ipaddr">获取地址...</string>
     <string name="state_logining">login...</string>
     <string name="state_checking">checking...</string>
     <string name="state_offlining">offline...</string>

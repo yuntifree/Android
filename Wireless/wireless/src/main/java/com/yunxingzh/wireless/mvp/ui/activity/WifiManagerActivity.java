@@ -298,7 +298,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        locationUtils.stopMonitor();
+       // locationUtils.stopMonitor();
         FWManager.getInstance().removeWifiObserver(wifiObserver);
     }
 }

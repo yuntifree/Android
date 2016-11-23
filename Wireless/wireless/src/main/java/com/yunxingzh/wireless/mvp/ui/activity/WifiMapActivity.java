@@ -31,6 +31,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.inner.GeoPoint;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.presenter.IWifiMapPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiMapPresenterImpl;
@@ -175,10 +176,9 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             WifiMapVo.WifiMapData.WifiMapInfo info = (WifiMapVo.WifiMapData.WifiMapInfo) marker.getExtraInfo().get("info");
 
             //计算p1、p2两点之间的直线距离，单位：米
-//            GeoPoint p1LL = new GeoPoint(39971802, 116347927);
-//            GeoPoint p2LL = new GeoPoint(39892131, 116498555);
-           // DistanceUtil. getDistance(p1, p2);
-            double distance = LocationUtils.getDistance(22.933103,113.903870,info.getLatitude(),info.getLongitude());
+            LatLng p1LL = new LatLng(22.933103, 113.903870);
+            LatLng p2LL = new LatLng(info.getLatitude(), info.getLongitude());
+            double distance = DistanceUtil. getDistance(p1LL, p2LL);
 
             //生成一个TextView用户在地图中显示InfoWindow
             LinearLayout markerLayout = new LinearLayout(getApplicationContext());
@@ -194,7 +194,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             TextView distances = new TextView(getApplicationContext());
             distances.setTextColor(getResources().getColor(R.color.blue_00a6f9));
             distances.setTextSize(10);
-            distances.setText(new DecimalFormat("#").format(distance * 100)+"m");
+            distances.setText(new DecimalFormat("#").format(distance)+"m");
 
             ImageView  addressImg = new ImageView(getApplicationContext());
             addressImg.setImageResource(R.drawable.ico_location);

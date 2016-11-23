@@ -32,9 +32,9 @@ import rx.schedulers.Schedulers;
 public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         AccessPointAdapter.HeaderViewHolder, AccessPointAdapter.ItemViewHolder, AccessPointAdapter.FooterViewHolder> {
     private static String TAG = "AccessPointAdapter";
-    public static int TYPE_CURRENT_AP = 0;
-    public static int TYPE_FOCUS_AP = 1;
-    public static int TYPE_NOAUTH_AP = 2;
+    public static int TYPE_CURRENT_AP = 0;//当前连接的wifi
+    public static int TYPE_FOCUS_AP = 1;//已经配置好的wifi
+    public static int TYPE_NOAUTH_AP = 2;//需要密码连接的wifi
 
     private Context mContext;
 
@@ -61,9 +61,9 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         mAccessDatas = new HashMap<String, AccessData>();
     }
 
-    public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, boolean forceRefresh){
-        if(!forceRefresh && mCurrentState != WifiState.UNKOWN && mCurrentAPoint != null){
-            if(mCurrentState == state && mCurrentAPoint.ssid.equals(current.ssid) && mAccessPoints.size() == accessPoints.size()){
+    public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, boolean forceRefresh) {
+        if (!forceRefresh && mCurrentState != WifiState.UNKOWN && mCurrentAPoint != null) {
+            if (mCurrentState == state && mCurrentAPoint.ssid.equals(current.ssid) && mAccessPoints.size() == accessPoints.size()) {
                 return;
             }
         }
@@ -75,16 +75,15 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         refreshData(true);
     }
 
-
-    private void refreshData(boolean refreshPWD){
+    private void refreshData(boolean refreshPWD) {
         sections.clear();
         mFocusPoints.clear();
         mNoauthPoints.clear();
-        for(AccessPoint ap : mAccessPoints){
-            if(mCurrentAPoint != null){
-                if(mCurrentAPoint.ssid.equals(ap.ssid)) continue;
+        for (AccessPoint ap : mAccessPoints) {
+            if (mCurrentAPoint != null) {
+                if (mCurrentAPoint.ssid.equals(ap.ssid)) continue;
             }
-            if(ap.isOpen() || mAccessDatas.get(ap.ssid) != null || ap.isConfiged ){
+            if (ap.isOpen() || mAccessDatas.get(ap.ssid) != null || ap.isConfiged) {
                 mFocusPoints.add(ap);
             } else {
                 mNoauthPoints.add(ap);
@@ -92,13 +91,12 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         }
         mFreeApCount = mFocusPoints.size();
         mFocusPoints.addAll(mNoauthPoints);
-        if(mCurrentAPoint != null) sections.add(TYPE_CURRENT_AP);
-        if(mFocusPoints.size() > 0) sections.add(TYPE_FOCUS_AP);
-
-        //if(mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
+        if (mCurrentAPoint != null) sections.add(TYPE_CURRENT_AP);
+        if (mFocusPoints.size() > 0) sections.add(TYPE_FOCUS_AP);
+       // if(mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
 
         notifyDataSetChanged();
-        if(refreshPWD) refreshPassword();
+        if (refreshPWD) refreshPassword();
     }
 
     @Override
@@ -109,9 +107,9 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     @Override
     protected int getItemCountForSection(int section) {
         int type = sections.get(section);
-        if(type == TYPE_CURRENT_AP){
+        if (type == TYPE_CURRENT_AP) {
             return 1;
-        } else if(type == TYPE_FOCUS_AP){
+        } else if (type == TYPE_FOCUS_AP) {
             return mFocusPoints.size();
 //        } else if(type == TYPE_NOAUTH_AP){
 //            return mNoauthPoints.size();
@@ -143,8 +141,8 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 
     @Override
     protected void onBindSectionHeaderViewHolder(HeaderViewHolder holder, int section) {
-        int type = sections.get(section);
-        holder.setSection(type);
+       // int wifiCount = sections.get(section);
+        holder.setWifiCount(sections.size());
     }
 
     @Override
@@ -155,28 +153,28 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     @Override
     protected void onBindItemViewHolder(ItemViewHolder holder, int section, int position) {
         int type = sections.get(section);
-        if(type == TYPE_CURRENT_AP){
+        if (type == TYPE_CURRENT_AP) {
             holder.setAccessPoint(mCurrentAPoint, type, position);
-        } else if(type == TYPE_FOCUS_AP){
+        } else if (type == TYPE_FOCUS_AP) {
             holder.setAccessPoint(mFocusPoints.get(position), type, position);
 //        } else if(type == TYPE_NOAUTH_AP){
 //            holder.setAccessPoint(mNoauthPoints.get(position), type);
         }
     }
 
-    protected LayoutInflater getLayoutInflater(){
+    protected LayoutInflater getLayoutInflater() {
         return LayoutInflater.from(mContext);
     }
 
-    private void refreshPassword(){
+    private void refreshPassword() {
         List<AccessPoint> aps = new ArrayList<AccessPoint>();
-        for(AccessPoint ap : mAccessPoints){
-            if(!mAccessDatas.containsKey(ap.ssid)){
+        for (AccessPoint ap : mAccessPoints) {
+            if (!mAccessDatas.containsKey(ap.ssid)) {
                 mAccessDatas.put(ap.ssid, null);
                 aps.add(ap);
             }
         }
-        if(aps.size() == 0) return;
+        if (aps.size() == 0) return;
 
         Observable.create(new Observable.OnSubscribe<List<AccessData>>() {
             @Override
@@ -185,23 +183,23 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
                 subscriber.onCompleted();
             }
         })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<List<AccessData>>() {
-            @Override
-            public void call(List<AccessData> ads) {
-                for(AccessData ad : ads){
-                    mAccessDatas.put(ad.ssid, ad);
-                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<AccessData>>() {
+                    @Override
+                    public void call(List<AccessData> ads) {
+                        for (AccessData ad : ads) {
+                            mAccessDatas.put(ad.ssid, ad);
+                        }
 
-                refreshData(false);
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable e) {
-                Logg.d(TAG, "Error! " + e);
-            }
-        });
+                        refreshData(false);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable e) {
+                        Logg.d(TAG, "Error! " + e);
+                    }
+                });
     }
 
 
@@ -227,31 +225,30 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             mSubicon = (ImageView) itemView.findViewById(R.id.iv_subicon);
         }
 
-        public void setAccessPoint(AccessPoint ap, int type, int position){
+        public void setAccessPoint(AccessPoint ap, int type, int position) {
             this.accessPoint = ap;
             this.type = type;
 
             mSSID.setText(ap.ssid);
 
-            if(type == TYPE_CURRENT_AP){
+            if (type == TYPE_CURRENT_AP) {
                 mSubtitle.setVisibility(View.VISIBLE);
                 mSubtitle.setText(context.getResources().getString(mCurrentState.resId));
-                if(mCurrentState == WifiState.CONNECTED){
+                if (mCurrentState == WifiState.CONNECTED) {
                     mSubicon.setVisibility(View.VISIBLE);
-                    mSubicon.setImageResource(R.drawable.tag_connected);
+                    mSubicon.setImageResource(R.drawable.connected);
                 } else {
                     mSubicon.setVisibility(View.GONE);
                 }
-            } else if(type == TYPE_FOCUS_AP){
+            } else if (type == TYPE_FOCUS_AP) {
                 mSubtitle.setVisibility(View.VISIBLE);
                 if (position < mFreeApCount) {
-                    mSubtitle.setText("免费WiFi");
+                    mSubtitle.setText(R.string.free_wifi);
                 } else {
-                    mSubtitle.setText("需要密码");
+                    mSubtitle.setText(R.string.need_pwd);
                 }
-                if(!ap.isOpen()){
-                    mSubicon.setVisibility(View.VISIBLE);
-                    mSubicon.setImageResource(R.drawable.tag_focus);
+                if (!ap.isOpen()) {
+                    mSubicon.setVisibility(View.GONE);
                 } else {
                     mSubicon.setVisibility(View.GONE);
                 }
@@ -262,23 +259,25 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 
             int percent = ap.signal.percent();
             int iconId;
-            if(percent > 90){
-                iconId = type == TYPE_CURRENT_AP || type == TYPE_FOCUS_AP ? R.drawable.signal_free3 : R.drawable.signal_password3;
-            } else if(percent > 60){
-                iconId = type == TYPE_CURRENT_AP || type == TYPE_FOCUS_AP ? R.drawable.signal_free2 : R.drawable.signal_password2;
+            if (percent > 90) {
+                iconId = type == TYPE_CURRENT_AP || type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small4 : R.drawable.ico_wifi_code4;
+            } else if (percent > 60) {
+                iconId = type == TYPE_CURRENT_AP || type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small3 : R.drawable.ico_wifi_code3;
+            } else if (percent > 30) {
+                iconId = type == TYPE_CURRENT_AP || type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small2 : R.drawable.ico_wifi_code2;
             } else {
-                iconId = type == TYPE_CURRENT_AP || type == TYPE_FOCUS_AP ? R.drawable.signal_free1 : R.drawable.signal_password1;
+                iconId = type == TYPE_CURRENT_AP || type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small1 : R.drawable.ico_wifi_code1;
             }
             mIcon.setImageResource(iconId);
         }
 
         @Override
         public void onClick(View v) {
-            if(type == TYPE_CURRENT_AP){
+            if (type == TYPE_CURRENT_AP) {
 
-            } else if(type == TYPE_FOCUS_AP){
-                FWManager.getInstance().connect(accessPoint);
-            } else if(type == TYPE_NOAUTH_AP){
+            } else if (type == TYPE_FOCUS_AP) {
+                FWManager.getInstance().connect(accessPoint);//连接wifi
+            } else if (type == TYPE_NOAUTH_AP) {
                 DialogActivity.showInuptPWD(context, accessPoint, false);
             }
         }
@@ -290,7 +289,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         }
     }
 
-    public class HeaderViewHolder extends RecyclerView.ViewHolder{
+    public class HeaderViewHolder extends RecyclerView.ViewHolder {
         private Context context;
         private TextView mSection;
 
@@ -299,19 +298,19 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             this.context = context;
             mSection = (TextView) itemView.findViewById(R.id.tv_section);
         }
-
-        public void setSection(int type){
-            if(type == TYPE_CURRENT_AP){
-                mSection.setText(context.getResources().getString(R.string.section_state_connected));
-            } else if(type == TYPE_FOCUS_AP){
-                mSection.setText(context.getResources().getString(R.string.section_state_freewifi));
-            } else if(type == TYPE_NOAUTH_AP){
-                mSection.setText(context.getResources().getString(R.string.section_state_password));
-            }
+        //显示wifi个数
+        public void setWifiCount(int wifiCount) {
+           // if (type == TYPE_CURRENT_AP) {
+                mSection.setText("扫描到附近共有"+wifiCount+"个WiFi");
+       //    }  else if (type == TYPE_FOCUS_AP) {
+//                mSection.setText(context.getResources().getString(R.string.section_state_freewifi));
+//            } else if (type == TYPE_NOAUTH_AP) {
+//                mSection.setText(context.getResources().getString(R.string.section_state_password));
+//            }
         }
     }
 
-    public class FooterViewHolder extends RecyclerView.ViewHolder{
+    public class FooterViewHolder extends RecyclerView.ViewHolder {
 
         public FooterViewHolder(View itemView) {
             super(itemView);
