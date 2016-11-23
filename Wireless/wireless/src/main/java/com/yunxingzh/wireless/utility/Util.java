@@ -21,7 +21,7 @@ public class Util {
         // 对结果进行格式化（保留小数点后的2位）
         //java.text.DecimalFormat format = new java.text.DecimalFormat("0.0");
         // 对结果进行格式化（不保留小数点后）
-        java.text.DecimalFormat format1 = new java.text.DecimalFormat(" ");
+        java.text.DecimalFormat format1 = new java.text.DecimalFormat("0.0");
         String res = "";
         // 原始bit
         double speedIn = speed;
