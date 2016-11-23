@@ -75,7 +75,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
 
     private FragmentManager fragmentManager;
 
-    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest, mMainHeadImg;
+    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest, mMainHeadImg,mWeatherLay;
     private MyScrollView scrollView;
     private TextView mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv, mConnectCountTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
@@ -129,6 +129,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
         mMainTemperature = findView(view, R.id.main_temperature);
         mMainWeather = findView(view, R.id.main_weather);
         mMainHeadImg = findView(view, R.id.main_head_img);
+        mWeatherLay = findView(view, R.id.weather_lay);
+        mWeatherLay.setOnClickListener(this);
 
         mFontNewsTv = findView(view, R.id.font_news_tv);
         mFontNewsTv.setOnClickListener(this);
@@ -301,7 +303,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
                     ToastUtil.showMiddle(getActivity(), "checkEnv:" + checkResult);
                     break;
             }
-
+        } else if(mWeatherLay == v){
+            startActivity(WebViewActivity.class,Constants.URL,"http://shenbao.dg.gov.cn/dgcsfw_zfb/csfw/dg_qxj/weixinportal.jsp",Constants.TITLE,"东莞天气");
         } else if (footView == v) {//查看更多新闻
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mMainWifiManager == v) {//wifi管理
@@ -362,7 +365,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
 
     public void setAnimation(View view, float fromX, float toX, float fromY, float toY) {
         TranslateAnimation translateAnimation = new TranslateAnimation(fromX, toX, fromY, toY);
-        translateAnimation.setDuration(2000);
+        translateAnimation.setDuration(4000);
         translateAnimation.setFillAfter(true);
         translateAnimation.setFillBefore(false);
         translateAnimation.setRepeatCount(-1);

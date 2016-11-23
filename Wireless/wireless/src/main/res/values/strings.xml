@@ -115,7 +115,7 @@
     <string name="state_connected">connected</string>
     <string name="state_offlining">offline...</string>
     <string name="state_disconnected">disconnected</string>
-    <string name="section_state_connected">Connected WiFi</string>
+    <string name="section_state_connected">已连接</string>
     <string name="section_state_freewifi">Free WiFi</string>
     <string name="section_state_password">Password Need</string>
     <string name="input_password">input password</string>

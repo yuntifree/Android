@@ -75,8 +75,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_manager);
         initView();
-        // user wifiObserver
-        //initData();
+       // initData();
     }
 
 
@@ -110,7 +109,6 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         locationUtils.startMonitor();//开始定位
 
         iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
-
 
         wifiMa = new WifiUtils(this);
         if (wifiMa.getWlanState()) {

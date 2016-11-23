@@ -93,7 +93,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         if(mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
 
         notifyDataSetChanged();
-
         if(refreshPWD) refreshPassword();
     }
 
