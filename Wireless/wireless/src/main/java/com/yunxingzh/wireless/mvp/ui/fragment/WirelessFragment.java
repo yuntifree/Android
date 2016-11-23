@@ -43,6 +43,7 @@ import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
+import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wirelesslibs.convenientbanner.ConvenientBanner;
 import com.yunxingzh.wirelesslibs.convenientbanner.holder.CBViewHolderCreator;
 import com.yunxingzh.wirelesslibs.convenientbanner.listener.OnItemClickListener;
@@ -353,6 +354,17 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
 
     @Override
     public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
+        int pageHeight = 900;
+        boolean bDown = oldy < y;
+
+        if (oldy == 0 && bDown) {
+            scrollView.smoothScrollTo(x, pageHeight);
+        }
+
+        if (oldy > pageHeight && y <= pageHeight && !bDown) {
+            scrollView.smoothScrollTo(x, 0);
+        }
+
         if (y > PULL_HEIGHT) { //下拉高度大于10
             mNoticeLay.setVisibility(View.GONE);
             mShowMoreIv.setVisibility(View.INVISIBLE);

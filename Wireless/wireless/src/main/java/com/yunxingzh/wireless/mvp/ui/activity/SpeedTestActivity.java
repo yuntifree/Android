@@ -22,6 +22,7 @@ import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.SpeedTestDialog;
 import com.yunxingzh.wireless.mvp.view.RotatePointer;
+import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.utility.NetUtil;
 import com.yunxingzh.wireless.utility.Util;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
@@ -52,7 +53,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     private long bytesReceived = -1;
     private long cacheData = -1;
 
-    private int mMaxTime = 15;
+    private int mMaxTime = 10;
 
     private int mRunCount = 0;
 
@@ -147,12 +148,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             mDialog.show();
             return;
         }
-        //先判断是否是WIFI环境
-//        if (!NetUtil.isConnectedWifi(MyApplication.getInstance())) {
-//            Util.showToast(SpeedTestActivity.this, "您的WiFi已断开，无法测速");
-//            shutdownAll();
-//            return;
-//        }
+
         mMiddleNoticeLay.setVisibility(View.VISIBLE);
         mBtnStart.setText(R.string.stop_speed);
         mList.clear();
@@ -172,7 +168,6 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         initTimer();
         String down_url = "http://download.weather.com.cn/3g/current/ChinaWeather_Android.apk";
         if (!TextUtils.isEmpty(down_url)) {
-            mMaxTime = 15;
             mApkUrl = down_url;
             mExecutorService.execute(new apkDownloadRunnable());
             timer.schedule(task, 10, mTimePeriod);
@@ -211,7 +206,6 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         mMiddleSpeedTv.setText(getTimeString(Util.speedMethodNormal(speed)));
         mMiddleContentTv.setText(tag);
         mBtnStart.setText(R.string.re_speed);
-       // Util.showToast(SpeedTestActivity.this, tag + desc);
     }
 
 
@@ -386,68 +380,17 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         int angle = 0;
         if (speed < 1024) {
             angle = 0;
-        } else if (speed < 20 * 1024 && speed >= 1024) {
-            angle = 5;
-        } else if (speed < 50 * 1024 && speed >= 20 * 1024) {
-            angle = 10;
-        } else if (speed < 70 * 1024 && speed >= 50 * 1024) {
-            angle = 15;
-        } else if (speed < 100 * 1024 && speed >= 70 * 1024) {
-            angle = 20;
-        } else if (speed < 120 * 1024 && speed >= 100 * 1024) {
-            angle = 25;
-        } else if (speed < 150 * 1024 && speed >= 120 * 1024) {
-            angle = 30;
-        } else if (speed < 170 * 1024 && speed >= 150 * 1024) {
-            angle = 40;
-        } else if (speed < 220 * 1024 && speed >= 170 * 1024) {
-            angle = 45;
-        } else if (speed < 250 * 1024 && speed >= 220 * 1024) {
-            angle = 50;
-        } else if (speed < 270 * 1024 && speed >= 250 * 1024) {
-            angle = 55;
-        } else if (speed < 300 * 1024 && speed >= 270 * 1024) {
-            angle = 60;
-        } else if (speed < 350 * 1024 && speed >= 300 * 1024) {
-            angle = 65;
-        } else if (speed < 400 * 1024 && speed >= 350 * 1024) {
-            angle = 70;
-        } else if (speed < 450 * 1024 && speed >= 400 * 1024) {
-            angle = 75;
-        } else if (speed < 480 * 1024 && speed >= 450 * 1024) {
-            angle = 80;
-        } else if (speed < 500 * 1024 && speed >= 480 * 1024) {
-            angle = 90;
-        } else if (speed < 550 * 1024 && speed >= 500 * 1024) {
-            angle = 95;
-        } else if (speed < 600 * 1024 && speed >= 550 * 1024) {
-            angle = 100;
-        } else if (speed < 650 * 1024 && speed >= 600 * 1024) {
-            angle = 105;
-        } else if (speed < 700 * 1024 && speed >= 650 * 1024) {
-            angle = 110;
-        } else if (speed < 750 * 1024 && speed >= 700 * 1024) {
-            angle = 115;
-        } else if (speed < 800 * 1024 && speed >= 750 * 1024) {
-            angle = 120;
-        } else if (speed < 1024 * 1024 && speed >= 800 * 1024) {
-            angle = 125;
-        } else if (speed < 1000 * 1024 && speed >= 850 * 1024) {
-            angle = 130;
-        } else if (speed < 1.3 * 1024 * 1024 && speed >= 1000 * 1024) {
-            angle = 135;
-        } else if (speed < 1.9 * 1024 * 1024 && speed >= 1.3 * 1024 * 1024) {
-            angle = 140;
-        } else if (speed < 2.4 * 1024 * 1024 && speed >= 1.9 * 1024 * 1024) {
-            angle = 145;
-        } else if (speed < 3.4 * 1024 * 1024 && speed >= 2.4 * 1024 * 1024) {
-            angle = 150;
-        } else if (speed < 5.4 * 1024 * 1024 && speed >= 3.4 * 1024 * 1024) {
-            angle = 165;
-        } else if (speed < 10 * 1024 * 1024 && speed >= 5.4 * 1024 * 1024) {
-            angle = 175;
-        } else {
-            angle = 175;
+        } else if (speed < 1024 * 1024 && speed >= 1024) {
+            // 0~1M, 每100k 11.25度
+            angle = (int)(speed * 11.25 / (1024 * 100));
+        } else if (speed < 5120 * 1024 && speed >= 1024 * 1024) {
+            // 1M~5M, 每1M，11.25度
+            angle = (int)((speed * 1.0 / (1024 * 1024) - 1) * 11.25 + 112.5);
+        } else if (speed < 10240 * 1024 && speed >= 5120 * 1024) {
+            // 5M~10M, 每2.5M 11.25度
+            angle = (int)((speed * 1.0 / (2560 * 1024) - 5) * 11.25 + 157.5);
+        } else if (speed >= 10240 * 1024) {
+            angle = 180;
         }
         return angle;
     }

@@ -49,6 +49,6 @@ public class MyScrollView extends ScrollView {
      */
     @Override
     public void fling(int velocityY) {
-        super.fling(velocityY / 4);
+        super.fling(velocityY / 3);
     }
 }
