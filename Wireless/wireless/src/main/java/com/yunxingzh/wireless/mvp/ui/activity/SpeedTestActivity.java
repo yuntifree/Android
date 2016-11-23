@@ -160,8 +160,14 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         cacheAngle = 0;
         mRunCount = 0;
 
+        /*
+        *  "http://dl.360safe.com/wifispeed/wifispeed.test"
+        *  "http://download.weather.com.cn/3g/current/ChinaWeather_Android.apk"
+        *  "http://down.360safe.com/360mse/f/360fmse_js010001.apk"
+        * */
+
         initTimer();
-        String down_url = "http://dl.360safe.com/wifispeed/wifispeed.test";
+        String down_url = "http://download.weather.com.cn/3g/current/ChinaWeather_Android.apk";
         if (!TextUtils.isEmpty(down_url)) {
             mMaxTime = 15;
             mApkUrl = down_url;
@@ -480,9 +486,9 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
                         return;
                     }
                     int count = 0;
-                    byte buf[] = new byte[128];
+                    byte buf[] = new byte[4096];
                     while (!mShutDown && (is.read(buf) > 0)) {
-                        if (count++ > 50) {
+                        if (count++ > 25) {
                             count = 0;
                             if (!NetUtil.isConnectedWifi(MyApplication.getInstance())) {
                                 break;
