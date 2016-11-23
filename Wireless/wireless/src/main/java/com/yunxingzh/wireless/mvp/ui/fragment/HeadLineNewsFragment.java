@@ -76,7 +76,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Subscribe
     public void onEventMainThread(EventBusType event) {
-        int index = event.getMsg();
+        int index = event.getItemIndex();
         if (index != -1){
             iHeadLinePresenter.clickCount(data.getInfos().get(index).getId(),CLICK_COUNT);
         }

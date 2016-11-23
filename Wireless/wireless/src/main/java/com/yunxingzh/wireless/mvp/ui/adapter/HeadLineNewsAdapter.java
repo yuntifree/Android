@@ -150,7 +150,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new EventBusType(position));
+                EventBus.getDefault().post(new EventBusType(0,0,position));
                 Intent intent = new Intent(context,WebViewActivity.class);
                 intent.putExtra(Constants.URL,result.getDst());
                 intent.putExtra(Constants.TITLE,result.getTitle());

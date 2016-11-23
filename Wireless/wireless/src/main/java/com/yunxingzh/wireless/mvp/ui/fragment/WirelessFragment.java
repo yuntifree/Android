@@ -244,7 +244,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
 
     @Subscribe
     public void onEventMainThread(EventBusType event) {
-        int index = event.getMsg();
+        int index = event.getItemIndex();
         if (index != -1) {
             if (newsList.get(index).getImages().size() == NEWS) {//图片size=1表示点击的是广告
                 iHeadLinePresenter.clickCount(newsList.get(index).getId(), NEWS);
