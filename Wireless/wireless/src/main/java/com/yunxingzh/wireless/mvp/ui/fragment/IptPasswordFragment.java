@@ -53,9 +53,8 @@ public class IptPasswordFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        TextView tv_ssid = (TextView) view.findViewById(R.id.tv_ssid);
-
+        TextView wifi_ssid = (TextView) view.findViewById(R.id.wifi_ssid);
+        wifi_ssid.setText(accessPoint.ssid);
         final EditText edt_password = (EditText) view.findViewById(R.id.edt_password);
 
         Button btn_connect = (Button) view.findViewById(R.id.btn_connect);

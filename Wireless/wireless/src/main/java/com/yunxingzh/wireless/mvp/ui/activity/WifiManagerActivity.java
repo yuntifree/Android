@@ -15,17 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IWifiManagerPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiManagerPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.AccessPointAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
@@ -59,8 +55,8 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     private AccessPointAdapter mAdapter;
     private List<ScanResult> scanResultList;
     private WifiUtils wifiMa;
-    private List<WifiConfiguration> wifiConfigurationList;//已经输入密码连接过的wifi
-    private String wifiPassword = null;
+    private List<AccessPoint> list ;
+
 
     private List<WifiVo.WifiData.MWifiInfo> mWifiInfos;
     private IWifiManagerPresenter iWifiManagerPresenter;
@@ -72,7 +68,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_manager);
         initView();
-       // initData();
+        initData();
     }
 
 
@@ -88,16 +84,9 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         mSwitchBtn.setVisibility(View.VISIBLE);
         mSwitchBtn.setOnCheckedChangeListener(this);
         mWifiRv.setLayoutManager(new LinearLayoutManager(this));
-        mWifiRv.addItemDecoration(new SpacesItemDecoration(0));
+        //mWifiRv.addItemDecoration(new SpacesItemDecoration(0));
         mSwipeWifi.setOnRefreshListener(this);
 
-        mAdapter = new AccessPointAdapter(this);
-        mWifiRv.setAdapter(mAdapter);
-
-        mHandler.removeMessages(MSG_REFRESH_LIST);
-        mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
-
-        FWManager.getInstance().addWifiObserver(wifiObserver);
     }
 
 
@@ -106,6 +95,12 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         locationUtils.startMonitor();//开始定位
 
         iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
+
+        mAdapter = new AccessPointAdapter(this);
+        mWifiRv.setAdapter(mAdapter);
+        mHandler.removeMessages(MSG_REFRESH_LIST);
+        mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
+        FWManager.getInstance().addWifiObserver(wifiObserver);
 
         wifiMa = new WifiUtils(this);
         if (wifiMa.getWlanState()) {
@@ -119,15 +114,6 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
             finish();
         }
     }
-
-//    @Override
-//    public void onRefresh() {
-//        if (scanResultList != null) {
-//            scanResultList.clear();
-//        }
-//        ToastUtil.showMiddle(this, R.string.refreshing);
-//        new Thread(new RefreshWifiThread()).start();
-//    }
 
     @Override
     public void onRefresh() {
@@ -198,7 +184,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         } else {
             current = FWManager.getInstance().getCurrent();
         }
-        List<AccessPoint> list = FWManager.getInstance().getList();
+        list = FWManager.getInstance().getList();
         if (mAdapter != null){
             mAdapter.setData(state, current, list, forceRefresh == 1 ? true : false);
         }
@@ -223,7 +209,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
                 Message message = new Message();
                 message.what = 1;
 
-                scanResultList = wifiMa.getScanResults();//得到扫描结果
+               // scanResultList = wifiMa.getScanResults();//得到扫描结果
               //  refreshWifiHandler.sendMessage(message);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -231,38 +217,23 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         }
     }
 
-//    final Handler refreshWifiHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//        super.handleMessage(msg);
-//        switch (msg.what) {
-//            case 1:
-//                mSwipeWifi.setRefreshing(false);
-//                wifiConfigurationList = wifiMa.getConfiguration();//得到已经配置好的列表
-//                wifiManagerAdapter = new WifiManagerAdapter(scanResultList);
-//                mWifiRv.setAdapter(wifiManagerAdapter);
-//                mWifiRv.swapAdapter(wifiManagerAdapter, true);//刷新列表
-//                break;
-//        }
-//        }
-//    };
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-            ToastUtil.showMiddle(this, R.string.opening);
-           // new Thread(new RefreshWifiThread()).start();
+            wifiMa.wifiOpen();
+            refreshList(1);
         } else {
             wifiMa.wifiClose();
-           // scanResultList.clear();
-          //  mWifiRv.swapAdapter(wifiManagerAdapter, true);//刷新列表
+            list.clear();
+            mWifiRv.swapAdapter(mAdapter,true);//刷新列表
+
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // locationUtils.stopMonitor();
+        locationUtils.stopMonitor();
         FWManager.getInstance().removeWifiObserver(wifiObserver);
     }
 }
