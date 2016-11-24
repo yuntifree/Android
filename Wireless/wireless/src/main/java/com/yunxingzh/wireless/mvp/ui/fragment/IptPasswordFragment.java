@@ -54,16 +54,9 @@ public class IptPasswordFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView tv_err_tips = (TextView) view.findViewById(R.id.tv_err_tips);
-        if(isShowError){
-            tv_err_tips.setVisibility(View.VISIBLE);
-        }
-
         TextView tv_ssid = (TextView) view.findViewById(R.id.tv_ssid);
-        tv_ssid.setText(accessPoint.ssid);
 
         final EditText edt_password = (EditText) view.findViewById(R.id.edt_password);
-        final CheckBox cb_share = (CheckBox) view.findViewById(R.id.cb_share);
 
         Button btn_connect = (Button) view.findViewById(R.id.btn_connect);
         btn_connect.setOnClickListener(new View.OnClickListener() {

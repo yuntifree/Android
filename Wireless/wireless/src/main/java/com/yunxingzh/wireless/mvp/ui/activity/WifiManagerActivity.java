@@ -111,42 +111,6 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         if (wifiMa.getWlanState()) {
             mSwitchBtn.setChecked(true);
         }
-        mWifiRv.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, final View view, int i) {
-                List<ScanResult> scanResult = baseQuickAdapter.getData();
-                final int netWorkId = wifiMa.isConfiguration(scanResult.get(i).SSID);
-
-                if (netWorkId != -1) {
-                    if (wifiMa.connectWifi(netWorkId)) {//连接指定WIFI
-                        view.setBackgroundResource(R.color.blue_00A0FB);
-                        ToastUtil.showMiddle(WifiManagerActivity.this, "显示当前wifi详情");
-                    }
-                } else {//没有配置好信息，配置
-//                    SpeedTestDialog pswDialog = new SpeedTestDialog(WifiManagerActivity.this, new SpeedTestDialog.OnCustomDialogListener() {
-//                        @Override
-//                        public void back(String str) {
-//                            wifiPassword = str;
-//                            if (wifiPassword != null) {
-//                                int netId = wifiMa.addWifiConfig(scanResultList, String.valueOf(netWorkId), wifiPassword);
-//                                if (netId != -1) {
-//                                    wifiMa.getConfiguration();//添加了配置信息，要重新得到配置信息
-//                                    if (wifiMa.connectWifi(netId)) {
-//                                        view.setBackgroundResource(R.color.green_1fbd22);
-//                                    }
-//                                } else {
-//                                    ToastUtil.showMiddle(WifiManagerActivity.this, R.string.internet_error);
-//                                    view.setBackgroundResource(R.color.red);
-//                                }
-//                            } else {
-//                                view.setBackgroundResource(R.color.yellow_db5800);
-//                            }
-//                        }
-//                    });
-//                    pswDialog.show();
-                }
-           }
-        });
     }
 
     @Override

@@ -114,7 +114,7 @@
     <string name="state_idle">wifi idle</string>
     <string name="state_disconnect_last">disconnect...</string>
     <string name="state_server_confirm">cloud confirm...</string>
-    <string name="state_connecting">connecting...</string>
+    <string name="state_connecting">正在连接...</string>
     <string name="state_auth">Auth...</string>
     <string name="state_ipaddr">获取地址...</string>
     <string name="state_logining">login...</string>
@@ -124,7 +124,7 @@
     <string name="section_state_connected">已连接</string>
     <string name="section_state_freewifi">免费WiFi</string>
     <string name="section_state_password">需要密码</string>
-    <string name="input_password">input password</string>
+    <string name="input_password">请输入密码</string>
     <string name="password_error">invald password!</string>
     <string name="state_auth_error">auth error</string>
     <string name="ssid">SSID</string>

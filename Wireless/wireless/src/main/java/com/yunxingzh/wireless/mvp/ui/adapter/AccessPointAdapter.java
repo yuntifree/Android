@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.truizlop.sectionedrecyclerview.SectionedRecyclerViewAdapter;
@@ -49,6 +50,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     private HashMap<String, AccessData> mAccessDatas;
 
     private int mFreeApCount;
+    private int size;
 
     public AccessPointAdapter(Context context) {
         this.mContext = context;
@@ -67,7 +69,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
                 return;
             }
         }
-        Logg.d(TAG, "set data: " + accessPoints.size());
+        size = accessPoints.size();
         mCurrentState = state;
         mCurrentAPoint = current;
         mAccessPoints = accessPoints;
@@ -93,7 +95,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         mFocusPoints.addAll(mNoauthPoints);
         if (mCurrentAPoint != null) sections.add(TYPE_CURRENT_AP);
         if (mFocusPoints.size() > 0) sections.add(TYPE_FOCUS_AP);
-       // if(mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
+        if(mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
 
         notifyDataSetChanged();
         if (refreshPWD) refreshPassword();
@@ -111,8 +113,8 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             return 1;
         } else if (type == TYPE_FOCUS_AP) {
             return mFocusPoints.size();
-//        } else if(type == TYPE_NOAUTH_AP){
-//            return mNoauthPoints.size();
+        } else if(type == TYPE_NOAUTH_AP){
+            return mNoauthPoints.size();
         }
         return 0;
     }
@@ -141,8 +143,8 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 
     @Override
     protected void onBindSectionHeaderViewHolder(HeaderViewHolder holder, int section) {
-       // int wifiCount = sections.get(section);
-        holder.setWifiCount(sections.size());
+        int type = sections.get(section);
+        holder.setWifiCount(size,type);
     }
 
     @Override
@@ -153,14 +155,15 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     @Override
     protected void onBindItemViewHolder(ItemViewHolder holder, int section, int position) {
         int type = sections.get(section);
-        if (type == TYPE_CURRENT_AP) {
-            holder.setAccessPoint(mCurrentAPoint, type, position);
-        } else if (type == TYPE_FOCUS_AP) {
-            holder.setAccessPoint(mFocusPoints.get(position), type, position);
-//        } else if(type == TYPE_NOAUTH_AP){
-//            holder.setAccessPoint(mNoauthPoints.get(position), type);
+        if(type == TYPE_CURRENT_AP){
+            holder.setAccessPoint(mCurrentAPoint, type);
+        } else if(type == TYPE_FOCUS_AP){
+            holder.setAccessPoint(mFocusPoints.get(position), type);
+        } else if(type == TYPE_NOAUTH_AP){
+            holder.setAccessPoint(mNoauthPoints.get(position), type);
         }
     }
+
 
     protected LayoutInflater getLayoutInflater() {
         return LayoutInflater.from(mContext);
@@ -213,60 +216,65 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         private TextView mSubtitle;
         private ImageView mIcon;
         private ImageView mSubicon;
+        private LinearLayout mWifiItemLay;
 
         public ItemViewHolder(View itemView, Context context) {
             super(itemView);
             this.context = context;
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+            mWifiItemLay = (LinearLayout) itemView.findViewById(R.id.wifi_item_lay);
             mSSID = (TextView) itemView.findViewById(R.id.tv_ssid);
             mSubtitle = (TextView) itemView.findViewById(R.id.tv_subtitle);
             mIcon = (ImageView) itemView.findViewById(R.id.iv_icon);
             mSubicon = (ImageView) itemView.findViewById(R.id.iv_subicon);
         }
 
-        public void setAccessPoint(AccessPoint ap, int type, int position) {
+        public void setAccessPoint(AccessPoint ap, int type) {
             this.accessPoint = ap;
             this.type = type;
+            int percent = ap.signal.percent();
 
             mSSID.setText(ap.ssid);
-
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(0,0,0,20);
             if (type == TYPE_CURRENT_AP) {
                 mSubtitle.setVisibility(View.VISIBLE);
                 mSubtitle.setText(context.getResources().getString(mCurrentState.resId));
                 if (mCurrentState == WifiState.CONNECTED) {
                     mSubicon.setVisibility(View.VISIBLE);
                     mSubicon.setImageResource(R.drawable.connected);
+                    mWifiItemLay.setLayoutParams(layoutParams);
                 } else {
                     mSubicon.setVisibility(View.GONE);
                 }
             } else if (type == TYPE_FOCUS_AP) {
                 mSubtitle.setVisibility(View.VISIBLE);
-                if (position < mFreeApCount) {
+               // if (position < mFreeApCount) {
                     mSubtitle.setText(R.string.free_wifi);
-                } else {
-                    mSubtitle.setText(R.string.need_pwd);
-                }
+               // } else {
+                //    mSubtitle.setText(R.string.need_pwd);
+              //  }
+
                 if (!ap.isOpen()) {
                     mSubicon.setVisibility(View.GONE);
                 } else {
-                    mSubicon.setVisibility(View.GONE);
+                    mSubicon.setVisibility(View.VISIBLE);
                 }
-//            } else if(type == TYPE_NOAUTH_AP){
-//                mSubtitle.setVisibility(View.GONE);
-//                mSubicon.setVisibility(View.GONE);
+            } else if(type == TYPE_NOAUTH_AP){
+                mSubtitle.setVisibility(View.GONE);
+                mSubicon.setVisibility(View.GONE);
             }
 
-            int percent = ap.signal.percent();
             int iconId;
             if (percent > 90) {
-                iconId = type == TYPE_CURRENT_AP || type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small4 : R.drawable.ico_wifi_code4;
+                iconId = type == TYPE_CURRENT_AP || type == TYPE_FOCUS_AP && type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small4 : R.drawable.ico_wifi_code4;
             } else if (percent > 60) {
-                iconId = type == TYPE_CURRENT_AP || type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small3 : R.drawable.ico_wifi_code3;
+                iconId = type == TYPE_CURRENT_AP || type == TYPE_FOCUS_AP && type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small3 : R.drawable.ico_wifi_code3;
             } else if (percent > 30) {
-                iconId = type == TYPE_CURRENT_AP || type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small2 : R.drawable.ico_wifi_code2;
+                iconId = type == TYPE_CURRENT_AP || type == TYPE_FOCUS_AP && type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small2 : R.drawable.ico_wifi_code2;
             } else {
-                iconId = type == TYPE_CURRENT_AP || type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small1 : R.drawable.ico_wifi_code1;
+                iconId = type == TYPE_CURRENT_AP || type == TYPE_FOCUS_AP && type == TYPE_NOAUTH_AP ? R.drawable.ico_wifi_small1 : R.drawable.ico_wifi_code1;
             }
             mIcon.setImageResource(iconId);
         }
@@ -298,15 +306,16 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             this.context = context;
             mSection = (TextView) itemView.findViewById(R.id.tv_section);
         }
+
         //显示wifi个数
-        public void setWifiCount(int wifiCount) {
-           // if (type == TYPE_CURRENT_AP) {
+        public void setWifiCount(int wifiCount,int type) {
+            if (type == TYPE_FOCUS_AP) {
                 mSection.setText("扫描到附近共有"+wifiCount+"个WiFi");
-       //    }  else if (type == TYPE_FOCUS_AP) {
-//                mSection.setText(context.getResources().getString(R.string.section_state_freewifi));
-//            } else if (type == TYPE_NOAUTH_AP) {
-//                mSection.setText(context.getResources().getString(R.string.section_state_password));
-//            }
+           } else if (type == TYPE_CURRENT_AP) {
+                mSection.setText("扫描到附近共有"+wifiCount+"个WiFi");
+            } else if (type == TYPE_NOAUTH_AP) {
+                mSection.setText("扫描到附近共有"+wifiCount+"个WiFi");
+            }
         }
     }
 
