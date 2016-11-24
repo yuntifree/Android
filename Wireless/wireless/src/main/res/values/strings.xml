@@ -98,7 +98,7 @@
     <string name="validate_faild">认证失败</string>
     <string name="validate_success">认证成功</string>
     <string name="need_pwd">需要密码</string>
-    <string name="free_wifi">免费WiFi</string>
+    <string name="free_wifi">无密码，可能需要登录</string>
     <string name="connection">连接</string>
     <string name="open_wifi">打开WiFi</string>
     <string name="find_near_wifi">寻找身边免费WiFi</string>

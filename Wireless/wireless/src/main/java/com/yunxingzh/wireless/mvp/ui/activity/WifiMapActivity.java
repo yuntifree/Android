@@ -126,7 +126,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         public void run() {
             try {
                 locationUtils.startMonitor();//开始定位
-                Thread.sleep(500);
+                Thread.sleep(2000);
                 Message message = new Message();
                 message.what = 1;
                 locationHandler.sendMessage(message);
@@ -146,7 +146,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                     lat = locationUtils.getBaseLocation().latitude;
                     lon = locationUtils.getBaseLocation().longitude;
                     //定义Maker坐标点lat,lon:22.933103,113.903870
-                    LatLng point = new LatLng(22.933103, 113.903870);
+                    LatLng point = new LatLng(lat, lon);
                     //设置地图缩放比例
                     baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
 
@@ -161,7 +161,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                             .icon(bitmap);
                     //在地图上添加Marker，并显示
                     baiduMap.addOverlay(option);
-                    iWifiMapPresenter.getWifiMap(113.903870, 22.933103);//获取周围热点lon,lat
+                    iWifiMapPresenter.getWifiMap(lon, lat);//获取周围热点lon,lat
                     initMarkerClickEvent();
                     break;
             }

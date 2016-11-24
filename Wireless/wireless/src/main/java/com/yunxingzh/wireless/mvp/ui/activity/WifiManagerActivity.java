@@ -210,10 +210,9 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         mWifiInfos = wifiVo.getData().getInfos();
     }
 
-    public class RefreshWifiThread  {
-
-       // iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
-    }
+//    public void WifiThread () {
+//        iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
+//    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

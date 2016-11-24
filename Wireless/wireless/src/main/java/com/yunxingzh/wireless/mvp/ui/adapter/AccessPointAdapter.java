@@ -277,6 +277,9 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             if (type == TYPE_CURRENT_AP) {
 
             } else if (type == TYPE_FOCUS_AP) {
+                if (accessPoint.ssid.equals("无线东莞DG—FREE")){
+
+                }
                 FWManager.getInstance().connect(accessPoint);//连接wifi
             } else if (type == TYPE_NOAUTH_AP) {
                 DialogActivity.showInuptPWD(context, accessPoint, false);

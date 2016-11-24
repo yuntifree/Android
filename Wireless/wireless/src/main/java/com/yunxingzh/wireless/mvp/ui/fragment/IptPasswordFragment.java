@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 
 /***
@@ -64,9 +65,8 @@ public class IptPasswordFragment extends Fragment {
                 String pwd = edt_password.getText().toString();
 
                 if(TextUtils.isEmpty(pwd)){
-                    //TODO: toast empty password
+                    ToastUtil.showMiddle(getActivity(),R.string.input_pwd);
                 } else {
-                    //TODO: cb_share
                     accessPoint.setPassword(pwd, AccessPoint.PasswordFrom.INPUT);
                     FWManager.getInstance().connect(accessPoint);
                     getActivity().finish();

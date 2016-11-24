@@ -83,11 +83,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
     private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
-    private HeadLineNewsAdapter headLineNewsAdapter;
     private AnimationSet alphaAnimation;
 
     private View footView;
-    private List<NewsVo.Data.NewsData> newsList;
+    private List<WeatherNewsVo.WeatherNewsData.mainNewsVo> mainNewsVos;
 
     private FontInfoVo.FontData.BannersVo bannersVo;
     private FontInfoVo.FontData.UserVo userVo;
@@ -168,29 +167,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
 
     @Override
     public void getHeadLineSuccess(NewsVo newsVo) {
-        if (newsVo != null) {
-            newsList = newsVo.getData().getInfos();
-            mNoticeTv.setText(newsList.get(ITEM).getTitle());
-        }
-        headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsList, true);
-        footView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_for_main_news, null);
-        mMainNewsLv.addFooterView(footView);
-        footView.setOnClickListener(this);
-        mMainNewsLv.setAdapter(headLineNewsAdapter);
-        Utility.setListViewHeight(mMainNewsLv, Constants.LISTVIEW_ITEM_HEIGHT);
-        //时间
-        String hour = StringUtils.getTime();
-        int h = Integer.parseInt(hour);
-        if (h >= 6 && h < 19) {
-            mMainHeadImg.setBackgroundResource(R.drawable.main_bg);
-        } else {
-            mMainHeadImg.setBackgroundResource(R.drawable.main_bg_night);
-        }
+
     }
 
     @Override
     public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {
         weatherNewsData = weatherNewsVo.getData().getWeather();
+        mainNewsVos = weatherNewsVo.getData().getNews();
         String info = weatherNewsData.getInfo();
         int type = weatherNewsData.getType();
         mMainTemperature.setText(weatherNewsData.getTemp() + "°C");
@@ -214,6 +197,26 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
                 mWeatherImgTop.setImageResource(R.drawable.snow);
                 break;
         }
+        //新闻
+        if (weatherNewsVo != null) {
+            mainNewsVos = weatherNewsVo.getData().getNews();
+            mNoticeTv.setText(mainNewsVos.get(ITEM).getTitle());
+        }
+//        headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsList, true);
+//        footView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_for_main_news, null);
+//        mMainNewsLv.addFooterView(footView);
+//        footView.setOnClickListener(this);
+//        mMainNewsLv.setAdapter(headLineNewsAdapter);
+        Utility.setListViewHeight(mMainNewsLv, Constants.LISTVIEW_ITEM_HEIGHT);
+        //时间
+        String hour = StringUtils.getTime();
+        int h = Integer.parseInt(hour);
+        if (h >= 6 && h < 19) {
+            mMainHeadImg.setBackgroundResource(R.drawable.main_bg);
+        } else {
+            mMainHeadImg.setBackgroundResource(R.drawable.main_bg_night);
+        }
+
         iHeadLinePresenter.getFontInfo();
     }
 
@@ -249,10 +252,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
     public void onEventMainThread(EventBusType event) {
         int index = event.getItemIndex();
         if (index != -1) {
-            if (newsList.get(index).getImages().size() == NEWS) {//图片size=1表示点击的是广告
-                iHeadLinePresenter.clickCount(newsList.get(index).getId(), NEWS);
-            }
-            iHeadLinePresenter.clickCount(newsList.get(index).getId(), NEWS);
+//            if (newsList.get(index).getImages().size() == NEWS) {//图片size=1表示点击的是广告
+//                iHeadLinePresenter.clickCount(newsList.get(index).getId(), NEWS);
+//            }
+//            iHeadLinePresenter.clickCount(newsList.get(index).getId(), NEWS);
         }
     }
 
