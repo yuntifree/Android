@@ -54,7 +54,7 @@
     <string name="no_news">没有找到相关新闻</string>
     <string name="no_resourse">没有更多数据了</string>
     <string name="head_line">东莞头条</string>
-    <string name="opening">正在打开...请稍候</string>
+    <string name="opening">请稍候...</string>
     <string name="refreshing">正在刷新列表...请稍候</string>
     <string name="wireless_list">无线</string>
     <string name="input_pwd">请输入密码</string>
@@ -100,8 +100,9 @@
     <string name="need_pwd">需要密码</string>
     <string name="free_wifi">免费WiFi</string>
     <string name="connection">连接</string>
-
-
+    <string name="open_wifi">打开WiFi</string>
+    <string name="find_near_wifi">寻找身边免费WiFi</string>
+    <string name="turn_on_wifi">开启WiFi</string>
 
 
 

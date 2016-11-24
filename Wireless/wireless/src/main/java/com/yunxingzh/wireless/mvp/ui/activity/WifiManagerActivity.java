@@ -9,9 +9,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -47,15 +49,16 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
     private static final String TAG = "WifiManagerActivity";
 
-    private TextView mTitleNameTv;
+    private TextView mTitleNameTv,mOpenWifiBtn;
     private ImageView mTitleReturnIv;
     private ToggleButton mSwitchBtn;
     private SwipeRefreshLayout mSwipeWifi;
     private RecyclerView mWifiRv;
     private AccessPointAdapter mAdapter;
-    private List<ScanResult> scanResultList;
     private WifiUtils wifiMa;
     private List<AccessPoint> list ;
+    private LinearLayout mWifiCloseLay,mWifiListLay;
+    private View wifiClosedView;
 
 
     private List<WifiVo.WifiData.MWifiInfo> mWifiInfos;
@@ -87,8 +90,12 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         //mWifiRv.addItemDecoration(new SpacesItemDecoration(0));
         mSwipeWifi.setOnRefreshListener(this);
 
+        mWifiCloseLay = findView(R.id.wifi_close_lay);
+        mWifiListLay = findView(R.id.wifi_list_lay);
+        wifiClosedView = LayoutInflater.from(this).inflate(R.layout.wifi_closed,null);
+        mOpenWifiBtn = (TextView) wifiClosedView.findViewById(R.id.open_wifi_btn);
+        mOpenWifiBtn.setOnClickListener(this);
     }
-
 
     public void initData() {
         locationUtils = LocationUtils.getInstance(this);
@@ -102,9 +109,15 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
         FWManager.getInstance().addWifiObserver(wifiObserver);
 
+        mWifiCloseLay.addView(wifiClosedView);
+
         wifiMa = new WifiUtils(this);
         if (wifiMa.getWlanState()) {
             mSwitchBtn.setChecked(true);
+            mWifiListLay.setVisibility(View.VISIBLE);
+
+        } else {
+            mWifiCloseLay.setVisibility(View.VISIBLE);
         }
     }
 
@@ -112,6 +125,8 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     public void onClick(View v) {
         if (mTitleReturnIv == v) {
             finish();
+        } else if (mOpenWifiBtn == v){
+            openWifi();
         }
     }
 
@@ -195,39 +210,35 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         mWifiInfos = wifiVo.getData().getInfos();
     }
 
-    public class RefreshWifiThread implements Runnable {
-        @Override
-        public void run() {
-            try {
-                //耗时操作
-                wifiMa.wifiOpen();
+    public class RefreshWifiThread  {
 
-                iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
-
-                wifiMa.wifiStartScan();//开始扫描
-                Thread.sleep(3000);
-                Message message = new Message();
-                message.what = 1;
-
-               // scanResultList = wifiMa.getScanResults();//得到扫描结果
-              //  refreshWifiHandler.sendMessage(message);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+       // iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-            wifiMa.wifiOpen();
-            refreshList(1);
+            openWifi();
         } else {
-            wifiMa.wifiClose();
-            list.clear();
-            mWifiRv.swapAdapter(mAdapter,true);//刷新列表
-
+            closeWifi();
         }
+    }
+
+    public void openWifi(){
+        mSwitchBtn.setChecked(true);
+        ToastUtil.showMiddle(this,R.string.opening);
+        wifiMa.wifiOpen();
+        mWifiCloseLay.setVisibility(View.GONE);
+        mWifiListLay.setVisibility(View.VISIBLE);
+        refreshList(1);
+        mWifiRv.swapAdapter(mAdapter,true);//刷新列表
+    }
+
+    public void closeWifi(){
+        mWifiListLay.setVisibility(View.GONE);
+        mWifiCloseLay.setVisibility(View.VISIBLE);
+        wifiMa.wifiClose();
+        list.clear();
     }
 
     @Override

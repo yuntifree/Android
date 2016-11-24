@@ -10,16 +10,35 @@
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_wifi"
+    <LinearLayout
+        android:id="@+id/wifi_list_lay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/wifi_rv"
-            android:background="@color/gray_f5f5f5"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_wifi"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/wifi_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/gray_f5f5f5" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/wifi_close_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        </LinearLayout>
 
 </LinearLayout>
