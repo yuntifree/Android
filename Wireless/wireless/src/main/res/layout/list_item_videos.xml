@@ -13,8 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="167dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/temp" />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/video_play"

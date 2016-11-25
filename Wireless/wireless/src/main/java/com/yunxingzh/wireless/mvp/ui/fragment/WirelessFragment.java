@@ -7,23 +7,19 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
-import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dgwx.app.lib.bl.WifiInterface;
-import com.dgwx.app.lib.common.util.SettingUtility;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
@@ -36,7 +32,6 @@ import com.yunxingzh.wireless.mvp.ui.activity.SpeedTestActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
-import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
@@ -45,7 +40,7 @@ import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
-import com.yunxingzh.wireless.utility.Logg;
+import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wirelesslibs.convenientbanner.ConvenientBanner;
 import com.yunxingzh.wirelesslibs.convenientbanner.holder.CBViewHolderCreator;
 import com.yunxingzh.wirelesslibs.convenientbanner.listener.OnItemClickListener;
@@ -166,6 +161,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         iHeadLinePresenter.weatherNews();
+
+        WifiInterface.init(getActivity());
+        WifiInterface.initEnv("http://192.168.100.4:880/wsmp/interface", "无线东莞DG—FREE", "ROOT_VNO");
     }
 
     @Override
@@ -293,15 +291,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
     @Override
     public void onClick(View v) {
         if (mConnectTv == v) {//一键连接
-            WifiInterface.init(getActivity());
-            WifiInterface.initEnv("http://192.168.100.4:880/wsmp/interface", "无线东莞DG—FREE", "ROOT_VNO");
             int checkResult = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
             switch (checkResult) {
                 case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
                     WifiInterface.wifiRegister(registerHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);
                     break;
                 case Constants.VALIDATE_SUCCESS://1、已经认证成功。
-                   // FWManager.
+                    ToastUtil.showMiddle(getActivity(),R.string.connect_success);
                     break;
                 default:
                     ToastUtil.showMiddle(getActivity(), "checkEnv:" + checkResult);
