@@ -11,13 +11,13 @@
     <style name="divide_line_vertical">
         <item name="android:layout_width">1dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/gray_dcdcdc</item>
+        <item name="android:background">@color/gray_f5f5f5</item>
     </style>
 
     <style name="divide_line_horizontal">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/gray_dcdcdc</item>
+        <item name="android:background">@color/gray_f5f5f5</item>
     </style>
     <style name="Button" parent="@style/Widget.AppCompat.Button.Borderless"/>
     <style name="Button.Blue" parent="Button"></style>

@@ -82,7 +82,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
     private IHeadLinePresenter iHeadLinePresenter;
     private AnimationSet alphaAnimation;
 
-    private View footView;
+    private TextView footView;
     private List<WeatherNewsVo.WeatherNewsData.mainNewsVo> mainNewsVos;
     private MainNewsAdapter mainNewsAdapter;
 
@@ -129,6 +129,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
         mMainHeadImg = findView(view, R.id.main_head_img);
         mWeatherLay = findView(view, R.id.weather_lay);
         mWeatherLay.setOnClickListener(this);
+        footView = findView(view, R.id.foot_view);
+        footView.setOnClickListener(this);
 
         mFontNewsTv = findView(view, R.id.font_news_tv);
         mFontNewsTv.setOnClickListener(this);
@@ -204,9 +206,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
             mNoticeTv.setText(mainNewsVos.get(ITEM).getTitle());
         }
         mainNewsAdapter = new MainNewsAdapter(getActivity(), mainNewsVos);
-        footView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_for_main_news, null);
-        mMainNewsLv.addFooterView(footView);
-        footView.setOnClickListener(this);
+
         mMainNewsLv.setAdapter(mainNewsAdapter);
         Utility.setListViewHeight(mMainNewsLv, Constants.LISTVIEW_ITEM_HEIGHT);
         //时间

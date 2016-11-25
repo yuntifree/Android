@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="10dp"
     android:orientation="vertical">
 
     <FrameLayout
@@ -64,7 +66,4 @@
         android:textColor="@color/gray_262626"
         android:textSize="16sp" />
 
-    <View style="@style/divide_line_horizontal"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"/>
 </LinearLayout>

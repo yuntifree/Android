@@ -102,6 +102,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         locationUtils.startMonitor();//开始定位
 
         iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
+        iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
 
         mAdapter = new AccessPointAdapter(this);
         mWifiRv.setAdapter(mAdapter);
@@ -209,10 +210,6 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     public void getWifiSuccess(WifiVo wifiVo) {
         mWifiInfos = wifiVo.getData().getInfos();
     }
-
-//    public void WifiThread () {
-//        iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
-//    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

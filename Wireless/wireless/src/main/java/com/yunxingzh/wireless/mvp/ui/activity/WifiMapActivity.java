@@ -1,5 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -162,6 +163,11 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                     //在地图上添加Marker，并显示
                     baiduMap.addOverlay(option);
                     iWifiMapPresenter.getWifiMap(lon, lat);//获取周围热点lon,lat
+                    Bitmap mBit = bitmap.getBitmap();
+                    //如果该图片为当前位置图，则跳过点击事件
+                    if (mBit.getHeight() == 120 && mBit.getWidth() == 120){
+                        return;
+                    }
                     initMarkerClickEvent();
                     break;
             }
