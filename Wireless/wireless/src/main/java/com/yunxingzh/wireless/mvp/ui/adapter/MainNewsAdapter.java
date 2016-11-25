@@ -31,7 +31,7 @@ public class MainNewsAdapter extends BaseAdapter {
     private List<WeatherNewsVo.WeatherNewsData.mainNewsVo> newsList;
 
     private LayoutInflater inflater;
-    private final int TYPE_COUNT = 3;
+    private final int TYPE_COUNT = 4;
     private final int TYPE_ONE = 1;//一张图片
     private final int TYPE_TWO = 2;//二张图片
     private final int TYPE_THREE = 3;//三张图片

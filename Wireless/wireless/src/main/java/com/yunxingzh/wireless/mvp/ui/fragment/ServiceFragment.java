@@ -3,6 +3,8 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,6 +93,10 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
     @Override
     public void getServiceSuccess(ServiceVo serviceVo) {
+        if(dataVoList != null){
+            dataVoList.clear();
+
+        }
         dataVoList = serviceVo.getData().getServices();
 
         for (int i = 0; i < dataVoList.size(); i++) {
@@ -160,12 +166,6 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
             mServiceParentGroup.addView(mServiceItem);
         }
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        iServicePresenter.getService();
     }
 
     public void startActivity(Class activity, String key, String value, String titleKey, String titleValue) {
