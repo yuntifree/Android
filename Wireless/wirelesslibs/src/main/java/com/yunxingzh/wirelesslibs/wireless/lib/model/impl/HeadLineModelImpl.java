@@ -10,6 +10,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkRequestParams;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpResBeanHandler;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.JsonUtils;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 
 import okhttp3.Headers;
 
