@@ -35,6 +35,7 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.zxing.camera.CameraManager;
 import com.yunxingzh.wireless.mvp.zxing.decoding.CaptureActivityHandler;
 import com.yunxingzh.wireless.mvp.zxing.decoding.InactivityTimer;
@@ -257,10 +258,10 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
             Toast.makeText(ScanCodeActivity.this, "Scan failed!", Toast.LENGTH_SHORT).show();
             return;
         }
+
         Intent resultIntent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putString("result", resultString);
-        bundle.putParcelable("bitmap", bitmap);
         resultIntent.putExtras(bundle);
         this.setResult(RESULT_OK, resultIntent);
         ScanCodeActivity.this.finish();
@@ -270,8 +271,10 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
         try {
             CameraManager.get().openDriver(surfaceHolder);
         } catch (IOException ioe) {
+            // TODO: 跳转到系统设置页面camara error
             return;
         } catch (RuntimeException e) {
+            // camare error
             return;
         }
         if (handler == null) {
@@ -357,6 +360,4 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
             mediaPlayer.seekTo(0);
         }
     };
-
-
 }
