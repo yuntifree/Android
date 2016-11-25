@@ -20,7 +20,7 @@
             android:layout_height="150dp"
             android:layout_marginTop="5dp"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"/>
+            android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/type_one_time"

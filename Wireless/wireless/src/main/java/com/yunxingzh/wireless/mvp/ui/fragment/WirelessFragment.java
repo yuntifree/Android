@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.dgwx.app.lib.bl.WifiInterface;
 import com.dgwx.app.lib.common.util.SettingUtility;
+import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
@@ -300,7 +301,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
                     WifiInterface.wifiRegister(registerHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);
                     break;
                 case Constants.VALIDATE_SUCCESS://1、已经认证成功。
-
+                   // FWManager.
                     break;
                 default:
                     ToastUtil.showMiddle(getActivity(), "checkEnv:" + checkResult);
