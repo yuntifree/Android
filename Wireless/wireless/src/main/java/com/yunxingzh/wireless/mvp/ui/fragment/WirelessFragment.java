@@ -2,18 +2,23 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -40,6 +45,7 @@ import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
+import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wirelesslibs.convenientbanner.ConvenientBanner;
 import com.yunxingzh.wirelesslibs.convenientbanner.holder.CBViewHolderCreator;
@@ -52,6 +58,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +77,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
     private final static int NEWS = 1;//新闻点击上报
     private final static int SCANNIN_GREQUEST_CODE = 1;
     private static final int DG_SDK_TIME_OUT = 5 * 1000;
+
+    private final static int SCROLL_STOP = 0;
+    private final static int SCROLL_DOWN = 1;
+    private final static int SCROLL_UP = -1;
+
+    private int mPageHeight;
 
     private FragmentManager fragmentManager;
 
@@ -91,6 +104,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
     private TextView mMainTemperature, mMainWeather;
     private WeatherNewsVo.WeatherNewsData.WeatherVo weatherNewsData;
     private ConvenientBanner mAdRotationBanner;
+
+    private int mScrollDirection = SCROLL_STOP;
 
     @Nullable
     @Override
@@ -153,6 +168,27 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
         alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
         mCircleSecondTv.startAnimation(alphaAnimation);
         mCircleThreeTv.startAnimation(alphaAnimation);
+
+//        scrollView.setOnTouchListener(new View.OnTouchListener() {
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (event.getAction() == MotionEvent.ACTION_UP) {
+//                    scrollView.startScrollerTask();
+//                }
+//                return false;
+//            }
+//        });
+//        scrollView.setOnScrollStoppedListener(new MyScrollView.OnScrollStoppedListener() {
+//            public void onScrollStopped() {
+//                int scrollPos = scrollView.getScrollY();
+//                // 向上滑且小于1屏，回到顶部
+//                if (scrollPos < mPageHeight && mScrollDirection == SCROLL_UP) {
+//                    scrollView.smoothScrollTo(0, 0);
+//                } else if (scrollPos < mPageHeight && mScrollDirection == SCROLL_DOWN) {
+//                    // 向下滑且小于1屏，去到新闻列表
+//                    scrollView.smoothScrollTo(0, mPageHeight);
+//                }
+//            }
+//        });
     }
 
     public void initData() {
@@ -340,12 +376,20 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
             case SCANNIN_GREQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
-                    String s = bundle.getString("result");
-                    System.out.print(s);
-                    //显示扫描到的内容
-                    // mTextView.setText(bundle.getString("result"));
-                    //显示
-                    // mImageView.setImageBitmap((Bitmap) data.getParcelableExtra("bitmap"));
+                    String ssid = "";
+                    try {
+                        String url = bundle.getString("result");
+                        ssid = url.substring(url.indexOf("ssid=")+5);
+                        ssid = java.net.URLDecoder.decode(ssid, "utf-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    // TODO: 开始连接wifi逻辑
+                    if (ssid.equals("无线东莞DG-FREE")) {
+                        // 正常逻辑
+                    } else {
+                        // 不是东莞无线
+                    }
                 }
                 break;
         }
@@ -353,15 +397,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
 
     @Override
     public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
-        int pageHeight = 900;
-        boolean bDown = oldy < y;
-
-        if (oldy == 0 && bDown) {
-            scrollView.smoothScrollTo(x, pageHeight);
-        }
-
-        if (oldy > pageHeight && y <= pageHeight && !bDown) {
-            scrollView.smoothScrollTo(x, 0);
+        if (y < oldy) {
+            mScrollDirection = SCROLL_UP;
+        } else if (y > oldy) {
+            mScrollDirection = SCROLL_DOWN;
+        } else {
+            mScrollDirection = SCROLL_STOP;
         }
 
         if (y > PULL_HEIGHT) { //下拉高度大于10
