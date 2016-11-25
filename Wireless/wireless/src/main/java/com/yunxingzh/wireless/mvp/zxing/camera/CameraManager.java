@@ -131,7 +131,7 @@ public final class CameraManager {
 
       //FIXME
  //     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-      //�Ƿ�ʹ��ǰ��
+      //是否使用前灯
 //      if (prefs.getBoolean(PreferencesActivity.KEY_FRONT_LIGHT, false)) {
 //        FlashlightManager.enableFlashlight();
 //      }
@@ -227,12 +227,14 @@ public final class CameraManager {
       } else if (width > MAX_FRAME_WIDTH) {
         width = MAX_FRAME_WIDTH;
       }
-      int height = screenResolution.y * 3 / 4;
-      if (height < MIN_FRAME_HEIGHT) {
-        height = MIN_FRAME_HEIGHT;
-      } else if (height > MAX_FRAME_HEIGHT) {
-        height = MAX_FRAME_HEIGHT;
-      }
+      // hoge: 使用正方形
+      int height = width;
+//      int height = screenResolution.y * 3 / 4;
+//      if (height < MIN_FRAME_HEIGHT) {
+//        height = MIN_FRAME_HEIGHT;
+//      } else if (height > MAX_FRAME_HEIGHT) {
+//        height = MAX_FRAME_HEIGHT;
+//      }
       int leftOffset = (screenResolution.x - width) / 2;
       int topOffset = (screenResolution.y - height) / 2;
       framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
