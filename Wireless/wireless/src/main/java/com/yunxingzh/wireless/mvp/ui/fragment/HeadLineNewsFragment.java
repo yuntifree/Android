@@ -103,7 +103,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         if (data.getInfos() != null) {
             newsListNext.addAll(data.getInfos());
             if (headLineNewsAdapter == null) {
-                headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsListNext, false);
+                headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsListNext);
                 mMainNewsLv.setAdapter(headLineNewsAdapter);
             }
             headLineNewsAdapter.notifyDataSetChanged();

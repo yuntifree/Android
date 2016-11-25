@@ -36,6 +36,7 @@ import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
+import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
@@ -87,6 +88,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
 
     private View footView;
     private List<WeatherNewsVo.WeatherNewsData.mainNewsVo> mainNewsVos;
+    private MainNewsAdapter mainNewsAdapter;
 
     private FontInfoVo.FontData.BannersVo bannersVo;
     private FontInfoVo.FontData.UserVo userVo;
@@ -202,11 +204,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
             mainNewsVos = weatherNewsVo.getData().getNews();
             mNoticeTv.setText(mainNewsVos.get(ITEM).getTitle());
         }
-//        headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsList, true);
-//        footView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_for_main_news, null);
-//        mMainNewsLv.addFooterView(footView);
-//        footView.setOnClickListener(this);
-//        mMainNewsLv.setAdapter(headLineNewsAdapter);
+        mainNewsAdapter = new MainNewsAdapter(getActivity(), mainNewsVos);
+        footView = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_for_main_news, null);
+        mMainNewsLv.addFooterView(footView);
+        footView.setOnClickListener(this);
+        mMainNewsLv.setAdapter(mainNewsAdapter);
         Utility.setListViewHeight(mMainNewsLv, Constants.LISTVIEW_ITEM_HEIGHT);
         //时间
         String hour = StringUtils.getTime();
@@ -252,10 +254,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
     public void onEventMainThread(EventBusType event) {
         int index = event.getItemIndex();
         if (index != -1) {
-//            if (newsList.get(index).getImages().size() == NEWS) {//图片size=1表示点击的是广告
-//                iHeadLinePresenter.clickCount(newsList.get(index).getId(), NEWS);
-//            }
-//            iHeadLinePresenter.clickCount(newsList.get(index).getId(), NEWS);
+            iHeadLinePresenter.clickCount(mainNewsVos.get(index).getId(), NEWS);
         }
     }
 

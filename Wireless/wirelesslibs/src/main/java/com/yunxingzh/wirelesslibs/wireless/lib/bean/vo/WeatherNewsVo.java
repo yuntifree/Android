@@ -92,6 +92,7 @@ public class WeatherNewsVo {
             private String source;
             private String ctime;
             private String dst;
+            private boolean isClick;
 
             public int getId() {
                 return id;
@@ -139,6 +140,14 @@ public class WeatherNewsVo {
 
             public void setDst(String dst) {
                 this.dst = dst;
+            }
+
+            public boolean isClick() {
+                return isClick;
+            }
+
+            public void setClick(boolean click) {
+                isClick = click;
             }
         }
     }
