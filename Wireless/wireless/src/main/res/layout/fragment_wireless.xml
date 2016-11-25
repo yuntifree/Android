@@ -23,7 +23,7 @@
             <LinearLayout
                 android:id="@+id/main_head_img"
                 android:layout_width="match_parent"
-                android:layout_height="346dp"
+                android:layout_height="345dp"
                 android:background="@drawable/main_bg"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -364,8 +364,8 @@
                 android:layout_marginTop="10dp"
                 android:padding="10dp"
                 android:background="@color/white"
-                android:divider="@color/transparent"
-                android:dividerHeight="0dp" />
+                android:divider="@color/gray_f5f5f5"
+                android:dividerHeight="1dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

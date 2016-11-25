@@ -63,7 +63,12 @@ public class WebViewActivity extends NetWorkBaseActivity implements View.OnClick
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 return false;
             }
-        });
+
+            @Override
+            public void onPageFinished(WebView view,String url){
+                myProgressBar.setVisibility(View.GONE);
+            }
+    });
         myWebView.loadUrl(mUrl);
     }
 

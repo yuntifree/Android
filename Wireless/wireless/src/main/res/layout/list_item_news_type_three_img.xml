@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
     android:background="@drawable/listview_selector"
     android:orientation="vertical">
 
@@ -12,10 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="东莞虎门一火车"
-        android:textColor="@color/gray_434343"
-        android:textSize="14sp" />
+        android:textColor="@color/gray_262626"
+        android:textSize="16sp" />
 
-    <LinearLayout
+    <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -23,27 +24,30 @@
 
         <ImageView
             android:id="@+id/type_three_left_img"
-            android:layout_width="113dp"
-            android:layout_height="74dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"/>
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_heightPercent="@string/sw_230px"
+            app:layout_widthPercent="@string/sw_330px"/>
 
         <ImageView
             android:id="@+id/type_three_middle_img"
-            android:layout_width="113dp"
-            android:layout_height="74dp"
-            android:adjustViewBounds="true"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:scaleType="fitXY"
+            app:layout_heightPercent="@string/sw_230px"
+            app:layout_widthPercent="@string/sw_330px"
             android:layout_marginLeft="5dp" />
 
         <ImageView
             android:id="@+id/type_three_right_img"
-            android:layout_width="113dp"
-            android:layout_height="74dp"
-            android:adjustViewBounds="true"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:scaleType="fitXY"
+            app:layout_heightPercent="@string/sw_230px"
+            app:layout_widthPercent="@string/sw_330px"
             android:layout_marginLeft="5dp" />
-    </LinearLayout>
+       </com.zhy.android.percent.support.PercentLinearLayout>
 
     <TextView
         android:id="@+id/type_three_time"
@@ -54,6 +58,4 @@
         android:textColor="@color/gray_848484"
         android:textSize="12sp" />
 
-    <View style="@style/divide_line_horizontal"
-        android:layout_marginTop="10dp"/>
-</LinearLayout>
+</com.zhy.android.percent.support.PercentLinearLayout>
