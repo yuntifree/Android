@@ -32,6 +32,4 @@
         android:textColor="@color/gray_848484"
         android:textSize="12sp" />
 
-    <View style="@style/divide_line_horizontal"
-        android:layout_marginTop="10dp"/>
 </LinearLayout>

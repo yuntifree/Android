@@ -1,6 +1,9 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -93,10 +97,10 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
     @Override
     public void getServiceSuccess(ServiceVo serviceVo) {
-        if(dataVoList != null){
-            dataVoList.clear();
+        WindowManager wm = (WindowManager) getContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+        int height = wm.getDefaultDisplay().getHeight() - 500;//获取屏幕高度
 
-        }
         dataVoList = serviceVo.getData().getServices();
 
         for (int i = 0; i < dataVoList.size(); i++) {
@@ -160,7 +164,14 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                         childLay.addView(views, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                     }
                 }
-                mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 30, 0, 30));
+
+                if (lines == 1){//只有一行
+                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 40, 0, 40));
+                } else if(lines == 2) {
+                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 40, 0, 40));
+                } else if (lines == 3){
+                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 40, 0, 40));
+                }
             }
 
             mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));

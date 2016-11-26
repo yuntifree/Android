@@ -397,13 +397,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
 
     @Override
     public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
-        if (y < oldy) {
-            mScrollDirection = SCROLL_UP;
-        } else if (y > oldy) {
-            mScrollDirection = SCROLL_DOWN;
-        } else {
-            mScrollDirection = SCROLL_STOP;
-        }
+//        if (y < oldy) {
+//            mScrollDirection = SCROLL_UP;
+//        } else if (y > oldy) {
+//            mScrollDirection = SCROLL_DOWN;
+//        } else {
+//            mScrollDirection = SCROLL_STOP;
+//        }
 
         if (y > PULL_HEIGHT) { //下拉高度大于10
             mNoticeLay.setVisibility(View.GONE);

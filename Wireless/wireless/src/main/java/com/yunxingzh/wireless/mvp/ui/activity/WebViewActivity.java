@@ -22,8 +22,8 @@ import com.yunxingzh.wireless.mvp.ui.utils.WebViewUtil;
 
 public class WebViewActivity extends NetWorkBaseActivity implements View.OnClickListener{
 
-    private ImageView mTitleReturnIv,mTitleRightIv;
-    private TextView mTitleNameTv;
+    private ImageView mWebLeftIv;
+    private TextView mWebTitleTv;
     private WebView myWebView;
     private ProgressBar myProgressBar;
     private String mUrl;
@@ -38,20 +38,18 @@ public class WebViewActivity extends NetWorkBaseActivity implements View.OnClick
     }
 
     public void initView() {
-        mTitleNameTv = findView(R.id.title_name_tv);
-        mTitleNameTv.setVisibility(View.VISIBLE);
-        mTitleReturnIv = findView(R.id.title_return_iv);
-        mTitleReturnIv.setOnClickListener(this);
+        mWebTitleTv = findView(R.id.web_title_tv);
+        mWebTitleTv.setVisibility(View.VISIBLE);
+        mWebLeftIv = findView(R.id.web_left_iv);
+        mWebLeftIv.setOnClickListener(this);
         myWebView = findView(R.id.webView);
         myProgressBar = findView(R.id.progress_bar);
-        mTitleRightIv  = findView(R.id.title_right_iv);
-        mTitleRightIv.setVisibility(View.INVISIBLE);
     }
 
     public void initData() {
         mUrl = getIntent().getStringExtra(Constants.URL);
         title = getIntent().getStringExtra(Constants.TITLE);
-        mTitleNameTv.setText(title);
+        mWebTitleTv.setText(title);
         WebViewUtil.initWebView(myWebView, myProgressBar);
         myWebView.setWebViewClient(new WebViewClient(){
             @Override
@@ -74,7 +72,7 @@ public class WebViewActivity extends NetWorkBaseActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        if (mTitleReturnIv == v ){
+        if (mWebLeftIv == v ){
             finish();
         }
     }
