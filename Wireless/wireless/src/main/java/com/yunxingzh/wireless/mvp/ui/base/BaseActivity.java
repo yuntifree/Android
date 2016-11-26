@@ -112,9 +112,4 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
         ToastUtil.showError(this, error);
     }
 
-    @Override
-    public void showErrorMsg(String errorMsg) {
-        ToastUtil.showErrorMsg(this, errorMsg);
-    }
-
 }

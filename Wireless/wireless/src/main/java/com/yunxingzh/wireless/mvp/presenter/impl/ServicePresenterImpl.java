@@ -48,12 +48,4 @@ public class ServicePresenterImpl implements IServicePresenter,IServiceModel.onG
             iServiceView.showError(error);
         }
     }
-
-    @Override
-    public void onGetServiceFailed(String errorMsg) {
-        if (iServiceView != null) {
-            iServiceView.hideProgress();
-            iServiceView.showErrorMsg(errorMsg);
-        }
-    }
 }

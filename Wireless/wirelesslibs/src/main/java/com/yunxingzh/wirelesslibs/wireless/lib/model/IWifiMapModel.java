@@ -10,7 +10,6 @@ public interface IWifiMapModel {
     interface onGetWifiMapListener{
         void onGetWifiMapSuccess(WifiMapVo wifiMapVo);
         void onGetWifiMapFailed(int error);
-        void onGetWifiMapFailed(String errorMsg);
     }
 
     /***

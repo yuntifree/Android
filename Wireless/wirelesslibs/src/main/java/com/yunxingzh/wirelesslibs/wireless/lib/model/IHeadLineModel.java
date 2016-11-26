@@ -12,19 +12,16 @@ public interface IHeadLineModel {
     interface onGetHeadLineListener{
         void onGetHeadLineSuccess(NewsVo newsVo);
         void onGetHeadLineFailed(int error);
-        void onGetHeadLineFailed(String errorMsg);
     }
 
     interface onClickCountListener{
         void onClickCountSuccess();
         void onClickCountFailed(int error);
-        void onClickCountFailed(String errorMsg);
     }
 
     interface onGetFontInfoListener{
         void onGetFontInfoSuccess(FontInfoVo fontInfoVo);
         void onGetFontInfoFailed(int error);
-        void onGetFontInfoFailed(String errorMsg);
     }
 
     /***

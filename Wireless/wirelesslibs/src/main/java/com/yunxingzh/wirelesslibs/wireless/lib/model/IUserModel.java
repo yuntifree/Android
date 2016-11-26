@@ -10,13 +10,11 @@ public interface IUserModel {
     interface onValidateCodeListener{
         void onValidateCodeSuccess();
         void onValidateCodeFailed(int error);
-        void onValidateCodeFailed(String errorMsg);
     }
 
     interface onRegisterListener{
         void onRegisterSuccess(UserInfoVo userVo);
         void onRegisterFailed(int error);
-        void onRegisterFailed(String errorMsg);
     }
 
     /****

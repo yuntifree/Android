@@ -28,7 +28,7 @@ public class WeatherNewsModelImpl implements IWeatherNewsModel {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
                     listener.onWeatherNewsSuccess(response);
                 } else {
-                    listener.onWeatherNewsFailed(response.getDesc());
+                    listener.onWeatherNewsFailed(response.getErrno());
                 }
             }
 

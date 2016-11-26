@@ -11,7 +11,6 @@ public interface IWifiManagerModel {
     interface onGetWifiListener{
         void onGetWifiSuccess(WifiVo wifiVo);
         void onGetWifiFailed(int error);
-        void onGetWifiFailed(String errorMsg);
     }
 
     /***

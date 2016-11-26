@@ -77,14 +77,6 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
     }
 
     @Override
-    public void onValidateCodeFailed(String errorMsg) {
-        if (iLoginView != null){
-            iLoginView.hideProgress();
-            iLoginView.showErrorMsg(errorMsg);
-        }
-    }
-
-    @Override
     public void onRegisterSuccess(UserInfoVo userVo) {
         MyApplication.sApplication.setUser(userVo);
         MyApplication.sApplication.setToken(userVo.getData().getToken());
@@ -101,14 +93,6 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
         if (iLoginView != null){
             iLoginView.hideProgress();
             iLoginView.showError(error);
-        }
-    }
-
-    @Override
-    public void onRegisterFailed(String errorMsg) {
-        if (iLoginView != null){
-            iLoginView.hideProgress();
-            iLoginView.showErrorMsg(errorMsg);
         }
     }
 }

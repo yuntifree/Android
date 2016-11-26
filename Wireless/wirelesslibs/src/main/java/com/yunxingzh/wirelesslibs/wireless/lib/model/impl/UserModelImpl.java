@@ -17,13 +17,12 @@ import okhttp3.Headers;
 
 /**
  * Created by Stephen on 2016/9/9.
- *
  */
 public class UserModelImpl implements IUserModel {
 
     @Override
-    public void getValidateCode(int term,double version,long ts,int nettype,int type, String phone,final onValidateCodeListener listener) {
-        String jsonStr = JsonUtils.jsonStirngForUser(term, version, ts, nettype, type, phone,"","",0,"","","");
+    public void getValidateCode(int term, double version, long ts, int nettype, int type, String phone, final onValidateCodeListener listener) {
+        String jsonStr = JsonUtils.jsonStirngForUser(term, version, ts, nettype, type, phone, "", "", 0, "", "", "");
         OkRequestParams param = new OkRequestParams();
         param.put("key", jsonStr);
         OkHttpUtil.post(Api.GET_PHONE_CODE, param, new OkHttpResBeanHandler<StringDto>() {
@@ -34,7 +33,7 @@ public class UserModelImpl implements IUserModel {
                 } else {
                     // TODO: 通用异常情况
                     if (!StringUtils.checkErrno(response.getErrno())) {
-                        listener.onValidateCodeFailed(response.getDesc());
+                        listener.onValidateCodeFailed(response.getErrno());
                     }
                 }
             }
@@ -47,9 +46,9 @@ public class UserModelImpl implements IUserModel {
     }
 
     @Override
-    public void register(int term,double version,long ts,int nettype,String username,String password,
-                      int code,String model,String channel,String udid,final onRegisterListener listener) {
-        String jsonStr = JsonUtils.jsonStirngForUser(term, version, ts, nettype,0,"", username, password,code,model,channel,udid);
+    public void register(int term, double version, long ts, int nettype, String username, String password,
+                         int code, String model, String channel, String udid, final onRegisterListener listener) {
+        String jsonStr = JsonUtils.jsonStirngForUser(term, version, ts, nettype, 0, "", username, password, code, model, channel, udid);
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 
@@ -59,9 +58,7 @@ public class UserModelImpl implements IUserModel {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
                     listener.onRegisterSuccess(response);
                 } else {
-                    if (!StringUtils.checkErrno(response.getErrno())) {
-                        listener.onRegisterFailed(response.getDesc());
-                    }
+                    listener.onRegisterFailed(response.getErrno());
                 }
             }
 

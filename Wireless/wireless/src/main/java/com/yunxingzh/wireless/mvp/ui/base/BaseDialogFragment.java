@@ -63,9 +63,4 @@ public class BaseDialogFragment extends DialogFragment implements IBaseView {
         ToastUtil.showError(getActivity(), error);
     }
 
-    @Override
-    public void showErrorMsg(String errorMsg) {
-        ToastUtil.showErrorMsg(getActivity(), errorMsg);
-    }
-
 }

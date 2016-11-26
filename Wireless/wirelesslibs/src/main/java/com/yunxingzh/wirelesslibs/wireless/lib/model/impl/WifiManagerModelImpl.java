@@ -29,7 +29,7 @@ public class WifiManagerModelImpl implements IWifiManagerModel {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
                     listener.onGetWifiSuccess(response);
                 } else {
-                    listener.onGetWifiFailed(response.getDesc());
+                    listener.onGetWifiFailed(response.getErrno());
                 }
             }
 

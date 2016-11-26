@@ -1,6 +1,7 @@
 package com.yunxingzh.wirelesslibs.wireless.lib.utils;
 
 import android.content.Context;
+import android.provider.SyncStateContract;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 

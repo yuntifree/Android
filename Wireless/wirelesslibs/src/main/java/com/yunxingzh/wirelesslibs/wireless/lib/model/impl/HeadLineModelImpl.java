@@ -32,7 +32,7 @@ public class HeadLineModelImpl implements IHeadLineModel {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
                     listener.onGetHeadLineSuccess(response);
                 } else {
-                    listener.onGetHeadLineFailed(response.getDesc());
+                    listener.onGetHeadLineFailed(response.getErrno());
                 }
             }
 
@@ -55,7 +55,7 @@ public class HeadLineModelImpl implements IHeadLineModel {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
                     listener.onClickCountSuccess();
                 } else {
-                    listener.onClickCountFailed(response.getDesc());
+                    listener.onClickCountFailed(response.getErrno());
                 }
             }
 
@@ -78,7 +78,7 @@ public class HeadLineModelImpl implements IHeadLineModel {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
                     listener.onGetFontInfoSuccess(response);
                 } else {
-                    listener.onGetFontInfoFailed(response.getDesc());
+                    listener.onGetFontInfoFailed(response.getErrno());
                 }
             }
 

@@ -30,22 +30,14 @@ public class ToastUtil {
         showMiddle(context, context.getString(resId));
     }
 
-    public static void showErrorMsg(Context context, String msg) {
-        ToastUtil.showMiddle(context, msg);
-
-    }
-
     public static void showError(Context context, int error) {
-        if (error == HttpCode.E_TOKEN) {
+        if (error == HttpCode.E_TOKEN || error == HttpCode.E_MISS_PARAM) {
             showMiddle(context, R.string.lost_token);
             MyApplication.sApplication.setToken("");
             MyApplication.sApplication.setUser(null);
             Intent intent = new Intent(context, RegisterActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             context.startActivity(intent);
-            return;
-        } else if(error == HttpCode.E_MISS_PARAM){
-            showMiddle(context, R.string.lost_param);
             return;
         } else if(error == HttpCode.E_INVAL_PARAM){
             showMiddle(context, R.string.param_error);

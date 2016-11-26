@@ -29,7 +29,7 @@ public class ServiceModelImpl implements IServiceModel{
                 if (response.getErrno() == HttpCode.HTTP_OK) {
                     listener.onGetServiceSuccess(response);
                 } else {
-                    listener.onGetServiceFailed(response.getDesc());
+                    listener.onGetServiceFailed(response.getErrno());
                 }
             }
 

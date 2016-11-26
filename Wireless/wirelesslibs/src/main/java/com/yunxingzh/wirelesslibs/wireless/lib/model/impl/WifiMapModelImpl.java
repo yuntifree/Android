@@ -29,7 +29,7 @@ public class WifiMapModelImpl implements IWifiMapModel{
                 if (response.getErrno() == HttpCode.HTTP_OK) {
                     listener.onGetWifiMapSuccess(response);
                 } else {
-                    listener.onGetWifiMapFailed(response.getDesc());
+                    listener.onGetWifiMapFailed(response.getErrno());
                 }
             }
 

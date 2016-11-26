@@ -49,11 +49,4 @@ public class WifiManagerPresenterImpl implements IWifiManagerPresenter,IWifiMana
         }
     }
 
-    @Override
-    public void onGetWifiFailed(String errorMsg) {
-        if (iWifiManagerView != null) {
-            iWifiManagerView.hideProgress();
-            iWifiManagerView.showErrorMsg(errorMsg);
-        }
-    }
 }

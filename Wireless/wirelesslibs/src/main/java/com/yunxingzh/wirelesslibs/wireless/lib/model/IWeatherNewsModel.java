@@ -11,7 +11,6 @@ public interface IWeatherNewsModel {
     interface onWeatherNewsListener{
         void onWeatherNewsSuccess(WeatherNewsVo weatherNewsVo);
         void onWeatherNewsFailed(int error);
-        void onWeatherNewsFailed(String errorMsg);
     }
 
     /***

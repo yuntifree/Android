@@ -32,7 +32,7 @@
                 android:id="@+id/type_two_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="25dp"
                 android:text="东莞阳光网    8:34"
                 android:textColor="@color/gray_848484"
                 android:textSize="12sp" />
@@ -43,6 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="fitXY"
+            android:layout_gravity="center"
             app:layout_heightPercent="@string/sw_230px"
             app:layout_widthPercent="@string/sw_330px"
             android:layout_marginLeft="5dp"

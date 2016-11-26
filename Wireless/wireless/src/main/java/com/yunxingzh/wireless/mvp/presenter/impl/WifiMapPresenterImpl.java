@@ -49,11 +49,4 @@ public class WifiMapPresenterImpl implements IWifiMapPresenter,IWifiMapModel.onG
         }
     }
 
-    @Override
-    public void onGetWifiMapFailed(String errorMsg) {
-        if (iWifiMapView != null) {
-            iWifiMapView.hideProgress();
-            iWifiMapView.showErrorMsg(errorMsg);
-        }
-    }
 }

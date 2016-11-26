@@ -10,7 +10,6 @@ public interface IServiceModel {
     interface onGetServiceListener{
         void onGetServiceSuccess(ServiceVo serviceVo);
         void onGetServiceFailed(int error);
-        void onGetServiceFailed(String errorMsg);
     }
 
     /***

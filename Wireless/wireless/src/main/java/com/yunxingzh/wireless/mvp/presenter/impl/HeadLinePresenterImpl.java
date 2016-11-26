@@ -87,14 +87,6 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     }
 
     @Override
-    public void onGetHeadLineFailed(String errorMsg) {
-        if(iHeadLineView != null){
-            iHeadLineView.hideProgress();
-            iHeadLineView.showErrorMsg(errorMsg);
-        }
-    }
-
-    @Override
     public void onClickCountSuccess() {
         if (iHeadLineView != null){
             iHeadLineView.hideProgress();
@@ -106,14 +98,6 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
         if(iHeadLineView != null){
             iHeadLineView.hideProgress();
             iHeadLineView.showError(error);
-        }
-    }
-
-    @Override
-    public void onClickCountFailed(String errorMsg) {
-        if(iHeadLineView != null){
-            iHeadLineView.hideProgress();
-            iHeadLineView.showErrorMsg(errorMsg);
         }
     }
 
@@ -134,14 +118,6 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     }
 
     @Override
-    public void onWeatherNewsFailed(String errorMsg) {
-        if (iHeadLineView != null){
-            iHeadLineView.hideProgress();
-            iHeadLineView.showErrorMsg(errorMsg);
-        }
-    }
-
-    @Override
     public void onGetFontInfoSuccess(FontInfoVo fontInfoVo) {
         if (iHeadLineView != null){
             iHeadLineView.hideProgress();
@@ -157,11 +133,4 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
         }
     }
 
-    @Override
-    public void onGetFontInfoFailed(String errorMsg) {
-        if (iHeadLineView != null){
-            iHeadLineView.hideProgress();
-            iHeadLineView.showErrorMsg(errorMsg);
-        }
-    }
 }
