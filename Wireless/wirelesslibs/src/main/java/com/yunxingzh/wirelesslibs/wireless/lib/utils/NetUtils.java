@@ -7,6 +7,16 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.yunxingzh.wirelesslibs.wireless.lib.api.Api;
+import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.dto.StringDto;
+import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
+import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkRequestParams;
+import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpCallback;
+import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpResBeanHandler;
+
+import okhttp3.Headers;
+
 /**
  * 跟网络相关的工具类
  */
@@ -51,5 +61,22 @@ public class NetUtils {
 		intent.setComponent(cm);
 		intent.setAction("android.intent.action.VIEW");
 		activity.startActivityForResult(intent, 0);
+	}
+
+	/**
+	 * 处理通用网络异常情况
+	 * @param errno
+	 * @return 是否处理完成
+     */
+	public static boolean checkErrno(int errno) {
+		boolean ret = false;
+		if (errno == HttpCode.E_TOKEN) {
+			// TODO
+			ret = true;
+		} else if (errno == HttpCode.E_INVAL_PARAM || errno ==HttpCode.E_MISS_PARAM) {
+			// TODO
+			ret = true;
+		}
+		return ret;
 	}
 }
