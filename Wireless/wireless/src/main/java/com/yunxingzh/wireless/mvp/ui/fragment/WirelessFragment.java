@@ -317,7 +317,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
             super.handleMessage(msg);
             if (msg.what == 0) {//认证成功
                 ToastUtil.showMiddle(getActivity(), R.string.validate_success);
-
             } else {
                 ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
             }
@@ -336,7 +335,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
                     ToastUtil.showMiddle(getActivity(),R.string.connect_success);
                     break;
                 default:
-                    ToastUtil.showMiddle(getActivity(), "checkEnv:" + checkResult);
+                   // ToastUtil.showMiddle(getActivity(), "checkEnv:" + checkResult);
                     break;
             }
         } else if(mWeatherLay == v){

@@ -86,6 +86,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         mSwitchBtn = findView(R.id.switch_btn);
         mSwitchBtn.setVisibility(View.VISIBLE);
         mSwitchBtn.setOnCheckedChangeListener(this);
+        mWifiRv.setHasFixedSize(true);
         mWifiRv.setLayoutManager(new LinearLayoutManager(this));
         //mWifiRv.addItemDecoration(new SpacesItemDecoration(0));
         mSwipeWifi.setOnRefreshListener(this);

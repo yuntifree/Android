@@ -11,6 +11,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkRequestParams;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpResBeanHandler;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.JsonUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import okhttp3.Headers;
 
@@ -32,7 +33,7 @@ public class UserModelImpl implements IUserModel {
                     listener.onValidateCodeSuccess();
                 } else {
                     // TODO: 通用异常情况
-                    if (!NetUtils.checkErrno(response.getErrno())) {
+                    if (!StringUtils.checkErrno(response.getErrno())) {
                         listener.onValidateCodeFailed(response.getDesc());
                     }
                 }
@@ -58,7 +59,7 @@ public class UserModelImpl implements IUserModel {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
                     listener.onRegisterSuccess(response);
                 } else {
-                    if (!NetUtils.checkErrno(response.getErrno())) {
+                    if (!StringUtils.checkErrno(response.getErrno())) {
                         listener.onRegisterFailed(response.getDesc());
                     }
                 }

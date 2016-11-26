@@ -62,21 +62,4 @@ public class NetUtils {
 		intent.setAction("android.intent.action.VIEW");
 		activity.startActivityForResult(intent, 0);
 	}
-
-	/**
-	 * 处理通用网络异常情况
-	 * @param errno
-	 * @return 是否处理完成
-     */
-	public static boolean checkErrno(int errno) {
-		boolean ret = false;
-		if (errno == HttpCode.E_TOKEN) {
-			// TODO
-			ret = true;
-		} else if (errno == HttpCode.E_INVAL_PARAM || errno ==HttpCode.E_MISS_PARAM) {
-			// TODO
-			ret = true;
-		}
-		return ret;
-	}
 }

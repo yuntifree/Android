@@ -57,6 +57,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     public void initView(View view) {
         mListRv = findView(view, R.id.list_rv);
         mListRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mListRv.setHasFixedSize(true);
         mListRv.addItemDecoration(new SpacesItemDecoration(Constants.ITEM_HEIGHT));
         mSwipeRefreshLay = findView(view, R.id.swipe_refresh_news);
         mSwipeRefreshLay.setOnRefreshListener(this);
