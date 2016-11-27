@@ -8,7 +8,7 @@
     android:background="@drawable/listview_selector"
     android:orientation="vertical">
 
-    <com.zhy.android.percent.support.PercentLinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -40,14 +40,12 @@
 
         <ImageView
             android:id="@+id/type_two_img"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="113dp"
+            android:layout_height="74dp"
             android:scaleType="fitXY"
             android:layout_gravity="center"
-            app:layout_heightPercent="@string/sw_230px"
-            app:layout_widthPercent="@string/sw_330px"
             android:layout_marginLeft="5dp"
             android:src="@drawable/img_default" />
-   </com.zhy.android.percent.support.PercentLinearLayout>
+   </LinearLayout>
 
 </com.zhy.android.percent.support.PercentLinearLayout>

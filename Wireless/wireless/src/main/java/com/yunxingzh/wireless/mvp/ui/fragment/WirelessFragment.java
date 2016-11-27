@@ -43,6 +43,7 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
+import com.yunxingzh.wireless.mvp.view.CircleWaveView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wireless.utility.Logg;
@@ -88,13 +89,14 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
 
     private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest, mMainHeadImg,mWeatherLay;
     private MyScrollView scrollView;
-    private TextView mNoticeTv, mConnectTv, mCircleSecondTv, mCircleThreeTv, mConnectCountTv,
+    private TextView mNoticeTv,/* mCircleSecondTv, mCircleThreeTv, */mConnectCountTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
     private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private AnimationSet alphaAnimation;
 
+    private CircleWaveView mConnectTv;
     private TextView footView;
     private List<WeatherNewsVo.WeatherNewsData.mainNewsVo> mainNewsVos;
     private MainNewsAdapter mainNewsAdapter;
@@ -128,8 +130,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
         mShowMoreIv = findView(view, R.id.show_more_iv);
         mConnectTv = findView(view, R.id.connect_tv);
         mConnectTv.setOnClickListener(this);
-        mCircleSecondTv = findView(view, R.id.circle_second_tv);
-        mCircleThreeTv = findView(view, R.id.circle_three_tv);
+        mConnectTv.start();
+       /* mCircleSecondTv = findView(view, R.id.circle_second_tv);
+        mCircleThreeTv = findView(view, R.id.circle_three_tv);*/
         mMainWifiManager = findView(view, R.id.main_wifi_manager);
         mMainWifiManager.setOnClickListener(this);
         mMainMapLay = findView(view, R.id.main_map_lay);
@@ -165,9 +168,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
         setAnimation(mWeatherImgBottom, 0, 60, 0, 0);
         setAnimation(mWeatherImgTop, 60, 0, 0, 0);
 
-        alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
-        mCircleSecondTv.startAnimation(alphaAnimation);
-        mCircleThreeTv.startAnimation(alphaAnimation);
+       // alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
+      /*  mCircleSecondTv.startAnimation(alphaAnimation);
+        mCircleThreeTv.startAnimation(alphaAnimation);*/
 
 //        scrollView.setOnTouchListener(new View.OnTouchListener() {
 //            public boolean onTouch(View v, MotionEvent event) {
@@ -199,7 +202,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         iHeadLinePresenter.weatherNews();
-
         WifiInterface.init(getActivity());
         WifiInterface.initEnv("http://192.168.100.4:880/wsmp/interface", "无线东莞DG—FREE", "ROOT_VNO");
     }
