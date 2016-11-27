@@ -1,12 +1,13 @@
 package com.yunxingzh.wirelesslibs.wireless.lib.bean.vo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by stephon on 2016/11/15.
  */
 
-public class WifiVo {
+public class WifiVo implements Serializable{
     private int errno;//错误码
     private String desc;//错误信息
     private WifiData data;
@@ -35,7 +36,7 @@ public class WifiVo {
         this.data = data;
     }
 
-    public class WifiData{
+    public class WifiData  implements Serializable{
         private List<MWifiInfo> infos;
 
         public List<MWifiInfo> getInfos() {
@@ -46,7 +47,7 @@ public class WifiVo {
             this.infos = infos;
         }
 
-        public class MWifiInfo{
+        public class MWifiInfo implements Serializable{
             private String ssid;
             private String username;
             private String password;

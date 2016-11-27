@@ -13,9 +13,14 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.fragment.APointDetailFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.IptPasswordFragment;
 import com.yunxingzh.wireless.wifi.AccessPoint;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
+
+import java.io.Serializable;
+import java.util.List;
 
 public class DialogActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String EXTRA_MY_WIFI = "my_wifi";//服务器获取的附近wifi
     private static final String EXTRA_TYPE = "extra_type";
     private static final String EXTRA_ACCESS_POINT = "extra_access_point";
     private static final String EXTRA_SHOW_ERROR = "extra_show_error";
@@ -47,12 +52,15 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         context.startActivity(intent);
     }
 
-    public static void showInuptPWD(Context context, AccessPoint accessPoint, boolean isShowError){
+    public static void showInuptPWD(Context context, AccessPoint accessPoint, List<WifiVo.WifiData.MWifiInfo> mWifiInfo, boolean isShowError){
         Intent intent = new Intent();
         intent.setClass(context, DialogActivity.class);
         intent.putExtra(EXTRA_TYPE, TYPE_INPUT_PASSWORD);
         intent.putExtra(EXTRA_ACCESS_POINT, accessPoint);
         intent.putExtra(EXTRA_SHOW_ERROR, isShowError);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(EXTRA_MY_WIFI, (Serializable) mWifiInfo);
+        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 
@@ -64,10 +72,11 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.content, APointDetailFragment.newInstance(accessPoint)).commit();
         } else if(type == TYPE_INPUT_PASSWORD){
+            List<WifiVo.WifiData.MWifiInfo> mWifiInfos = (List<WifiVo.WifiData.MWifiInfo>) intent.getSerializableExtra(EXTRA_MY_WIFI);
             AccessPoint accessPoint = intent.getParcelableExtra(EXTRA_ACCESS_POINT);
             boolean isShowError = intent.getBooleanExtra(EXTRA_SHOW_ERROR, false);
             getSupportFragmentManager().beginTransaction().
-                    replace(R.id.content, IptPasswordFragment.newInstance(accessPoint, isShowError)).commit();
+                    replace(R.id.content, IptPasswordFragment.newInstance(accessPoint, mWifiInfos,isShowError)).commit();
         }
     }
 

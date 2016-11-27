@@ -15,6 +15,10 @@ import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.wifi.AccessPoint;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
+
+import java.io.Serializable;
+import java.util.List;
 
 /***
  * wifi管理-密码连接dialog
@@ -22,12 +26,14 @@ import com.yunxingzh.wireless.wifi.AccessPoint;
 
 public class IptPasswordFragment extends Fragment {
 
+    private static final String EXTRA_MY_WIFI = "my_wifi";//服务器获取的附近wifi
     private static final String EXTRA_ACCESS_POINT = "extra_access_point";
     private static final String EXTRA_SHOW_ERROR = "extra_show_error";
 
-    public static IptPasswordFragment newInstance(AccessPoint accessPoint, boolean isShowError) {
+    public static IptPasswordFragment newInstance(AccessPoint accessPoint, List<WifiVo.WifiData.MWifiInfo> mWifiInfos,boolean isShowError) {
         IptPasswordFragment fragment = new IptPasswordFragment();
         Bundle bundle = new Bundle();
+        bundle.putSerializable(EXTRA_MY_WIFI, (Serializable) mWifiInfos);
         bundle.putParcelable(EXTRA_ACCESS_POINT, accessPoint);
         bundle.putBoolean(EXTRA_SHOW_ERROR, isShowError);
         fragment.setArguments(bundle);
@@ -36,12 +42,14 @@ public class IptPasswordFragment extends Fragment {
 
     private AccessPoint accessPoint;
     private boolean isShowError;
+    private List<WifiVo.WifiData.MWifiInfo> wifiInfoList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         accessPoint = (AccessPoint) arguments.getParcelable(EXTRA_ACCESS_POINT);
+        wifiInfoList = (List<WifiVo.WifiData.MWifiInfo>) arguments.getSerializable(EXTRA_MY_WIFI);
         isShowError = arguments.getBoolean(EXTRA_SHOW_ERROR);
     }
 
@@ -68,7 +76,11 @@ public class IptPasswordFragment extends Fragment {
                     ToastUtil.showMiddle(getActivity(),R.string.input_pwd);
                 } else {
                     accessPoint.setPassword(pwd, AccessPoint.PasswordFrom.INPUT);
-                    FWManager.getInstance().connect(accessPoint);
+                    for (int i = 0; i < wifiInfoList.size(); i++){
+                        if (accessPoint.ssid.equals(wifiInfoList.get(i).getSsid())){
+                            FWManager.getInstance().connect(accessPoint);
+                        }
+                    }
                     getActivity().finish();
                 }
             }

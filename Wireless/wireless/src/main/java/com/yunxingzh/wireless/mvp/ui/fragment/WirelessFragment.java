@@ -30,7 +30,9 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.mvp.presenter.IConnectDGCountPresenter;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
+import com.yunxingzh.wireless.mvp.presenter.impl.ConnectDGCountPresenterImpl;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.SpeedTestActivity;
@@ -44,6 +46,7 @@ import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.view.CircleWaveView;
+import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wireless.utility.Logg;
@@ -68,7 +71,7 @@ import java.util.List;
  * 无线
  */
 
-public class WirelessFragment extends BaseFragment implements IHeadLineView, View.OnClickListener, ScrollViewListener {
+public class WirelessFragment extends BaseFragment implements IHeadLineView,IConnectDGCountView, View.OnClickListener, ScrollViewListener {
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -89,11 +92,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
 
     private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest, mMainHeadImg,mWeatherLay;
     private MyScrollView scrollView;
-    private TextView mNoticeTv,/* mCircleSecondTv, mCircleThreeTv, */mConnectCountTv,
+    private TextView mNoticeTv,mConnectCountTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
     private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
+    private IConnectDGCountPresenter iConnectDGCountPresenter;
     private AnimationSet alphaAnimation;
 
     private CircleWaveView mConnectTv;
@@ -131,8 +135,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
         mConnectTv = findView(view, R.id.connect_tv);
         mConnectTv.setOnClickListener(this);
         mConnectTv.start();
-       /* mCircleSecondTv = findView(view, R.id.circle_second_tv);
-        mCircleThreeTv = findView(view, R.id.circle_three_tv);*/
+
         mMainWifiManager = findView(view, R.id.main_wifi_manager);
         mMainWifiManager.setOnClickListener(this);
         mMainMapLay = findView(view, R.id.main_map_lay);
@@ -168,10 +171,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
         setAnimation(mWeatherImgBottom, 0, 60, 0, 0);
         setAnimation(mWeatherImgTop, 60, 0, 0, 0);
 
-       // alphaAnimation = (AnimationSet) AnimationUtils.loadAnimation(getActivity(), R.anim.alpha);
-      /*  mCircleSecondTv.startAnimation(alphaAnimation);
-        mCircleThreeTv.startAnimation(alphaAnimation);*/
-
 //        scrollView.setOnTouchListener(new View.OnTouchListener() {
 //            public boolean onTouch(View v, MotionEvent event) {
 //                if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -198,6 +197,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
         //注册EventBus
         EventBus.getDefault().register(this);
         fragmentManager = getFragmentManager();
+        iConnectDGCountPresenter = new ConnectDGCountPresenterImpl(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
@@ -319,6 +319,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
             super.handleMessage(msg);
             if (msg.what == 0) {//认证成功
                 ToastUtil.showMiddle(getActivity(), R.string.validate_success);
+               // iConnectDGCountPresenter.connectDGCount();
             } else {
                 ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
             }
@@ -328,18 +329,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
     @Override
     public void onClick(View v) {
         if (mConnectTv == v) {//一键连接
-            int checkResult = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
-            switch (checkResult) {
-                case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
-                    WifiInterface.wifiRegister(registerHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);
-                    break;
-                case Constants.VALIDATE_SUCCESS://1、已经认证成功。
-                    ToastUtil.showMiddle(getActivity(),R.string.connect_success);
-                    break;
-                default:
-                   // ToastUtil.showMiddle(getActivity(), "checkEnv:" + checkResult);
-                    break;
-            }
+            connectDGWifi();
         } else if(mWeatherLay == v){
             startActivity(WebViewActivity.class,Constants.URL,"http://shenbao.dg.gov.cn/dgcsfw_zfb/csfw/dg_qxj/weixinportal.jsp",Constants.TITLE,"东莞天气");
         } else if (footView == v) {//查看更多新闻
@@ -388,10 +378,27 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
                     // TODO: 开始连接wifi逻辑
                     if (ssid.equals("无线东莞DG-FREE")) {
                         // 正常逻辑
+                        connectDGWifi();
                     } else {
                         // 不是东莞无线
                     }
                 }
+                break;
+        }
+    }
+
+    public void connectDGWifi(){
+        int checkResult = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
+        switch (checkResult) {
+            case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
+                WifiInterface.wifiRegister(registerHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);
+                break;
+            case Constants.VALIDATE_SUCCESS://1、已经认证成功。
+                ToastUtil.showMiddle(getActivity(),R.string.connect_success);
+                //iConnectDGCountPresenter.connectDGCount();
+                break;
+            default:
+                // ToastUtil.showMiddle(getActivity(), "checkEnv:" + checkResult);
                 break;
         }
     }
@@ -442,5 +449,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
     public void onResume() {
         super.onResume();
         mAdRotationBanner.startTurning(1500);
+    }
+
+    @Override
+    public void connectDGCountSuccess() {
+
     }
 }

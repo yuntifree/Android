@@ -62,4 +62,24 @@ public class JsonUtils {
         }
         return jsonObject.toString();
     }
+
+    public static String jsonStirngForMain(int uid, String token, int term, double version, long ts,
+                                           int nettype,String apmac) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("uid", uid);
+            jsonObject.put("token", token);
+            jsonObject.put("term", term);
+            jsonObject.put("version", version);
+            jsonObject.put("ts", ts);
+            jsonObject.put("nettype", nettype);
+            JSONObject data = new JSONObject();
+            data.put("apmac", apmac);
+            jsonObject.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return jsonObject.toString();
+    }
 }

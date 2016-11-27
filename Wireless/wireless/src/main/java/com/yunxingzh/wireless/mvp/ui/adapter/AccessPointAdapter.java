@@ -18,6 +18,7 @@ import com.yunxingzh.wireless.mvp.ui.activity.DialogActivity;
 import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +48,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     private List<AccessPoint> mNoauthPoints;
     private List<Integer> sections;
     private HashMap<String, AccessData> mAccessDatas;
+    private List<WifiVo.WifiData.MWifiInfo> mWifiInfoList;//服务器获取的附近wifi列表
 
     private int size;
 
@@ -61,11 +63,14 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         mAccessDatas = new HashMap<String, AccessData>();
     }
 
-    public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, boolean forceRefresh) {
+    public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, List<WifiVo.WifiData.MWifiInfo> mWifiInfos,boolean forceRefresh) {
         if (!forceRefresh && mCurrentState != WifiState.UNKOWN && mCurrentAPoint != null) {
             if (mCurrentState == state && mCurrentAPoint.ssid.equals(current.ssid) && mAccessPoints.size() == accessPoints.size()) {
                 return;
             }
+        }
+        if (mWifiInfos != null){
+            mWifiInfoList = mWifiInfos;
         }
         size = accessPoints.size();
         mCurrentState = state;
@@ -282,7 +287,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
                 }
                 FWManager.getInstance().connect(accessPoint);//连接wifi
             } else if (type == TYPE_NOAUTH_AP) {
-                DialogActivity.showInuptPWD(context, accessPoint, false);
+                DialogActivity.showInuptPWD(context, accessPoint,mWifiInfoList,false);
             }
         }
 

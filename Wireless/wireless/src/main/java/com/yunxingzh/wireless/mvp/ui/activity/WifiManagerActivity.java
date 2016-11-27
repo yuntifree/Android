@@ -49,15 +49,15 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
     private static final String TAG = "WifiManagerActivity";
 
-    private TextView mTitleNameTv,mOpenWifiBtn;
+    private TextView mTitleNameTv, mOpenWifiBtn;
     private ImageView mTitleReturnIv;
     private ToggleButton mSwitchBtn;
     private SwipeRefreshLayout mSwipeWifi;
     private RecyclerView mWifiRv;
     private AccessPointAdapter mAdapter;
     private WifiUtils wifiMa;
-    private List<AccessPoint> list ;
-    private LinearLayout mWifiCloseLay,mWifiListLay;
+    private List<AccessPoint> list;
+    private LinearLayout mWifiCloseLay, mWifiListLay;
     private View wifiClosedView;
 
 
@@ -93,41 +93,58 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
         mWifiCloseLay = findView(R.id.wifi_close_lay);
         mWifiListLay = findView(R.id.wifi_list_lay);
-        wifiClosedView = LayoutInflater.from(this).inflate(R.layout.wifi_closed,null);
+        wifiClosedView = LayoutInflater.from(this).inflate(R.layout.wifi_closed, null);
         mOpenWifiBtn = (TextView) wifiClosedView.findViewById(R.id.open_wifi_btn);
         mOpenWifiBtn.setOnClickListener(this);
     }
 
     public void initData() {
         locationUtils = LocationUtils.getInstance(this);
-        locationUtils.startMonitor();//开始定位
+        new Thread(new WifiManagerActivity.GetLocationThread()).start();
 
         iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
-        iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
-
-        mAdapter = new AccessPointAdapter(this);
-        mWifiRv.setAdapter(mAdapter);
-        mHandler.removeMessages(MSG_REFRESH_LIST);
-        mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
-        FWManager.getInstance().addWifiObserver(wifiObserver);
-
-        mWifiCloseLay.addView(wifiClosedView);
 
         wifiMa = new WifiUtils(this);
         if (wifiMa.getWlanState()) {
             mSwitchBtn.setChecked(true);
             mWifiListLay.setVisibility(View.VISIBLE);
-
         } else {
             mWifiCloseLay.setVisibility(View.VISIBLE);
         }
     }
 
+    public class GetLocationThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                locationUtils.startMonitor();//开始定位
+                Thread.sleep(2000);
+                Message message = new Message();
+                message.what = 1;
+                locationHandler.sendMessage(message);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    final Handler locationHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
+                    break;
+            }
+        }
+    };
+
     @Override
     public void onClick(View v) {
         if (mTitleReturnIv == v) {
             finish();
-        } else if (mOpenWifiBtn == v){
+        } else if (mOpenWifiBtn == v) {
             openWifi();
         }
     }
@@ -186,7 +203,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
                     refreshList(msg.arg1);
                     break;
                 case MSG_AUTH_ERROR:
-                    DialogActivity.showInuptPWD(WifiManagerActivity.this, (AccessPoint)msg.obj, true);
+                    DialogActivity.showInuptPWD(WifiManagerActivity.this, (AccessPoint) msg.obj,mWifiInfos, true);
                     break;
             }
         }
@@ -202,14 +219,23 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
             current = FWManager.getInstance().getCurrent();
         }
         list = FWManager.getInstance().getList();
-        if (mAdapter != null){
-            mAdapter.setData(state, current, list, forceRefresh == 1 ? true : false);
+        if (mAdapter != null) {
+            mAdapter.setData(state, current, list, mWifiInfos, forceRefresh == 1 ? true : false);
         }
     }
 
     @Override
     public void getWifiSuccess(WifiVo wifiVo) {
         mWifiInfos = wifiVo.getData().getInfos();
+
+        mAdapter = new AccessPointAdapter(this);
+        mWifiRv.setAdapter(mAdapter);
+        mHandler.removeMessages(MSG_REFRESH_LIST);
+        mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
+        FWManager.getInstance().addWifiObserver(wifiObserver);
+
+        mWifiCloseLay.addView(wifiClosedView);
+
     }
 
     @Override
@@ -221,17 +247,17 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         }
     }
 
-    public void openWifi(){
+    public void openWifi() {
         mSwitchBtn.setChecked(true);
-        ToastUtil.showMiddle(this,R.string.opening);
+        ToastUtil.showMiddle(this, R.string.opening);
         wifiMa.wifiOpen();
         mWifiCloseLay.setVisibility(View.GONE);
         mWifiListLay.setVisibility(View.VISIBLE);
         refreshList(1);
-        mWifiRv.swapAdapter(mAdapter,true);//刷新列表
+        mWifiRv.swapAdapter(mAdapter, true);//刷新列表
     }
 
-    public void closeWifi(){
+    public void closeWifi() {
         mWifiListLay.setVisibility(View.GONE);
         mWifiCloseLay.setVisibility(View.VISIBLE);
         wifiMa.wifiClose();
