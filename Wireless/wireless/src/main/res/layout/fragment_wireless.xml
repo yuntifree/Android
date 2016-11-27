@@ -23,7 +23,7 @@
             <LinearLayout
                 android:id="@+id/main_head_img"
                 android:layout_width="match_parent"
-                android:layout_height="345dp"
+                android:layout_height="344dp"
                 android:background="@drawable/main_bg"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -337,14 +337,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="@color/blue_def2fe"
-                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:layout_marginLeft="14dp"
                     android:layout_marginRight="2.5dp"
+                    android:layout_gravity="center"
                     android:src="@drawable/notice" />
 
                 <TextView
@@ -352,6 +352,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lines="1"
+                    android:layout_gravity="center"
                     android:text="东莞虎门一火车"
                     android:textColor="@color/blue_4a90e2"
                     android:textSize="12sp" />

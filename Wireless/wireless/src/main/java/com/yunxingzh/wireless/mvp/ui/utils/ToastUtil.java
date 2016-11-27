@@ -36,7 +36,7 @@ public class ToastUtil {
             MyApplication.sApplication.setToken("");
             MyApplication.sApplication.setUser(null);
             Intent intent = new Intent(context, RegisterActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);//清空栈
             context.startActivity(intent);
             return;
         } else if(error == HttpCode.E_INVAL_PARAM){

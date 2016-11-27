@@ -86,6 +86,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     }
 
     public void initData() {
+        baiduMap = mapView.getMap();
         locationUtils = LocationUtils.getInstance(this);
         new Thread(new GetLocationThread()).start();
         iWifiMapPresenter = new WifiMapPresenterImpl(this);
@@ -143,7 +144,6 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    baiduMap = mapView.getMap();
                     lat = locationUtils.getBaseLocation().latitude;
                     lon = locationUtils.getBaseLocation().longitude;
                     //定义Maker坐标点lat,lon:22.933103,113.903870

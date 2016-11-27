@@ -177,9 +177,9 @@ public class HeadLineNewsAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (!result.isClickColor()) {
                     result.setClickColor(true);
-                    startActivity(WebViewActivity.class, position, result);
+                    startActivity(WebViewActivity.class, position, result,true);
                 } else {
-                    startActivity(WebViewActivity.class, position, result);
+                    startActivity(WebViewActivity.class, position, result,true);
                 }
             }
         });
@@ -187,11 +187,12 @@ public class HeadLineNewsAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void startActivity(Class activity, int position, NewsVo.Data.NewsData result) {
+    public void startActivity(Class activity, int position, NewsVo.Data.NewsData result,boolean fromNews) {
         EventBus.getDefault().post(new EventBusType(0, 0, position));
         Intent intent = new Intent(context, activity);
         intent.putExtra(Constants.URL, result.getDst());
         intent.putExtra(Constants.TITLE, result.getTitle());
+        intent.putExtra(Constants.FROM_NEWS, fromNews);
         context.startActivity(intent);
         notifyDataSetChanged();
     }

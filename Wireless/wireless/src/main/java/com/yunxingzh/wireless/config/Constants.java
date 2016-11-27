@@ -21,6 +21,7 @@ public class Constants {
     public static final String VIDEO_URL = "video_url";
     public static final String URL = "url";
     public static final String TITLE = "title";
+    public static final String FROM_NEWS = "fromNews";
 
     //eventBus flag
     public static final int WIRELESS = 1;//无线

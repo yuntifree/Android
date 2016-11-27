@@ -56,7 +56,7 @@
     <string name="head_line">东莞头条</string>
     <string name="opening">请稍候...</string>
     <string name="refreshing">正在刷新列表...请稍候</string>
-    <string name="wireless_list">无线</string>
+    <string name="wireless_list">WiFi列表</string>
     <string name="input_pwd">请输入密码</string>
     <string name="pwd">密码:</string>
     <string name="cancel">取消</string>
