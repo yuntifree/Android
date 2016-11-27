@@ -412,7 +412,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Vie
         } else if (y == HEIGHT) {
             mNoticeLay.setVisibility(View.VISIBLE);
             mNoticeTv.setText(R.string.head_line);
-            mShowMoreIv.setVisibility(View.VISIBLE);
         }
     }
 

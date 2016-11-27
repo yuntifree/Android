@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
@@ -39,7 +42,8 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
 //    private final static int INDEX_TWO = 2;
 //    private final static int INDEX_THREE = 3;
 
-    private TextView mIdApp,mIdGame,mIdVideo,mIdNews;
+    private TextView mIdApp,mIdGame,mIdVideo,mIdNews,mIdTabLeftLine,mIdTabRightLine;
+    private int screenWidth;// 屏幕的宽度
     private ViewPager mViewPager;
     private HeadLineFragmentPagerAdapter headLineFragmentAdapter;
     private List<Fragment> fragments = new ArrayList<>();
@@ -61,6 +65,8 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
        // mIdGame = findView(view,R.id.id_game);
         mIdVideo = findView(view,R.id.id_video);
         mIdNews = findView(view,R.id.id_news);
+        mIdTabLeftLine = findView(view,R.id.id_tab_left_line);
+        mIdTabRightLine = findView(view,R.id.id_tab_right_line);
     }
 
     // 重置颜色
@@ -73,6 +79,7 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
        // mIdApp.setTextSize(SIZE);
        // mIdGame.setTextColor(res.getColor(R.color.blue_C0D8F4));
       //  mIdGame.setTextSize(SIZE);
+
     }
 
     public void initData() {
@@ -113,6 +120,11 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
         }
     }
 
+    private void setLineSelect(boolean leftSelected, boolean rightSelected) {
+        mIdTabLeftLine.setVisibility(leftSelected ? View.VISIBLE : View.GONE);
+        mIdTabRightLine.setVisibility(rightSelected ? View.VISIBLE : View.GONE);
+    }
+
     @Override
     public void onDestroy(){
         super.onDestroy();
@@ -122,7 +134,6 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
     //当前页面被滑动时调用
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
     }
 
     //当新的页面被选中时调用
@@ -133,10 +144,12 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
             case INDEX_ZERO:
                 mIdNews.setTextColor(res.getColor(R.color.white));
                 mIdNews.setTextSize(FOCUS_SIZE);
+                setLineSelect(true,false);
                 break;
             case INDEX_ONE:
                 mIdVideo.setTextColor(res.getColor(R.color.white));
                 mIdVideo.setTextSize(FOCUS_SIZE);
+                setLineSelect(false,true);
                 break;
 //            case INDEX_TWO:
 //                mIdApp.setTextColor(res.getColor(R.color.white));
