@@ -31,10 +31,7 @@ public class UserModelImpl implements IUserModel {
                 if (response.getErrno() == HttpCode.HTTP_OK) {
                     listener.onValidateCodeSuccess();
                 } else {
-                    // TODO: 通用异常情况
-                    if (!StringUtils.checkErrno(response.getErrno())) {
-                        listener.onValidateCodeFailed(response.getErrno());
-                    }
+                    listener.onValidateCodeFailed(response.getErrno());
                 }
             }
 

@@ -234,21 +234,4 @@ public class StringUtils {
         return formatter.format(d);
     }
 
-    /**
-     * 处理通用网络异常情况
-     * @param errno
-     * @return 是否处理完成
-     */
-    public static boolean checkErrno(int errno) {
-        boolean ret = false;
-        if (errno == HttpCode.E_TOKEN) {
-
-            ret = true;
-        } else if (errno == HttpCode.E_INVAL_PARAM || errno == HttpCode.E_MISS_PARAM) {
-            // TODO
-            ret = true;
-        }
-        return ret;
-    }
-
 }

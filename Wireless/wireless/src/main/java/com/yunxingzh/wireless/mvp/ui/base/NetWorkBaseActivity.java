@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.yunxingzh.wireless.mvp.ui.activity.HttpErrorActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.MainActivity;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 
 /**
@@ -18,8 +19,8 @@ public class NetWorkBaseActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!NetUtils.isNetworkAvailable(getApplicationContext())) {
-            startActivityForResult(new Intent(this, HttpErrorActivity.class), REQUEST_NETWORK_ERROR);
-        }
+//        if (!NetUtils.isNetworkAvailable(getApplicationContext())) {
+//            startActivity(new Intent(this, MainActivity.class));
+//        }
     }
 }

@@ -15,6 +15,7 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IBaseView;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.view.dialog.LoadingDialogFragment;
 
 /**
@@ -37,6 +38,10 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (!NetUtils.isNetworkAvailable(getApplicationContext())) {
+            ToastUtil.showMiddle(this,R.string.network_error);
+            return;
+        }
     }
 
     /* @Override
