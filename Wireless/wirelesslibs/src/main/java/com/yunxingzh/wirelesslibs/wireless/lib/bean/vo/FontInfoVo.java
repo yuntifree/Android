@@ -1,5 +1,7 @@
 package com.yunxingzh.wirelesslibs.wireless.lib.bean.vo;
 
+import java.util.List;
+
 /**
  * Created by stephon on 2016/11/16.
  */
@@ -35,7 +37,7 @@ public class FontInfoVo {
 
     public class FontData{
         private UserVo user;
-        private BannersVo banner;
+        private List<BannersVo> banner;
 
         public UserVo getUser() {
             return user;
@@ -45,11 +47,11 @@ public class FontInfoVo {
             this.user = user;
         }
 
-        public BannersVo getBanner() {
+        public List<BannersVo> getBanner() {
             return banner;
         }
 
-        public void setBanner(BannersVo banner) {
+        public void setBanner(List<BannersVo> banner) {
             this.banner = banner;
         }
 

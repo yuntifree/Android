@@ -74,8 +74,16 @@ public class GuidedActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onPageSelected(int position) {
-        if (position == 2) {
-            enter.setVisibility(View.VISIBLE);
+        switch (position){
+            case 0:
+                enter.setVisibility(View.GONE);
+                break;
+            case 1:
+                enter.setVisibility(View.GONE);
+                break;
+            case 2:
+                enter.setVisibility(View.VISIBLE);
+                break;
         }
     }
 

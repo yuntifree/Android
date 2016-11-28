@@ -31,7 +31,7 @@ public class ToastUtil {
     }
 
     public static void showError(Context context, int error) {
-        if (error == HttpCode.E_TOKEN || error == HttpCode.E_MISS_PARAM) {
+        if (error == HttpCode.E_TOKEN ) {
             showMiddle(context, R.string.lost_token);
             MyApplication.sApplication.setToken("");
             MyApplication.sApplication.setUser(null);

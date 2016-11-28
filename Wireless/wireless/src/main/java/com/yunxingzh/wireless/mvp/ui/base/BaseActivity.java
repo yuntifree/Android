@@ -40,7 +40,6 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
         mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (!NetUtils.isNetworkAvailable(getApplicationContext())) {
             ToastUtil.showMiddle(this,R.string.network_error);
-            return;
         }
     }
 

@@ -6,6 +6,9 @@ public class Api {
    // public static final String WEB_HOST = WEB_SCHEME + "";
     // 测试地址
     public static final String WEB_HOST = WEB_SCHEME + "120.25.133.234/";
+    //测试2
+    //public static final String WEB_HOST = WEB_SCHEME + "120.76.236.185/";
+
 
     public static final String GET_PHONE_CODE = WEB_HOST + "get_phone_code";//获取短信验证码
     public static final String REGISTER = WEB_HOST + "register";//注册
