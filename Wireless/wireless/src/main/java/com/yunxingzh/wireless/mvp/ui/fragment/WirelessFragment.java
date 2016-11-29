@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -75,6 +76,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
+
 /**
  * Created by stephon_ on 2016/11/1.
  * 无线
@@ -122,6 +125,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
     private int mScrollDirection = SCROLL_STOP;
     private WifiUtils wifiUtils = null;
+    private String dgfreeSSID;
+    private CheckEnvTask mCheckTask = null;
 
     @Nullable
     @Override
@@ -211,6 +216,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
         iHeadLinePresenter.weatherNews();
+
+        wifiUtils = new WifiUtils(getActivity());
+
+        dgfreeSSID = getResources().getString(R.string.ssids);
+        FWManager.getInstance().addWifiObserver(wifiObserver);
     }
 
     @Override
@@ -311,18 +321,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
-    public Handler registerHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {//注册成功
-                WifiInterface.wifiLogon(validateHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
-            } else {
-                ToastUtil.showMiddle(getActivity(), R.string.register_faild);
-            }
-        }
-    };
-
     public Handler validateHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -335,6 +333,14 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             }
         }
     };
+
+    private void CheckAndLogon() {
+        if (mCheckTask != null) {
+            return;
+        }
+        mCheckTask = new CheckEnvTask();
+        mCheckTask.execute((Void)null);
+    }
 
     final Handler logoOutHandler = new Handler() {
         @Override
@@ -354,14 +360,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     @Override
     public void onClick(View v) {
         if (mConnectTv == v) {//一键连接
-            if (!NetUtil.isWifiAvailible(getActivity())) {
-                if (AppUtils.getNetWorkType(getActivity()) == 0) {//0：网络状态为已连接wifi
-                    checkDGWifi();
-                } else {
-                    ToastUtil.showMiddle(getActivity(), R.string.no_wifi);
-                }
+            if (wifiUtils.getWlanState()) {
+                checkDGWifi();
+            } else {
+                ToastUtil.showMiddle(getActivity(), R.string.no_wifi);
             }
-            //  WifiInterface.wifiLogout(logoOutHandler,"13543753375",DG_SDK_TIME_OUT);
         } else if (mWeatherLay == v) {
             startActivity(WebViewActivity.class, Constants.URL, "http://shenbao.dg.gov.cn/dgcsfw_zfb/csfw/dg_qxj/weixinportal.jsp", Constants.TITLE, "东莞天气");
         } else if (footView == v) {//查看更多新闻
@@ -391,16 +394,32 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
         }
     }
-//
-//    private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
-//        @Override
-//        public void onStateChanged(WifiState new_state, WifiState old_state) {
-//            Logg.d(TAG, "onStateChanged");
-//
-//            mHandler.removeMessages(MSG_REFRESH_LIST);
-//            mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
-//        }
-//    };
+
+    private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
+        @Override
+        public void onStateChanged(WifiState new_state, WifiState old_state) {
+            if (new_state == WifiState.CONNECTED) {
+                AccessPoint currentAp = FWManager.getInstance().getCurrent();
+                if (currentAp != null && currentAp.ssid.equals(dgfreeSSID)) {
+                    CheckAndLogon();
+                } else {
+                    // 先不处理
+                }
+            }
+        }
+
+        @Override
+        public void onListChanged(List<AccessPoint> accessPoints) {
+        }
+
+        @Override
+        public void onRSSIChanged(int rssi) {
+        }
+
+        @Override
+        public void onAuthError(AccessPoint ap) {
+        }
+    };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -418,8 +437,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    if (ssid.equals("无线东莞DG-FREE")) {
-                        new Thread(new CheckEnvThread()).start();
+                    if (ssid.equals(dgfreeSSID)) {
+                        CheckAndLogon();
                     } else {
                         // 不是东莞无线
                         if (URLUtil.isHttpsUrl(url) || URLUtil.isHttpUrl(url)) {
@@ -438,28 +457,64 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         }
     }
 
+    public class CheckEnvTask extends AsyncTask<Void, Void, Boolean> {
+        private int mCheckRet = -1;
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                mCheckRet = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mCheckTask = null;
+            if (success) {
+                switch (mCheckRet) {
+                    case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
+                        WifiInterface.wifiLogon(validateHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
+                        break;
+                    case Constants.VALIDATE_SUCCESS://1、已经认证成功。
+                        ToastUtil.showMiddle(getActivity(), R.string.connect_success);
+                        //iConnectDGCountPresenter.connectDGCount();
+                        break;
+                    default:
+                        ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                }
+            } else {
+                ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mCheckTask = null;
+        }
+    }
+
     public class CheckEnvThread implements Runnable {
         @Override
         public void run() {
             try {
                 int checkResult = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
-                Thread.sleep(2000);
                 Message message = new Message();
                 message.what = checkResult;
-                connectHandler.sendMessage(message);
-            } catch (InterruptedException e) {
+                checkHandler.sendMessage(message);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public Handler connectHandler = new Handler() {
+    public Handler checkHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
             switch (msg.what) {
                 case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
-                    WifiInterface.wifiRegister(registerHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);
+                    WifiInterface.wifiLogon(validateHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
                     break;
                 case Constants.VALIDATE_SUCCESS://1、已经认证成功。
                     ToastUtil.showMiddle(getActivity(), R.string.connect_success);
@@ -469,6 +524,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                     ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
                     break;
             }
+            super.handleMessage(msg);
         }
     };
 
@@ -512,8 +568,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
         AccessPoint DGFreeAp = null;
         for (int i = 0; i < apList.size(); i++){//找出是否有东莞wifi
-            if (DGFreeAp.ssid.equals("无线东莞DG-FREE")){
-                DGFreeAp = apList.get(i);
+            AccessPoint ap = apList.get(i);
+            if (ap.ssid.equals(dgfreeSSID)){
+                DGFreeAp = ap;
                 break;
             }
         }
@@ -521,8 +578,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             AccessPoint currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
             if (currentAp != null){
                 if (currentAp.ssid.equals(DGFreeAp.ssid)){
-                    //todo 验证东莞sdk
-                    new Thread(new CheckEnvThread()).start();
+                    CheckAndLogon();
                 } else {
                     //已连上普通wifi
                 }

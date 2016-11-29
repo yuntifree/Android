@@ -2,8 +2,11 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,14 +15,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dgwx.app.lib.bl.WifiInterface;
+import com.dgwx.app.lib.common.util.SettingUtility;
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IRegisterPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.RegisterPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.NetWorkBaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IRegisterView;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
+
+import org.json.JSONObject;
+
+import static com.yunxingzh.wireless.R.string.phone;
 
 /**
  * Created by Stephen on 2016/9/8.
@@ -36,6 +48,8 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
     private TextView mGetValidateCodeBtn;
     private IRegisterPresenter iLoginPresenter;
     private TimeCount mTimeCount;
+    private String mPhone;
+    private String mCode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,15 +76,47 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
     @Override
     public void onClick(View view) {
         if (view == mLoRegisterBtn) {
-            if(StringUtils.isEmpty(getCode())){
+            String code = getCode();
+            if (StringUtils.isEmpty(code)){
                 setCode(R.string.input_code);
-                return;
+            } else if (mCode.equals(code)){
+                iLoginPresenter.register(mPhone, StringUtils.getMD5(mCode),Integer.parseInt(mCode));
+            } else {
+                ToastUtil.showMiddle(RegisterActivity.this, "请输入正确的验证码");
             }
-            iLoginPresenter.register(getPhone(), StringUtils.getMD5(getCode()),Integer.parseInt(getCode()));
         } else if (view == mGetValidateCodeBtn){
-            iLoginPresenter.getValidateCode(TYPE, getPhone());
+            WifiInterface.wifiRegister(handler, getPhone(), "", 5000);
         }
     }
+
+    final Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+        String obj = (String) msg.obj;
+        int what = msg.what;
+        String reason = " ";
+        String pwd = "";
+        try {
+            JSONObject resp = new JSONObject(obj);
+            reason = resp.getJSONObject("head").getString("reason");
+            pwd = resp.getJSONObject("body").getString("pwd");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        switch (what) {
+            case 0:
+                SPUtils.put(MyApplication.getInstance(), Constants.SP_USER_NAME, getPhone());
+                mPhone = getPhone();
+                SPUtils.put(MyApplication.getInstance(), Constants.SP_WIFI_PWD, pwd);
+                mCode = pwd;
+                break;
+            default:
+                ToastUtil.showMiddle(RegisterActivity.this, reason);
+                break;
+        }
+        super.handleMessage(msg);
+        }
+    };
 
     @Override
     public void getValidateCodeSuccess() {
