@@ -5,7 +5,9 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
+import com.dgwx.app.lib.bl.WifiInterface;
 import com.yunxingzh.wireless.FWManager;
+import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
 import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.AreaDataVo;
@@ -56,9 +58,14 @@ public class MyApplication extends Application {
             OkHttpUtil.init(sApplication);
             startService();
             bindService();
+
+            WifiInterface.init(this);
+            WifiInterface.initEnv(getResources().getString(R.string.wsmpurl), getResources().getString(R.string.ssids),getResources().getString(R.string.vnocode));
+
         } else {
             Logg.d(TAG, "on create in service thread");
         }
+
     }
 
     public boolean isExit() {

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.webkit.URLUtil;
 
 import com.yunxingzh.wirelesslibs.wireless.lib.api.Api;
 import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
@@ -14,6 +15,12 @@ import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkRequestParams;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpCallback;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpResBeanHandler;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import okhttp3.Headers;
 

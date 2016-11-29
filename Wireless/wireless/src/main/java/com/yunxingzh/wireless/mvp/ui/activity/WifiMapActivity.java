@@ -165,10 +165,10 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                     iWifiMapPresenter.getWifiMap(lon, lat);//获取周围热点lon,lat
                     Bitmap mBit = bitmap.getBitmap();
                     //如果该图片为当前位置图，则跳过点击事件
-                    if (mBit.getHeight() == 120 && mBit.getWidth() == 120){
-                        return;
+
+                    if (mBit.getHeight() != 120 && mBit.getWidth() != 120){
+                        initMarkerClickEvent();
                     }
-                    initMarkerClickEvent();
                     break;
             }
         }

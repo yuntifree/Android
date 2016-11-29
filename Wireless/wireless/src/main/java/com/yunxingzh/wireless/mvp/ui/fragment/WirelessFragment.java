@@ -3,6 +3,7 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.webkit.URLUtil;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,12 +60,14 @@ import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.BannerInfo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,8 +206,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
         iHeadLinePresenter.weatherNews();
-        WifiInterface.init(getActivity());
-        WifiInterface.initEnv("http://192.168.100.4:880/wsmp/interface", "无线东莞DG—FREE", "ROOT_VNO");
     }
 
     @Override
@@ -329,10 +331,26 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         }
     };
 
+    final Handler logoOutHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+                    ToastUtil.showMiddle(getActivity(), "下线成功");
+                    break;
+                default:
+                    ToastUtil.showMiddle(getActivity(), "下线失败");
+                    break;
+            }
+        }
+    };
+
     @Override
     public void onClick(View v) {
         if (mConnectTv == v) {//一键连接
-            connectDGWifi();
+          //  new Thread(new CheckEnvThread()).start();
+             WifiInterface.wifiLogout(logoOutHandler,"13543753375",DG_SDK_TIME_OUT);
         } else if (mWeatherLay == v) {
             startActivity(WebViewActivity.class, Constants.URL, "http://shenbao.dg.gov.cn/dgcsfw_zfb/csfw/dg_qxj/weixinportal.jsp", Constants.TITLE, "东莞天气");
         } else if (footView == v) {//查看更多新闻
@@ -371,40 +389,67 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
                     String ssid = "";
+                    String url = "";
                     try {
-                        String url = bundle.getString("result");
+                        url = bundle.getString("result");
                         ssid = url.substring(url.indexOf("ssid=") + 5);
                         ssid = java.net.URLDecoder.decode(ssid, "utf-8");
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    // TODO: 开始连接wifi逻辑
                     if (ssid.equals("无线东莞DG-FREE")) {
-                        // 正常逻辑
-                        connectDGWifi();
+                        new Thread(new CheckEnvThread()).start();
                     } else {
                         // 不是东莞无线
+                        if (URLUtil.isHttpsUrl(url) || URLUtil.isHttpUrl(url)) {
+                            Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                            intent.putExtra(Constants.URL, url);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent();
+                            intent.setAction("android.intent.action.VIEW");
+                            intent.setData(Uri.parse(url));
+                            startActivity(intent);
+                        }
                     }
                 }
                 break;
         }
     }
 
-    public void connectDGWifi() {
-        int checkResult = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
-        switch (checkResult) {
-            case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
-                WifiInterface.wifiRegister(registerHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);
-                break;
-            case Constants.VALIDATE_SUCCESS://1、已经认证成功。
-                ToastUtil.showMiddle(getActivity(), R.string.connect_success);
-                //iConnectDGCountPresenter.connectDGCount();
-                break;
-            default:
-                // ToastUtil.showMiddle(getActivity(), "checkEnv:" + checkResult);
-                break;
+    public class CheckEnvThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                int checkResult = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
+                Thread.sleep(2000);
+                Message message = new Message();
+                message.what = checkResult;
+                connectHandler.sendMessage(message);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+    public Handler connectHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
+                    WifiInterface.wifiRegister(registerHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);
+                    break;
+                case Constants.VALIDATE_SUCCESS://1、已经认证成功。
+                    ToastUtil.showMiddle(getActivity(), R.string.connect_success);
+                    //iConnectDGCountPresenter.connectDGCount();
+                    break;
+                default:
+                    ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {

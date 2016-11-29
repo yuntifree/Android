@@ -110,6 +110,14 @@
 
 
 
+    <string name="wsmpurl">http://120.234.130.196:880/wsmp/interface</string>
+    <string name="ssids">无线东莞DG-FREE</string>
+    <string name="vnocode">ROOT_VNO</string>
+
+
+
+
+
 
     <!--WiFi-->
     <string name="state_unkown">unkown error</string>

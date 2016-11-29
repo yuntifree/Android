@@ -6,7 +6,9 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.ui.base.NetWorkBaseActivity;
+import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.WebViewUtil;
 
 /**
@@ -80,7 +83,19 @@ public class WebViewActivity extends NetWorkBaseActivity implements View.OnClick
             public void onPageFinished(WebView view,String url){
                 myProgressBar.setVisibility(View.GONE);
             }
-    });
+
+            @Override
+            public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                super.onReceivedHttpError(view, request, errorResponse);
+                ToastUtil.showMiddle(WebViewActivity.this,R.string.internet_error);
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                ToastUtil.showMiddle(WebViewActivity.this,R.string.internet_error);
+            }
+        });
         myWebView.loadUrl(mUrl);
     }
 
