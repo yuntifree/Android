@@ -99,10 +99,18 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     }
 
     public void initData() {
+        iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
+
         locationUtils = LocationUtils.getInstance(this);
         new Thread(new WifiManagerActivity.GetLocationThread()).start();
 
-        iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
+        mAdapter = new AccessPointAdapter(this);
+        mWifiRv.setAdapter(mAdapter);
+        mHandler.removeMessages(MSG_REFRESH_LIST);
+        mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
+        FWManager.getInstance().addWifiObserver(wifiObserver);
+
+        mWifiCloseLay.addView(wifiClosedView);
 
         wifiMa = new WifiUtils(this);
         if (wifiMa.getWlanState()) {
@@ -227,15 +235,6 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     @Override
     public void getWifiSuccess(WifiVo wifiVo) {
         mWifiInfos = wifiVo.getData().getInfos();
-
-        mAdapter = new AccessPointAdapter(this);
-        mWifiRv.setAdapter(mAdapter);
-        mHandler.removeMessages(MSG_REFRESH_LIST);
-        mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
-        FWManager.getInstance().addWifiObserver(wifiObserver);
-
-        mWifiCloseLay.addView(wifiClosedView);
-
     }
 
     @Override

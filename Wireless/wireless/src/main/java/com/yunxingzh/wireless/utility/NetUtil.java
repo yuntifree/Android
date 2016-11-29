@@ -11,27 +11,36 @@ import android.net.NetworkInfo;
 public class NetUtil {
     /**
      * Get the network info
+     *
      * @param context
      * @return
      */
-    public static NetworkInfo getNetworkInfo(Context context){
+    public static NetworkInfo getNetworkInfo(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ret = null;
-        try{
+        try {
             ret = cm.getActiveNetworkInfo();
-        }catch(Throwable e){
+        } catch (Throwable e) {
         }
         return ret;
     }
 
     /**
      * Check if there is any connectivity to a Wifi network
+     *
      * @param context
-     * @param type
      * @return
      */
-    public static boolean isConnectedWifi(Context context){
+    public static boolean isConnectedWifi(Context context) {
         NetworkInfo info = getNetworkInfo(context);
         return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_WIFI);
+    }
+
+    public static boolean isWifiAvailible(Context context) {
+        NetworkInfo info = getNetworkInfo(context);
+        if (info != null) {
+            return info.isAvailable();
+        }
+        return false;
     }
 }

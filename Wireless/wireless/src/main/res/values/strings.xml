@@ -106,9 +106,10 @@
     <string name="connect_success">恭喜您连接成功</string>
     <string name="jump">立即体验</string>
     <string name="network_error">网络跑路啦</string>
-
-
-
+    <string name="network_need_login">已连接,点我登录验证</string>
+    <string name="faild">连接失败</string>
+    <string name="no_wifi">附近没有可以连接的wifi</string>
+    <string name="please_open_wifi">请先打开wifi</string>
 
     <string name="wsmpurl">http://120.234.130.196:880/wsmp/interface</string>
     <string name="ssids">无线东莞DG-FREE</string>

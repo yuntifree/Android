@@ -1,6 +1,8 @@
 package com.yunxingzh.wireless.mvp.ui.adapter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +12,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dgwx.app.lib.bl.WifiInterface;
 import com.truizlop.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.model.AccessData;
 import com.yunxingzh.wireless.mvp.ui.activity.DialogActivity;
+import com.yunxingzh.wireless.mvp.ui.fragment.WirelessFragment;
+import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
@@ -63,13 +70,13 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         mAccessDatas = new HashMap<String, AccessData>();
     }
 
-    public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, List<WifiVo.WifiData.MWifiInfo> mWifiInfos,boolean forceRefresh) {
+    public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, List<WifiVo.WifiData.MWifiInfo> mWifiInfos, boolean forceRefresh) {
         if (!forceRefresh && mCurrentState != WifiState.UNKOWN && mCurrentAPoint != null) {
             if (mCurrentState == state && mCurrentAPoint.ssid.equals(current.ssid) && mAccessPoints.size() == accessPoints.size()) {
                 return;
             }
         }
-        if (mWifiInfos != null){
+        if (mWifiInfos != null) {
             mWifiInfoList = mWifiInfos;
         }
         size = accessPoints.size();
@@ -280,14 +287,13 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         @Override
         public void onClick(View v) {
             if (type == TYPE_CURRENT_AP) {
-
-            } else if (type == TYPE_FOCUS_AP) {
-                if (accessPoint.ssid.equals("无线东莞DG—FREE")){
-
+                if (accessPoint.ssid.equals("无线东莞DG-FREE")) {
+                    new Thread(new AccessPointAdapter.CheckEnvThread()).start();
                 }
-                FWManager.getInstance().connect(accessPoint);//连接wifi
+            } else if (type == TYPE_FOCUS_AP) {
+                new Thread(new ConnectWifiThread(accessPoint)).start();
             } else if (type == TYPE_NOAUTH_AP) {
-                DialogActivity.showInuptPWD(context, accessPoint,mWifiInfoList,false);
+                DialogActivity.showInuptPWD(context, accessPoint, mWifiInfoList, false);
             }
         }
 
@@ -319,6 +325,101 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             }
         }
     }
+
+    public Handler connectWifiHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            AccessPoint ap = (AccessPoint) msg.obj;
+            if (msg.what == 1) {
+                if (ap.ssid.equals("无线东莞DG-FREE")) {
+                    new Thread(new AccessPointAdapter.CheckEnvThread()).start();
+                }
+            } else {
+                ToastUtil.showMiddle(mContext, R.string.faild);
+            }
+        }
+    };
+
+    //连接wifi
+    public class ConnectWifiThread implements Runnable {
+        private AccessPoint accessPoint;
+        public ConnectWifiThread(AccessPoint accessPoint){
+            this.accessPoint = accessPoint;
+        }
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(2000);
+                FWManager.getInstance().connect(accessPoint);//连接wifi
+                Message message = new Message();
+                message.what = 1;
+                message.obj = accessPoint;
+                connectWifiHandler.sendMessage(message);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class CheckEnvThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(2000);
+                int checkResult = WifiInterface.checkEnv(5 * 1000);
+                Message message = new Message();
+                message.what = checkResult;
+                connectDGHandler.sendMessage(message);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Handler connectDGHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
+                    WifiInterface.wifiRegister(registerHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), 5 * 1000);
+                    break;
+                case Constants.VALIDATE_SUCCESS://1、已经认证成功。
+                    ToastUtil.showMiddle(mContext, R.string.connect_success);
+                    //iConnectDGCountPresenter.connectDGCount();
+                    break;
+                default:
+                    ToastUtil.showMiddle(mContext, R.string.validate_faild);
+                    break;
+            }
+        }
+    };
+
+    public Handler registerHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {//注册成功
+                WifiInterface.wifiLogon(validateHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), 5 * 1000);//wifi认证
+            } else {
+                ToastUtil.showMiddle(mContext, R.string.register_faild);
+            }
+        }
+    };
+
+    public Handler validateHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {//认证成功
+                ToastUtil.showMiddle(mContext, R.string.validate_success);
+                // iConnectDGCountPresenter.connectDGCount();
+            } else {
+                ToastUtil.showMiddle(mContext, R.string.validate_faild);
+            }
+        }
+    };
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {
 

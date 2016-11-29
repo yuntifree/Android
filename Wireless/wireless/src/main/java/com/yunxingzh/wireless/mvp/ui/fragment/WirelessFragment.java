@@ -47,12 +47,15 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
+import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
 import com.yunxingzh.wireless.mvp.view.CircleWaveView;
 import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wireless.utility.Logg;
+import com.yunxingzh.wireless.utility.NetUtil;
 import com.yunxingzh.wireless.wifi.AccessPoint;
+import com.yunxingzh.wireless.wifi.WifiState;
 import com.yunxingzh.wirelesslibs.convenientbanner.ConvenientBanner;
 import com.yunxingzh.wirelesslibs.convenientbanner.holder.CBViewHolderCreator;
 import com.yunxingzh.wirelesslibs.convenientbanner.listener.OnItemClickListener;
@@ -60,6 +63,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.BannerInfo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
@@ -117,6 +121,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private ConvenientBanner mAdRotationBanner;
 
     private int mScrollDirection = SCROLL_STOP;
+    private WifiUtils wifiUtils = null;
 
     @Nullable
     @Override
@@ -349,8 +354,14 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     @Override
     public void onClick(View v) {
         if (mConnectTv == v) {//一键连接
-          //  new Thread(new CheckEnvThread()).start();
-             WifiInterface.wifiLogout(logoOutHandler,"13543753375",DG_SDK_TIME_OUT);
+            if (!NetUtil.isWifiAvailible(getActivity())) {
+                if (AppUtils.getNetWorkType(getActivity()) == 0) {//0：网络状态为已连接wifi
+                    checkDGWifi();
+                } else {
+                    ToastUtil.showMiddle(getActivity(), R.string.no_wifi);
+                }
+            }
+            //  WifiInterface.wifiLogout(logoOutHandler,"13543753375",DG_SDK_TIME_OUT);
         } else if (mWeatherLay == v) {
             startActivity(WebViewActivity.class, Constants.URL, "http://shenbao.dg.gov.cn/dgcsfw_zfb/csfw/dg_qxj/weixinportal.jsp", Constants.TITLE, "东莞天气");
         } else if (footView == v) {//查看更多新闻
@@ -380,6 +391,16 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
         }
     }
+//
+//    private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
+//        @Override
+//        public void onStateChanged(WifiState new_state, WifiState old_state) {
+//            Logg.d(TAG, "onStateChanged");
+//
+//            mHandler.removeMessages(MSG_REFRESH_LIST);
+//            mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
+//        }
+//    };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -485,6 +506,30 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         intent.putExtra(key, videoUrl);
         intent.putExtra(titleKey, title);
         startActivity(intent);
+    }
+
+    public void checkDGWifi(){
+        List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
+        AccessPoint DGFreeAp = null;
+        for (int i = 0; i < apList.size(); i++){//找出是否有东莞wifi
+            if (DGFreeAp.ssid.equals("无线东莞DG-FREE")){
+                DGFreeAp = apList.get(i);
+                break;
+            }
+        }
+        if (DGFreeAp != null){
+            AccessPoint currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
+            if (currentAp != null){
+                if (currentAp.ssid.equals(DGFreeAp.ssid)){
+                    //todo 验证东莞sdk
+                    new Thread(new CheckEnvThread()).start();
+                } else {
+                    //已连上普通wifi
+                }
+            } else {
+                FWManager.getInstance().connect(DGFreeAp);
+            }
+        }
     }
 
     @Override
