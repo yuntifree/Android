@@ -41,6 +41,7 @@ import com.yunxingzh.wireless.mvp.ui.activity.SpeedTestActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.WifiSpiritedActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
@@ -99,7 +100,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
     private FragmentManager fragmentManager;
 
-    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest, mMainHeadImg, mWeatherLay;
+    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest,
+            mMainHeadImg, mWeatherLay,mMainSpiritedLay;
     private MyScrollView scrollView;
     private TextView mNoticeTv, mConnectCountTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
@@ -143,6 +145,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         mNoticeLay = findView(view, R.id.notice_lay);
         mShowMoreIv = findView(view, R.id.show_more_iv);
         mConnectTv = findView(view, R.id.connect_tv);
+        mMainSpiritedLay = findView(view, R.id.main_spirited_lay);
+        mMainSpiritedLay.setOnClickListener(this);
         mConnectTv.setOnClickListener(this);
         mConnectTv.start();
 
@@ -204,6 +208,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     public void initData() {
+        wifiUtils = new WifiUtils(getActivity());
         //注册EventBus
         EventBus.getDefault().register(this);
         fragmentManager = getFragmentManager();
@@ -354,12 +359,14 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     @Override
     public void onClick(View v) {
         if (mConnectTv == v) {//一键连接
-            if (!NetUtil.isWifiAvailible(getActivity())) {
+            if (wifiUtils.getWlanState()) {
                 if (AppUtils.getNetWorkType(getActivity()) == 0) {//0：网络状态为已连接wifi
                     checkDGWifi();
                 } else {
                     ToastUtil.showMiddle(getActivity(), R.string.no_wifi);
                 }
+            } else {
+                ToastUtil.showMiddle(getActivity(),R.string.please_open_wifi);
             }
             //  WifiInterface.wifiLogout(logoOutHandler,"13543753375",DG_SDK_TIME_OUT);
         } else if (mWeatherLay == v) {
@@ -377,12 +384,14 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
         } else if (mMainSpeedtest == v) { // wifi 测速
             startActivity(SpeedTestActivity.class, "", "", "", "");
+        } else if(mMainSpiritedLay == v){//wifi公益
+            startActivity(WifiSpiritedActivity.class, "", "", "", "");
         } else if (mFontNewsTv == v) { // 东莞头条
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mFontVideoTv == v) { //热门视频
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE, Constants.VIDEO));
         } else if (mFontServiceTv == v) { //同城服务
-            EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
+           // EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
         } else if (mFontZhiTv == v) { //智慧服务
             EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
         } else if (mFontPlayingTv == v) { //同城直播
@@ -391,16 +400,42 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
         }
     }
-//
-//    private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
-//        @Override
-//        public void onStateChanged(WifiState new_state, WifiState old_state) {
-//            Logg.d(TAG, "onStateChanged");
-//
-//            mHandler.removeMessages(MSG_REFRESH_LIST);
-//            mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
-//        }
-//    };
+
+    private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
+        @Override
+        public void onStateChanged(WifiState new_state, WifiState old_state) {
+            mHandler.removeMessages(MSG_REFRESH_LIST);
+            mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
+        }
+
+        @Override
+        public void onListChanged(List<AccessPoint> accessPoints) {
+
+        }
+
+        @Override
+        public void onRSSIChanged(int rssi) {
+
+        }
+
+        @Override
+        public void onAuthError(AccessPoint ap) {
+
+        }
+    };
+
+    private static final int MSG_REFRESH_LIST = 1;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_REFRESH_LIST:
+                    //已经连接上
+
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -508,19 +543,19 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         startActivity(intent);
     }
 
-    public void checkDGWifi(){
+    public void checkDGWifi() {
         List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
         AccessPoint DGFreeAp = null;
-        for (int i = 0; i < apList.size(); i++){//找出是否有东莞wifi
-            if (DGFreeAp.ssid.equals("无线东莞DG-FREE")){
+        for (int i = 0; i < apList.size(); i++) {//找出是否有东莞wifi
+            if (DGFreeAp.ssid.equals("无线东莞DG-FREE")) {
                 DGFreeAp = apList.get(i);
                 break;
             }
         }
-        if (DGFreeAp != null){
+        if (DGFreeAp != null) {
             AccessPoint currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
-            if (currentAp != null){
-                if (currentAp.ssid.equals(DGFreeAp.ssid)){
+            if (currentAp != null) {
+                if (currentAp.ssid.equals(DGFreeAp.ssid)) {
                     //todo 验证东莞sdk
                     new Thread(new CheckEnvThread()).start();
                 } else {

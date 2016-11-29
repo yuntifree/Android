@@ -18,7 +18,7 @@ import okhttp3.Headers;
 public class WeatherNewsModelImpl implements IWeatherNewsModel {
     @Override
     public void weatherNews(int uid, String token, int term, double version, long ts, int nettype, final onWeatherNewsListener listener) {
-        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,0,0,0,0,0);
+        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,0,0,0,0,0,"","");
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 

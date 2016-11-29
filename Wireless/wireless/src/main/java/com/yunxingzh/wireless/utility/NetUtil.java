@@ -36,11 +36,4 @@ public class NetUtil {
         return (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_WIFI);
     }
 
-    public static boolean isWifiAvailible(Context context) {
-        NetworkInfo info = getNetworkInfo(context);
-        if (info != null) {
-            return info.isAvailable();
-        }
-        return false;
-    }
 }

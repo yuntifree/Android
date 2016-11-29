@@ -249,6 +249,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         // 在activity执行onDestroy时执行mMapView.onDestroy()
         mapView.onDestroy();
         mapView = null;
+        locationUtils.stopMonitor();
     }
 
     @Override

@@ -40,7 +40,7 @@ public class JsonUtils {
     }
 
     public static String jsonStirngForMain(int uid, String token, int term, double version, long ts,
-                                          int nettype,int type,int seq,int id,double longitude,double latitude) {
+                                          int nettype,int type,int seq,int id,double longitude,double latitude,String ssid,String password) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("uid", uid);
@@ -55,6 +55,8 @@ public class JsonUtils {
             data.put("id", id);
             data.put("longitude", longitude);
             data.put("latitude", latitude);
+            data.put("ssid", ssid);
+            data.put("password", password);
             jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/title_public"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:text="@string/content_first"
+        android:textColor="@color/gray_787878"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/content_seconed"
+        android:textColor="@color/gray_787878"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/content_third"
+        android:textColor="@color/gray_787878"
+        android:textSize="14sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="62dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/spirited_bg" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="21dp"
+                android:src="@drawable/spirited_icon" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/spirited_ssid" />
+
+                <EditText
+                    android:id="@+id/sp_ssid_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="center"
+                    android:hint="@string/input_ssid"
+                    android:textColorHint="@color/gray_b4b4b4" />
+            </LinearLayout>
+
+            <View
+                style="@style/divide_line_horizontal"
+                android:layout_width="220dp"
+                android:layout_marginTop="14sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/spirited_pwd" />
+
+                <EditText
+                    android:id="@+id/sp_pwd_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:inputType="textPassword"
+                    android:hint="@string/spirited_input_pwd"
+                    android:textColorHint="@color/gray_b4b4b4" />
+            </LinearLayout>
+
+            <View
+                style="@style/divide_line_horizontal"
+                android:layout_width="220dp"
+                android:layout_marginTop="14sp" />
+
+
+            <TextView
+                android:id="@+id/sp_join_btn"
+                android:layout_width="262dp"
+                android:layout_height="44dp"
+                android:text="@string/spirited_join"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/white"
+                android:background="@drawable/style_spirited"/>
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

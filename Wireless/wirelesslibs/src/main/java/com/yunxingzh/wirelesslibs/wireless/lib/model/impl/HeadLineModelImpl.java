@@ -22,7 +22,7 @@ public class HeadLineModelImpl implements IHeadLineModel {
     @Override
     public void getHeadLine(int uid, String token, int term, double version, long ts,
                             int nettype,int type, int seq, final onGetHeadLineListener listener) {
-        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,type,seq,0,0,0);
+        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,type,seq,0,0,0,"","");
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 
@@ -45,7 +45,7 @@ public class HeadLineModelImpl implements IHeadLineModel {
 
     @Override
     public void clickCount(int uid, String token, int term, double version, long ts, int nettype, int id,int type, final onClickCountListener listener) {
-        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,type,0,id,0,0);
+        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,type,0,id,0,0,"","");
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 
@@ -68,7 +68,7 @@ public class HeadLineModelImpl implements IHeadLineModel {
 
     @Override
     public void getFontInfo(int uid, String token, int term, double version, long ts, int nettype,final onGetFontInfoListener listener) {
-        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,0,0,0,0,0);
+        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,0,0,0,0,0,"","");
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 

@@ -20,4 +20,6 @@ public class Api {
     public static final String GET_FONT_INFO = WEB_HOST + "get_front_info";//首页底部内容
     public static final String GET_WIFI_MAP = WEB_HOST + "get_nearby_aps";//获取地图周围热点
     public static final String CONNECT_DG_WIFI = WEB_HOST + "report_apmac";//上报连接东莞wifi次数
+    public static final String WIFI_SPIRITED = WEB_HOST + "report_wifi";//wifi公益
+
 }

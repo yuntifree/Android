@@ -110,6 +110,18 @@
     <string name="faild">连接失败</string>
     <string name="no_wifi">附近没有可以连接的wifi</string>
     <string name="please_open_wifi">请先打开wifi</string>
+    <string name="wifi_spirited">WiFi公益</string>
+    <string name="content_first">3万个免费WiFi</string>
+    <string name="content_seconed">打造全民WiFi服务</string>
+    <string name="content_third">你的生活，将因为我的到来，而万分精彩</string>
+    <string name="input_ssid">请输入无线网络名称</string>
+    <string name="spirited_input_pwd">请输入无线网络密码</string>
+    <string name="spirited_join">参与公益</string>
+    <string name="spirited_join_success">参与公益成功</string>
+
+
+
+
 
     <string name="wsmpurl">http://120.234.130.196:880/wsmp/interface</string>
     <string name="ssids">无线东莞DG-FREE</string>
