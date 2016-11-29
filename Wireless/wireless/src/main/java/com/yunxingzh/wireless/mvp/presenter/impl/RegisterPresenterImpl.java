@@ -80,7 +80,6 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
     public void onRegisterSuccess(UserInfoVo userVo) {
         MyApplication.sApplication.setUser(userVo);
         MyApplication.sApplication.setToken(userVo.getData().getToken());
-        MyApplication.sApplication.setWifiPwd(userVo.getData().getWifipass());
         MyApplication.sApplication.setUserName(iLoginView.getPhone());
         if (iLoginView != null){
             iLoginView.hideProgress();
