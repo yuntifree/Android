@@ -54,9 +54,15 @@ public class NetUtils {
 	/**
 	 * 判断是否是wifi连接
 	 */
-	public static boolean isWifi(Context context) {
-		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		return cm!=null && cm.getActiveNetworkInfo().getType() == ConnectivityManager.TYPE_WIFI;
+	public static boolean isWifi(Context mContext) {
+		ConnectivityManager connectivityManager = (ConnectivityManager) mContext
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+		if (activeNetInfo != null
+				&& activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

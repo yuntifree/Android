@@ -105,6 +105,12 @@
             android:theme="@android:style/Theme.NoTitleBar"/>
 
 
+        <receiver android:name="com.yunxingzh.wireless.service.NetBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
         <!--定位所需服务-->
         <service
             android:name="com.baidu.location.f"

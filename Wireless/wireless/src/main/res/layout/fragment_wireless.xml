@@ -82,13 +82,12 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         app:diffuse_color="@color/white"
-                        app:diffuse_coreColor="@color/white"
-                        app:diffuse_coreImage="@drawable/main_circle"
-                        app:diffuse_coreRadius="100"
-                        app:diffuse_maxWidth="150"
-                        app:diffuse_width="3"/>
+                        app:diffuse_coreImage="@drawable/need_connect"
+                        app:diffuse_coreRadius="150"
+                        app:diffuse_maxWidth="300"
+                        app:diffuse_width="5"/>
 
-                   <TextView
+                 <!--  <TextView
                         android:id="@+id/connect_tv"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
@@ -97,16 +96,16 @@
                         android:gravity="center"
                         android:textSize="18sp"
                        android:background="@drawable/main_circle"
-                        android:textColor="@color/blue_009CFB" />
+                        android:textColor="@color/blue_009CFB" />-->
 
                 </FrameLayout>
 
                 <TextView
+                    android:id="@+id/connect_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
-                    android:text="@string/find_wifi"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -346,7 +345,7 @@
                     android:layout_height="wrap_content"
                     android:lines="1"
                     android:layout_gravity="center"
-                    android:text="东莞虎门一火车"
+                    android:text="东莞头条"
                     android:textColor="@color/blue_4a90e2"
                     android:textSize="12sp" />
             </LinearLayout>
