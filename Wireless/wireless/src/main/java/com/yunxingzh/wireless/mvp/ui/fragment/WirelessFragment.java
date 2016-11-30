@@ -91,7 +91,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private final static int ITEM = 0;
     private final static int NEWS = 1;//新闻点击上报
     private final static int SCANNIN_GREQUEST_CODE = 1;
-    private static final int DG_SDK_TIME_OUT = 5 * 1000;
+    private static final int DG_SDK_TIME_OUT = 10 * 1000;
 
     private final static int SCROLL_STOP = 0;
     private final static int SCROLL_DOWN = 1;
@@ -323,18 +323,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         super.onDestroyView();
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
-
-    public Handler registerHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {//注册成功
-                WifiInterface.wifiLogon(validateHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
-            } else {
-                ToastUtil.showMiddle(getActivity(), R.string.register_faild);
-            }
-        }
-    };
 
     public Handler validateHandler = new Handler() {
         @Override
