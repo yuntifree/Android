@@ -13,7 +13,8 @@
     <string name="first_news">头条</string>
     <string name="service">服务</string>
     <string name="buy">抢购</string>
-    <string name="validate_code">验证码</string>
+    <string name="validate_code">请输入验证码</string>
+    <string name="final_validate_code">请输入正确的验证码</string>
     <string name="login">开启智慧城市之旅</string>
     <string name="dg_head_line">东莞头条</string>
     <string name="map">WiFi地图</string>
@@ -64,7 +65,8 @@
     <string name="cancel_speed">取消测速</string>
     <string name="stop_speed">停止测速</string>
     <string name="re_speed">重新测速</string>
-
+    <string name="agree">登录即代表已同意</string>
+    <string name="agree_content">《东莞无线用户协议》</string>
     <string name="query">确定</string>
     <string name="internet_error">网络连接错误</string>
     <string name="hot">WiFi地图</string>
@@ -85,7 +87,7 @@
     <string name="safecenter_barcode">扫一扫</string>
     <string name="scan_error">扫描失败,请重试</string>
     <string name="start_speed">开始测速</string>
-    <string name="phone">手机号</string>
+    <string name="phone">请输入手机号</string>
     <string name="input_content">搜索或输入网址</string>
     <string name="enter_phone">请输入手机号</string>
     <string name="enter_right_phone">请输入正确的手机号</string>

@@ -2,7 +2,6 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dgwx.app.lib.bl.WifiInterface;
-import com.dgwx.app.lib.common.util.SettingUtility;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.MyApplication;
@@ -25,13 +23,10 @@ import com.yunxingzh.wireless.mvp.presenter.impl.RegisterPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.NetWorkBaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IRegisterView;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import org.json.JSONObject;
-
-import static com.yunxingzh.wireless.R.string.phone;
 
 /**
  * Created by Stephen on 2016/9/8.
@@ -45,7 +40,7 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
 
     private EditText mValidateCodeEt, mLoPhoneEt;
     private Button mLoRegisterBtn;
-    private TextView mGetValidateCodeBtn;
+    private TextView mGetValidateCodeBtn,mAgreeContent;
     private IRegisterPresenter iLoginPresenter;
     private TimeCount mTimeCount;
     private String mPhone;
@@ -67,6 +62,8 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
         mGetValidateCodeBtn.setOnClickListener(this);
         mLoRegisterBtn = findView(R.id.lo_login_btn);
         mLoRegisterBtn.setOnClickListener(this);
+        mAgreeContent = findView(R.id.agree_content);
+        mAgreeContent.setOnClickListener(this);
     }
 
     public void initData() {
@@ -76,16 +73,19 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
     @Override
     public void onClick(View view) {
         if (view == mLoRegisterBtn) {
-            String code = getCode();
-            if (StringUtils.isEmpty(code)){
-                setCode(R.string.input_code);
-            } else if (mCode.equals(code)){
-                iLoginPresenter.register(mPhone, StringUtils.getMD5(mCode),Integer.parseInt(mCode));
+            if (mCode != null || !StringUtils.isEmpty(getCode())) {
+                if (mCode.equals(getCode())) {
+                    iLoginPresenter.register(mPhone, StringUtils.getMD5(mCode), Integer.parseInt(mCode));
+                } else {
+                    ToastUtil.showMiddle(RegisterActivity.this, R.string.final_validate_code);
+                }
             } else {
-                ToastUtil.showMiddle(RegisterActivity.this, "请输入正确的验证码");
+                ToastUtil.showMiddle(RegisterActivity.this, R.string.input_code);
             }
         } else if (view == mGetValidateCodeBtn){
-            WifiInterface.wifiRegister(handler, getPhone(), "", 5000);
+            WifiInterface.wifiRegister(handler, getPhone(), "", Constants.TIME_OUT);
+        } else if (view == mAgreeContent){
+            startActivity(WebViewActivity.class,"用户协议","http://www.yunxingzh.com/app/agreement.html");
         }
     }
 
@@ -109,6 +109,11 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
                 mPhone = getPhone();
                 SPUtils.put(MyApplication.getInstance(), Constants.SP_WIFI_PWD, pwd);
                 mCode = pwd;
+
+                mTimeCount = new TimeCount(TIME, MILLISECOND);
+                mTimeCount.start();
+                mGetValidateCodeBtn.setText(SECOND + getString(R.string.second));
+                ToastUtil.showMiddle(RegisterActivity.this, R.string.get_validate_code_success);
                 break;
             default:
                 ToastUtil.showMiddle(RegisterActivity.this, reason);
@@ -120,21 +125,23 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
 
     @Override
     public void getValidateCodeSuccess() {
-        mTimeCount = new TimeCount(TIME, MILLISECOND);
-        mTimeCount.start();
-        mGetValidateCodeBtn.setText(SECOND + getString(R.string.second));
-        ToastUtil.showMiddle(this, R.string.get_validate_code_success);
+//        mTimeCount = new TimeCount(TIME, MILLISECOND);
+//        mTimeCount.start();
+//        mGetValidateCodeBtn.setText(SECOND + getString(R.string.second));
+//        ToastUtil.showMiddle(this, R.string.get_validate_code_success);
     }
 
     @Override
     public void registerSuccess() {
         ToastUtil.showMiddle(this, R.string.register_success);
-        startActivity(MainActivity.class);
+        startActivity(MainActivity.class,"","");
         finish();
     }
 
-    public void startActivity(Class activity) {
+    public void startActivity(Class activity,String title,String url) {
         Intent intent = new Intent(this, activity);
+        intent.putExtra(Constants.TITLE,title);
+        intent.putExtra(Constants.URL,url);
         startActivity(intent);
     }
 
@@ -158,7 +165,7 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
 
         @Override
         public void onFinish() {//计时完毕时触发
-            mGetValidateCodeBtn.setBackgroundResource(R.drawable.style_login_btn);
+            //mGetValidateCodeBtn.setBackgroundResource(R.drawable.style_login_btn);
             mGetValidateCodeBtn.setText(R.string.re_get_verification_code);
             mGetValidateCodeBtn.setEnabled(true);
         }
@@ -166,7 +173,7 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
         @Override
         public void onTick(long millisUntilFinished) {//计时过程显示
             mGetValidateCodeBtn.setEnabled(false);
-            mGetValidateCodeBtn.setBackgroundResource(R.drawable.validate_code_style);
+          //  mGetValidateCodeBtn.setBackgroundResource(R.drawable.validate_code_style);
             mGetValidateCodeBtn.setText(millisUntilFinished / MILLISECOND + getString(R.string.second));
         }
     }

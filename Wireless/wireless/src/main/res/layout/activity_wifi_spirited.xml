@@ -61,6 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -70,10 +71,12 @@
 
                 <EditText
                     android:id="@+id/sp_ssid_et"
-                    android:layout_width="match_parent"
+                    android:layout_width="235dp"
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:gravity="center"
+                    android:textSize="12sp"
+                    android:textColor="@color/gray_b4b4b4"
                     android:hint="@string/input_ssid"
                     android:textColorHint="@color/gray_b4b4b4" />
             </LinearLayout>
@@ -87,6 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="34dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -96,9 +100,12 @@
 
                 <EditText
                     android:id="@+id/sp_pwd_et"
-                    android:layout_width="wrap_content"
+                    android:layout_width="235dp"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:textColor="@color/gray_b4b4b4"
                     android:inputType="textPassword"
                     android:hint="@string/spirited_input_pwd"
                     android:textColorHint="@color/gray_b4b4b4" />
