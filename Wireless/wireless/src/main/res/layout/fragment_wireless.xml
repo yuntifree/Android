@@ -75,20 +75,10 @@
 
                     </LinearLayout>
 
-                  <!--  <TextView
-                        android:id="@+id/circle_three_tv"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/main_circle_three"
-                        android:gravity="center"
-                        android:textColor="@color/blue_009CFB" />
-                   -->
-
                     <com.yunxingzh.wireless.mvp.view.CircleWaveView
-                        android:id="@+id/connect_tv"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
+                        android:id="@+id/animation_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
                         app:diffuse_color="@color/white"
@@ -99,12 +89,14 @@
                         app:diffuse_width="3"/>
 
                    <TextView
+                        android:id="@+id/connect_tv"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center"
                         android:text="一键连接"
                         android:gravity="center"
                         android:textSize="18sp"
+                       android:background="@drawable/main_circle"
                         android:textColor="@color/blue_009CFB" />
 
                 </FrameLayout>

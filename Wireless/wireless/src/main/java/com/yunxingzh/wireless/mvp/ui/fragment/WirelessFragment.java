@@ -104,7 +104,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest,
             mMainHeadImg, mWeatherLay,mMainSpiritedLay;
     private MyScrollView scrollView;
-    private TextView mNoticeTv, mConnectCountTv,
+    private TextView mNoticeTv, mConnectCountTv,mConnectTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
     private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop;
     private ListView mMainNewsLv;
@@ -112,7 +112,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private IConnectDGCountPresenter iConnectDGCountPresenter;
     private AnimationSet alphaAnimation;
 
-    private CircleWaveView mConnectTv;
+    private CircleWaveView mAnimationTv;
     private TextView footView;
     private List<WeatherNewsVo.WeatherNewsData.mainNewsVo> mainNewsVos;
     private MainNewsAdapter mainNewsAdapter;
@@ -148,10 +148,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         mNoticeLay = findView(view, R.id.notice_lay);
         mShowMoreIv = findView(view, R.id.show_more_iv);
         mConnectTv = findView(view, R.id.connect_tv);
+        mConnectTv.setOnClickListener(this);
         mMainSpiritedLay = findView(view, R.id.main_spirited_lay);
         mMainSpiritedLay.setOnClickListener(this);
-        mConnectTv.setOnClickListener(this);
-        mConnectTv.start();
+        mAnimationTv = findView(view, R.id.animation_tv);
+        mAnimationTv.start();
 
         mMainWifiManager = findView(view, R.id.main_wifi_manager);
         mMainWifiManager.setOnClickListener(this);

@@ -43,8 +43,7 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
     private TextView mGetValidateCodeBtn,mAgreeContent;
     private IRegisterPresenter iLoginPresenter;
     private TimeCount mTimeCount;
-    private String mPhone;
-    private String mCode;
+    private String code = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,9 +72,9 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
     @Override
     public void onClick(View view) {
         if (view == mLoRegisterBtn) {
-            if (mCode != null || !StringUtils.isEmpty(getCode())) {
-                if (mCode.equals(getCode())) {
-                    iLoginPresenter.register(mPhone, StringUtils.getMD5(mCode), Integer.parseInt(mCode));
+            if (!StringUtils.isEmpty(getCode())) {
+                if (code.equals(getCode())) {
+                    iLoginPresenter.register(getPhone(), StringUtils.getMD5(getCode()), 0);
                 } else {
                     ToastUtil.showMiddle(RegisterActivity.this, R.string.final_validate_code);
                 }
@@ -95,20 +94,17 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
         String obj = (String) msg.obj;
         int what = msg.what;
         String reason = " ";
-        String pwd = "";
         try {
             JSONObject resp = new JSONObject(obj);
             reason = resp.getJSONObject("head").getString("reason");
-            pwd = resp.getJSONObject("body").getString("pwd");
+            code = resp.getJSONObject("body").getString("pwd");
         } catch (Exception e) {
             e.printStackTrace();
         }
         switch (what) {
             case 0:
                 SPUtils.put(MyApplication.getInstance(), Constants.SP_USER_NAME, getPhone());
-                mPhone = getPhone();
-                SPUtils.put(MyApplication.getInstance(), Constants.SP_WIFI_PWD, pwd);
-                mCode = pwd;
+                SPUtils.put(MyApplication.getInstance(), Constants.SP_WIFI_PWD, code);
 
                 mTimeCount = new TimeCount(TIME, MILLISECOND);
                 mTimeCount.start();
