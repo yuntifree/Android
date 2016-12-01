@@ -125,6 +125,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         @Override
         public void run() {
             try {
+                // TODO: use callback not sleep
                 locationUtils.startMonitor();//开始定位
                 Thread.sleep(2000);
                 Message message = new Message();
@@ -174,7 +175,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         @Override
         public void onStateChanged(WifiState new_state, WifiState old_state) {
             Logg.d(TAG, "onStateChanged");
-
+            // TODO: checkEnv
             mHandler.removeMessages(MSG_REFRESH_LIST);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
         }
@@ -248,7 +249,6 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
     public void openWifi() {
         mSwitchBtn.setChecked(true);
-        ToastUtil.showMiddle(this, R.string.opening);
         wifiMa.wifiOpen();
         mWifiCloseLay.setVisibility(View.GONE);
         mWifiListLay.setVisibility(View.VISIBLE);

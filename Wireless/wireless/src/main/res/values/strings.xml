@@ -102,6 +102,7 @@
     <string name="validate_success">认证成功</string>
     <string name="need_pwd">需要密码</string>
     <string name="free_wifi">无密码，可能需要登录</string>
+    <string name="configed_wifi">免费WiFi，点击连接</string>
     <string name="connection">连接</string>
     <string name="open_wifi">打开WiFi</string>
     <string name="find_near_wifi">寻找身边免费WiFi</string>
@@ -111,8 +112,8 @@
     <string name="network_error">网络跑路啦</string>
     <string name="network_need_login">已连接,点我登录验证</string>
     <string name="faild">连接失败</string>
-    <string name="no_wifi">附近没有可以连接的wifi</string>
-    <string name="please_open_wifi">请先打开wifi</string>
+    <string name="no_wifi">附近没有可以连接的WiFi</string>
+    <string name="please_open_wifi">请先打开WiFi</string>
     <string name="wifi_spirited">WiFi公益</string>
     <string name="content_first">3万个免费WiFi</string>
     <string name="content_seconed">打造全民WiFi服务</string>
@@ -123,7 +124,7 @@
     <string name="spirited_join_success">感谢您的参与</string>
     <string name="connect_wifi">已连接</string>
     <string name="connect_dg_success">东莞城市免费WiFi</string>
-    <string name="wireless_dg">无线东莞</string>
+    <string name="wireless_dg">东莞无限开启智慧生活</string>
 
 
 
@@ -137,24 +138,24 @@
 
 
     <!--WiFi-->
-    <string name="state_unkown">unkown error</string>
-    <string name="state_disabled">wifi disabled</string>
-    <string name="state_idle">wifi idle</string>
-    <string name="state_disconnect_last">disconnect...</string>
-    <string name="state_server_confirm">cloud confirm...</string>
+    <string name="state_unkown">未知错误</string>
+    <string name="state_disabled">WiFi 未打开</string>
+    <string name="state_idle">WiFi 空闲中</string>
+    <string name="state_disconnect_last">断开连接...</string>
+    <string name="state_server_confirm">云端确认...</string>
     <string name="state_connecting">正在连接...</string>
-    <string name="state_auth">Auth...</string>
+    <string name="state_auth">正在认证...</string>
     <string name="state_ipaddr">获取地址...</string>
-    <string name="state_logining">login...</string>
-    <string name="state_checking">checking...</string>
-    <string name="state_offlining">offline...</string>
-    <string name="state_disconnected">disconnected</string>
+    <string name="state_logining">登录中...</string>
+    <string name="state_checking">检测中...</string>
+    <string name="state_offlining">下线中...</string>
+    <string name="state_disconnected">已断开</string>
     <string name="section_state_connected">已连接</string>
     <string name="section_state_freewifi">免费WiFi</string>
     <string name="section_state_password">需要密码</string>
     <string name="input_password">请输入密码</string>
-    <string name="password_error">invald password!</string>
-    <string name="state_auth_error">auth error</string>
+    <string name="password_error">密码错误!</string>
+    <string name="state_auth_error">认证失败</string>
     <string name="ssid">SSID</string>
     <string name="mac_address">MAC地址</string>
     <string name="signal_strength">信号强度</string>

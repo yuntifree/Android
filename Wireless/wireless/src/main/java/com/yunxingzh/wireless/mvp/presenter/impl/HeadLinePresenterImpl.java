@@ -43,7 +43,7 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void clickCount(int id,int type) {
         if (iHeadLineView != null){
-            iHeadLineView.showProgress();
+            //iHeadLineView.showProgress();
             iHeadLineModel.clickCount(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
                     0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
                     StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),id,type,this);
@@ -53,7 +53,7 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void weatherNews() {
         if (iHeadLineView != null){
-            iHeadLineView.showProgress();
+            //iHeadLineView.showProgress();
             iWeatherNewsModel.weatherNews(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
                     0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
                     StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),this);
@@ -63,7 +63,7 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void getFontInfo() {
         if (iHeadLineView != null){
-            iHeadLineView.showProgress();
+            //iHeadLineView.showProgress();
             iHeadLineModel.getFontInfo(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
                     0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
                     StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),this);
@@ -89,14 +89,14 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void onClickCountSuccess() {
         if (iHeadLineView != null){
-            iHeadLineView.hideProgress();
+            //iHeadLineView.hideProgress();
         }
     }
 
     @Override
     public void onClickCountFailed(int error) {
         if(iHeadLineView != null){
-            iHeadLineView.hideProgress();
+            //iHeadLineView.hideProgress();
             iHeadLineView.showError(error);
         }
     }
@@ -104,7 +104,7 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void onWeatherNewsSuccess(WeatherNewsVo weatherNewsVo) {
         if (iHeadLineView != null){
-            iHeadLineView.hideProgress();
+            //iHeadLineView.hideProgress();
             iHeadLineView.weatherNewsSuccess(weatherNewsVo);
         }
     }
@@ -112,7 +112,7 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void onWeatherNewsFailed(int error) {
         if (iHeadLineView != null){
-            iHeadLineView.hideProgress();
+            //iHeadLineView.hideProgress();
             iHeadLineView.showError(error);
         }
     }
@@ -120,7 +120,7 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void onGetFontInfoSuccess(FontInfoVo fontInfoVo) {
         if (iHeadLineView != null){
-            iHeadLineView.hideProgress();
+            //iHeadLineView.hideProgress();
             iHeadLineView.getFontInfoSuccess(fontInfoVo);
         }
     }
@@ -128,7 +128,7 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void onGetFontInfoFailed(int error) {
         if (iHeadLineView != null){
-            iHeadLineView.hideProgress();
+            //iHeadLineView.hideProgress();
             iHeadLineView.showError(error);
         }
     }

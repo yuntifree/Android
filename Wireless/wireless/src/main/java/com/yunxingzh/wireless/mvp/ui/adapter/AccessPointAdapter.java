@@ -43,6 +43,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     public static int TYPE_CURRENT_AP = 0;//当前连接的wifi
     public static int TYPE_FOCUS_AP = 1;//已经配置好的wifi
     public static int TYPE_NOAUTH_AP = 2;//需要密码连接的wifi
+    public static int TYPE_OTHER_AP = 3; //除了当前WiFi外的
 
     private Context mContext;
 
@@ -51,21 +52,31 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     private AccessPoint mCurrentAPoint;
     private WifiState mCurrentState;
 
-    private List<AccessPoint> mFocusPoints;
-    private List<AccessPoint> mNoauthPoints;
+    private List<AccessPointEx> mFocusPoints;
+    private List<AccessPointEx> mNoauthPoints;
+    private List<AccessPointEx> mOtherPoints;
     private List<Integer> sections;
     private HashMap<String, AccessData> mAccessDatas;
     private List<WifiVo.WifiData.MWifiInfo> mWifiInfoList;//服务器获取的附近wifi列表
 
-    private int size;
+
+    public class AccessPointEx {
+        public int type;
+        public AccessPoint ap;
+        public AccessPointEx(AccessPoint ap, int type) {
+            this.ap = ap;
+            this.type = type;
+        }
+    }
 
     public AccessPointAdapter(Context context) {
         this.mContext = context;
         mAccessPoints = new ArrayList<AccessPoint>();
         mCurrentAPoint = null;
         mCurrentState = WifiState.UNKOWN;
-        mFocusPoints = new ArrayList<AccessPoint>();
-        mNoauthPoints = new ArrayList<AccessPoint>();
+        mFocusPoints = new ArrayList<AccessPointEx>();
+        mNoauthPoints = new ArrayList<AccessPointEx>();
+        mOtherPoints = new ArrayList<AccessPointEx>();
         sections = new ArrayList<Integer>();
         mAccessDatas = new HashMap<String, AccessData>();
     }
@@ -79,7 +90,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         if (mWifiInfos != null) {
             mWifiInfoList = mWifiInfos;
         }
-        size = accessPoints.size();
+
         mCurrentState = state;
         mCurrentAPoint = current;
         mAccessPoints = accessPoints;
@@ -91,20 +102,25 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         sections.clear();
         mFocusPoints.clear();
         mNoauthPoints.clear();
+        mOtherPoints.clear();
         for (AccessPoint ap : mAccessPoints) {
             if (mCurrentAPoint != null) {
                 if (mCurrentAPoint.ssid.equals(ap.ssid)) continue;
             }
             if (ap.isOpen() || mAccessDatas.get(ap.ssid) != null || ap.isConfiged) {
-                mFocusPoints.add(ap);
+                mFocusPoints.add(new AccessPointEx(ap, TYPE_FOCUS_AP));
             } else {
-                mNoauthPoints.add(ap);
+                mNoauthPoints.add(new AccessPointEx(ap, TYPE_NOAUTH_AP));
             }
         }
+        mOtherPoints.addAll(mFocusPoints);
+        mOtherPoints.addAll(mNoauthPoints);
 
         if (mCurrentAPoint != null) sections.add(TYPE_CURRENT_AP);
-        if (mFocusPoints.size() > 0) sections.add(TYPE_FOCUS_AP);
-        if (mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
+        if (mOtherPoints.size() > 0) sections.add(TYPE_OTHER_AP);
+
+        //if (mFocusPoints.size() > 0) sections.add(TYPE_FOCUS_AP);
+        //if (mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
 
         notifyDataSetChanged();
         if (refreshPWD) refreshPassword();
@@ -120,10 +136,12 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         int type = sections.get(section);
         if (type == TYPE_CURRENT_AP) {
             return 1;
-        } else if (type == TYPE_FOCUS_AP) {
-            return mFocusPoints.size();
-        } else if (type == TYPE_NOAUTH_AP) {
-            return mNoauthPoints.size();
+//        } else if (type == TYPE_FOCUS_AP) {
+//            return mFocusPoints.size();
+//        } else if (type == TYPE_NOAUTH_AP) {
+//            return mNoauthPoints.size();
+        } else if (type == TYPE_OTHER_AP) {
+            return mOtherPoints.size();
         }
         return 0;
     }
@@ -153,7 +171,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     @Override
     protected void onBindSectionHeaderViewHolder(HeaderViewHolder holder, int section) {
         int type = sections.get(section);
-        holder.setWifiCount(size, type);
+        holder.setWifiCount(mOtherPoints.size(), type);
     }
 
     @Override
@@ -166,10 +184,13 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         int type = sections.get(section);
         if (type == TYPE_CURRENT_AP) {
             holder.setAccessPoint(mCurrentAPoint, type);
-        } else if (type == TYPE_FOCUS_AP) {
-            holder.setAccessPoint(mFocusPoints.get(position), type);
-        } else if (type == TYPE_NOAUTH_AP) {
-            holder.setAccessPoint(mNoauthPoints.get(position), type);
+//        } else if (type == TYPE_FOCUS_AP) {
+//            holder.setAccessPoint(mFocusPoints.get(position), type);
+//        } else if (type == TYPE_NOAUTH_AP) {
+//            holder.setAccessPoint(mNoauthPoints.get(position), type);
+        } else if (type == TYPE_OTHER_AP) {
+            AccessPointEx ap = mOtherPoints.get(position);
+            holder.setAccessPoint(ap.ap, ap.type);
         }
     }
 
@@ -225,14 +246,14 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         private TextView mSubtitle;
         private ImageView mIcon;
         private ImageView mSubicon;
-        private LinearLayout mWifiItemLay;
+        private View mWifiItemLay;
 
         public ItemViewHolder(View itemView, Context context) {
             super(itemView);
             this.context = context;
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-            mWifiItemLay = (LinearLayout) itemView.findViewById(R.id.wifi_item_lay);
+            mWifiItemLay = itemView.findViewById(R.id.place_holder);
             mSSID = (TextView) itemView.findViewById(R.id.tv_ssid);
             mSubtitle = (TextView) itemView.findViewById(R.id.tv_subtitle);
             mIcon = (ImageView) itemView.findViewById(R.id.iv_icon);
@@ -243,13 +264,10 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             this.accessPoint = ap;
             this.type = type;
             int percent = ap.signal.percent();
-
             mSSID.setText(ap.ssid);
 
             if (type == TYPE_CURRENT_AP) {
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0, 0, 0, 20);
-                mWifiItemLay.setLayoutParams(layoutParams);
+                mWifiItemLay.setVisibility(View.VISIBLE);
                 mSubtitle.setVisibility(View.VISIBLE);
                 mSubtitle.setText(context.getResources().getString(mCurrentState.resId));
                 if (mCurrentState == WifiState.CONNECTED) {//当前状态-已经连接
@@ -260,11 +278,12 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
                 }
             } else if (type == TYPE_FOCUS_AP) {
                 mSubtitle.setVisibility(View.VISIBLE);
-                mSubtitle.setText(R.string.free_wifi);
                 if (!ap.isOpen()) {
                     mSubicon.setVisibility(View.GONE);
+                    mSubtitle.setText(R.string.configed_wifi);
                 } else {
                     mSubicon.setVisibility(View.GONE);
+                    mSubtitle.setText(R.string.free_wifi);
                 }
             } else if (type == TYPE_NOAUTH_AP) {
                 mSubtitle.setText(R.string.need_pwd);
@@ -286,13 +305,11 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 
         @Override
         public void onClick(View v) {
-            if (type == TYPE_CURRENT_AP) {
-                if (accessPoint.ssid.equals("无线东莞DG-FREE")) {
-                    new Thread(new AccessPointAdapter.CheckEnvThread()).start();
-                }
-            } else if (type == TYPE_FOCUS_AP) {
-                new Thread(new ConnectWifiThread(accessPoint)).start();
-            } else if (type == TYPE_NOAUTH_AP) {
+            if(type == TYPE_CURRENT_AP){
+
+            } else if(type == TYPE_FOCUS_AP){
+                FWManager.getInstance().connect(accessPoint);
+            } else if(type == TYPE_NOAUTH_AP){
                 DialogActivity.showInuptPWD(context, accessPoint, mWifiInfoList, false);
             }
         }
@@ -316,110 +333,15 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 
         //显示wifi个数
         public void setWifiCount(int wifiCount, int type) {
-            if (type == TYPE_FOCUS_AP) {
+            if (type == TYPE_OTHER_AP) {
                 mToptitle.setText("扫描到附近共有" + wifiCount + "个WiFi");
             } else if (type == TYPE_CURRENT_AP) {
                 mToptitle.setVisibility(View.GONE);
-            } else if (type == TYPE_NOAUTH_AP) {//需要密码连接
-                mToptitle.setVisibility(View.GONE);
+//            } else if (type == TYPE_NOAUTH_AP) {//需要密码连接
+//                mToptitle.setVisibility(View.GONE);
             }
         }
     }
-
-    public Handler connectWifiHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            AccessPoint ap = (AccessPoint) msg.obj;
-            if (msg.what == 1) {
-                if (ap.ssid.equals("无线东莞DG-FREE")) {
-                    new Thread(new AccessPointAdapter.CheckEnvThread()).start();
-                }
-            } else {
-                ToastUtil.showMiddle(mContext, R.string.faild);
-            }
-        }
-    };
-
-    //连接wifi
-    public class ConnectWifiThread implements Runnable {
-        private AccessPoint accessPoint;
-        public ConnectWifiThread(AccessPoint accessPoint){
-            this.accessPoint = accessPoint;
-        }
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(2000);
-                FWManager.getInstance().connect(accessPoint);//连接wifi
-                Message message = new Message();
-                message.what = 1;
-                message.obj = accessPoint;
-                connectWifiHandler.sendMessage(message);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public class CheckEnvThread implements Runnable {
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(2000);
-                int checkResult = WifiInterface.checkEnv(5 * 1000);
-                Message message = new Message();
-                message.what = checkResult;
-                connectDGHandler.sendMessage(message);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public Handler connectDGHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
-                    WifiInterface.wifiRegister(registerHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), 5 * 1000);
-                    break;
-                case Constants.VALIDATE_SUCCESS://1、已经认证成功。
-                    ToastUtil.showMiddle(mContext, R.string.connect_success);
-                    //iConnectDGCountPresenter.connectDGCount();
-                    break;
-                default:
-                    ToastUtil.showMiddle(mContext, R.string.validate_faild);
-                    break;
-            }
-        }
-    };
-
-    public Handler registerHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {//注册成功
-                WifiInterface.wifiLogon(validateHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), 5 * 1000);//wifi认证
-            } else {
-                ToastUtil.showMiddle(mContext, R.string.register_faild);
-            }
-        }
-    };
-
-    public Handler validateHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {//认证成功
-                ToastUtil.showMiddle(mContext, R.string.validate_success);
-                // iConnectDGCountPresenter.connectDGCount();
-            } else {
-                ToastUtil.showMiddle(mContext, R.string.validate_faild);
-            }
-        }
-    };
 
     public class FooterViewHolder extends RecyclerView.ViewHolder {
 

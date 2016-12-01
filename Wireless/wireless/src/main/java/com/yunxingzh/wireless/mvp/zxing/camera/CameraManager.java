@@ -17,6 +17,12 @@
 package com.yunxingzh.wireless.mvp.zxing.camera;
 
 import java.io.IOException;
+import java.security.Policy;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -25,6 +31,7 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
@@ -321,8 +328,7 @@ public final class CameraManager {
         previewFormat + '/' + previewFormatString);
   }
 
-	public Context getContext() {
+  public Context getContext() {
 		return context;
 	}
-
 }

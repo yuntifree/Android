@@ -213,8 +213,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
         iHeadLinePresenter.weatherNews();
 
-        wifiUtils = new WifiUtils(getActivity());
-
         FWManager.getInstance().addWifiObserver(wifiObserver);
         //获取屏幕宽高
         WindowManager wm = getActivity().getWindowManager();
@@ -365,11 +363,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
     public void onClick(View v) {
         if (mConnectIv == v) {//一键连接
             if (wifiUtils.getWlanState()) {//是否打开
-                if (NetUtils.isWifi(getActivity())){//是否连上
-                    ToastUtil.showMiddle(getActivity(),"您已连接wifi");
-                } else {
-                    checkDGWifi();
-                }
+                checkDGWifi();
             } else {
                 ToastUtil.showMiddle(getActivity(), R.string.please_open_wifi);
             }
@@ -416,7 +410,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
         @Override
         public void onStateChanged(WifiState new_state, WifiState old_state) {
             if (new_state == WifiState.CONNECTED) {
-                AccessPoint currentAp = FWManager.getInstance().getCurrent();
+                currentAp = FWManager.getInstance().getCurrent();
                 if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
                     CheckAndLogon();
                 } else {
@@ -502,8 +496,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
                         //iConnectDGCountPresenter.connectDGCount();
                         break;
                     default:
-                        //ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
-                        ToastUtil.showMiddle(getActivity(), "CheckEnv: " + mCheckRet);
+                        ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
                 }
             } else {
                 ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
@@ -551,9 +544,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
 
     //连接后改变状态
     public void changeState() {
-        AccessPoint DGWifiAp = getDGWifiFromList();//找出附近wifi列表中的东莞wifi
         currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
-        if (NetUtils.isWifi(getActivity())) {
+        if (currentAp != null) {
             mAnimationTv.setVisibility(View.GONE);
             mConnectIv.setVisibility(View.VISIBLE);
             mConnectIv.setImageResource(R.drawable.main_connected);
@@ -568,6 +560,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
             mConnectIv.setVisibility(View.VISIBLE);
             mConnectIv.setImageResource(R.drawable.need_connect);
             mAnimationTv.start();
+
+            AccessPoint DGWifiAp = getDGWifiFromList();//找出附近wifi列表中的东莞wifi
             if (DGWifiAp != null) {
                 mConnectText.setText(R.string.find_wifi);
             } else {
@@ -626,17 +620,20 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
     }
 
     public void checkDGWifi() {
+        currentAp = FWManager.getInstance().getCurrent();
         AccessPoint DGFreeAp = getDGWifiFromList();
-        if (DGFreeAp != null) {
-            if (currentAp != null) {
-                if (currentAp.ssid.equals(DGFreeAp.ssid)) {
-                    CheckAndLogon();
-                } else {
-                    //已连上普通wifi
-                }
+        // 已经连上wifi
+        if (currentAp != null) {
+            if (DGFreeAp != null && currentAp.ssid.equals(DGFreeAp.ssid)) {
+                CheckAndLogon();
             } else {
-                FWManager.getInstance().connect(DGFreeAp);
+                //已连上普通wifi
+                ToastUtil.showMiddle(getActivity(), "已经连接 "+currentAp.ssid);
             }
+        } else if (DGFreeAp != null) {
+            FWManager.getInstance().connect(DGFreeAp);
+        } else {
+            startActivity(WifiManagerActivity.class, "", "", "", "");
         }
     }
 
