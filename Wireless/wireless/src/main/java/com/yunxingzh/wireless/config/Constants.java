@@ -43,4 +43,8 @@ public class Constants {
     public static final int TIME_OUT = 15*1000;
     public static final String SSID = "无线东莞DG-FREE";
 
+    // url
+    public static final String URL_AGREEMENT = "http://www.yunxingzh.com/app/agreement.html";
+    public static final String URL_WEATHER = "http://shenbao.dg.gov.cn/dgcsfw_zfb/csfw/dg_qxj/weixinportal.jsp";
+
 }
