@@ -128,7 +128,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
 
     private int mScrollDirection = SCROLL_STOP;
     private WifiUtils wifiUtils = null;
-    private String dgfreeSSID;
     private CheckEnvTask mCheckTask = null;
     private AccessPoint currentAp;
 
@@ -226,7 +225,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
 
         wifiUtils = new WifiUtils(getActivity());
 
-        dgfreeSSID = getResources().getString(R.string.ssids);
         FWManager.getInstance().addWifiObserver(wifiObserver);
     }
 
@@ -319,12 +317,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
             super.handleMessage(msg);
             if (msg.what == 0) {//认证成功
                 ToastUtil.showMiddle(getActivity(), R.string.validate_success);
-
                 currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
-                if (NetUtils.isWifi(getActivity())) {
+                if (currentAp != null) {
                     mAnimationTv.setCoreImage(R.drawable.main_connected);
                     mAnimationTv.stop();
-                    if (currentAp.equals(dgfreeSSID)) {
+                    if (currentAp.equals(Constants.SSID)) {
                         mConnectText.setText(R.string.connect_wifi + R.string.connect_dg_success);
                     } else {
                         mConnectText.setText(R.string.connect_wifi + currentAp.ssid);
@@ -366,11 +363,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
             if (wifiUtils.getWlanState()) {
                 checkDGWifi();
             } else {
+                // TODO：WIFI没有启用
                 ToastUtil.showMiddle(getActivity(), R.string.no_wifi);
             }
             //  WifiInterface.wifiLogout(logoOutHandler,MyApplication.sApplication.getUserName(),5000);
         } else if (mWeatherLay == v) {
-            startActivity(WebViewActivity.class, Constants.URL, "http://shenbao.dg.gov.cn/dgcsfw_zfb/csfw/dg_qxj/weixinportal.jsp", Constants.TITLE, "东莞天气");
+            startActivity(WebViewActivity.class, Constants.URL, Constants.URL_WEATHER, Constants.TITLE, "东莞天气");
         } else if (footView == v) {//查看更多新闻
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mMainWifiManager == v) {//wifi管理
@@ -412,7 +410,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
         public void onStateChanged(WifiState new_state, WifiState old_state) {
             if (new_state == WifiState.CONNECTED) {
                 AccessPoint currentAp = FWManager.getInstance().getCurrent();
-                if (currentAp != null && currentAp.ssid.equals(dgfreeSSID)) {
+                if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
                     CheckAndLogon();
                 } else {
                     // 先不处理
@@ -450,7 +448,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    if (ssid.equals(dgfreeSSID)) {
+                    if (ssid.equals(Constants.SSID)) {
                         CheckAndLogon();
                     } else {
                         // 不是东莞无线
@@ -489,7 +487,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
             if (success) {
                 switch (mCheckRet) {
                     case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
-                        WifiInterface.wifiLogon(validateHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
+                        WifiInterface.wifiLogon(validateHandler, MyApplication.getInstance().getUserName(),
+                                MyApplication.getInstance().getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
                         break;
                     case Constants.VALIDATE_SUCCESS://1、已经认证成功。
                         ToastUtil.showMiddle(getActivity(), R.string.connect_success);
@@ -545,17 +544,15 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
 
     //连接后改变状态
     public void changeState() {
-        AccessPoint DGWifiAp = getDGWifiFromList();//找出附近wifi列表中的东莞wifi
+        AccessPoint DGWifiAp = getDGWifiFromList();
         currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
-        if (NetUtils.isWifi(getActivity())) {
+        if (currentAp != null) {
             mAnimationTv.setCoreImage(R.drawable.main_connected);
             mAnimationTv.stop();
-            if (currentAp != null) {
-                if (currentAp.ssid.equals(dgfreeSSID)) {
-                    mConnectText.setText(R.string.connect_wifi +""+ R.string.connect_dg_success);
-                } else {
-                    mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
-                }
+            if (currentAp.ssid.equals(Constants.SSID)) {
+                mConnectText.setText(R.string.connect_wifi +""+ R.string.connect_dg_success);
+            } else {
+                mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
             }
         } else {
             mAnimationTv.setCoreImage(R.drawable.need_connect);
@@ -609,7 +606,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
         List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
         for (int i = 0; i < apList.size(); i++) {//找出是否有东莞wifi
             AccessPoint ap = apList.get(i);
-            if (ap.ssid.equals(dgfreeSSID)) {
+            if (ap.ssid.equals(Constants.SSID)) {
                 DGFreeAp = ap;
                 break;
             }

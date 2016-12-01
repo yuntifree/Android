@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -43,7 +44,7 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
     private TextView mGetValidateCodeBtn,mAgreeContent;
     private IRegisterPresenter iLoginPresenter;
     private TimeCount mTimeCount;
-    private String code = "";
+    private String mCode = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,19 +73,20 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
     @Override
     public void onClick(View view) {
         if (view == mLoRegisterBtn) {
-            if (!StringUtils.isEmpty(getCode())) {
-                if (code.equals(getCode())) {
-                    iLoginPresenter.register(getPhone(), StringUtils.getMD5(getCode()), 0);
-                } else {
-                    ToastUtil.showMiddle(RegisterActivity.this, R.string.final_validate_code);
-                }
+            String code = getCode();
+            if (mCode.equals(code)) {
+                iLoginPresenter.register(getPhone(), StringUtils.getMD5(code), 0);
             } else {
-                ToastUtil.showMiddle(RegisterActivity.this, R.string.input_code);
+                ToastUtil.showMiddle(RegisterActivity.this, R.string.final_validate_code);
             }
-        } else if (view == mGetValidateCodeBtn){
-            WifiInterface.wifiRegister(handler, getPhone(), "", Constants.TIME_OUT);
+        } else if (view == mGetValidateCodeBtn) {
+            if (StringUtils.validatePhoneNumber(getPhone())) {
+                WifiInterface.wifiRegister(handler, getPhone(), "", Constants.TIME_OUT);
+            } else {
+                ToastUtil.showMiddle(this, R.string.enter_right_phone);
+            }
         } else if (view == mAgreeContent){
-            startActivity(WebViewActivity.class,"用户协议","http://www.yunxingzh.com/app/agreement.html");
+            startActivity(WebViewActivity.class,"用户协议", Constants.URL_AGREEMENT);
         }
     }
 
@@ -97,15 +99,12 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
         try {
             JSONObject resp = new JSONObject(obj);
             reason = resp.getJSONObject("head").getString("reason");
-            code = resp.getJSONObject("body").getString("pwd");
+            mCode = resp.getJSONObject("body").getString("pwd");
         } catch (Exception e) {
             e.printStackTrace();
         }
         switch (what) {
             case 0:
-                SPUtils.put(MyApplication.getInstance(), Constants.SP_USER_NAME, getPhone());
-                SPUtils.put(MyApplication.getInstance(), Constants.SP_WIFI_PWD, code);
-
                 mTimeCount = new TimeCount(TIME, MILLISECOND);
                 mTimeCount.start();
                 mGetValidateCodeBtn.setText(SECOND + getString(R.string.second));
@@ -176,7 +175,8 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
 
     @Override
     public String getPhone() {
-        return mLoPhoneEt.getText() + "";
+        String strText = mLoPhoneEt.getText() + "";
+        return strText.trim();
     }
 
     @Override
@@ -186,12 +186,12 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
 
     @Override
     public String getCode() {
-        return mValidateCodeEt.getText() + "";
+        String code = mValidateCodeEt.getText() + "";
+        return code.trim();
     }
 
     @Override
     public void setCode(int msgId) {
         ToastUtil.showMiddle(this, msgId);
     }
-
 }
