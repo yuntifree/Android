@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
@@ -556,12 +558,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
             mConnectIv.setVisibility(View.VISIBLE);
             mConnectIv.setImageResource(R.drawable.main_connected);
             mAnimationTv.stop();
-            if (currentAp != null) {
-                if (currentAp.ssid.equals(Constants.SSID)) {
-                    mConnectText.setText(R.string.connect_wifi + "" + R.string.connect_dg_success);
-                } else {
-                    mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
-                }
+            if (currentAp.ssid.equals(Constants.SSID)) {
+                mConnectText.setText(R.string.connect_wifi +""+ R.string.connect_dg_success);
+            } else {
+                mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
             }
         } else {
             mAnimationTv.setVisibility(View.VISIBLE);
