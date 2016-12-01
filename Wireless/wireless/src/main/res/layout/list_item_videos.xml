@@ -15,8 +15,7 @@
             android:id="@+id/video_img"
             android:layout_width="match_parent"
             android:layout_height="167dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
+            android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/video_play"

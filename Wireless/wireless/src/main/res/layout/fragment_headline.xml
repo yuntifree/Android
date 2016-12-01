@@ -35,8 +35,9 @@
 
                 <TextView
                     android:id="@+id/id_tab_left_line"
-                    android:layout_width="100dp"
+                    android:layout_width="41dp"
                     android:layout_height="2dp"
+                    android:layout_gravity="center"
                     android:background="@color/white" />
 
             </LinearLayout>
@@ -58,9 +59,10 @@
 
                 <TextView
                     android:id="@+id/id_tab_right_line"
-                    android:layout_width="100dp"
+                    android:layout_width="41dp"
                     android:layout_height="2dp"
                     android:visibility="invisible"
+                    android:layout_gravity="center"
                     android:background="@color/white" />
             </LinearLayout>
 

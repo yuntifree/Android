@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp"
+    android:paddingBottom="12dp"
+    android:paddingTop="12dp"
     android:background="@drawable/listview_selector"
     android:orientation="vertical">
 
@@ -25,6 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="东莞虎门一火车"
+                android:maxLines="2"
                 android:textColor="@color/gray_262626"
                 android:textSize="16sp" />
 
@@ -42,8 +43,11 @@
             android:id="@+id/type_two_img"
             android:layout_width="113dp"
             android:layout_height="74dp"
-            android:scaleType="fitXY"
             android:layout_gravity="center"
+            android:scaleType="center"
+            android:adjustViewBounds="true"
+            android:maxWidth="113dp"
+            android:maxHeight="74dp"
             android:layout_marginLeft="5dp"
             android:src="@drawable/img_default" />
    </LinearLayout>

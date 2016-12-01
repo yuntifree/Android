@@ -82,21 +82,15 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         app:diffuse_color="@color/white"
-                        app:diffuse_coreImage="@drawable/need_connect"
-                        app:diffuse_coreRadius="150"
-                        app:diffuse_maxWidth="300"
-                        app:diffuse_width="5"/>
+                        />
 
-                 <!--  <TextView
-                        android:id="@+id/connect_tv"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                   <ImageView
+                        android:id="@+id/connect_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="一键连接"
-                        android:gravity="center"
-                        android:textSize="18sp"
-                       android:background="@drawable/main_circle"
-                        android:textColor="@color/blue_009CFB" />-->
+                        android:visibility="gone"
+                        android:gravity="center" />
 
                 </FrameLayout>
 
@@ -354,7 +348,6 @@
                 android:id="@+id/main_news_lv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:scrollbars="none"
@@ -373,7 +366,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
                     android:layout_gravity="center"
-                    android:layout_margin="10dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
                     android:background="@color/blue_63C7FF"
                     android:gravity="center"
                     android:text="@string/get_more"
