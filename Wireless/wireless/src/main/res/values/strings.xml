@@ -35,6 +35,7 @@
     <string name="enter_exit">再按一次退出程序</string>
     <string name="lost_token">登陆信息失效，请重新登陆</string>
     <string name="lost_param">缺少参数</string>
+    <string name="net_error">网络错误</string>
     <string name="param_error">参数异常</string>
     <string name="data_error">数据库错误</string>
     <string name="inner_error">服务器内部错误</string>

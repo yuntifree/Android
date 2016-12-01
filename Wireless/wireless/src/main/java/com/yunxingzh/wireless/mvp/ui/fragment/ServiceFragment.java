@@ -30,6 +30,7 @@ import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
+import com.yunxingzh.wireless.service.NetBroadcastReceiver;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.ServiceVo;
 
 import java.util.List;
@@ -40,13 +41,14 @@ import java.util.List;
  */
 
 @SuppressWarnings("ResourceType")
-public class ServiceFragment extends BaseFragment implements IServiceView, View.OnClickListener {
+public class ServiceFragment extends BaseFragment implements IServiceView, View.OnClickListener,NetBroadcastReceiver.NetEvevt {
 
     private TextView mSearchTv;
     private TextView mServiceMoreTv, mHouseKeepingTv, mHousingTv, mSecondHandsTv, mCooperationTv;
     private LinearLayout mServiceParentGroup;
     private IServicePresenter iServicePresenter;
     private List<ServiceVo.DataVo.ServiceData> dataVoList;
+    public static NetBroadcastReceiver.NetEvevt serviceEvevts;
 
     @Nullable
     @Override
@@ -99,6 +101,16 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     public void getServiceSuccess(ServiceVo serviceVo) {
         dataVoList = serviceVo.getData().getServices();
 
+        //获取屏幕宽高
+        WindowManager wm = getActivity().getWindowManager();
+        int width = wm.getDefaultDisplay().getWidth();//720,1536
+        int height = wm.getDefaultDisplay().getHeight();//1280,2560
+        if (width <= 720 && height <= 1280){
+
+        } else {
+
+        }
+
         for (int i = 0; i < dataVoList.size(); i++) {
             LinearLayout mServiceItem = new LinearLayout(getActivity());//item最外层layout
             mServiceItem.setBackgroundColor(getResources().getColor(R.color.white));
@@ -117,7 +129,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
             View lineSmall = new View(getActivity());
             lineSmall.setMinimumHeight(1);
-            lineSmall.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
+            lineSmall.setBackgroundColor(getResources().getColor(R.color.gray_e6e6e6));
 
             View line = new View(getActivity());
             line.setMinimumHeight(20);
@@ -141,7 +153,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                     int positon = j * 3 + k;//得到item当前position
                     if (positon >= size) {//一行不足3个时填充空view
                         TextView nullView = new TextView(getActivity());
-                        childLay.addView(nullView, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                        childLay.addView(nullView, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, 60, 0, 0, 0, 0));
                     } else {
                         TextView views = new TextView(getActivity());
                         String title = childDatas.get(positon).getTitle();
@@ -157,19 +169,19 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                                 startActivity(WebViewActivity.class, Constants.URL, dv.getDst(), Constants.TITLE, dv.getTitle());
                             }
                         });
-                        childLay.addView(views, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                        childLay.addView(views, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, 60, 0, 0, 0, 0));
                     }
                 }
 
-                if (lines == 1){//只有一行
-                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 40, 0, 40));
-                } else if(lines == 2 && j == 0) {
-                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 40, 0, 40));
-                } else if (lines == 2 && j == 1){
-                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 40));
-                } else if (lines == 3){
-                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
-                }
+//                if (lines == 1){//只有一行
+//                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 40, 0, 40));
+//                } else if(lines == 2 && j == 0) {
+//                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 40, 0, 40));
+//                } else if (lines == 2 && j == 1){
+//                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 40));
+//                } else if (lines == 3){
+//                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+//                }
             }
 
             mServiceParentGroup.addView(mServiceItem);
@@ -177,7 +189,6 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 return;
             }
             mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
-
         }
     }
 
@@ -194,5 +205,10 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         lp.weight = weight;
         lp.setMargins(left, top, right, bottom);
         return lp;
+    }
+
+    @Override
+    public void onNetChange(boolean netMobile) {
+        ToastUtil.showMiddle(getActivity(),netMobile+"");
     }
 }

@@ -1,10 +1,7 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,18 +9,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.webkit.URLUtil;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -57,18 +50,14 @@ import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wireless.service.NetBroadcastReceiver;
-import com.yunxingzh.wireless.utility.Logg;
-import com.yunxingzh.wireless.utility.NetUtil;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
 import com.yunxingzh.wirelesslibs.convenientbanner.ConvenientBanner;
 import com.yunxingzh.wirelesslibs.convenientbanner.holder.CBViewHolderCreator;
 import com.yunxingzh.wirelesslibs.convenientbanner.listener.OnItemClickListener;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.BannerInfo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
@@ -76,7 +65,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,7 +89,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
     private final static int SCROLL_UP = -1;
 
     private int mPageHeight;
-    public static NetBroadcastReceiver.NetEvevt evevt;
+    public static NetBroadcastReceiver.NetEvevt wirelessEvevt;
     private FragmentManager fragmentManager;
 
     private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest,
@@ -113,7 +101,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private IConnectDGCountPresenter iConnectDGCountPresenter;
-    private AnimationSet alphaAnimation;
 
     private CircleWaveView mAnimationTv;
     private TextView footView, mConnectText;
@@ -135,7 +122,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wireless, null);
-        evevt = this;
+        wirelessEvevt = this;
         initView(view);
         initData();
         return view;
@@ -377,7 +364,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
         if (mConnectIv == v) {//一键连接
             if (wifiUtils.getWlanState()) {//是否打开
                 if (NetUtils.isWifi(getActivity())){//是否连上
-                    ToastUtil.showMiddle(getActivity(),"connected");
+                    ToastUtil.showMiddle(getActivity(),"您已连接wifi");
                 } else {
                     checkDGWifi();
                 }
@@ -569,10 +556,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
             mConnectIv.setVisibility(View.VISIBLE);
             mConnectIv.setImageResource(R.drawable.main_connected);
             mAnimationTv.stop();
-            if (currentAp.ssid.equals(Constants.SSID)) {
-                mConnectText.setText(R.string.connect_wifi +""+ R.string.connect_dg_success);
-            } else {
-                mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
+            if (currentAp != null) {
+                if (currentAp.ssid.equals(Constants.SSID)) {
+                    mConnectText.setText(R.string.connect_wifi + "" + R.string.connect_dg_success);
+                } else {
+                    mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
+                }
             }
         } else {
             mAnimationTv.setVisibility(View.VISIBLE);

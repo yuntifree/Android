@@ -40,7 +40,7 @@ public class ToastUtil {
             context.startActivity(intent);
             return;
         }else if(error == HttpCode.E_MISS_PARAM){
-            showMiddle(context, R.string.lost_param);
+            showMiddle(context, R.string.net_error);
             return;
         } else if(error == HttpCode.E_INVAL_PARAM){
             showMiddle(context, R.string.param_error);
