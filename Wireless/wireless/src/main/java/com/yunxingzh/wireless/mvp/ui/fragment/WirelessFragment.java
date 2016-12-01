@@ -496,7 +496,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
                         //iConnectDGCountPresenter.connectDGCount();
                         break;
                     default:
-                        ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                        //ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                        ToastUtil.showMiddle(getActivity(), "CheckEnv: " + mCheckRet);
                 }
             } else {
                 ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
