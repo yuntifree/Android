@@ -18,6 +18,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    /*友盟多渠道统计*/
+    productFlavors {
+        xiaomi {}
+        baidu {}
+        c360 {}
+        oppo {}
+        vivo {}
+        huawei {}
+        meizu {}
+        tengxun {}
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+    }
 }
 
 dependencies {

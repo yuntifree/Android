@@ -1,9 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -13,11 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -30,7 +24,6 @@ import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
-import com.yunxingzh.wireless.service.NetBroadcastReceiver;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.ServiceVo;
 
 import java.util.List;
@@ -41,14 +34,13 @@ import java.util.List;
  */
 
 @SuppressWarnings("ResourceType")
-public class ServiceFragment extends BaseFragment implements IServiceView, View.OnClickListener,NetBroadcastReceiver.NetEvevt {
+public class ServiceFragment extends BaseFragment implements IServiceView, View.OnClickListener {
 
     private TextView mSearchTv;
     private TextView mServiceMoreTv, mHouseKeepingTv, mHousingTv, mSecondHandsTv, mCooperationTv;
     private LinearLayout mServiceParentGroup;
     private IServicePresenter iServicePresenter;
     private List<ServiceVo.DataVo.ServiceData> dataVoList;
-    public static NetBroadcastReceiver.NetEvevt serviceEvevts;
 
     @Nullable
     @Override
@@ -205,10 +197,5 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         lp.weight = weight;
         lp.setMargins(left, top, right, bottom);
         return lp;
-    }
-
-    @Override
-    public void onNetChange(boolean netMobile) {
-        ToastUtil.showMiddle(getActivity(),netMobile+"");
     }
 }

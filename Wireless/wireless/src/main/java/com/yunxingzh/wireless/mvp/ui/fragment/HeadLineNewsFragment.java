@@ -18,7 +18,6 @@ import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
-import com.yunxingzh.wireless.service.NetBroadcastReceiver;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
@@ -34,7 +33,7 @@ import java.util.List;
  * 头条-新闻
  */
 
-public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener,NetBroadcastReceiver.NetEvevt {
+public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener{
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -44,7 +43,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private HeadLineNewsAdapter headLineNewsAdapter;
-    public static NetBroadcastReceiver.NetEvevt newsEvevt;
     private List<NewsVo.Data.NewsData> newsListNext;
     private NewsVo.Data data;
 
@@ -158,11 +156,5 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         intent.putExtra(key, videoUrl);
         intent.putExtra(titleKey, title);
         startActivity(intent);
-    }
-
-    @Override
-    public void onNetChange(boolean netMobile) {
-        ToastUtil.showMiddle(getActivity(),netMobile+"");
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
     }
 }

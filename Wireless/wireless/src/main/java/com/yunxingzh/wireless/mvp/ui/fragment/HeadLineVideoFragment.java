@@ -22,7 +22,6 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
-import com.yunxingzh.wireless.service.NetBroadcastReceiver;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
@@ -35,7 +34,7 @@ import java.util.List;
  * 头条-视频
  */
 
-public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener,NetBroadcastReceiver.NetEvevt {
+public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
     private final static int HEAD_LINE_TYPE = 1;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -46,9 +45,6 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     //下拉刷新
     private SwipeRefreshLayout mSwipeRefreshLay;
     private List<NewsVo.Data.NewsData> newsVo;
-
-    public static NetBroadcastReceiver.NetEvevt videoEvevts;
-
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -124,11 +120,5 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         Intent intent = new Intent(getActivity(), activity);
         intent.putExtra(key, videoUrl);
         startActivity(intent);
-    }
-
-    @Override
-    public void onNetChange(boolean netMobile) {
-        ToastUtil.showMiddle(getActivity(),netMobile+"");
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
     }
 }

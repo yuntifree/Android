@@ -13,10 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.webkit.URLUtil;
 import android.widget.ImageView;
@@ -51,7 +48,6 @@ import com.yunxingzh.wireless.mvp.view.CircleWaveView;
 import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
-import com.yunxingzh.wireless.service.NetBroadcastReceiver;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
 import com.yunxingzh.wirelesslibs.convenientbanner.ConvenientBanner;
@@ -75,7 +71,7 @@ import java.util.List;
  * 无线
  */
 
-public class WirelessFragment extends BaseFragment implements IHeadLineView, NetBroadcastReceiver.NetEvevt, IConnectDGCountView, View.OnClickListener, ScrollViewListener {
+public class WirelessFragment extends BaseFragment implements IHeadLineView, IConnectDGCountView, View.OnClickListener, ScrollViewListener {
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -91,7 +87,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
     private final static int SCROLL_UP = -1;
 
     private int mPageHeight;
-    public static NetBroadcastReceiver.NetEvevt wirelessEvevt;
     private FragmentManager fragmentManager;
 
     private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest,
@@ -124,7 +119,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wireless, null);
-        wirelessEvevt = this;
         initView(view);
         initData();
         return view;
@@ -406,11 +400,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, Net
         }
     }
 
-    @Override
-    public void onNetChange(boolean netMobile) {
-        changeState();
-        iHeadLinePresenter.weatherNews();
-    }
+//        changeState();
+//        iHeadLinePresenter.weatherNews();
 
     private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
         @Override
