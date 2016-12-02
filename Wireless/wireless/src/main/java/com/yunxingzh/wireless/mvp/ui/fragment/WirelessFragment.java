@@ -73,6 +73,7 @@ import java.util.List;
 
 public class WirelessFragment extends BaseFragment implements IHeadLineView, IConnectDGCountView, View.OnClickListener, ScrollViewListener {
 
+    private final static String TAG = "WirelessFragment";
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
     private final static int PULL_HEIGHT = 10;
@@ -121,6 +122,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         View view = inflater.inflate(R.layout.fragment_wireless, null);
         initView(view);
         initData();
+        // 进入主页判断下网络
+        CheckAndLogon();
         return view;
     }
 
@@ -317,10 +320,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 if (currentAp != null) {
                     mAnimationTv.setCoreImage(R.drawable.main_connected);
                     mAnimationTv.stop();
+                    String connText;
                     if (currentAp.equals(Constants.SSID)) {
-                        mConnectText.setText(R.string.connect_wifi + R.string.connect_dg_success);
+                        connText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
+                        mConnectText.setText(connText);
                     } else {
-                        mConnectText.setText(R.string.connect_wifi + currentAp.ssid);
+                        connText = getResources().getString(R.string.connect_wifi) + currentAp.ssid;
+                        mConnectText.setText(connText);
                     }
                 }
                 // iConnectDGCountPresenter.connectDGCount();
@@ -394,6 +400,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         }
     }
 
+    private void onNetChange() {
+        changeState();
+        iHeadLinePresenter.weatherNews();
+    }
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -419,6 +429,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 } else {
                     // 先不处理
                 }
+                onNetChange();
+            } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
+                onNetChange();
             }
         }
 
@@ -553,8 +566,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             mConnectIv.setVisibility(View.VISIBLE);
             mConnectIv.setImageResource(R.drawable.main_connected);
             mAnimationTv.stop();
+            String ssidText;
             if (currentAp.ssid.equals(Constants.SSID)) {
-                mConnectText.setText(R.string.connect_wifi +""+ R.string.connect_dg_success);
+                ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
+                mConnectText.setText(ssidText);
             } else {
                 mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
             }
