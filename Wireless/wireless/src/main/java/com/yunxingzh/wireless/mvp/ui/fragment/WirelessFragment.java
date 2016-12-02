@@ -680,7 +680,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         super.onResume();
         changeState();
         mAdRotationBanner.startTurning(1500);
-        ToastUtil.showMiddle(getActivity(),"onResume");
     }
 
     @Override

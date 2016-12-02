@@ -21,8 +21,8 @@ import okhttp3.Headers;
 public class UserModelImpl implements IUserModel {
 
     @Override
-    public void getValidateCode(int term, double version, long ts, int nettype, int type, String phone, final onValidateCodeListener listener) {
-        String jsonStr = JsonUtils.jsonStirngForUser(term, version, ts, nettype, type, phone, "", "", 0, "", "", "");
+    public void getValidateCode(int term, double version, long ts, int nettype, int type, final onValidateCodeListener listener) {
+        String jsonStr = JsonUtils.jsonStirngForUser(term, version, ts, nettype, type, "", "", "", "", "");
         OkRequestParams param = new OkRequestParams();
         param.put("key", jsonStr);
         OkHttpUtil.post(Api.GET_PHONE_CODE, param, new OkHttpResBeanHandler<StringDto>() {
@@ -44,8 +44,8 @@ public class UserModelImpl implements IUserModel {
 
     @Override
     public void register(int term, double version, long ts, int nettype, String username, String password,
-                         int code, String model, String channel, String udid, final onRegisterListener listener) {
-        String jsonStr = JsonUtils.jsonStirngForUser(term, version, ts, nettype, 0, "", username, password, code, model, channel, udid);
+                         String model, String channel, String udid, final onRegisterListener listener) {
+        String jsonStr = JsonUtils.jsonStirngForUser(term, version, ts, nettype, 0, username , password, model, channel, udid);
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 

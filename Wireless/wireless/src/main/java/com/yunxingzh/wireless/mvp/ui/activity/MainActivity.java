@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (StringUtils.isEmpty(MyApplication.sApplication.getToken())) {
+        if (StringUtils.isEmpty(MyApplication.sApplication.getToken()) || MyApplication.sApplication.needLogin()) {
             startActivity(new Intent(this, RegisterActivity.class));
             finish();
             return;
@@ -145,11 +145,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public Fragment showFragment(Fragment fragment) {
         if (currentFragment != fragment) {
             FragmentTransaction ft = fragmentManager.beginTransaction();
-            if (!fragment.isAdded()) {
-                ft.hide(currentFragment).add(R.id.main_fragment_parent, fragment).commit();
-            } else {
-                ft.hide(currentFragment).show(fragment).commit();
-            }
+//            if (!fragment.isAdded()) {
+//                ft.hide(currentFragment).add(R.id.main_fragment_parent, fragment).commit();
+//            } else {
+//                ft.hide(currentFragment).show(fragment).commit();
+//            }
+            ft.replace(R.id.main_fragment_parent, fragment).commit();
             currentFragment = fragment;
         }
         return currentFragment;

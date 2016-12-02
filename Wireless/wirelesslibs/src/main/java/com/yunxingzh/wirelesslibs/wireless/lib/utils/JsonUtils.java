@@ -13,9 +13,8 @@ public class JsonUtils {
 
     }
 
-    public static String jsonStirngForUser(int term, double version, long ts,int nettype, int type,
-                                           String phone,String username,String password,
-                                           int code,String model,String channel,String udid) {
+    public static String jsonStirngForUser(int term, double version, long ts,int nettype, int type,String username,String password,
+                                           String model,String channel,String udid) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("term", term);
@@ -24,10 +23,8 @@ public class JsonUtils {
             jsonObject.put("nettype", nettype);
             JSONObject data = new JSONObject();
             data.put("type", type);
-            data.put("phone", phone);
             data.put("username", username);
             data.put("password", password);
-            data.put("code", code);
             data.put("model", model);
             data.put("channel", channel);
             data.put("udid", udid);

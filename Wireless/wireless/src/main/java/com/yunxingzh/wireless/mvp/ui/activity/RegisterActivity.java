@@ -74,8 +74,8 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
     public void onClick(View view) {
         if (view == mLoRegisterBtn) {
             String code = getCode();
-            if (mCode.equals(code)) {
-                iLoginPresenter.register(getPhone(), StringUtils.getMD5(code), 0);
+            if (mCode.equals(code) && !StringUtils.isEmpty(code)) {
+                iLoginPresenter.register(getPhone(), code);
             } else {
                 ToastUtil.showMiddle(RegisterActivity.this, R.string.final_validate_code);
             }

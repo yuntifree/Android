@@ -40,21 +40,21 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
     }
 
     @Override
-    public void getValidateCode(int type,String phone) {
+    public void getValidateCode(int type) {
         if (iLoginView != null && inputValidate()) {
             iLoginView.showProgress();
             iUserModel.getValidateCode(0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
                     StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),
-                    type,phone, this);
+                    type, this);
         }
     }
 
     @Override
-    public void register(String username, String password, int code) {
+    public void register(String username, String password) {
         if (iLoginView != null){
             iLoginView.showProgress();
             iUserModel.register(0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
-                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),username,password,code,
+                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),username,password,
                     AppUtils.getPhoneModel(),AppUtils.getChannelName(MyApplication.sApplication) == null ? "" : AppUtils.getChannelName(MyApplication.sApplication),
                     MyApplication.sApplication.getMark(),this);
         }

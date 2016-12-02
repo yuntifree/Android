@@ -2,7 +2,9 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,21 +110,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-    }
-
-    @Override
-    public boolean getUserVisibleHint() {
-        return super.getUserVisibleHint();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ToastUtil.showMiddle(getActivity(),"onResume");
-    }
 
     @Override
     public void getHeadLineSuccess(NewsVo newsVo) {
@@ -130,6 +117,8 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         // swipeRefreshLayout.setLoading(false);
         if (newsVo != null) {
             data = newsVo.getData();
+        } else {
+            ToastUtil.showMiddle(getActivity(),"网络异常");
         }
 
         if (newsListNext == null) {
@@ -155,7 +144,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     @Override
     public void getFontInfoSuccess(FontInfoVo fontInfoVo) {
     }
-
 
     @Override
     public void onRefresh() {

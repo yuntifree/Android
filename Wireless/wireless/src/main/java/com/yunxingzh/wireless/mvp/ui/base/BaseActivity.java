@@ -94,7 +94,7 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
             mLoadingDialog = LoadingDialogFragment.newInstance("");
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.add(mLoadingDialog, "loading_dialog");
-            transaction.commit();
+            transaction.commitAllowingStateLoss();
         } else {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.show(mLoadingDialog);

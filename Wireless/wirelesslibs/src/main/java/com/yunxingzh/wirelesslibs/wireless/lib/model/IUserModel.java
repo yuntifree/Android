@@ -19,16 +19,15 @@ public interface IUserModel {
 
     /****
      * 获取短信验证码
-     * @param phone
      * @param listener
      */
-    void getValidateCode(int term,double version,long ts,int nettype,int type, String phone, onValidateCodeListener listener);
+    void getValidateCode(int term,double version,long ts,int nettype,int type, onValidateCodeListener listener);
 
     /***
      * 注册
      * @param
      * @param
      */
-    void register(int term,double version,long ts,int nettype,String username,String password,
-               int code,String model,String channel,String udid,onRegisterListener listener);
+    void register(int term,double version,long ts,int nettype,String username,
+               String password, String model,String channel,String udid,onRegisterListener listener);
 }
