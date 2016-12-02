@@ -111,12 +111,10 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        ToastUtil.showMiddle(getActivity(),isVisibleToUser+"");
     }
 
     @Override
     public boolean getUserVisibleHint() {
-        ToastUtil.showMiddle(getActivity(),"getUserVisibleHint");
         return super.getUserVisibleHint();
     }
 
