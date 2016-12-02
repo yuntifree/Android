@@ -404,20 +404,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         changeState();
         iHeadLinePresenter.weatherNews();
     }
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        ToastUtil.showMiddle(getActivity(),isVisibleToUser+"");
-    }
-
-    @Override
-    public boolean getUserVisibleHint() {
-        ToastUtil.showMiddle(getActivity(),"getUserVisibleHint");
-        return super.getUserVisibleHint();
-    }
-
-    //        changeState();
-//        iHeadLinePresenter.weatherNews();
 
     private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
         @Override
@@ -657,8 +643,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
     @Subscribe
     public void onEventMainThread(EventBusType event) {
-        int index = event.getItemIndex();
-        if (index != -1) {
+        int index = event.getChildMsg();
+        if (event.getMsg() == Constants.MAIN_NEWS_FLAG && index != -1) {
             iHeadLinePresenter.clickCount(mainNewsVos.get(index).getId(), NEWS);
         }
     }

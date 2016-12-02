@@ -98,9 +98,11 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Subscribe
     public void onEventMainThread(EventBusType event) {
-        int index = event.getItemIndex();
-        if (index != -1) {
+        int index = event.getChildMsg();
+        if (event.getMsg() == Constants.HEAD_LINE_NEWS_FLAG && index != -1) {
             iHeadLinePresenter.clickCount(data.getInfos().get(index).getId(), CLICK_COUNT);
+        } else if (event.getMsg() == Constants.NET_CHAGED){
+            ToastUtil.showMiddle(getActivity(),"sss");
         }
     }
 
@@ -117,8 +119,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         // swipeRefreshLayout.setLoading(false);
         if (newsVo != null) {
             data = newsVo.getData();
-        } else {
-            ToastUtil.showMiddle(getActivity(),"网络异常");
         }
 
         if (newsListNext == null) {

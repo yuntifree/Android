@@ -145,12 +145,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public Fragment showFragment(Fragment fragment) {
         if (currentFragment != fragment) {
             FragmentTransaction ft = fragmentManager.beginTransaction();
-//            if (!fragment.isAdded()) {
-//                ft.hide(currentFragment).add(R.id.main_fragment_parent, fragment).commit();
-//            } else {
-//                ft.hide(currentFragment).show(fragment).commit();
-//            }
-            ft.replace(R.id.main_fragment_parent, fragment).commit();
+            if (!fragment.isAdded()) {
+                ft.hide(currentFragment).add(R.id.main_fragment_parent, fragment).commit();
+            } else {
+                ft.hide(currentFragment).show(fragment).commit();
+            }
             currentFragment = fragment;
         }
         return currentFragment;

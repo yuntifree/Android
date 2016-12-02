@@ -188,7 +188,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
     }
 
     public void startActivity(Class activity, int position, NewsVo.Data.NewsData result,boolean fromNews) {
-        EventBus.getDefault().post(new EventBusType(0, 0, position));
+        EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE_NEWS_FLAG,position));
         Intent intent = new Intent(context, activity);
         intent.putExtra(Constants.URL, result.getDst());
         intent.putExtra(Constants.TITLE, result.getTitle());

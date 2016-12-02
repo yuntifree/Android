@@ -24,10 +24,13 @@ public class Constants {
     public static final String FROM_NEWS = "fromNews";
 
     //eventBus flag
+    public static final int HEAD_LINE_NEWS_FLAG = 100;//头条新闻点击上报flag
+    public static final int MAIN_NEWS_FLAG = 101;//首页新闻点击上报flag
     public static final int WIRELESS = 1;//无线
     public static final int HEAD_LINE = 2;//头条
     public static final int SERVICE = 3;//服务
     public static final int VIDEO = 4;//视频
+    public static final int NET_CHAGED = 5;//网络异常
 
     //0、网络正常，可以发起调用认证、下线等接口。1、已经认证成功。
     public static final int NET_OK = 0;
