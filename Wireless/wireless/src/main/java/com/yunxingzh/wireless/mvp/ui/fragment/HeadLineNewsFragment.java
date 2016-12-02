@@ -100,16 +100,30 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         if (index != -1) {
             iHeadLinePresenter.clickCount(data.getInfos().get(index).getId(), CLICK_COUNT);
         }
-        if (index == Constants.NET_CHANGED){
-            int s = event.getMsg();
-            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
-        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);//反注册EventBus
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        ToastUtil.showMiddle(getActivity(),isVisibleToUser+"");
+    }
+
+    @Override
+    public boolean getUserVisibleHint() {
+        ToastUtil.showMiddle(getActivity(),"getUserVisibleHint");
+        return super.getUserVisibleHint();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ToastUtil.showMiddle(getActivity(),"onResume");
     }
 
     @Override

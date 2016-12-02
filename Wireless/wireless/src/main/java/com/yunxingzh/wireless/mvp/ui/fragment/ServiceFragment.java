@@ -93,16 +93,6 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     public void getServiceSuccess(ServiceVo serviceVo) {
         dataVoList = serviceVo.getData().getServices();
 
-        //获取屏幕宽高
-        WindowManager wm = getActivity().getWindowManager();
-        int width = wm.getDefaultDisplay().getWidth();//720,1536
-        int height = wm.getDefaultDisplay().getHeight();//1280,2560
-        if (width <= 720 && height <= 1280){
-
-        } else {
-
-        }
-
         for (int i = 0; i < dataVoList.size(); i++) {
             LinearLayout mServiceItem = new LinearLayout(getActivity());//item最外层layout
             mServiceItem.setBackgroundColor(getResources().getColor(R.color.white));
@@ -164,16 +154,32 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                         childLay.addView(views, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, 60, 0, 0, 0, 0));
                     }
                 }
+                //获取屏幕宽高
+                WindowManager wm = getActivity().getWindowManager();
+                int width = wm.getDefaultDisplay().getWidth();//720,1536
+                int height = wm.getDefaultDisplay().getHeight();//1280,2560
+                if (width <= 720 && height <= 1280){
+                    if (lines == 1){//只有一行
+                        mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 40, 0, 40));
+                    } else if(lines == 2 && j == 0) {
+                        mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 40, 0, 40));
+                    } else if (lines == 2 && j == 1){
+                        mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 40));
+                    } else if (lines == 3){
+                        mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                    }
+                } else {
+                    if (lines == 1){//只有一行
+                        mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 80, 0, 80));
+                    } else if(lines == 2 && j == 0) {
+                        mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 80, 0, 80));
+                    } else if (lines == 2 && j == 1){
+                        mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 80));
+                    } else if (lines == 3){
+                        mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                    }
+                }
 
-//                if (lines == 1){//只有一行
-//                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 40, 0, 40));
-//                } else if(lines == 2 && j == 0) {
-//                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 40, 0, 40));
-//                } else if (lines == 2 && j == 1){
-//                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 40));
-//                } else if (lines == 3){
-//                    mServiceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
-//                }
             }
 
             mServiceParentGroup.addView(mServiceItem);
