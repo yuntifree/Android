@@ -644,7 +644,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     @Subscribe
     public void onEventMainThread(EventBusType event) {
         int index = event.getChildMsg();
-        if (event.getMsg() == Constants.MAIN_NEWS_FLAG && index != -1) {
+        if (event.getMsg() == Constants.MAIN_NEWS_FLAG && index != -1) {//上报
             iHeadLinePresenter.clickCount(mainNewsVos.get(index).getId(), NEWS);
         }
     }

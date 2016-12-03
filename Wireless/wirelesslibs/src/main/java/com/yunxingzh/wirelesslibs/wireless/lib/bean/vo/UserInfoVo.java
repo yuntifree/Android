@@ -36,7 +36,6 @@ public class UserInfoVo implements Serializable {
         private String token;
         private String privdata;//用于刷新token
         private int expire;// 过期时间(单位秒)
-        private String wifipass;//wifi密码
 
         public int getUid() {
             return uid;
@@ -68,14 +67,6 @@ public class UserInfoVo implements Serializable {
 
         public void setExpire(int expire) {
             this.expire = expire;
-        }
-
-        public String getWifipass() {
-            return wifipass;
-        }
-
-        public void setWifipass(String wifipass) {
-            this.wifipass = wifipass;
         }
     }
 }

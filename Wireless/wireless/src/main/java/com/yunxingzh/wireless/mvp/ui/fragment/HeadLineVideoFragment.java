@@ -38,8 +38,9 @@ import java.util.List;
 
 public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
-    private final static int HEAD_LINE_TYPE = 1;//0-新闻 1-视频 2-应用 3-游戏
+    private final static int HEAD_LINE_TYPE = 1;// 0-新闻 1-视频 2-应用 3-游戏 5-东莞新闻
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
+    private final static int CLICK_COUNT = 0;//0- 视频播放 1-新闻点击 2-广告展示 3-广告点击 4-服务
 
     private LinearLayout mNetErrorVideoLay;
     private RecyclerView mListRv;
@@ -105,7 +106,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 List<NewsVo.Data.NewsData> data = baseQuickAdapter.getData();
-                iHeadLinePresenter.clickCount(data.get(i).getId(),HEAD_LINE_SEQ);//记录播放次数
+                iHeadLinePresenter.clickCount(data.get(i).getId(),CLICK_COUNT);//上报
                 startActivity(VideoPlayActivity.class,Constants.VIDEO_URL,data.get(i).getDst());
             }
         });

@@ -30,7 +30,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 
 public class HeadLineGameFragment extends BaseFragment implements IHeadLineView,SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
-    private final static int HEAD_LINE_TYPE = 3;//0-新闻 1-视频 2-应用 3-游戏
+    private final static int HEAD_LINE_TYPE = 3;//0-新闻 1-视频 2-应用 3-游戏 5-东莞新闻
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
 
     private RecyclerView mListRv;

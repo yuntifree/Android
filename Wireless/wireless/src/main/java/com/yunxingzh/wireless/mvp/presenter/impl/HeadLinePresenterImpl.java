@@ -3,12 +3,15 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wireless.mvp.view.IServiceView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.IHeadLineModel;
+import com.yunxingzh.wirelesslibs.wireless.lib.model.IServiceModel;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.IWeatherNewsModel;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.HeadLineModelImpl;
+import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.ServiceModelImpl;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.WeatherNewsModelImpl;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
@@ -23,11 +26,19 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     private IWeatherNewsModel iWeatherNewsModel;
     private IHeadLineView iHeadLineView;
     private IHeadLineModel iHeadLineModel;
+    private IServiceView iServiceView;
 
     public HeadLinePresenterImpl(IHeadLineView view) {
         iHeadLineView = view;
+        iServiceView = null;
         iHeadLineModel = new HeadLineModelImpl();
         iWeatherNewsModel = new WeatherNewsModelImpl();
+    }
+
+    public HeadLinePresenterImpl(IServiceView view) {
+        iHeadLineView = null;
+        iServiceView = view;
+        iHeadLineModel = new HeadLineModelImpl();
     }
 
     @Override

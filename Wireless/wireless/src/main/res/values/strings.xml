@@ -62,6 +62,7 @@
     <string name="input_pwd">请输入密码</string>
     <string name="pwd">密码:</string>
     <string name="cancel">取消</string>
+    <string name="net_set">请检查网络设置</string>
     <string name="query_speed">继续测速</string>
     <string name="cancel_speed">取消测速</string>
     <string name="stop_speed">停止测速</string>

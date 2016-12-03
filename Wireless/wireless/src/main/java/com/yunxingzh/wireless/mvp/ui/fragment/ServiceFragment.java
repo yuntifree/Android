@@ -17,7 +17,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.IServicePresenter;
+import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.presenter.impl.ServicePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.SearchActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
@@ -37,10 +39,13 @@ import java.util.List;
 @SuppressWarnings("ResourceType")
 public class ServiceFragment extends BaseFragment implements IServiceView, View.OnClickListener {
 
+    private final static int CLICK_COUNT = 4;//0- 视频播放 1-新闻点击 2-广告展示 3-广告点击 4-服务
+
     private TextView mSearchTv;
     private TextView mServiceMoreTv, mHouseKeepingTv, mHousingTv, mSecondHandsTv, mCooperationTv;
     private LinearLayout mServiceParentGroup;
     private IServicePresenter iServicePresenter;
+    private IHeadLinePresenter iHeadLinePresenter;
     private List<ServiceVo.DataVo.ServiceData> dataVoList;
 
     @Nullable
@@ -69,6 +74,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     }
 
     public void initData() {
+        iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iServicePresenter = new ServicePresenterImpl(this);
         iServicePresenter.getService();
         if (!NetUtils.isNetworkAvailable(getActivity())){
@@ -97,14 +103,29 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     @Override
     public void onClick(View v) {
         if (mCooperationTv == v) {//招聘
+            if (iHeadLinePresenter != null) {
+                iHeadLinePresenter.clickCount(1, CLICK_COUNT);//上报
+            }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zk", Constants.TITLE, mCooperationTv.getText() + "");
         } else if (mSecondHandsTv == v) {//二手
+            if (iHeadLinePresenter != null) {
+                iHeadLinePresenter.clickCount(2, CLICK_COUNT);
+            }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zl", Constants.TITLE, mSecondHandsTv.getText() + "");
         } else if (mHousingTv == v) {//租房
+            if (iHeadLinePresenter != null) {
+                iHeadLinePresenter.clickCount(3, CLICK_COUNT);
+            }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zj", Constants.TITLE, mHousingTv.getText() + "");
         } else if (mHouseKeepingTv == v) {//家政
+            if (iHeadLinePresenter != null) {
+                iHeadLinePresenter.clickCount(4, CLICK_COUNT);
+            }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zm", Constants.TITLE, mHouseKeepingTv.getText() + "");
         } else if (mServiceMoreTv == v) {//更多
+            if (iHeadLinePresenter != null) {
+                iHeadLinePresenter.clickCount(5, CLICK_COUNT);
+            }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zn", Constants.TITLE, mServiceMoreTv.getText() + "");
         } else if (mSearchTv == v) {//搜索
             startActivity(SearchActivity.class, "", "", "", "");
@@ -170,6 +191,9 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                             @Override
                             public void onClick(View v) {
                                 ServiceVo.DataVo.ServiceData.ServiceChildData dv = (ServiceVo.DataVo.ServiceData.ServiceChildData) v.getTag();
+                                if (iHeadLinePresenter != null) {
+                                    iHeadLinePresenter.clickCount(dv.getSid(),CLICK_COUNT);//上报
+                                }
                                 startActivity(WebViewActivity.class, Constants.URL, dv.getDst(), Constants.TITLE, dv.getTitle());
                             }
                         });

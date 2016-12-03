@@ -38,9 +38,9 @@ import java.util.List;
 
 public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener {
 
-    private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
+    private final static int HEAD_LINE_TYPE = 0;// 0-新闻 1-视频 2-应用 3-游戏 5-东莞新闻
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
-    private final static int CLICK_COUNT = 1;//记录点击次数；0-视频，1-新闻，2-广告展示；3-广告点击
+    private final static int CLICK_COUNT = 1;//上报；0- 视频播放 1-新闻点击 2-广告展示 3-广告点击 4-服务
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView mMainNewsLv;
@@ -112,7 +112,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                 @Override
                 public void onClick(View v) {
                     if (!NetUtils.isNetworkAvailable(getActivity())) {
-                        ToastUtil.showMiddle(getActivity(), "请检查网络设置");
+                        ToastUtil.showMiddle(getActivity(), R.string.net_set);
                     } else {
                         mNetErrorLay.setVisibility(View.GONE);
                         swipeRefreshLayout.setVisibility(View.VISIBLE);
@@ -126,7 +126,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     @Subscribe
     public void onEventMainThread(EventBusType event) {
         int index = event.getChildMsg();
-        if (event.getMsg() == Constants.HEAD_LINE_NEWS_FLAG && index != -1) {
+        if (event.getMsg() == Constants.HEAD_LINE_NEWS_FLAG && index != -1) {//上报
             iHeadLinePresenter.clickCount(data.getInfos().get(index).getId(), CLICK_COUNT);
         }
     }

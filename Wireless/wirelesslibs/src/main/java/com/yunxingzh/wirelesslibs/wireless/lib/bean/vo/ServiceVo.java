@@ -76,8 +76,17 @@ public class ServiceVo {
             }
 
             public class ServiceChildData{
+                private int sid;
                 private String title;
                 private String dst;
+
+                public int getSid() {
+                    return sid;
+                }
+
+                public void setSid(int sid) {
+                    this.sid = sid;
+                }
 
                 public String getTitle() {
                     return title;
