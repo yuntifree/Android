@@ -125,7 +125,7 @@
     <string name="connect_wifi">已连接</string>
     <string name="connect_dg_success">东莞城市免费WiFi</string>
     <string name="wireless_dg">东莞无限开启智慧生活</string>
-
+    <string name="refresh_net">刷新重试</string>
 
 
     <string name="wsmpurl">http://120.234.130.196:880/wsmp/interface</string>

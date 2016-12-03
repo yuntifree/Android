@@ -25,6 +25,7 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.ServiceVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 
 import java.util.List;
 
@@ -70,6 +71,27 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     public void initData() {
         iServicePresenter = new ServicePresenterImpl(this);
         iServicePresenter.getService();
+        if (!NetUtils.isNetworkAvailable(getActivity())){
+            final View netView = LayoutInflater.from(getActivity()).inflate(R.layout.wifi_closed, null);
+            TextView openTv = (TextView) netView.findViewById(R.id.net_open_tv);
+            TextView contentTv = (TextView) netView.findViewById(R.id.net_content_tv);
+            TextView refreshBtn = (TextView) netView.findViewById(R.id.open_wifi_btn);
+            openTv.setVisibility(View.GONE);
+            contentTv.setText(R.string.network_error);
+            refreshBtn.setText(R.string.refresh_net);
+            mServiceParentGroup.addView(netView,getLayoutParams(0,Gravity.CENTER,LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,0,200,0,0));
+            refreshBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!NetUtils.isNetworkAvailable(getActivity())) {
+                        ToastUtil.showMiddle(getActivity(), "请检查网络设置");
+                    } else {
+                        netView.setVisibility(View.GONE);
+                        iServicePresenter.getService();
+                    }
+                }
+            });
+        }
     }
 
     @Override

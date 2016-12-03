@@ -2,14 +2,14 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
@@ -23,6 +23,7 @@ import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,7 +36,7 @@ import java.util.List;
  * 头条-新闻
  */
 
-public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener{
+public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener {
 
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -47,6 +48,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private HeadLineNewsAdapter headLineNewsAdapter;
     private List<NewsVo.Data.NewsData> newsListNext;
     private NewsVo.Data data;
+    private LinearLayout mNetErrorLay;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child_news, container, false);
@@ -59,6 +61,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         mMainNewsLv = findView(view, R.id.head_line_lv);
         swipeRefreshLayout = findView(view, R.id.swipe_ly);
         swipeRefreshLayout.setOnRefreshListener(this);
+        mNetErrorLay = findView(view, R.id.net_error_news_lay);
         mMainNewsLv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -94,6 +97,30 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         swipeRefreshLayout.setRefreshing(true);
+        if (!NetUtils.isNetworkAvailable(getActivity())){
+            View netView = LayoutInflater.from(getActivity()).inflate(R.layout.wifi_closed, null);
+            swipeRefreshLayout.setVisibility(View.GONE);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+            TextView openTv = (TextView) netView.findViewById(R.id.net_open_tv);
+            TextView contentTv = (TextView) netView.findViewById(R.id.net_content_tv);
+            TextView refreshBtn = (TextView) netView.findViewById(R.id.open_wifi_btn);
+            openTv.setVisibility(View.GONE);
+            contentTv.setText(R.string.network_error);
+            refreshBtn.setText(R.string.refresh_net);
+            mNetErrorLay.addView(netView);
+            refreshBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!NetUtils.isNetworkAvailable(getActivity())) {
+                        ToastUtil.showMiddle(getActivity(), "请检查网络设置");
+                    } else {
+                        mNetErrorLay.setVisibility(View.GONE);
+                        swipeRefreshLayout.setVisibility(View.VISIBLE);
+                        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+                    }
+                }
+            });
+        }
     }
 
     @Subscribe
@@ -101,8 +128,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         int index = event.getChildMsg();
         if (event.getMsg() == Constants.HEAD_LINE_NEWS_FLAG && index != -1) {
             iHeadLinePresenter.clickCount(data.getInfos().get(index).getId(), CLICK_COUNT);
-        } else if (event.getMsg() == Constants.NET_CHAGED){
-            ToastUtil.showMiddle(getActivity(),"sss");
         }
     }
 

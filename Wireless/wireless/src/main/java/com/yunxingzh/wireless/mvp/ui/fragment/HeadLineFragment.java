@@ -43,7 +43,6 @@ public class HeadLineFragment extends BaseFragment implements ViewPager.OnPageCh
 //    private final static int INDEX_THREE = 3;
 
     private TextView mIdApp,mIdGame,mIdVideo,mIdNews,mIdTabLeftLine,mIdTabRightLine;
-    private int screenWidth;// 屏幕的宽度
     private ViewPager mViewPager;
     private HeadLineFragmentPagerAdapter headLineFragmentAdapter;
     private List<Fragment> fragments = new ArrayList<>();

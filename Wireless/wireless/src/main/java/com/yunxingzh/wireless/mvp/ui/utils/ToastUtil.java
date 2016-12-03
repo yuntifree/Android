@@ -2,20 +2,13 @@ package com.yunxingzh.wireless.mvp.ui.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.Gravity;
 import android.widget.Toast;
 
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.config.Constants;
-import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
-import com.yunxingzh.wireless.utility.NetUtil;
 import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpCallback;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
-
-import org.greenrobot.eventbus.EventBus;
 
 public class ToastUtil {
 
@@ -47,9 +40,6 @@ public class ToastUtil {
             return;
         } else if(error == HttpCode.E_MISS_PARAM){//即缺少参数
             showMiddle(context, R.string.net_error);
-            if (!NetUtils.isNetworkAvailable(context)){
-                EventBus.getDefault().post(new EventBusType(Constants.NET_CHAGED));
-            }
             return;
         } else if(error == HttpCode.E_INVAL_PARAM){
             showMiddle(context, R.string.param_error);
