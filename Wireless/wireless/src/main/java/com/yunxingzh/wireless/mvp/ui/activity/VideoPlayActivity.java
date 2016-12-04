@@ -73,7 +73,13 @@ public class VideoPlayActivity extends BaseActivity {
                 //view.loadUrl("javascript:try{autoplay();}catch(e){}");
                 loadCount++;
                 if (loadCount > 1) {
-                    view.loadUrl("javascript:(function() { var videos = document.getElementsByTagName('video'); for(var i=0;i<videos.length;i++){videos[i].play();}})()");
+                    view.loadUrl("javascript:(function() { " +
+                            "var videos = document.getElementsByTagName('video'); " +
+                                "for(var i=0;i<videos.length;i++){" +
+                                    "videos[i].play();" +
+                             "videos[i].addEventListener('ended', function () {  window.close(); alert('11111111')  }, false);"+
+                            "}" +
+                            "})()");
                 }
                 mProgressBar.setVisibility(View.GONE);
             }

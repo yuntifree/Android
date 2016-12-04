@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
@@ -41,6 +42,18 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
 //        if (!NetUtils.isNetworkAvailable(getApplicationContext())) {
 //            ToastUtil.showMiddle(this,R.string.network_error);
 //        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     /* @Override

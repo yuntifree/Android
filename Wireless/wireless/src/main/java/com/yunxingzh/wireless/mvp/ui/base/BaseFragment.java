@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.activity.HttpErrorActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
@@ -39,11 +40,18 @@ public class BaseFragment extends Fragment implements IBaseView, View.OnTouchLis
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(getActivity().getLocalClassName());
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (getView() != null) {
             getView().setOnTouchListener(this);
         }
+        MobclickAgent.onPageStart(getClass().getName());
     }
 
     @Override

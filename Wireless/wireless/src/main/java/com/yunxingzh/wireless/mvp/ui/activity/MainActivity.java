@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
@@ -166,6 +167,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 exitTime = System.currentTimeMillis();
             } else {
                 finish();
+                MobclickAgent.onKillProcess(this);
                 System.exit(STATUS);
             }
             return true;

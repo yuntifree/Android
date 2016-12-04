@@ -77,7 +77,7 @@ public class IptPasswordFragment extends Fragment {
                 } else {
                     accessPoint.setPassword(pwd, AccessPoint.PasswordFrom.INPUT);
                     for (int i = 0; i < wifiInfoList.size(); i++){
-                        if (accessPoint.ssid.equals(wifiInfoList.get(i).getSsid())){
+                        if (accessPoint.ssid.equals(wifiInfoList.get(i).getSsid())){//与服务器端的附近wifi比较
                             FWManager.getInstance().connect(accessPoint);
                         }
                     }
