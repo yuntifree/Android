@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
+import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MyApplication;
@@ -42,6 +43,8 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
 //        if (!NetUtils.isNetworkAvailable(getApplicationContext())) {
 //            ToastUtil.showMiddle(this,R.string.network_error);
 //        }
+        //听云
+        NBSAppAgent.setLicenseKey("87fb7caacc08462a8aecd82cb1c6d4fd").withLocationServiceEnabled(true).start(this.getApplicationContext());
     }
 
     @Override

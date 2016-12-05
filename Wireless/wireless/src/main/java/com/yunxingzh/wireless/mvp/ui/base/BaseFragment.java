@@ -1,10 +1,15 @@
 package com.yunxingzh.wireless.mvp.ui.base;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
+import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.activity.HttpErrorActivity;
@@ -25,6 +30,14 @@ public class BaseFragment extends Fragment implements IBaseView, View.OnTouchLis
 
     protected <T extends View> T findView(View view, int id) {
         return (T) view.findViewById(id);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        //听云
+        NBSAppAgent.setLicenseKey("87fb7caacc08462a8aecd82cb1c6d4fd").withLocationServiceEnabled(true).start(getActivity().getApplicationContext());
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     public void needLogin() {

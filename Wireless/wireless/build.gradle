@@ -20,6 +20,23 @@ android {
         }
     }
 
+    /*听云*/
+    sourceSets {
+        main{
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    allprojects {
+        repositories {
+            jcenter()
+        }
+        tasks.withType(JavaCompile) {
+            sourceCompatibility = 1.7
+            targetCompatibility = 1.7
+        }
+    }
+
     /*友盟多渠道统计*/
     productFlavors {
         xiaomi {}
