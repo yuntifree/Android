@@ -44,11 +44,11 @@ public class LocationUtils {
         if (!mLocationClient.isStarted()) {
             mLocationClient.start();
         }
-        if (mLocationClient != null && mLocationClient.isStarted()) {
-            mLocationClient.requestLocation();
-        } else {
-
-        }
+//        if (mLocationClient != null && mLocationClient.isStarted()) {
+//            mLocationClient.requestLocation();
+//        } else {
+//
+//        }
     }
 
     public void stopMonitor() {

@@ -26,30 +26,21 @@
         <ImageView
             android:id="@+id/type_three_left_img"
             android:layout_width="113dp"
-            android:scaleType="center"
-            android:adjustViewBounds="false"
-            android:maxWidth="113dp"
-            android:maxHeight="74dp"
+            android:scaleType="centerCrop"
             android:layout_height="74dp" />
 
         <ImageView
             android:id="@+id/type_three_middle_img"
             android:layout_width="113dp"
             android:layout_height="74dp"
-            android:scaleType="center"
-            android:adjustViewBounds="true"
-            android:maxWidth="113dp"
-            android:maxHeight="74dp"
+            android:scaleType="centerCrop"
             android:layout_marginLeft="5dp" />
 
         <ImageView
             android:id="@+id/type_three_right_img"
             android:layout_width="113dp"
             android:layout_height="74dp"
-            android:scaleType="center"
-            android:adjustViewBounds="true"
-            android:maxWidth="113dp"
-            android:maxHeight="74dp"
+            android:scaleType="centerCrop"
             android:layout_marginLeft="5dp" />
        </LinearLayout>
 

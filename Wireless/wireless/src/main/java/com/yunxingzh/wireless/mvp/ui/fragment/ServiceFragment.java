@@ -166,11 +166,11 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
             if (width <= 720 && height <= 1280){
                 mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 45, 45, 16, 20, 0, 20));
+                mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 5, 20, 0, 20));
             } else {
-                mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 80, 80, 18, 20, 0, 20));
+                mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 100, 100, 35, 40, 0, 40));
+                mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 15, 20, 0, 20));
             }
-
-            mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 5, 20, 0, 20));
 
             int size = dataVoList.get(i).getItems().size();
             List<ServiceVo.DataVo.ServiceData.ServiceChildData> childDatas = dataVoList.get(i).getItems();

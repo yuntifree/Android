@@ -577,7 +577,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, IWi
 
     public void checkDGWifi() {
         // 1. 未联网，有DG-Free: 连接DG-Free
-        if (NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
+        if (!NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
             AccessPoint DGFreeAp = getDGWifiFromList();
             if (DGFreeAp != null) {//不为空表示周围有东莞wifi
                 FWManager.getInstance().connect(DGFreeAp);//先连接上wifi

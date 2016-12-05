@@ -21,11 +21,11 @@ android {
     }
 
     /*听云*/
-    sourceSets {
-        main{
-            jniLibs.srcDirs = ['libs']
-        }
-    }
+//    sourceSets {
+//        main{
+//            jniLibs.srcDirs = ['libs']
+//        }
+//    }
 
     allprojects {
         repositories {
