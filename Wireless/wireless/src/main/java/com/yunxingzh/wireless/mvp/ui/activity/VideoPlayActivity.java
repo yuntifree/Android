@@ -1,10 +1,13 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
@@ -12,6 +15,7 @@ import android.widget.ProgressBar;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.WebViewUtil;
 
 /**
@@ -27,6 +31,7 @@ public class VideoPlayActivity extends BaseActivity {
     private String playUrl;
     private int loadCount;
 
+    @SuppressLint("JavascriptInterface")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +50,17 @@ public class VideoPlayActivity extends BaseActivity {
     public void initData() {
         playUrl = getIntent().getStringExtra(Constants.VIDEO_URL);
         WebViewUtil.initWebView(webView, mProgressBar);
+
+        WebSettings settings = webView.getSettings();
+        //设置JS脚本
+        settings.setJavaScriptEnabled(true);
+        //支持缩放
+        settings.setSupportZoom(false);
+        //启用内置缩放装置
+        settings.setBuiltInZoomControls(false);
+
+        webView.addJavascriptInterface(new JSClass(), "JSHost");
+
         loadCount = 0;
         webView.setWebViewClient(new WebViewClient() {
             /**
@@ -77,7 +93,7 @@ public class VideoPlayActivity extends BaseActivity {
                             "var videos = document.getElementsByTagName('video'); " +
                                 "for(var i=0;i<videos.length;i++){" +
                                     "videos[i].play();" +
-                             "videos[i].addEventListener('ended', function () {  window.close(); alert('11111111')  }, false);"+
+                             "videos[i].addEventListener('ended', function () { JSHost.closeWindow(); }, false);"+
                             "}" +
                             "})()");
                 }
@@ -100,5 +116,12 @@ public class VideoPlayActivity extends BaseActivity {
     protected void onDestroy() {
         webView.destroy();
         super.onDestroy();
+    }
+
+    private class JSClass extends Object {
+        @JavascriptInterface
+        public void closeWindow() {
+            finish();
+        }
     }
 }

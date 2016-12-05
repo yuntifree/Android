@@ -88,7 +88,8 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     public void initData() {
         baiduMap = mapView.getMap();
         locationUtils = LocationUtils.getInstance(this);
-        new Thread(new GetLocationThread()).start();
+        //new Thread(new GetLocationThread()).start();
+        locationUtils.startMonitor(locationHandler);
         iWifiMapPresenter = new WifiMapPresenterImpl(this);
     }
 
@@ -123,54 +124,40 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         baiduMap.setMapStatus(u);
     }
 
-    public class GetLocationThread implements Runnable {
-        @Override
-        public void run() {
-            try {
-                locationUtils.startMonitor();//开始定位
-                Thread.sleep(2000);
-                Message message = new Message();
-                message.what = 1;
-                locationHandler.sendMessage(message);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     final Handler locationHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    lat = locationUtils.getBaseLocation().latitude;
-                    lon = locationUtils.getBaseLocation().longitude;
-                    //定义Maker坐标点lat,lon:22.933103,113.903870
-                    LatLng point = new LatLng(lat, lon);
-                    //设置地图缩放比例
-                    baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
+        super.handleMessage(msg);
+        if (msg.what == 0) {
+            lat = locationUtils.getBaseLocation().latitude;
+            lon = locationUtils.getBaseLocation().longitude;
+            //定义Maker坐标点lat,lon:22.933103,113.903870
+            LatLng point = new LatLng(lat, lon);
+            //设置地图缩放比例
+            baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
 
-                    MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
-                    baiduMap.animateMapStatus(status);
-                    // 构建Marker图标
-                    BitmapDescriptor bitmap = BitmapDescriptorFactory
-                            .fromResource(R.drawable.mine);
-                    //构建MarkerOption，用于在地图上添加Marker
-                    OverlayOptions option = new MarkerOptions()
-                            .position(point)
-                            .icon(bitmap);
-                    //在地图上添加Marker，并显示
-                    baiduMap.addOverlay(option);
-                    iWifiMapPresenter.getWifiMap(lon, lat);//获取周围热点lon,lat
-                    Bitmap mBit = bitmap.getBitmap();
-                    //如果该图片为当前位置图，则跳过点击事件
+            MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
+            baiduMap.animateMapStatus(status);
+            // 构建Marker图标
+            BitmapDescriptor bitmap = BitmapDescriptorFactory
+                    .fromResource(R.drawable.mine);
+            //构建MarkerOption，用于在地图上添加Marker
+            OverlayOptions option = new MarkerOptions()
+                    .position(point)
+                    .icon(bitmap);
+            //在地图上添加Marker，并显示
+            baiduMap.addOverlay(option);
+            iWifiMapPresenter.getWifiMap(lon, lat);//获取周围热点lon,lat
+            Bitmap mBit = bitmap.getBitmap();
+            //如果该图片为当前位置图，则跳过点击事件
 
-                    if (mBit.getHeight() != 120 && mBit.getWidth() != 120){
-                        initMarkerClickEvent();
-                    }
-                    break;
+            if (mBit.getHeight() != 120 && mBit.getWidth() != 120){
+                initMarkerClickEvent();
             }
+        } else {
+            // TODO
+        }
         }
     };
 
