@@ -24,6 +24,7 @@ import com.yunxingzh.wireless.mvp.presenter.impl.RegisterPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.NetWorkBaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IRegisterView;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
@@ -81,7 +82,11 @@ public class RegisterActivity extends NetWorkBaseActivity implements IRegisterVi
             }
         } else if (view == mGetValidateCodeBtn) {
             if (StringUtils.validatePhoneNumber(getPhone())) {
-                WifiInterface.wifiRegister(handler, getPhone(), "", Constants.TIME_OUT);
+                if (NetUtils.isNetworkAvailable(this)) {
+                    WifiInterface.wifiRegister(handler, getPhone(), "", Constants.TIME_OUT);
+                } else {
+                    ToastUtil.showMiddle(this, R.string.net_error);
+                }
             } else {
                 ToastUtil.showMiddle(this, R.string.enter_right_phone);
             }

@@ -22,6 +22,7 @@ import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
 
 /**
  * Created by stephon_ on 2016/11/2.
@@ -104,6 +105,10 @@ public class HeadLineAppFragment extends BaseFragment implements IHeadLineView,S
 
     @Override
     public void getFontInfoSuccess(FontInfoVo fontInfoVo) {}
+
+    @Override
+    public void getWifiSuccess(WifiVo wifiVo) {
+    }
 
     @Override
     public void onRefresh() {

@@ -26,6 +26,7 @@ import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 
 import java.util.ArrayList;
@@ -135,6 +136,9 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     @Override
     public void getFontInfoSuccess(FontInfoVo fontInfoVo) {}
+
+    @Override
+    public void getWifiSuccess(WifiVo wifiVo) {}
 
     @Override
     public void onRefresh() {

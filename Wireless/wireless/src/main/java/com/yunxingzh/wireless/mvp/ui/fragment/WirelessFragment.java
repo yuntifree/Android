@@ -3,6 +3,8 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,8 +31,10 @@ import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IConnectDGCountPresenter;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
+import com.yunxingzh.wireless.mvp.presenter.IWifiManagerPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.ConnectDGCountPresenterImpl;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
+import com.yunxingzh.wireless.mvp.presenter.impl.WifiManagerPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.SpeedTestActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
@@ -40,6 +44,7 @@ import com.yunxingzh.wireless.mvp.ui.activity.WifiSpiritedActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
+import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
@@ -47,6 +52,7 @@ import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
 import com.yunxingzh.wireless.mvp.view.CircleWaveView;
 import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
@@ -56,6 +62,7 @@ import com.yunxingzh.wirelesslibs.convenientbanner.listener.OnItemClickListener;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
@@ -71,7 +78,7 @@ import java.util.List;
  * 无线
  */
 
-public class WirelessFragment extends BaseFragment implements IHeadLineView, IConnectDGCountView, View.OnClickListener, ScrollViewListener {
+public class WirelessFragment extends BaseFragment implements IHeadLineView, IWifiManagerView, IConnectDGCountView, View.OnClickListener, ScrollViewListener {
 
     private final static String TAG = "WirelessFragment";
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
@@ -83,10 +90,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private final static int SCANNIN_GREQUEST_CODE = 1;
     private static final int DG_SDK_TIME_OUT = 10 * 1000;
 
-    private final static int SCROLL_STOP = 0;
-    private final static int SCROLL_DOWN = 1;
-    private final static int SCROLL_UP = -1;
-
     private int mPageHeight;
     private FragmentManager fragmentManager;
 
@@ -95,11 +98,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private MyScrollView scrollView;
     private TextView mConnectCountTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
-    private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop,mConnectIv;
+    private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop, mConnectIv;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private IConnectDGCountPresenter iConnectDGCountPresenter;
-
+    private IWifiManagerPresenter iWifiManagerPresenter;
     private CircleWaveView mAnimationTv;
     private TextView footView, mConnectText;
     private List<WeatherNewsVo.WeatherNewsData.mainNewsVo> mainNewsVos;
@@ -111,10 +114,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private WeatherNewsVo.WeatherNewsData.WeatherVo weatherNewsData;
     private ConvenientBanner mAdRotationBanner;
 
-    private int mScrollDirection = SCROLL_STOP;
     private WifiUtils wifiUtils = null;
     private CheckEnvTask mCheckTask = null;
     private AccessPoint currentAp;
+
+    private LocationUtils locationUtils;
+    private List<WifiVo.WifiData.MWifiInfo> mWifiInfos;
 
     @Nullable
     @Override
@@ -177,34 +182,15 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
         setAnimation(mWeatherImgBottom, 0, 60, 0, 0);
         setAnimation(mWeatherImgTop, 60, 0, 0, 0);
-
-//        scrollView.setOnTouchListener(new View.OnTouchListener() {
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_UP) {
-//                    scrollView.startScrollerTask();
-//                }
-//                return false;
-//            }
-//        });
-//        scrollView.setOnScrollStoppedListener(new MyScrollView.OnScrollStoppedListener() {
-//            public void onScrollStopped() {
-//                int scrollPos = scrollView.getScrollY();
-//                // 向上滑且小于1屏，回到顶部
-//                if (scrollPos < mPageHeight && mScrollDirection == SCROLL_UP) {
-//                    scrollView.smoothScrollTo(0, 0);
-//                } else if (scrollPos < mPageHeight && mScrollDirection == SCROLL_DOWN) {
-//                    // 向下滑且小于1屏，去到新闻列表
-//                    scrollView.smoothScrollTo(0, mPageHeight);
-//                }
-//            }
-//        });
     }
 
     public void initData() {
         wifiUtils = new WifiUtils(getActivity());
         //注册EventBus
         EventBus.getDefault().register(this);
+        locationUtils = LocationUtils.getInstance(getActivity());
         fragmentManager = getFragmentManager();
+        iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
         iConnectDGCountPresenter = new ConnectDGCountPresenterImpl(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
@@ -215,7 +201,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         WindowManager wm = getActivity().getWindowManager();
         int width = wm.getDefaultDisplay().getWidth();//720,1536
         int height = wm.getDefaultDisplay().getHeight();//1280,2560
-        if (width <= 720 && height <= 1280){
+        if (width <= 720 && height <= 1280) {
             mAnimationTv.setCoreRadius(100);
             mAnimationTv.setMaxWidth(300);
             mAnimationTv.setDiffuseWidth(5);
@@ -224,11 +210,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             mAnimationTv.setMaxWidth(2000);
             mAnimationTv.setDiffuseWidth(30);
         }
-    }
-
-    @Override
-    public void getHeadLineSuccess(NewsVo newsVo) {
-
     }
 
     @Override
@@ -315,7 +296,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             super.handleMessage(msg);
             if (msg.what == 0) {//认证成功
                 ToastUtil.showMiddle(getActivity(), R.string.validate_success);
-                // iConnectDGCountPresenter.connectDGCount();
+                EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));//跳转新闻列表
+                iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
             } else {
                 ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
             }
@@ -330,20 +312,20 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         mCheckTask.execute((Void) null);
     }
 
-    final Handler logoOutHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    ToastUtil.showMiddle(getActivity(), "下线成功");
-                    break;
-                default:
-                    ToastUtil.showMiddle(getActivity(), "下线失败");
-                    break;
-            }
-        }
-    };
+//    final Handler logoOutHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            switch (msg.what) {
+//                case 0:
+//                    ToastUtil.showMiddle(getActivity(), "下线成功");
+//                    break;
+//                default:
+//                    ToastUtil.showMiddle(getActivity(), "下线失败");
+//                    break;
+//            }
+//        }
+//    };
 
     @Override
     public void onClick(View v) {
@@ -388,7 +370,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
     private void onNetChange() {
         changeState();
-        iHeadLinePresenter.weatherNews();
+        if (iHeadLinePresenter != null) {
+            iHeadLinePresenter.weatherNews();
+        }
     }
 
     private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
@@ -405,7 +389,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 }
             } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
                 // 断开网
-                onNetChange();
+                changeState();
             }
         }
 
@@ -483,7 +467,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                         break;
                     case Constants.VALIDATE_SUCCESS://1、已经认证成功。
                         ToastUtil.showMiddle(getActivity(), R.string.connect_success);
-                        //iConnectDGCountPresenter.connectDGCount();
+                        EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));//跳转新闻列表
+                        iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
                         break;
                     default:
                         ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
@@ -492,7 +477,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
             }
             // 判断下按钮的状态
-            onNetChange();
+            changeState();
         }
 
         @Override
@@ -531,23 +516,118 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         }
     }
 
+    public AccessPoint getDGWifiFromList() {
+        AccessPoint DGFreeAp = null;
+        List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
+        for (int i = 0; i < apList.size(); i++) {//找出是否有东莞wifi
+            AccessPoint ap = apList.get(i);
+            if (ap.ssid.equals(Constants.SSID)) {
+                DGFreeAp = ap;
+                break;
+            }
+        }
+        return DGFreeAp;
+    }
+
+    public class GetLocationThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                // TODO: use callback not sleep
+                locationUtils.startMonitor();//开始定位
+                Thread.sleep(2000);
+                Message message = new Message();
+                message.what = 1;
+                locationHandler.sendMessage(message);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    final Handler locationHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
+                    break;
+            }
+        }
+    };
+
+    //服务器后台返回的附近wifi列表
+    @Override
+    public void getWifiSuccess(WifiVo wifiVo) {
+        mWifiInfos = wifiVo.getData().getInfos();
+        if (mWifiInfos != null) {
+            List<AccessPoint> nearList = FWManager.getInstance().getList();//先拿到附近列表
+            int nearSize = nearList.size();
+            for (int i = 0; i < nearSize; i++) {
+                String ssid = nearList.get(i).ssid;
+                if (mWifiInfos.contains(ssid)) {//如果附近列表存在，则连接
+                    FWManager.getInstance().connect(nearList.get(i));
+                } else{
+                    ToastUtil.showMiddle(getActivity(), "附近没有可用wifi");
+                }
+            }
+        }
+    }
+
+    public void checkDGWifi() {
+        // 1. 未联网，有DG-Free: 连接DG-Free
+        if (NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
+            AccessPoint DGFreeAp = getDGWifiFromList();
+            if (DGFreeAp != null) {//不为空表示周围有东莞wifi
+                FWManager.getInstance().connect(DGFreeAp);//先连接上wifi
+            } else if (DGFreeAp == null) { // 4. 未联网，没有DG-Free：如果周围有服务器返回的WiFi，自动连接。否则提示没有可用WiFi
+                new Thread(new GetLocationThread()).start();//获取后台返回的附近wifi列表
+            }
+        } else {
+            //已连上wifi
+            currentAp = FWManager.getInstance().getCurrent();
+            // 3. 已经连上DG-Free的情况：跳转新闻列表
+            if (currentAp.ssid.equals(Constants.SSID)) {
+                CheckAndLogon();
+            } else {
+                // 2. 已经连上其它WiFi，周围有DG-Free的情况，无需去连接DG-Free
+                if (currentAp.ssid.equals(Constants.SSID)) {
+                    return;
+                }
+                ToastUtil.showMiddle(getActivity(), "已经连接 " + currentAp.ssid);
+            }
+        }
+//        startActivity(WifiManagerActivity.class, "", "", "", "");
+    }
+
+    @Subscribe
+    public void onEventMainThread(EventBusType event) {
+        int index = event.getChildMsg();
+        if (event.getMsg() == Constants.MAIN_NEWS_FLAG && index != -1) {//上报
+            iHeadLinePresenter.clickCount(mainNewsVos.get(index).getId(), NEWS);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        locationUtils.stopMonitor();
+        EventBus.getDefault().unregister(this);//反注册EventBus
+    }
+
     @Override
     public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
-//        if (y < oldy) {
-//            mScrollDirection = SCROLL_UP;
-//        } else if (y > oldy) {
-//            mScrollDirection = SCROLL_DOWN;
-//        } else {
-//            mScrollDirection = SCROLL_STOP;
-//        }
-
         if (y > PULL_HEIGHT) { //下拉高度大于10
-           // mNoticeLay.setVisibility(View.GONE);
+            // mNoticeLay.setVisibility(View.GONE);
             mShowMoreIv.setVisibility(View.INVISIBLE);
         } else if (y == HEIGHT) {
-           // mNoticeLay.setVisibility(View.VISIBLE);
+            // mNoticeLay.setVisibility(View.VISIBLE);
         }
+    }
 
+    public String getCurrentWifiMacAddress(){
+        return wifiUtils.getCurrentWifiInfo().getMacAddress();
     }
 
     public void setAnimation(View view, float fromX, float toX, float fromY, float toY) {
@@ -567,56 +647,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         startActivity(intent);
     }
 
-    public AccessPoint getDGWifiFromList() {
-        AccessPoint DGFreeAp = null;
-        List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
-        for (int i = 0; i < apList.size(); i++) {//找出是否有东莞wifi
-            AccessPoint ap = apList.get(i);
-            if (ap.ssid.equals(Constants.SSID)) {
-                DGFreeAp = ap;
-                break;
-            }
-        }
-        return DGFreeAp;
-    }
-
-    public void checkDGWifi() {
-        currentAp = FWManager.getInstance().getCurrent();
-        AccessPoint DGFreeAp = getDGWifiFromList();
-        // 已经连上wifi
-        // TODO: 此处逻辑要修改
-        // 1. 未联网，有DG-Free: 连接DG-Free
-        // 2. 已经连上其它WiFi，周围有DG-Free的情况：是否需要连接DG-Free？
-        // 3. 已经连上DG-Free的情况：跳转新闻列表
-        // 4. 未联网，没有DG-Free：如果周围有服务器返回的WiFi，自动连接。否则提示没有可用WiFi
-        if (currentAp != null) {
-            if (DGFreeAp != null && currentAp.ssid.equals(DGFreeAp.ssid)) {
-                CheckAndLogon();
-            } else {
-                //已连上普通wifi
-                ToastUtil.showMiddle(getActivity(), "已经连接 "+currentAp.ssid);
-            }
-        } else if (DGFreeAp != null) {
-            FWManager.getInstance().connect(DGFreeAp);
-        } else {
-            startActivity(WifiManagerActivity.class, "", "", "", "");
-        }
-    }
-
-    @Subscribe
-    public void onEventMainThread(EventBusType event) {
-        int index = event.getChildMsg();
-        if (event.getMsg() == Constants.MAIN_NEWS_FLAG && index != -1) {//上报
-            iHeadLinePresenter.clickCount(mainNewsVos.get(index).getId(), NEWS);
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        EventBus.getDefault().unregister(this);//反注册EventBus
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -632,6 +662,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
     @Override
     public void connectDGCountSuccess() {
+    }
 
+    @Override
+    public void getHeadLineSuccess(NewsVo newsVo) {
     }
 }
