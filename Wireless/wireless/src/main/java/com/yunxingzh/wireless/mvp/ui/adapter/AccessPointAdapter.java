@@ -306,7 +306,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         @Override
         public void onClick(View v) {
             if(type == TYPE_CURRENT_AP){
-
+                // do nothing
             } else if(type == TYPE_FOCUS_AP){
                 FWManager.getInstance().connect(accessPoint);
             } else if(type == TYPE_NOAUTH_AP){

@@ -315,20 +315,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             super.handleMessage(msg);
             if (msg.what == 0) {//认证成功
                 ToastUtil.showMiddle(getActivity(), R.string.validate_success);
-
-                currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
-                if (currentAp != null) {
-                    mAnimationTv.setCoreImage(R.drawable.main_connected);
-                    mAnimationTv.stop();
-                    String connText;
-                    if (currentAp.equals(Constants.SSID)) {
-                        connText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
-                        mConnectText.setText(connText);
-                    } else {
-                        connText = getResources().getString(R.string.connect_wifi) + currentAp.ssid;
-                        mConnectText.setText(connText);
-                    }
-                }
                 // iConnectDGCountPresenter.connectDGCount();
             } else {
                 ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
@@ -408,15 +394,17 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
         @Override
         public void onStateChanged(WifiState new_state, WifiState old_state) {
+            // 连上网
             if (new_state == WifiState.CONNECTED) {
                 currentAp = FWManager.getInstance().getCurrent();
                 if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
                     CheckAndLogon();
                 } else {
                     // 先不处理
+                    onNetChange();
                 }
-                onNetChange();
             } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
+                // 断开网
                 onNetChange();
             }
         }
@@ -503,6 +491,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             } else {
                 ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
             }
+            // 判断下按钮的状态
+            onNetChange();
         }
 
         @Override
@@ -510,39 +500,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             mCheckTask = null;
         }
     }
-
-    public class CheckEnvThread implements Runnable {
-        @Override
-        public void run() {
-            try {
-                int checkResult = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
-                Message message = new Message();
-                message.what = checkResult;
-                checkHandler.sendMessage(message);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public Handler checkHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
-                    WifiInterface.wifiLogon(validateHandler, MyApplication.sApplication.getUserName(), MyApplication.sApplication.getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
-                    break;
-                case Constants.VALIDATE_SUCCESS://1、已经认证成功。
-                    ToastUtil.showMiddle(getActivity(), R.string.connect_success);
-                    //iConnectDGCountPresenter.connectDGCount();
-                    break;
-                default:
-                    ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
 
     //连接后改变状态
     public void changeState() {
@@ -627,6 +584,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         currentAp = FWManager.getInstance().getCurrent();
         AccessPoint DGFreeAp = getDGWifiFromList();
         // 已经连上wifi
+        // TODO: 此处逻辑要修改
+        // 1. 未联网，有DG-Free: 连接DG-Free
+        // 2. 已经连上其它WiFi，周围有DG-Free的情况：是否需要连接DG-Free？
+        // 3. 已经连上DG-Free的情况：跳转新闻列表
+        // 4. 未联网，没有DG-Free：如果周围有服务器返回的WiFi，自动连接。否则提示没有可用WiFi
         if (currentAp != null) {
             if (DGFreeAp != null && currentAp.ssid.equals(DGFreeAp.ssid)) {
                 CheckAndLogon();
