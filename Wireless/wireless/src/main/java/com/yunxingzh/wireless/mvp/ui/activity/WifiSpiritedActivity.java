@@ -64,36 +64,18 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
                 ToastUtil.showMiddle(this, R.string.input_ssid);
                 return;
             }
-            new Thread(new GetLocationThread()).start();
+            locationUtils.startMonitor(locationHandler);
         }
     }
 
-    public class GetLocationThread implements Runnable {
-        @Override
-        public void run() {
-            try {
-                locationUtils.startMonitor();//开始定位
-                Thread.sleep(2000);
-                Message message = new Message();
-                message.what = 1;
-                locationHandler.sendMessage(message);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     final Handler locationHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    iWifiSpiritedPresenter.wifiSpirited(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude,getSsid(),getPwd());
-                    break;
-                default:
-                    break;
-            }
+        super.handleMessage(msg);
+        if (msg.what == 0) {
+            iWifiSpiritedPresenter.wifiSpirited(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude,getSsid(),getPwd());
+        }
         }
     };
 

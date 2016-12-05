@@ -183,6 +183,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     protected void onBindItemViewHolder(ItemViewHolder holder, int section, int position) {
         int type = sections.get(section);
         if (type == TYPE_CURRENT_AP) {
+            holder.setLayerVisible(true);
             holder.setAccessPoint(mCurrentAPoint, type);
 //        } else if (type == TYPE_FOCUS_AP) {
 //            holder.setAccessPoint(mFocusPoints.get(position), type);
@@ -190,6 +191,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 //            holder.setAccessPoint(mNoauthPoints.get(position), type);
         } else if (type == TYPE_OTHER_AP) {
             AccessPointEx ap = mOtherPoints.get(position);
+            holder.setLayerVisible(false);
             holder.setAccessPoint(ap.ap, ap.type);
         }
     }
@@ -199,6 +201,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         return LayoutInflater.from(mContext);
     }
 
+    //TODO: fetch password from server
     private void refreshPassword() {
         List<AccessPoint> aps = new ArrayList<AccessPoint>();
         for (AccessPoint ap : mAccessPoints) {
@@ -260,6 +263,10 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             mSubicon = (ImageView) itemView.findViewById(R.id.iv_subicon);
         }
 
+        public void setLayerVisible(boolean visible) {
+            mWifiItemLay.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+
         public void setAccessPoint(AccessPoint ap, int type) {
             this.accessPoint = ap;
             this.type = type;
@@ -267,7 +274,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             mSSID.setText(ap.ssid);
 
             if (type == TYPE_CURRENT_AP) {
-                mWifiItemLay.setVisibility(View.VISIBLE);
                 mSubtitle.setVisibility(View.VISIBLE);
                 mSubtitle.setText(context.getResources().getString(mCurrentState.resId));
                 if (mCurrentState == WifiState.CONNECTED) {//当前状态-已经连接
@@ -310,7 +316,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             } else if(type == TYPE_FOCUS_AP){
                 FWManager.getInstance().connect(accessPoint);
             } else if(type == TYPE_NOAUTH_AP){
-                DialogActivity.showInuptPWD(context, accessPoint, mWifiInfoList, false);
+                DialogActivity.showInuptPWD(context, accessPoint, false);
             }
         }
 

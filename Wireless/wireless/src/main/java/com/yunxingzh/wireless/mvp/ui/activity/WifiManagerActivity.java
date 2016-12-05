@@ -102,7 +102,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
 
         locationUtils = LocationUtils.getInstance(this);
-        new Thread(new WifiManagerActivity.GetLocationThread()).start();
+        locationUtils.startMonitor(locationHandler);
 
         mAdapter = new AccessPointAdapter(this);
         mWifiRv.setAdapter(mAdapter);
@@ -121,30 +121,16 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         }
     }
 
-    public class GetLocationThread implements Runnable {
-        @Override
-        public void run() {
-            try {
-                // TODO: use callback not sleep
-                locationUtils.startMonitor();//开始定位
-                Thread.sleep(2000);
-                Message message = new Message();
-                message.what = 1;
-                locationHandler.sendMessage(message);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+
 
     final Handler locationHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
-                    break;
+        super.handleMessage(msg);
+            if (msg.what == 0) {
+                iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
+            } else {
+                Logg.d(TAG, "getLocation err:" + msg.what);
             }
         }
     };
@@ -212,7 +198,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
                     refreshList(msg.arg1);
                     break;
                 case MSG_AUTH_ERROR:
-                    DialogActivity.showInuptPWD(WifiManagerActivity.this, (AccessPoint) msg.obj,mWifiInfos, true);
+                    DialogActivity.showInuptPWD(WifiManagerActivity.this, (AccessPoint) msg.obj, true);
                     break;
             }
         }

@@ -82,7 +82,7 @@ public class APointDetailFragment extends Fragment {
                     if(accessPoint.isFreeWifi()){
                         FWManager.getInstance().connect(accessPoint);
                     } else {
-                        DialogActivity.showInuptPWD(getActivity(), accessPoint, null,false);
+                        DialogActivity.showInuptPWD(getActivity(), accessPoint,false);
                     }
                 }
             });

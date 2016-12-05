@@ -3,6 +3,8 @@ package com.yunxingzh.wireless.mvp.ui.utils;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.baidu.location.BDLocation;
@@ -12,6 +14,7 @@ import com.baidu.location.LocationClientOption;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.AreaUtils;
 
 import java.util.List;
+
 
 /**
  * Created by carey on 2016/7/6 0006.
@@ -26,6 +29,7 @@ public class LocationUtils {
 
     public BDLocationListener myListener = new MyLocationListener();
     private LocationClient mLocationClient;
+    private Handler mHandler;
 
     public static LocationUtils getInstance(Context context) {
         if (mInstance == null) {
@@ -40,14 +44,10 @@ public class LocationUtils {
         mLocationClient.registerLocationListener(myListener);
     }
 
-    public void startMonitor() {
+    public void startMonitor(Handler handler) {
+        mHandler = handler;
         if (!mLocationClient.isStarted()) {
             mLocationClient.start();
-        }
-        if (mLocationClient != null && mLocationClient.isStarted()) {
-            mLocationClient.requestLocation();
-        } else {
-
         }
     }
 
@@ -70,7 +70,7 @@ public class LocationUtils {
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy
         );//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
-        int span=1000;
+        int span = 5000;
         option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
         option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
         option.setOpenGps(true);//可选，默认false,设置是否使用gps
@@ -86,9 +86,6 @@ public class LocationUtils {
     public class MyLocationListener implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {
-            if (location == null) {
-                return ;
-            }
             mLocation = location;
             mBaseLocation.latitude = mLocation.getLatitude();
             mBaseLocation.longitude = mLocation.getLongitude();
@@ -100,10 +97,12 @@ public class LocationUtils {
             sb.append(location.getLatitude());
             sb.append("\nlontitude : ");
             sb.append(location.getLongitude());
+
+            int ret = location.getLocType();
+
             if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
                 sb.append("\ndescribe : ");
                 sb.append("gps定位成功");
-
             } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果
                 sb.append("\ndescribe : ");
                 sb.append("网络定位成功");
@@ -119,10 +118,25 @@ public class LocationUtils {
             } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
                 sb.append("\ndescribe : ");
                 sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
+            } else if (location.getLocType() == BDLocation.TypeServerCheckKeyError) {
+                sb.append("\ndescribe : ");
+                sb.append("baidu key error");
             }
             sb.append("\nlocationdescribe : ");
             sb.append(location.getLocationDescribe());// 位置语义化信息
             Log.i("sd",sb.toString());
+
+            if (mHandler != null) {
+                Message msg = mHandler.obtainMessage();
+                if (ret == BDLocation.TypeGpsLocation ||
+                        ret == BDLocation.TypeNetWorkLocation ||
+                        ret == BDLocation.TypeOffLineLocation) {
+                    msg.what = 0;
+                } else {
+                    msg.what = ret;
+                }
+                mHandler.sendMessage(msg);
+            }
         }
     }
 
