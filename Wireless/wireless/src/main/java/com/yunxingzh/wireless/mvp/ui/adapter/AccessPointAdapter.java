@@ -122,10 +122,10 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             String longitude = "";
             String latitude = "";
             String[] ssids = null;
-            if (mAccessPoints != null) {
-                ssids = new String[mAccessPoints.size()];
-                for (int i = 0; i < mAccessPoints.size(); i++) {
-                    ssids[i] = mAccessPoints.get(i).ssid;
+            if (uploadList != null) {
+                ssids = new String[uploadList.size()];
+                for (int i = 0; i < uploadList.size(); i++) {
+                    ssids[i] = uploadList.get(i);
                 }
                 longitude = SPUtils.get(mContext, "longitude", "");
                 latitude = SPUtils.get(mContext, "latitude", "");
@@ -144,7 +144,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
                         List<WifiVo.WifiData.MWifiInfo> mWifiList = response.getData().getWifipass();
                         if (mWifiList != null) {
                             for (int i = 0; i < mWifiList.size(); i++) {
-                                mCurrentAPoint.setPassword(mWifiList.get(i).getPass(), AccessPoint.PasswordFrom.UNKNOWN);
+                                mAccessPoints.get(i).setPassword(mWifiList.get(i).getPass(), AccessPoint.PasswordFrom.INPUT);
                             }
                         }
                     } else {

@@ -1,5 +1,8 @@
 package com.yunxingzh.wirelesslibs.wireless.lib.utils;
 
+import android.app.Application;
+import android.content.Context;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,14 +13,14 @@ import java.util.List;
  * 生成json的工具类
  */
 
-public class JsonUtils {
+public class JsonUtils extends Application{
 
     private JsonUtils() {
 
     }
 
-    public static String jsonStirngForUser(int term, double version, long ts,int nettype, int type,String username,String password,
-                                           String model,String channel,String udid) {
+    public static String jsonStirngForUser(int term, double version, long ts, int nettype, int type, String username, String password,
+                                           String model, String channel, String udid) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("term", term);
@@ -65,6 +68,38 @@ public class JsonUtils {
         return jsonObject.toString();
     }
 
+   // public static JSONObject parentJsonNode() {
+//        MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
+//                0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
+//                StringUtils.getCurrentTime(),
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put("uid", uid);
+//            jsonObject.put("token", token);
+//            jsonObject.put("term", term);
+//            jsonObject.put("version", version);
+//            jsonObject.put("ts", ts);
+//            jsonObject.put("nettype", AppUtils.getNetWorkType());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//        return jsonObject;
+   // }
+
+//    public static String childJsonNode(int a,int b){
+//        JSONObject jsObj = parentJsonNode(uid,token,term,version,ts,nettype);
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put("a",a);
+//            jsonObject.put("b",b);
+//            jsObj.put("data",jsonObject);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return jsObj.toString();
+//    }
+
     public static String jsonStirngForWifi(int uid, String token, int term, double version, long ts,
                                            int nettype, double longitude, double latitude, String[] ssids) {
         JSONObject jsonObject = new JSONObject();
@@ -80,7 +115,7 @@ public class JsonUtils {
             data.put("latitude", latitude);
 
             JSONArray array = new JSONArray();
-            for (int i = 0; i < ssids.length; i++){
+            for (int i = 0; i < ssids.length; i++) {
                 array.put(ssids[i]);
             }
             data.put("ssids", array);
@@ -93,7 +128,7 @@ public class JsonUtils {
     }
 
     public static String jsonStirngForMain(int uid, String token, int term, double version, long ts,
-                                           int nettype,String apmac) {
+                                           int nettype, String apmac) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("uid", uid);
