@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yunxingzh.wireless.mview.dialog.LoadingDialogFragment;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
+import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IBaseView;
 
 /**

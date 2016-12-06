@@ -1,21 +1,15 @@
 package wireless.libs.model.impl;
 
-import com.yunxingzh.wireless.mvp.ui.utils.JsonUtils;
+import com.yunxingzh.wireless.utils.JsonUtils;
 
 import okhttp3.Headers;
 import wireless.libs.api.Api;
 import wireless.libs.api.HttpCode;
-import wireless.libs.bean.dto.StringDto;
-import wireless.libs.bean.vo.FontInfoVo;
-import wireless.libs.bean.vo.NewsVo;
 import wireless.libs.bean.vo.WifiMapVo;
-import wireless.libs.model.IHeadLineModel;
 import wireless.libs.model.IWifiMapModel;
 import wireless.libs.okhttp.OkHttpUtil;
 import wireless.libs.okhttp.OkRequestParams;
 import wireless.libs.okhttp.response.OkHttpResBeanHandler;
-
-import okhttp3.Headers;
 
 /**
  * Created by stephon on 2016/11/18.

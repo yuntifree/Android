@@ -1,9 +1,9 @@
 package com.yunxingzh.wireless.mvp.presenter.impl;
 
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.presenter.IWifiMapPresenter;
-import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
+import com.yunxingzh.wireless.utils.AppUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiMapView;
 
 import wireless.libs.bean.vo.WifiMapVo;
@@ -28,9 +28,9 @@ public class WifiMapPresenterImpl implements IWifiMapPresenter,IWifiMapModel.onG
     public void getWifiMap(double longitude, double latitude) {
         if (iWifiMapView != null){
             iWifiMapView.showProgress();
-            iWifiMapModel.getWifiMap(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
-                    0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
-                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),longitude,latitude,this);
+            iWifiMapModel.getWifiMap(MainApplication.sApplication.getUser().getData().getUid(), MainApplication.sApplication.getToken(),
+                    0,Double.parseDouble(AppUtils.getVersionName(MainApplication.sApplication)),
+                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MainApplication.sApplication),longitude,latitude,this);
         }
     }
 

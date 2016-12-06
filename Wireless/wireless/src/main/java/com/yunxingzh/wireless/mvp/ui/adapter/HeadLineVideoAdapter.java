@@ -6,7 +6,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 
 import java.util.List;
 

@@ -15,7 +15,7 @@ import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.dialog.LoadingDialogFragment;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
+import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IBaseView;
 
 /**
@@ -60,7 +60,7 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
     /* @Override
     protected void onStart() {
         super.onStart();
-        if (MyApplication.sApplication.isExit()) {
+        if (MainApplication.sApplication.isExit()) {
             finish();
         }
     }*/

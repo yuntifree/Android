@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 
 import java.util.List;

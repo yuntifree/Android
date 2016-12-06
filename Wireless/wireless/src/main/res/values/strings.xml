@@ -5,13 +5,14 @@
     <string name="determine">确定</string>
     <string name="scan_text">将二维码放入框内, 即可自动扫描</string>
 
-    <string name="http_error_msg">抱歉，您的网络出错啦！</string>
+    <string name="http_error_msg">网络傲娇啦~</string>
     <string name="http_error_tips">暂时没有检测到网络信号，请尝试检查你的网络连接是否存在异常，恢复网络后将自动正常加载</string>
 
     <string name="net_error_timeout">网络连接超时</string>
     <string name="net_error_server">服务器错误</string>
     <string name="net_error_net">网络错误</string>
     <string name="net_error_unknow">未知错误</string>
+    <string name="json_parse_error">JSON解析错误</string>
 
     <string name="wireless">无线</string>
     <string name="first_news">头条</string>

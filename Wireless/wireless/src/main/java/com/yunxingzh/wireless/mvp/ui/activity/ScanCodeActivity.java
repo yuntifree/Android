@@ -1,6 +1,5 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
@@ -35,7 +34,6 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.zxing.camera.CameraManager;
 import com.yunxingzh.wireless.mvp.zxing.decoding.CaptureActivityHandler;
 import com.yunxingzh.wireless.mvp.zxing.decoding.InactivityTimer;

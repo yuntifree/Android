@@ -22,12 +22,14 @@ import com.yunxingzh.wireless.mvp.presenter.impl.ServicePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.SearchActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
-import com.yunxingzh.wireless.mvp.ui.utils.NetUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
+import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
 
 import java.util.List;
 
+import wireless.libs.bean.Service;
+import wireless.libs.bean.resp.ServiceList;
 import wireless.libs.bean.vo.ServiceVo;
 
 /**
@@ -45,7 +47,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     private LinearLayout mServiceParentGroup;
     private IServicePresenter iServicePresenter;
     private IHeadLinePresenter iHeadLinePresenter;
-    private List<ServiceVo.DataVo.ServiceData> dataVoList;
+    //private List<ServiceVo.DataVo.ServiceData> dataVoList;
 
     @Nullable
     @Override
@@ -131,15 +133,109 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         }
     }
 
+//    @Override
+//    public void getServiceSuccess(ServiceVo serviceVo) {
+//        dataVoList = serviceVo.getData().getServices();
+//        //获取屏幕宽高
+//        WindowManager wm = getActivity().getWindowManager();
+//        int width = wm.getDefaultDisplay().getWidth();//720,1536
+//        int height = wm.getDefaultDisplay().getHeight();//1280,2560
+//
+//        for (int i = 0; i < dataVoList.size(); i++) {
+//            LinearLayout mServiceItem = new LinearLayout(getActivity());//item最外层layout
+//            mServiceItem.setBackgroundColor(getResources().getColor(R.color.white));
+//            mServiceItem.setOrientation(LinearLayout.VERTICAL);
+//
+//            LinearLayout mItemTop = new LinearLayout(getActivity());//item顶部layout
+//            mItemTop.setOrientation(LinearLayout.HORIZONTAL);
+//
+//            ImageView mServiceImg = new ImageView(getActivity());
+//            Glide.with(getActivity()).load(dataVoList.get(i).getIcon()).placeholder(R.drawable.ic_close).into(mServiceImg);
+//
+//            TextView mServiceTitle = new TextView(getActivity());
+//            mServiceTitle.setTextColor(getResources().getColor(R.color.gray_3c3c3c));
+//            mServiceTitle.setTextSize(14);
+//            mServiceTitle.setText(dataVoList.get(i).getTitle());
+//
+//            View lineSmall = new View(getActivity());
+//            lineSmall.setMinimumHeight(1);
+//            lineSmall.setBackgroundColor(getResources().getColor(R.color.gray_e6e6e6));
+//
+//            View line = new View(getActivity());
+//            line.setMinimumHeight(20);
+//            line.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
+//
+//            if (width <= 720 && height <= 1280){
+//                mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 45, 45, 16, 20, 0, 20));
+//                mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 5, 20, 0, 20));
+//            } else {
+//                mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 100, 100, 35, 40, 0, 40));
+//                mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 15, 20, 0, 20));
+//            }
+//
+//            int size = dataVoList.get(i).getItems().size();
+//            List<ServiceVo.DataVo.ServiceData.ServiceChildData> childDatas = dataVoList.get(i).getItems();
+//
+//            int num = ((size % 3) > 0) ? 1 : 0;
+//            int lines = size / 3 + num;//得到行数
+//
+//            mServiceItem.addView(mItemTop);
+//            mServiceItem.addView(lineSmall, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, 1, 0, 0, 0, 0));
+//
+//            for (int j = 0; j < lines; j++) {//循环行数
+//                LinearLayout childLay = new LinearLayout(getActivity());
+//                for (int k = 0; k < 3; k++) {//循环子item
+//                    int positon = j * 3 + k;//得到item当前position
+//                    if (positon >= size) {//一行不足3个时填充空view
+//                        TextView nullView = new TextView(getActivity());
+//                        childLay.addView(nullView, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, 60, 0, 0, 0, 0));
+//                    } else {
+//                        TextView views = new TextView(getActivity());
+//                        String title = childDatas.get(positon).getTitle();
+//                        views.setText(title);
+//                        views.setTextSize(14);
+//                        views.setGravity(Gravity.CENTER);
+//                        views.setTextColor(getResources().getColor(R.color.gray_5a5a5a));
+//                        views.setTag(childDatas.get(positon));
+//                        views.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                ServiceVo.DataVo.ServiceData.ServiceChildData dv = (ServiceVo.DataVo.ServiceData.ServiceChildData) v.getTag();
+//                                if (iHeadLinePresenter != null) {
+//                                    iHeadLinePresenter.clickCount(dv.getSid(),CLICK_COUNT);//上报
+//                                }
+//                                startActivity(WebViewActivity.class, Constants.URL, dv.getDst(), Constants.TITLE, dv.getTitle());
+//                            }
+//                        });
+//                        childLay.addView(views, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, 60, 0, 0, 0, 0));
+//                    }
+//                }
+//
+//                if (width <= 720 && height <= 1280){
+//                    getLines(lines,mServiceItem,j,childLay,40,40);
+//                } else {
+//                    getLines(lines,mServiceItem,j,childLay,80,80);
+//                }
+//
+//            }
+//
+//            mServiceParentGroup.addView(mServiceItem);
+//            if (i == dataVoList.size() - 1){
+//                return;
+//            }
+//            mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+//        }
+//    }
+
     @Override
-    public void getServiceSuccess(ServiceVo serviceVo) {
-        dataVoList = serviceVo.getData().getServices();
+    public void getServiceListSuccess(ServiceList services) {
+        List<Service> list = services.services;
         //获取屏幕宽高
         WindowManager wm = getActivity().getWindowManager();
         int width = wm.getDefaultDisplay().getWidth();//720,1536
         int height = wm.getDefaultDisplay().getHeight();//1280,2560
 
-        for (int i = 0; i < dataVoList.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             LinearLayout mServiceItem = new LinearLayout(getActivity());//item最外层layout
             mServiceItem.setBackgroundColor(getResources().getColor(R.color.white));
             mServiceItem.setOrientation(LinearLayout.VERTICAL);
@@ -148,12 +244,12 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             mItemTop.setOrientation(LinearLayout.HORIZONTAL);
 
             ImageView mServiceImg = new ImageView(getActivity());
-            Glide.with(getActivity()).load(dataVoList.get(i).getIcon()).placeholder(R.drawable.ic_close).into(mServiceImg);
+            Glide.with(getActivity()).load(list.get(i).icon).placeholder(R.drawable.ic_close).into(mServiceImg);
 
             TextView mServiceTitle = new TextView(getActivity());
             mServiceTitle.setTextColor(getResources().getColor(R.color.gray_3c3c3c));
             mServiceTitle.setTextSize(14);
-            mServiceTitle.setText(dataVoList.get(i).getTitle());
+            mServiceTitle.setText(list.get(i).title);
 
             View lineSmall = new View(getActivity());
             lineSmall.setMinimumHeight(1);
@@ -171,8 +267,8 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 15, 20, 0, 20));
             }
 
-            int size = dataVoList.get(i).getItems().size();
-            List<ServiceVo.DataVo.ServiceData.ServiceChildData> childDatas = dataVoList.get(i).getItems();
+            int size = list.get(i).items.size();
+            List<Service.ServiceItem> childDatas = list.get(i).items;
 
             int num = ((size % 3) > 0) ? 1 : 0;
             int lines = size / 3 + num;//得到行数
@@ -189,7 +285,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                         childLay.addView(nullView, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, 60, 0, 0, 0, 0));
                     } else {
                         TextView views = new TextView(getActivity());
-                        String title = childDatas.get(positon).getTitle();
+                        String title = childDatas.get(positon).title;
                         views.setText(title);
                         views.setTextSize(14);
                         views.setGravity(Gravity.CENTER);
@@ -198,11 +294,11 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                         views.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                ServiceVo.DataVo.ServiceData.ServiceChildData dv = (ServiceVo.DataVo.ServiceData.ServiceChildData) v.getTag();
+                                Service.ServiceItem dv = (Service.ServiceItem) v.getTag();
                                 if (iHeadLinePresenter != null) {
-                                    iHeadLinePresenter.clickCount(dv.getSid(),CLICK_COUNT);//上报
+                                    iHeadLinePresenter.clickCount(dv.sid,CLICK_COUNT);//上报
                                 }
-                                startActivity(WebViewActivity.class, Constants.URL, dv.getDst(), Constants.TITLE, dv.getTitle());
+                                startActivity(WebViewActivity.class, Constants.URL, dv.dst, Constants.TITLE, dv.title);
                             }
                         });
                         childLay.addView(views, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, 60, 0, 0, 0, 0));
@@ -218,7 +314,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             }
 
             mServiceParentGroup.addView(mServiceItem);
-            if (i == dataVoList.size() - 1){
+            if (i == list.size() - 1){
                 return;
             }
             mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));

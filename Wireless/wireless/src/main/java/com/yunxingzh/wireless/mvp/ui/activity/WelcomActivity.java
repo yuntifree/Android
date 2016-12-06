@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.SPUtils;
+import com.yunxingzh.wireless.utils.SPUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;

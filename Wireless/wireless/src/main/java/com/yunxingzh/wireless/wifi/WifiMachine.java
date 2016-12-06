@@ -9,7 +9,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.text.TextUtils;
 
-import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

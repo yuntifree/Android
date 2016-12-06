@@ -9,7 +9,7 @@ import android.net.wifi.WifiConfiguration.PairwiseCipher;
 import android.net.wifi.WifiConfiguration.Protocol;
 import android.text.TextUtils;
 
-import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
 
 public class ConfigurationSecuritiesOld extends ConfigurationSecurities {
 

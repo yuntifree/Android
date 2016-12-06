@@ -1,12 +1,10 @@
 package com.yunxingzh.wireless.mvp.presenter.impl;
 
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.presenter.IWifiManagerPresenter;
-import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
+import com.yunxingzh.wireless.utils.AppUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
-
-import java.util.ArrayList;
 
 import wireless.libs.bean.vo.WifiVo;
 import wireless.libs.model.IWifiManagerModel;
@@ -30,9 +28,9 @@ public class WifiManagerPresenterImpl implements IWifiManagerPresenter,IWifiMana
     public void getWifi(double longitude, double latitude, String[] ssids) {
         if (iWifiManagerView != null){
             iWifiManagerView.showProgress();
-            iWifiManagerModel.getWifi(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
-                    0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
-                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),longitude,latitude,ssids,this);
+            iWifiManagerModel.getWifi(MainApplication.sApplication.getUser().getData().getUid(), MainApplication.sApplication.getToken(),
+                    0,Double.parseDouble(AppUtils.getVersionName(MainApplication.sApplication)),
+                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MainApplication.sApplication),longitude,latitude,ssids,this);
         }
     }
 

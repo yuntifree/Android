@@ -1,6 +1,6 @@
 package wireless.libs.model.impl;
 
-import com.yunxingzh.wireless.mvp.ui.utils.JsonUtils;
+import com.yunxingzh.wireless.utils.JsonUtils;
 
 import okhttp3.Headers;
 import wireless.libs.api.HttpCode;

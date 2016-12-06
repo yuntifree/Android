@@ -25,7 +25,7 @@ import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.presenter.IConnectDGCountPresenter;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.ConnectDGCountPresenterImpl;
@@ -40,12 +40,12 @@ import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mview.MyScrollView;
-import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.NetUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
-import com.yunxingzh.wireless.mvp.ui.utils.Utility;
-import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
+import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
+import com.yunxingzh.wireless.utils.Utility;
+import com.yunxingzh.wireless.utils.WifiUtils;
 import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
@@ -328,7 +328,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                     ToastUtil.showMiddle(getActivity(), R.string.please_open_wifi);
                 }
             }
-            //  WifiInterface.wifiLogout(logoOutHandler,MyApplication.sApplication.getUserName(),5000);
+            //  WifiInterface.wifiLogout(logoOutHandler,MainApplication.sApplication.getUserName(),5000);
         } else if (mWeatherLay == v) {
             startActivity(WebViewActivity.class, Constants.URL, Constants.URL_WEATHER, Constants.TITLE, "东莞天气");
         } else if (footView == v) {//查看更多新闻
@@ -455,8 +455,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             if (success) {
                 switch (mCheckRet) {
                     case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
-                        WifiInterface.wifiLogon(validateHandler, MyApplication.getInstance().getUserName(),
-                                MyApplication.getInstance().getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
+                        WifiInterface.wifiLogon(validateHandler, MainApplication.getInstance().getUserName(),
+                                MainApplication.getInstance().getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
                         break;
                     case Constants.VALIDATE_SUCCESS://1、已经认证成功。
                         ToastUtil.showMiddle(getActivity(), R.string.connect_success);

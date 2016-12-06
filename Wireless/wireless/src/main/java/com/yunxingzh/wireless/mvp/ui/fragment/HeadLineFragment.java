@@ -5,13 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
@@ -19,7 +15,6 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineFragmentPagerAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

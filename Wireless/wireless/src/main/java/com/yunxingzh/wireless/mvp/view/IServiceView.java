@@ -1,11 +1,12 @@
 package com.yunxingzh.wireless.mvp.view;
 
-import wireless.libs.bean.vo.ServiceVo;
+import wireless.libs.bean.resp.ServiceList;
 
 /**
  * Created by stephon on 2016/11/6.
  */
 
 public interface IServiceView extends IBaseView{
-    void getServiceSuccess(ServiceVo serviceVo);
+    //void getServiceSuccess(ServiceVo serviceVo);
+    void getServiceListSuccess(ServiceList services);
 }

@@ -16,13 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.SpeedTestDialog;
+import com.yunxingzh.wireless.utils.AppUtils;
+import com.yunxingzh.wireless.utils.SpeedTestDialog;
 import com.yunxingzh.wireless.mview.RotatePointer;
-import com.yunxingzh.wireless.mvp.ui.utils.NetUtil;
-import com.yunxingzh.wireless.mvp.ui.utils.Util;
+import com.yunxingzh.wireless.utils.NetUtil;
+import com.yunxingzh.wireless.utils.Util;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -418,7 +418,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             if (++mRunnableCount > 10) {
                 return;
             }
-            if (!TextUtils.isEmpty(mUrl) && !mShutDown && NetUtil.isConnectedWifi(MyApplication.getInstance())) {
+            if (!TextUtils.isEmpty(mUrl) && !mShutDown && NetUtil.isConnectedWifi(MainApplication.getInstance())) {
                 InputStream is = null;
                 try {
                     URL myURL = new URL(mUrl);
@@ -433,12 +433,12 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
                     while (!mShutDown && (is.read(buf) > 0)) {
                         if (count++ > 25) {
                             count = 0;
-                            if (!NetUtil.isConnectedWifi(MyApplication.getInstance())) {
+                            if (!NetUtil.isConnectedWifi(MainApplication.getInstance())) {
                                 break;
                             }
                         }
                     }
-                    if (!mShutDown && NetUtil.isConnectedWifi(MyApplication.getInstance())) {
+                    if (!mShutDown && NetUtil.isConnectedWifi(MainApplication.getInstance())) {
                         new DefaultRunnable(mApkUrl).run();
                     }
                 } catch (Exception e) {

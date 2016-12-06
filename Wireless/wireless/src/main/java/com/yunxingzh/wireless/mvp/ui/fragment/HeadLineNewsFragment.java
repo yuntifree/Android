@@ -18,8 +18,8 @@ import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
-import com.yunxingzh.wireless.mvp.ui.utils.NetUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
+import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 
 import org.greenrobot.eventbus.EventBus;
