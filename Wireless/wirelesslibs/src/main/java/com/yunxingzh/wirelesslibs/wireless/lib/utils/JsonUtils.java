@@ -1,8 +1,5 @@
 package com.yunxingzh.wirelesslibs.wireless.lib.utils;
 
-import android.app.Application;
-import android.content.Context;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +10,7 @@ import java.util.List;
  * 生成json的工具类
  */
 
-public class JsonUtils extends Application{
+public class JsonUtils {
 
     private JsonUtils() {
 

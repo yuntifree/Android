@@ -62,7 +62,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     private List<Integer> sections;
     private HashMap<String, AccessData> mAccessDatas;
     private List<WifiVo.WifiData.MWifiInfo> mWifiInfoList;//服务器获取的附近wifi列表
-    private HashSet<String> mLocalSSIDs;
 
 
     public class AccessPointEx {
@@ -85,7 +84,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         mOtherPoints = new ArrayList<AccessPointEx>();
         sections = new ArrayList<Integer>();
         mAccessDatas = new HashMap<String, AccessData>();
-        mLocalSSIDs = new HashSet<String>();
     }
 
     public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, List<WifiVo.WifiData.MWifiInfo> mWifiInfos, boolean forceRefresh) {
@@ -106,8 +104,8 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         ArrayList<String> uploadList = new ArrayList<String>();
         int apType;
         for (AccessPoint ap : mAccessPoints) {
-            if (!mLocalSSIDs.contains(ap.ssid)) {
-                mLocalSSIDs.add(ap.ssid);
+            if (!mAccessDatas.containsKey(ap.ssid)) {
+                mAccessDatas.put(ap.ssid, null);
                 apType = checkAPType(ap);
                 // 搜集需要提交的ap
                 if (apType == TYPE_NOAUTH_AP) {
@@ -142,11 +140,15 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
                 public void onSuccess(int code, Headers headers, WifiVo response) {
                     if (response.getErrno() == HttpCode.HTTP_OK) {
                         List<WifiVo.WifiData.MWifiInfo> mWifiList = response.getData().getWifipass();
-                        if (mWifiList != null) {
-                            for (int i = 0; i < mWifiList.size(); i++) {
-                                mAccessPoints.get(i).setPassword(mWifiList.get(i).getPass(), AccessPoint.PasswordFrom.INPUT);
-                            }
-                        }
+//                        if (mWifiList != null) {
+//                            for (AccessPoint ap : mAccessPoints) {
+//                                for (WifiVo.WifiData.MWifiInfo item : mWifiList) {
+//                                    if (ap.ssid.equals(item.getSsid())) {
+//                                        ap.setPassword(item.getPass(), AccessPoint.PasswordFrom.CLOUD);
+//                                    }
+//                                }
+//                            }
+//                        }
                     } else {
                         //   listener.onGetWifiFailed(response.getErrno());
                     }
@@ -206,7 +208,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         //if (mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
 
         notifyDataSetChanged();
-        if (refreshPWD) refreshPassword();
     }
 
     @Override
@@ -282,42 +283,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 
     protected LayoutInflater getLayoutInflater() {
         return LayoutInflater.from(mContext);
-    }
-
-    private void refreshPassword() {
-        List<AccessPoint> aps = new ArrayList<AccessPoint>();
-        for (AccessPoint ap : mAccessPoints) {
-            if (!mAccessDatas.containsKey(ap.ssid)) {
-                mAccessDatas.put(ap.ssid, null);
-                aps.add(ap);
-            }
-        }
-        if (aps.size() == 0) return;
-
-        Observable.create(new Observable.OnSubscribe<List<AccessData>>() {
-            @Override
-            public void call(Subscriber<? super List<AccessData>> subscriber) {
-                subscriber.onNext(new ArrayList<AccessData>());
-                subscriber.onCompleted();
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<AccessData>>() {
-                    @Override
-                    public void call(List<AccessData> ads) {
-                        for (AccessData ad : ads) {
-                            mAccessDatas.put(ad.ssid, ad);
-                        }
-
-                        refreshData(false);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable e) {
-                        Logg.d(TAG, "Error! " + e);
-                    }
-                });
     }
 
 
