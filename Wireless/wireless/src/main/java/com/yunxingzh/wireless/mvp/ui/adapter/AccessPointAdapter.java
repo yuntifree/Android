@@ -12,34 +12,15 @@ import android.widget.TextView;
 import com.truizlop.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.model.AccessData;
 import com.yunxingzh.wireless.mvp.ui.activity.DialogActivity;
-import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
-import com.yunxingzh.wirelesslibs.wireless.lib.api.Api;
-import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
-import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkRequestParams;
-import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpResBeanHandler;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.JsonUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-
-import okhttp3.Headers;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         AccessPointAdapter.HeaderViewHolder, AccessPointAdapter.ItemViewHolder, AccessPointAdapter.FooterViewHolder> {
@@ -62,7 +43,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     private List<Integer> sections;
     private HashMap<String, AccessData> mAccessDatas;
     private List<WifiVo.WifiData.MWifiInfo> mWifiInfoList;//服务器获取的附近wifi列表
-    private HashSet<String> mLocalSSIDs;
 
 
     public class AccessPointEx {
@@ -85,7 +65,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         mOtherPoints = new ArrayList<AccessPointEx>();
         sections = new ArrayList<Integer>();
         mAccessDatas = new HashMap<String, AccessData>();
-        mLocalSSIDs = new HashSet<String>();
     }
 
     public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, List<WifiVo.WifiData.MWifiInfo> mWifiInfos, boolean forceRefresh) {
@@ -106,8 +85,8 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         ArrayList<String> uploadList = new ArrayList<String>();
         int apType;
         for (AccessPoint ap : mAccessPoints) {
-            if (!mLocalSSIDs.contains(ap.ssid)) {
-                mLocalSSIDs.add(ap.ssid);
+            if (!mAccessDatas.containsKey(ap.ssid)) {
+                mAccessDatas.put(ap.ssid, null);
                 apType = checkAPType(ap);
                 // 搜集需要提交的ap
                 if (apType == TYPE_NOAUTH_AP) {
@@ -117,51 +96,47 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         }
 
         // 如果有改变，服务器端比较
-        if (uploadList.size() > 0) {
-            // TODO:此处进行服务器比较, 完成后 refreshData
-            String longitude = "";
-            String latitude = "";
-            String[] ssids = null;
-            if (mAccessPoints != null) {
-                ssids = new String[mAccessPoints.size()];
-                for (int i = 0; i < mAccessPoints.size(); i++) {
-                    ssids[i] = mAccessPoints.get(i).ssid;
-                }
-                longitude = SPUtils.get(mContext, "longitude", "");
-                latitude = SPUtils.get(mContext, "latitude", "");
-            }
-
-            String jsonStr = JsonUtils.jsonStirngForWifi(MyApplication.sApplication.getUser().getData().getUid(),
-                    MyApplication.sApplication.getToken(),
-                    0, Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
-                    StringUtils.getCurrentTime(), AppUtils.getNetWorkType(MyApplication.sApplication), Double.parseDouble(longitude), Double.parseDouble(latitude), ssids);
-            OkRequestParams params = new OkRequestParams();
-            params.put("key", jsonStr);
-            OkHttpUtil.post(Api.GET_WIFI_LIST, params, new OkHttpResBeanHandler<WifiVo>() {
-                @Override
-                public void onSuccess(int code, Headers headers, WifiVo response) {
-                    if (response.getErrno() == HttpCode.HTTP_OK) {
-                        List<WifiVo.WifiData.MWifiInfo> mWifiList = response.getData().getWifipass();
-                        if (mWifiList != null) {
-                            for (int i = 0; i < mWifiList.size(); i++) {
-                                mCurrentAPoint.setPassword(mWifiList.get(i).getPass(), AccessPoint.PasswordFrom.UNKNOWN);
-                            }
-                        }
-                    } else {
-                        //   listener.onGetWifiFailed(response.getErrno());
-                    }
-                }
-
-                @Override
-                public void onFailure(int code, Headers headers, int error, Throwable t) {
-                    //   listener.onGetWifiFailed(error);
-                }
-            });
-
-            refreshData(true);
-        } else {
-            refreshData(true);
-        }
+//        if (uploadList.size() > 0) {
+//            String longitude = SPUtils.get(mContext, "longitude", "0.0");
+//            String latitude = SPUtils.get(mContext, "latitude", "0.0");
+//
+//            String jsonStr = JsonUtils.jsonStirngForWifi(MyApplication.sApplication.getUser().getData().getUid(),
+//                    MyApplication.sApplication.getToken(),
+//                    0, Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
+//                    StringUtils.getCurrentTime(), AppUtils.getNetWorkType(MyApplication.sApplication), Double.parseDouble(longitude), Double.parseDouble(latitude), uploadList);
+//            OkRequestParams params = new OkRequestParams();
+//            params.put("key", jsonStr);
+//
+//            OkHttpUtil.post(Api.GET_WIFI_LIST, params, new OkHttpResBeanHandler<WifiVo>() {
+//                @Override
+//                public void onSuccess(int code, Headers headers, WifiVo response) {
+//                    if (response.getErrno() == HttpCode.HTTP_OK) {
+//                        List<WifiVo.WifiData.MWifiInfo> mWifiList = response.getData().getWifipass();
+//                        if (mWifiList != null) {
+//                            for (AccessPoint ap : mAccessPoints) {
+//                                for (WifiVo.WifiData.MWifiInfo item : mWifiList) {
+//                                    if (ap.ssid.equals(item.getSsid())) {
+//                                        ap.setPassword(item.getPass(), AccessPoint.PasswordFrom.CLOUD);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        Logg.d(TAG, response.getDesc());
+//                    }
+//                    refreshData(true);
+//                }
+//
+//                @Override
+//                public void onFailure(int code, Headers headers, int error, Throwable t) {
+//                    //   listener.onGetWifiFailed(error);
+//                    refreshData(true);
+//                }
+//            });
+//        } else {
+//            refreshData(true);
+//        }
+        refreshData(true);
     }
 
     private int checkAPType(AccessPoint ap) {
@@ -206,7 +181,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         //if (mNoauthPoints.size() > 0) sections.add(TYPE_NOAUTH_AP);
 
         notifyDataSetChanged();
-        if (refreshPWD) refreshPassword();
     }
 
     @Override
@@ -282,42 +256,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 
     protected LayoutInflater getLayoutInflater() {
         return LayoutInflater.from(mContext);
-    }
-
-    private void refreshPassword() {
-        List<AccessPoint> aps = new ArrayList<AccessPoint>();
-        for (AccessPoint ap : mAccessPoints) {
-            if (!mAccessDatas.containsKey(ap.ssid)) {
-                mAccessDatas.put(ap.ssid, null);
-                aps.add(ap);
-            }
-        }
-        if (aps.size() == 0) return;
-
-        Observable.create(new Observable.OnSubscribe<List<AccessData>>() {
-            @Override
-            public void call(Subscriber<? super List<AccessData>> subscriber) {
-                subscriber.onNext(new ArrayList<AccessData>());
-                subscriber.onCompleted();
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<AccessData>>() {
-                    @Override
-                    public void call(List<AccessData> ads) {
-                        for (AccessData ad : ads) {
-                            mAccessDatas.put(ad.ssid, ad);
-                        }
-
-                        refreshData(false);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable e) {
-                        Logg.d(TAG, "Error! " + e);
-                    }
-                });
     }
 
 

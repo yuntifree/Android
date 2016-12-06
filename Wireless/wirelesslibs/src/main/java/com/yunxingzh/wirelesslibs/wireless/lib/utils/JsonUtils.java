@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 生成json的工具类
@@ -66,7 +66,7 @@ public class JsonUtils {
     }
 
     public static String jsonStirngForWifi(int uid, String token, int term, double version, long ts,
-                                           int nettype, double longitude, double latitude, String[] ssids) {
+                                           int nettype, double longitude, double latitude, ArrayList<String> ssids) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("uid", uid);
@@ -80,8 +80,8 @@ public class JsonUtils {
             data.put("latitude", latitude);
 
             JSONArray array = new JSONArray();
-            for (int i = 0; i < ssids.length; i++){
-                array.put(ssids[i]);
+            for (int i = 0; i < ssids.size(); i++){
+                array.put(ssids.get(i));
             }
             data.put("ssids", array);
             jsonObject.put("data", data);
