@@ -8,17 +8,14 @@ import android.content.Intent;
 import com.dgwx.app.lib.bl.WifiInterface;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
-import com.yunxingzh.wireless.utility.Logg;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.AreaDataVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.UserInfoVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AreaUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.DeviceUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
-
+import com.yunxingzh.wireless.mvp.ui.utils.DeviceUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.SPUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.service.FWService;
+
+import wireless.libs.bean.vo.UserInfoVo;
+import wireless.libs.okhttp.OkHttpUtil;
 
 /**
  * Created by Carey on 2016/5/25.
@@ -41,14 +38,12 @@ public class MyApplication extends Application {
     private String userName;
     private UserInfoVo mUser;
 
-    private AreaDataVo mAreaDataVo;
 
     @Override
     public void onCreate() {
         super.onCreate();
         sApplication = this;
         if (isUIApplication(this)) {
-            Logg.d(TAG, "on create in ui thread");
             try {
                 startService(new Intent(this, FWService.class));
             } catch (Throwable e) {
@@ -63,7 +58,7 @@ public class MyApplication extends Application {
             WifiInterface.initEnv(getResources().getString(R.string.wsmpurl), getResources().getString(R.string.ssids),getResources().getString(R.string.vnocode));
 
         } else {
-            Logg.d(TAG, "on create in service thread");
+            LogUtils.d(TAG, "on create in service thread");
         }
 
     }
@@ -141,27 +136,6 @@ public class MyApplication extends Application {
     public void setUser(UserInfoVo mUser) {
         this.mUser = mUser;
         SPUtils.putObject(sApplication, Constants.SP_KEY_USER, mUser);
-    }
-
-    public AreaDataVo getAreaDataVo() {
-        if (mAreaDataVo == null) {
-            mAreaDataVo = (AreaDataVo) SPUtils.getObject(sApplication, Constants.SP_KEY_AREA);
-        }
-        return mAreaDataVo;
-    }
-
-    public void setAreaDataVo(int pId, int cId, int aId) {
-        setAreaDataVo(pId, cId, aId, AreaUtils.getInstance(this).getProvinceNameById(pId)
-                , AreaUtils.getInstance(this).getCityNameById(pId, cId), AreaUtils.getInstance(this).getAreaNameById(pId, cId, aId));
-    }
-
-    public void setAreaDataVo(int pId, int cId, int aId, String pName, String cName, String aName) {
-        if (getAreaDataVo() == null) {
-            this.mAreaDataVo = new AreaDataVo(pId, cId, aId, pName, cName, aName);
-            SPUtils.putObject(sApplication, Constants.SP_KEY_AREA, mAreaDataVo);
-        } else {
-            mAreaDataVo.setData(pId, cId, aId, pName, cName, aName);
-        }
     }
 
     public void loginOut() {

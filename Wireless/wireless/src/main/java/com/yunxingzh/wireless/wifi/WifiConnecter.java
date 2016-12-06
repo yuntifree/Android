@@ -7,7 +7,7 @@ import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import com.yunxingzh.wireless.utility.Logg;
+import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
 
 import java.util.Comparator;
 import java.util.List;
@@ -45,7 +45,7 @@ public class WifiConnecter{
             try {
                 id = wifiMgr.addNetwork(config);
             } catch(NullPointerException e) {
-                Logg.e(TAG, "Weird!! Really!! What's wrong??" + e.getMessage());
+                LogUtils.e(TAG, "Weird!! Really!! What's wrong??" + e.getMessage());
             }
             if(id == -1) {
                 return false;
@@ -107,7 +107,7 @@ public class WifiConnecter{
         try {
             id = wifiMgr.addNetwork(config);
         } catch(NullPointerException e) {
-            Logg.e(TAG, "Weird!! Really!! What's wrong??" + e.getMessage());
+            LogUtils.e(TAG, "Weird!! Really!! What's wrong??" + e.getMessage());
             // Weird!! Really!!
             // This exception is reported by user to Android Developer Console(https://market.android.com/publish/Home)
         }
@@ -129,9 +129,7 @@ public class WifiConnecter{
 
     /**
      * Connect to a configured network.
-     * @param wifiManager
      * @param config
-     * @param numOpenNetworksKept Settings.Secure.WIFI_NUM_OPEN_NETWORKS_KEPT
      * @return
      */
     public static boolean connectToConfiguredNetwork(final Context ctx, final WifiManager wifiMgr, WifiConfiguration config, boolean reassociate) {

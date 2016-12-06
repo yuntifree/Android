@@ -5,7 +5,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiConfiguration.AuthAlgorithm;
 import android.net.wifi.WifiConfiguration.KeyMgmt;
 
-import com.yunxingzh.wireless.utility.Logg;
+import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
 
 public class ConfigurationSecuritiesV8 extends ConfigurationSecurities {
 
@@ -122,7 +122,7 @@ public class ConfigurationSecuritiesV8 extends ConfigurationSecurities {
                 break;
 
             default:
-                Logg.e(TAG, "Invalid security type: " + sec);
+                LogUtils.e(TAG, "Invalid security type: " + sec);
         }
 
 //    config.proxySettings = mProxySettings;
@@ -141,7 +141,7 @@ public class ConfigurationSecuritiesV8 extends ConfigurationSecurities {
         } else if (wpa) {
             return PskType.WPA;
         } else {
-            Logg.w(TAG, "Received abnormal flag string: " + result.capabilities);
+            LogUtils.w(TAG, "Received abnormal flag string: " + result.capabilities);
             return PskType.UNKNOWN;
         }
     }

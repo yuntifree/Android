@@ -15,7 +15,6 @@ import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.wifi.AccessPoint;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
 
 import java.io.Serializable;
 import java.util.List;

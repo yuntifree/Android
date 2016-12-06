@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp" />
 
-    <com.yunxingzh.wireless.mvp.ui.utils.MyScrollView
+    <com.yunxingzh.wireless.mview.MyScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -101,5 +101,5 @@
             </LinearLayout>
         </LinearLayout>
 
-    </com.yunxingzh.wireless.mvp.ui.utils.MyScrollView>
+    </com.yunxingzh.wireless.mview.MyScrollView>
 </com.zhy.android.percent.support.PercentLinearLayout>

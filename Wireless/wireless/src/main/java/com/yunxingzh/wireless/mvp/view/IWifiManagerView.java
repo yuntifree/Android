@@ -1,6 +1,6 @@
 package com.yunxingzh.wireless.mvp.view;
 
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
+import wireless.libs.bean.vo.WifiVo;
 
 /**
  * Created by stephon on 2016/11/15.

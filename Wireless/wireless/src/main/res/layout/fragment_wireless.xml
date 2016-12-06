@@ -10,7 +10,7 @@
     <!--android:fitsSystemWindows="true"-->
     <!--android:clipToPadding="true"-->
 
-    <com.yunxingzh.wireless.mvp.ui.utils.MyScrollView
+    <com.yunxingzh.wireless.mview.MyScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -380,5 +380,5 @@
             <include layout="@layout/activity_main_font_info" />
 
         </LinearLayout>
-    </com.yunxingzh.wireless.mvp.ui.utils.MyScrollView>
+    </com.yunxingzh.wireless.mview.MyScrollView>
 </com.zhy.android.percent.support.PercentLinearLayout>

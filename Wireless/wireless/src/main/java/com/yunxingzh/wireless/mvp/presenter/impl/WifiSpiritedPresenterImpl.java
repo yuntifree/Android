@@ -2,11 +2,12 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IWifiSpiritedPresenter;
+import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiSpiritedView;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.IWifiSpiritedModel;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.WifiSpiritedModelImpl;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
+
+import wireless.libs.model.IWifiSpiritedModel;
+import wireless.libs.model.impl.WifiSpiritedModelImpl;
 
 /**
  * Created by stephon on 2016/11/29.

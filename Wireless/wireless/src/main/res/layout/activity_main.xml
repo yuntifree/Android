@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.android.percent.support.PercentLinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/main_fragment_parent"
@@ -15,7 +14,7 @@
 
     <View style="@style/divide_line_horizontal" />
 
-    <com.yunxingzh.wirelesslibs.wireless.lib.view.PercentRadioGroup
+    <com.yunxingzh.wireless.mview.PercentRadioGroup
         android:id="@+id/main_class_group"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -33,9 +32,9 @@
             android:checked="true"
             android:drawableTop="@drawable/main_class_img_radio1_selector"
             android:gravity="center"
-            android:textSize="12sp"
             android:text="@string/wireless"
-            android:textColor="@drawable/main_class_text_selector" />
+            android:textColor="@drawable/main_class_text_selector"
+            android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/head_line_radio"
@@ -45,9 +44,9 @@
             android:button="@null"
             android:drawableTop="@drawable/main_class_img_radio2_selector"
             android:gravity="center"
-            android:textSize="12sp"
             android:text="@string/first_news"
-            android:textColor="@drawable/main_class_text_selector" />
+            android:textColor="@drawable/main_class_text_selector"
+            android:textSize="12sp" />
 
         <RadioButton
             android:id="@+id/service_radio"
@@ -57,20 +56,20 @@
             android:button="@null"
             android:drawableTop="@drawable/main_class_img_radio3_selector"
             android:gravity="center"
-            android:textSize="12sp"
             android:text="@string/service"
-            android:textColor="@drawable/main_class_text_selector" />
+            android:textColor="@drawable/main_class_text_selector"
+            android:textSize="12sp" />
 
-       <!-- <RadioButton
-            android:id="@+id/buying_radio"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:button="@null"
-            android:drawableTop="@drawable/main_class_img_radio4_selector"
-            android:gravity="center"
-            android:textSize="12sp"
-            android:text="@string/buy"
-            android:textColor="@drawable/main_class_text_selector" />-->
-    </com.yunxingzh.wirelesslibs.wireless.lib.view.PercentRadioGroup>
+        <!-- <RadioButton
+             android:id="@+id/buying_radio"
+             android:layout_width="0dp"
+             android:layout_height="match_parent"
+             android:layout_weight="1"
+             android:button="@null"
+             android:drawableTop="@drawable/main_class_img_radio4_selector"
+             android:gravity="center"
+             android:textSize="12sp"
+             android:text="@string/buy"
+             android:textColor="@drawable/main_class_text_selector" />-->
+    </com.yunxingzh.wireless.mview.PercentRadioGroup>
 </com.zhy.android.percent.support.PercentLinearLayout>

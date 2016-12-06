@@ -14,9 +14,9 @@ import com.yunxingzh.wireless.mvp.presenter.IWifiSpiritedPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiSpiritedPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IWifiSpiritedView;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 /**
  * Created by stephon on 2016/11/29.

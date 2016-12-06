@@ -17,13 +17,14 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+
+import wireless.libs.bean.vo.NewsVo;
 
 /**
  * Created by stephon on 2016/11/3.

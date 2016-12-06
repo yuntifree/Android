@@ -10,7 +10,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/wireless" />
-            <option value="$PROJECT_DIR$/wirelesslibs" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

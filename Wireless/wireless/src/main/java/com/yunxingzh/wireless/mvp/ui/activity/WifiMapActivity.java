@@ -40,11 +40,11 @@ import com.yunxingzh.wireless.mvp.presenter.impl.WifiMapPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiMapView;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiMapVo;
-
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
+
+import wireless.libs.bean.vo.WifiMapVo;
 
 /**
  * Created by stephon on 2016/11/14.

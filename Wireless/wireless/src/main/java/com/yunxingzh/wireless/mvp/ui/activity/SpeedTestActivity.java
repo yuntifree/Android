@@ -1,12 +1,10 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
-import android.app.AlertDialog;
 import android.graphics.Color;
 import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -20,12 +18,11 @@ import android.widget.TextView;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.SpeedTestDialog;
-import com.yunxingzh.wireless.mvp.view.RotatePointer;
-import com.yunxingzh.wireless.utility.Logg;
-import com.yunxingzh.wireless.utility.NetUtil;
-import com.yunxingzh.wireless.utility.Util;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
+import com.yunxingzh.wireless.mview.RotatePointer;
+import com.yunxingzh.wireless.mvp.ui.utils.NetUtil;
+import com.yunxingzh.wireless.mvp.ui.utils.Util;
 
 import java.io.InputStream;
 import java.net.URL;

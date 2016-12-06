@@ -11,10 +11,10 @@ import android.os.Message;
 import android.os.RemoteException;
 
 import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
 import com.yunxingzh.wireless.service.FWService;
 import com.yunxingzh.wireless.service.IFWService;
 import com.yunxingzh.wireless.service.IFWServiceCallback;
-import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
 
@@ -47,7 +47,7 @@ public class FWManager {
 
         @Override
         public void run() {
-            Logg.d(TAG, "rebind service");
+            LogUtils.d(TAG, "rebind service");
             try {
                 mContext.startService(getServiceIntent(mContext));
                 bindService(mContext);
@@ -84,12 +84,12 @@ public class FWManager {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mService = IFWService.Stub.asInterface(service);
             onAttached();
-            Logg.d(TAG, "service connected");
+            LogUtils.d(TAG, "service connected");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Logg.d(TAG, "service disconnected");
+            LogUtils.d(TAG, "service disconnected");
             mService = null;
             mHandler.removeCallbacks(sRestartServiceRunnable);
             mHandler.post(sRestartServiceRunnable);
@@ -168,11 +168,11 @@ public class FWManager {
 
     public void connect(AccessPoint accessPoint) {
         if (mService == null) {
-            Logg.w(TAG, "connect when service is null");
+            LogUtils.w(TAG, "connect when service is null");
             return;
         }
         if (accessPoint == null) {
-            Logg.w(TAG, "connect when accesspoint is null");
+            LogUtils.w(TAG, "connect when accesspoint is null");
             return;
         }
 
@@ -185,7 +185,7 @@ public class FWManager {
 
     public void disconnect() {
         if (mService == null) {
-            Logg.w(TAG, "disconnect when service is null");
+            LogUtils.w(TAG, "disconnect when service is null");
             return;
         }
 
@@ -198,7 +198,7 @@ public class FWManager {
 
     public void scan() {
         if (mService == null) {
-            Logg.w(TAG, "scan when service is null");
+            LogUtils.w(TAG, "scan when service is null");
             return;
         }
 
@@ -211,7 +211,7 @@ public class FWManager {
 
     public void checkState() {
         if (mService == null) {
-            Logg.w(TAG, "checkState when service is null");
+            LogUtils.w(TAG, "checkState when service is null");
             return;
         }
 
@@ -224,7 +224,7 @@ public class FWManager {
 
     public boolean setEnabled(boolean enable) {
         if (mService == null) {
-            Logg.w(TAG, "setEnabled when service is null");
+            LogUtils.w(TAG, "setEnabled when service is null");
             return false;
         }
 
@@ -238,7 +238,7 @@ public class FWManager {
 
     public List<AccessPoint> getList() {
         if (mService == null) {
-            Logg.w(TAG, "getList when service is null");
+            LogUtils.w(TAG, "getList when service is null");
             return Collections.emptyList();
         }
 
@@ -252,7 +252,7 @@ public class FWManager {
 
     public AccessPoint getCurrent() {
         if (mService == null) {
-            Logg.w(TAG, "getList when service is null");
+            LogUtils.w(TAG, "getList when service is null");
             return null;
         }
 
@@ -266,7 +266,7 @@ public class FWManager {
 
     public WifiState getState() {
         if (mService == null) {
-            Logg.w(TAG, "getState when service is null");
+            LogUtils.w(TAG, "getState when service is null");
             return WifiState.UNKOWN;
         }
 
@@ -280,7 +280,7 @@ public class FWManager {
 
     public boolean isEnabled() {
         if (mService == null) {
-            Logg.w(TAG, "isEnabled when service is null");
+            LogUtils.w(TAG, "isEnabled when service is null");
             return true;
         }
 
@@ -294,7 +294,7 @@ public class FWManager {
 
     public void ignore(String ssid) {
         if (mService == null) {
-            Logg.w(TAG, "ingore when service is null");
+            LogUtils.w(TAG, "ingore when service is null");
             return;
         }
 

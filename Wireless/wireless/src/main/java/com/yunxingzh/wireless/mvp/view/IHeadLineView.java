@@ -1,9 +1,9 @@
 package com.yunxingzh.wireless.mvp.view;
 
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
+
+import wireless.libs.bean.vo.FontInfoVo;
+import wireless.libs.bean.vo.NewsVo;
+import wireless.libs.bean.vo.WeatherNewsVo;
 
 /**
  * Created by stephon on 2016/11/3.

@@ -12,34 +12,16 @@ import android.widget.TextView;
 import com.truizlop.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.config.MyApplication;
-import com.yunxingzh.wireless.mvp.model.AccessData;
 import com.yunxingzh.wireless.mvp.ui.activity.DialogActivity;
-import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
-import com.yunxingzh.wirelesslibs.wireless.lib.api.Api;
-import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
-import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkRequestParams;
-import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpResBeanHandler;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.JsonUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
-import okhttp3.Headers;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import wireless.libs.bean.vo.AccessData;
+import wireless.libs.bean.vo.WifiVo;
 
 public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         AccessPointAdapter.HeaderViewHolder, AccessPointAdapter.ItemViewHolder, AccessPointAdapter.FooterViewHolder> {
@@ -115,31 +97,31 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         }
 
         // 如果有改变，服务器端比较
-        if (uploadList.size() > 0) {
-            // TODO:此处进行服务器比较, 完成后 refreshData
-            String longitude = "";
-            String latitude = "";
-            String[] ssids = null;
-            if (uploadList != null) {
-                ssids = new String[uploadList.size()];
-                for (int i = 0; i < uploadList.size(); i++) {
-                    ssids[i] = uploadList.get(i);
-                }
-                longitude = SPUtils.get(mContext, "longitude", "");
-                latitude = SPUtils.get(mContext, "latitude", "");
-            }
-
-            String jsonStr = JsonUtils.jsonStirngForWifi(MyApplication.sApplication.getUser().getData().getUid(),
-                    MyApplication.sApplication.getToken(),
-                    0, Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
-                    StringUtils.getCurrentTime(), AppUtils.getNetWorkType(MyApplication.sApplication), Double.parseDouble(longitude), Double.parseDouble(latitude), ssids);
-            OkRequestParams params = new OkRequestParams();
-            params.put("key", jsonStr);
-            OkHttpUtil.post(Api.GET_WIFI_LIST, params, new OkHttpResBeanHandler<WifiVo>() {
-                @Override
-                public void onSuccess(int code, Headers headers, WifiVo response) {
-                    if (response.getErrno() == HttpCode.HTTP_OK) {
-                        List<WifiVo.WifiData.MWifiInfo> mWifiList = response.getData().getWifipass();
+//        if (uploadList.size() > 0) {
+//            // TODO:此处进行服务器比较, 完成后 refreshData
+//            String longitude = "";
+//            String latitude = "";
+//            String[] ssids = null;
+//            if (uploadList != null) {
+//                ssids = new String[uploadList.size()];
+//                for (int i = 0; i < uploadList.size(); i++) {
+//                    ssids[i] = uploadList.get(i);
+//                }
+//                longitude = SPUtils.get(mContext, "longitude", "");
+//                latitude = SPUtils.get(mContext, "latitude", "");
+//            }
+//
+//            String jsonStr = JsonUtils.jsonStirngForWifi(MyApplication.sApplication.getUser().getData().getUid(),
+//                    MyApplication.sApplication.getToken(),
+//                    0, Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
+//                    StringUtils.getCurrentTime(), AppUtils.getNetWorkType(MyApplication.sApplication), Double.parseDouble(longitude), Double.parseDouble(latitude), ssids);
+//            OkRequestParams params = new OkRequestParams();
+//            params.put("key", jsonStr);
+//            OkHttpUtil.post(Api.GET_WIFI_LIST, params, new OkHttpResBeanHandler<WifiVo>() {
+//                @Override
+//                public void onSuccess(int code, Headers headers, WifiVo response) {
+//                    if (response.getErrno() == HttpCode.HTTP_OK) {
+//                        List<WifiVo.WifiData.MWifiInfo> mWifiList = response.getData().getWifipass();
 //                        if (mWifiList != null) {
 //                            for (AccessPoint ap : mAccessPoints) {
 //                                for (WifiVo.WifiData.MWifiInfo item : mWifiList) {
@@ -149,21 +131,22 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 //                                }
 //                            }
 //                        }
-                    } else {
-                        //   listener.onGetWifiFailed(response.getErrno());
-                    }
-                }
-
-                @Override
-                public void onFailure(int code, Headers headers, int error, Throwable t) {
-                    //   listener.onGetWifiFailed(error);
-                }
-            });
-
-            refreshData(true);
-        } else {
-            refreshData(true);
-        }
+//                    } else {
+//                        //   listener.onGetWifiFailed(response.getErrno());
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(int code, Headers headers, int error, Throwable t) {
+//                    //   listener.onGetWifiFailed(error);
+//                }
+//            });
+//
+//            refreshData(true);
+//        } else {
+//            refreshData(true);
+//        }
+        refreshData(true);
     }
 
     private int checkAPType(AccessPoint ap) {

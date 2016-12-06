@@ -3,12 +3,13 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IRegisterPresenter;
+import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.view.IRegisterView;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.UserInfoVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.IUserModel;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.UserModelImpl;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
+
+import wireless.libs.bean.vo.UserInfoVo;
+import wireless.libs.model.IUserModel;
+import wireless.libs.model.impl.UserModelImpl;
 
 /**
  * Created by Stephen on 2016/9/10.
@@ -44,7 +45,7 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
         if (iLoginView != null && inputValidate()) {
             iLoginView.showProgress();
             iUserModel.getValidateCode(0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
-                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),
+                    StringUtils.getCurrentTime(), AppUtils.getNetWorkType(MyApplication.sApplication),
                     type, this);
         }
     }

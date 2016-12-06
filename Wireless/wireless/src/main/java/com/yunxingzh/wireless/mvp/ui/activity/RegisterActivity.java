@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,15 +17,13 @@ import android.widget.TextView;
 import com.dgwx.app.lib.bl.WifiInterface;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
-import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IRegisterPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.RegisterPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.NetWorkBaseActivity;
+import com.yunxingzh.wireless.mvp.ui.utils.NetUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IRegisterView;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import org.json.JSONObject;
 

@@ -20,17 +20,17 @@ import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.VideoPlayActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineVideoAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
+import com.yunxingzh.wireless.mvp.ui.utils.NetUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import wireless.libs.bean.vo.FontInfoVo;
+import wireless.libs.bean.vo.NewsVo;
+import wireless.libs.bean.vo.WeatherNewsVo;
 
 /**
  * Created by stephon_ on 2016/11/2.

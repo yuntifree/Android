@@ -2,14 +2,15 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IWifiManagerPresenter;
+import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.IWifiManagerModel;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.WifiManagerModelImpl;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import java.util.ArrayList;
+
+import wireless.libs.bean.vo.WifiVo;
+import wireless.libs.model.IWifiManagerModel;
+import wireless.libs.model.impl.WifiManagerModelImpl;
 
 /**
  * Created by stephon on 2016/11/15.

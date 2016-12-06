@@ -46,4 +46,34 @@
         <attr name="diffuse_maxWidth"/>
     </declare-styleable>
 
+    <declare-styleable name="ConvenientBanner">
+        <attr name="canLoop" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="TagFlowLayout">
+        <attr name="auto_select_effect" format="boolean"></attr>
+        <attr name="max_select" format="integer"></attr>
+        <attr name="gravity">
+            <enum name="left" value="-1" />
+            <enum name="center" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="RadioButton">
+        <attr name="drawableHeight" format="dimension"></attr>
+        <attr name="drawableWidth" format="dimension"></attr>
+        <attr name="drawableLeft" format="reference"></attr>
+        <attr name="drawableRight" format="reference"></attr>
+        <attr name="drawableTop" format="reference"></attr>
+        <attr name="drawableBottom" format="reference"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="SegmentedGroup">
+        <attr name="sc_corner_radius" format="dimension" />
+        <attr name="sc_border_width" format="dimension" />
+        <attr name="sc_tint_color" format="color" />
+        <attr name="sc_checked_text_color" format="color" />
+        <attr name="sc_unchecked_tint_color" format="color"/>
+    </declare-styleable>
 </resources>

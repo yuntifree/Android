@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.mview.ClearEditText;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.view.ClearEditText;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 
 /**
  * Created by stephon on 2016/11/17.

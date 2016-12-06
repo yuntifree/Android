@@ -2,12 +2,13 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IWifiMapPresenter;
+import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiMapView;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiMapVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.IWifiMapModel;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.WifiMapModelImpl;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
+
+import wireless.libs.bean.vo.WifiMapVo;
+import wireless.libs.model.IWifiMapModel;
+import wireless.libs.model.impl.WifiMapModelImpl;
 
 /**
  * Created by stephon on 2016/11/18.

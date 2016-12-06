@@ -14,11 +14,9 @@ import android.view.inputmethod.InputMethodManager;
 import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.mview.dialog.LoadingDialogFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IBaseView;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.view.dialog.LoadingDialogFragment;
 
 /**
  * Created by Carey on 2016/5/25.

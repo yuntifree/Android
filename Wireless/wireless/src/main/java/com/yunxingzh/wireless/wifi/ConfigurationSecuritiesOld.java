@@ -9,7 +9,7 @@ import android.net.wifi.WifiConfiguration.PairwiseCipher;
 import android.net.wifi.WifiConfiguration.Protocol;
 import android.text.TextUtils;
 
-import com.yunxingzh.wireless.utility.Logg;
+import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
 
 public class ConfigurationSecuritiesOld extends ConfigurationSecurities {
 
@@ -57,7 +57,7 @@ public class ConfigurationSecuritiesOld extends ConfigurationSecurities {
         } else if (wifiConfig.allowedProtocols.get(Protocol.WPA)) {
             return WPA;
         } else {
-            Logg.w(TAG, "Unknown security type from WifiConfiguration, falling back on open.");
+            LogUtils.w(TAG, "Unknown security type from WifiConfiguration, falling back on open.");
             return OPEN;
         }
     }
@@ -110,7 +110,7 @@ public class ConfigurationSecuritiesOld extends ConfigurationSecurities {
 
         if (TextUtils.isEmpty(security)) {
             security = OPEN;
-            Logg.w(TAG, "Empty security, assuming open");
+            LogUtils.w(TAG, "Empty security, assuming open");
         }
 
         if (security.equals(WEP)) {

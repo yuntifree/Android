@@ -79,6 +79,21 @@
     <color name="gray_787878">#787878</color>
     <color name="gray_b5b5b5">#b5b5b5</color>
     <color name="gray_e6e6e6">#e6e6e6</color>
+    <color name="white_1">#FFeeeff3</color>
+    <color name="gray_c7">#FFC7C7C7</color>
+    <color name="gray_7a">#FF7A7A7A</color>
+    <color name="gray_f9">#FFF9F9F9</color>
+    <color name="gray_ea">#FFEAEAEA</color>
+
+
+    <color name="radio_button_selected_color">#ff33b5e5</color>
+    <color name="radio_button_unselected_color">#e0e0e0</color>
+    <color name="gray_e5">#FFE5E5E5</color>
+
+    <color name="result_view">#b0000000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+
 
 
 

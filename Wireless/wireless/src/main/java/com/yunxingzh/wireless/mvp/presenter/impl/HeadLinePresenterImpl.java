@@ -2,18 +2,18 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
+import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.IHeadLineModel;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.IWeatherNewsModel;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.IWifiManagerModel;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.HeadLineModelImpl;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.WeatherNewsModelImpl;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
+
+import wireless.libs.bean.vo.FontInfoVo;
+import wireless.libs.bean.vo.NewsVo;
+import wireless.libs.bean.vo.WeatherNewsVo;
+import wireless.libs.model.IHeadLineModel;
+import wireless.libs.model.IWeatherNewsModel;
+import wireless.libs.model.impl.HeadLineModelImpl;
+import wireless.libs.model.impl.WeatherNewsModelImpl;
 
 /**
  * Created by stephon on 2016/11/3.

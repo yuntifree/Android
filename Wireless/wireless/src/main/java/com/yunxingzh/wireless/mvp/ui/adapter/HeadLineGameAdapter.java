@@ -3,9 +3,10 @@ package com.yunxingzh.wireless.mvp.ui.adapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 
 import java.util.List;
+
+import wireless.libs.bean.vo.NewsVo;
 
 /**
  * Created by stephon on 2016/11/6.

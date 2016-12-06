@@ -9,7 +9,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.text.TextUtils;
 
-import com.yunxingzh.wireless.utility.Logg;
+import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -150,7 +150,7 @@ public class WifiMachine {
     //sync system and app state
     public void checkState(){
         WifiState sysState = getSysState();
-        Logg.d(TAG, "checkState: QU(" + String.valueOf(mState) + ") VS SYS(" + sysState + ")");
+        LogUtils.d(TAG, "checkState: QU(" + String.valueOf(mState) + ") VS SYS(" + sysState + ")");
         if(sysState == mState) return;
 
         if(sysState == WifiState.DISCONNECTED || sysState == WifiState.IDLE){
@@ -199,13 +199,13 @@ public class WifiMachine {
 
     public void connect(AccessPoint ap){
         if (ap == null) {
-            Logg.d(TAG, "connect failed: ap is null");
+            LogUtils.d(TAG, "connect failed: ap is null");
             return;
         }
 
         if (mCurrentWorker != null) {
             mPendingPoint = ap;
-            Logg.d(TAG, "last connected need offline: " + mCurrentWorker.getAccessPoint().toString());
+            LogUtils.d(TAG, "last connected need offline: " + mCurrentWorker.getAccessPoint().toString());
             setActionState(WifiState.WAITING_DISCONNECT_LAST);
             mCurrentWorker.offline()
                     .subscribeOn(Schedulers.io())
@@ -214,7 +214,7 @@ public class WifiMachine {
                     .subscribe(offlineObserver);
         } else {
             mCurrentWorker = createConnectWoker(ap);
-            Logg.d(TAG, "connect " + ap.toString() + " and waiting cloud confirm");
+            LogUtils.d(TAG, "connect " + ap.toString() + " and waiting cloud confirm");
             setActionState(WifiState.WAITING_SERVER_CONFIRM);
             mCurrentWorker.confirm()
                     .subscribeOn(Schedulers.io())
@@ -271,12 +271,12 @@ public class WifiMachine {
 
         @Override
         public void onError(Throwable e) {
-            Logg.d(TAG, "offline error: " + e.getMessage());
+            LogUtils.d(TAG, "offline error: " + e.getMessage());
         }
 
         @Override
         public void onNext(WorkResult workResult) {
-            Logg.d(TAG, "offline success!");
+            LogUtils.d(TAG, "offline success!");
             if (mState != WifiState.WAITING_DISCONNECT_LAST) {
                 setActionState(WifiState.IDLE);
                 destroy();
@@ -294,12 +294,12 @@ public class WifiMachine {
 
         @Override
         public void onError(Throwable e) {
-            Logg.d(TAG, "confirm error: " + e.getMessage());
+            LogUtils.d(TAG, "confirm error: " + e.getMessage());
         }
 
         @Override
         public void onNext(WorkResult workResult) {
-            Logg.d(TAG, "confirm success!");
+            LogUtils.d(TAG, "confirm success!");
             if(mState == WifiState.DISABLED || mCurrentWorker == null) return;
             if (workResult.success()) {
                 setActionState(WifiState.CONNECTING);
@@ -323,7 +323,7 @@ public class WifiMachine {
 
         @Override
         public void onError(Throwable e) {
-            Logg.d(TAG, "connect error: " + e.getMessage());
+            LogUtils.d(TAG, "connect error: " + e.getMessage());
         }
 
         @Override
@@ -343,12 +343,12 @@ public class WifiMachine {
 
         @Override
         public void onError(Throwable e) {
-            Logg.d(TAG, "login error: " + e.getMessage());
+            LogUtils.d(TAG, "login error: " + e.getMessage());
         }
 
         @Override
         public void onNext(WorkResult workResult) {
-            Logg.d(TAG, "login success");
+            LogUtils.d(TAG, "login success");
             if(mState == WifiState.DISABLED || mCurrentWorker == null) return;
             if (workResult.success()) {
                 setActionState(WifiState.CHECKING);
@@ -372,12 +372,12 @@ public class WifiMachine {
 
         @Override
         public void onError(Throwable e) {
-            Logg.d(TAG, "check error: " + e.getMessage());
+            LogUtils.d(TAG, "check error: " + e.getMessage());
         }
 
         @Override
         public void onNext(WorkResult workResult) {
-            Logg.d(TAG, "check success");
+            LogUtils.d(TAG, "check success");
             if(mState == WifiState.DISABLED || mCurrentWorker == null) return;
             setActionState(WifiState.CONNECTED);
         }
@@ -393,14 +393,14 @@ public class WifiMachine {
     }
 
     private void systemStateChanged(WifiState state){
-        Logg.d(TAG, "systemStateChanged: " + state + " with WifiState: " + mState);
+        LogUtils.d(TAG, "systemStateChanged: " + state + " with WifiState: " + mState);
         if (mState == WifiState.CONNECTING && state == WifiState.IDLE) {
-            Logg.d(TAG, "when connecting, drop idle event");
+            LogUtils.d(TAG, "when connecting, drop idle event");
             return;
         }
         if ((mState == WifiState.LOGINING || mState == WifiState.CHECKING)
                 && (state == WifiState.CONNECTING || state == WifiState.CONNECTING_AUTH || state == WifiState.CONNECTING_IPADDR || state == WifiState.CONNECTED)) {
-            Logg.d(TAG, "when logining or checking, drop connected and connecting event");
+            LogUtils.d(TAG, "when logining or checking, drop connected and connecting event");
             return;
         }
 
@@ -412,7 +412,7 @@ public class WifiMachine {
             if (mCurrentWorker == null) {
                 doSystemConnected();
             }else {
-                Logg.d(TAG, "when connected and saved, drop connected event");
+                LogUtils.d(TAG, "when connected and saved, drop connected event");
             }
             return;
         }
@@ -441,7 +441,7 @@ public class WifiMachine {
     }
 
     private void systemListChanged(List<ScanResult> scanResults){
-//        Logg.d(TAG, "systemListChanged");
+//        LogUtils.d(TAG, "systemListChanged");
         mAccessPoints.clear();
         if(scanResults != null){
             for(ScanResult scanResult : scanResults){
@@ -463,7 +463,7 @@ public class WifiMachine {
     }
 
     private void systemRssiChanged(Integer rssi){
-//        Logg.d(TAG, "systemRssiChanged");
+//        LogUtils.d(TAG, "systemRssiChanged");
         dispatchRSSIChanged(rssi);
     }
 
@@ -472,7 +472,7 @@ public class WifiMachine {
     private void setActionState(WifiState state){
         if (state == mState && state != mState.CONNECTED) return;
 
-        Logg.d(TAG, "setActionState：" + String.valueOf(mState) + " ->" + String.valueOf(state));
+        LogUtils.d(TAG, "setActionState：" + String.valueOf(mState) + " ->" + String.valueOf(state));
         WifiState old_state = mState;
         mState = state;
 
@@ -491,7 +491,7 @@ public class WifiMachine {
             }
         }
 
-        Logg.d(TAG, "doSystemConnected " + mCurrentWorker);
+        LogUtils.d(TAG, "doSystemConnected " + mCurrentWorker);
         if (mCurrentWorker != null) {
             setActionState(WifiState.LOGINING);
             mCurrentWorker.login()
@@ -503,7 +503,7 @@ public class WifiMachine {
     }
 
     private void doSystemDisconnected(){
-        Logg.d(TAG, "doSystemDisconnected " + mState);
+        LogUtils.d(TAG, "doSystemDisconnected " + mState);
         if (mState == WifiState.WAITING_DISCONNECT_LAST) {
             if (mCurrentWorker != null) {
                 mCurrentWorker.destory();
@@ -512,7 +512,7 @@ public class WifiMachine {
 
             if (mPendingPoint != null) {
                 mCurrentWorker = createConnectWoker(mPendingPoint);
-                Logg.d(TAG, "new connect ap: " + mPendingPoint + " mCurrentStrategy: " + mCurrentWorker);
+                LogUtils.d(TAG, "new connect ap: " + mPendingPoint + " mCurrentStrategy: " + mCurrentWorker);
                 setActionState(WifiState.WAITING_SERVER_CONFIRM);
                 mCurrentWorker.confirm()
                         .subscribeOn(Schedulers.io())

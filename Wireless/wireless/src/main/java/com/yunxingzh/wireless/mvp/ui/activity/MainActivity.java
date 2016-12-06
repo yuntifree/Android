@@ -1,19 +1,11 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -23,17 +15,11 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.mvp.ui.fragment.BuyingFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineFragment;
-import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineNewsFragment;
-import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineVideoFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.ServiceFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.WirelessFragment;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.UserInfoVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">东莞无线</string>
 
+    <string name="loading">加载中...</string>
+    <string name="determine">确定</string>
+    <string name="scan_text">将二维码放入框内, 即可自动扫描</string>
+
     <string name="http_error_msg">抱歉，您的网络出错啦！</string>
     <string name="http_error_tips">暂时没有检测到网络信号，请尝试检查你的网络连接是否存在异常，恢复网络后将自动正常加载</string>
 

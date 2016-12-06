@@ -5,7 +5,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.yunxingzh.wirelesslibs.convenientbanner.holder.Holder;
+
+import wireless.libs.convenientbanner.holder.Holder;
 
 /**
  * Created by Sai on 15/8/4.

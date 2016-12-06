@@ -1,8 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.utils;
 
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -11,9 +9,6 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.AreaUtils;
-
-import java.util.List;
 
 
 /**
@@ -149,32 +144,6 @@ public class LocationUtils {
 
     private static double rad(double d) {
         return d * Math.PI / 180.0;
-    }
-
-    private static AreaUtils.Data getCity(Context context) {
-        LocationManager locationManager = (LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        if(location == null){
-            return null;
-        }
-        AreaUtils areaUtils = AreaUtils.getInstance(context);
-        List<AreaUtils.Data> provinceList = areaUtils.getProvinceList();
-        AreaUtils.Data closestData = null;
-        double closestLength = 0;
-        for (AreaUtils.Data provinceData : provinceList) {
-            List<AreaUtils.Data> cityList = areaUtils.getCityListById(provinceData.getId());
-            for (AreaUtils.Data cityData : cityList) {
-                double len = getDistance(location.getLatitude(), location.getLongitude(), cityData.getLatitude(), cityData.getLongitude());
-                if (closestLength == 0) {
-                    closestLength = len;
-                    closestData = cityData;
-                } else if (len < closestLength) {
-                    closestLength = len;
-                    closestData = cityData;
-                }
-            }
-        }
-        return closestData;
     }
 
     /**

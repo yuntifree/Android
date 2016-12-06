@@ -13,10 +13,6 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.fragment.APointDetailFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.IptPasswordFragment;
 import com.yunxingzh.wireless.wifi.AccessPoint;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
-
-import java.io.Serializable;
-import java.util.List;
 
 public class DialogActivity extends AppCompatActivity implements View.OnClickListener {
 

@@ -4,10 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.yunxingzh.wireless.mvp.ui.activity.HttpErrorActivity;
-import com.yunxingzh.wireless.mvp.ui.activity.MainActivity;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
-
 /**
  * Created by Carey on 2016/5/25.
  */

@@ -22,21 +22,20 @@ import com.yunxingzh.wireless.mvp.presenter.impl.WifiManagerPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.AccessPointAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.SPUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
-import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import wireless.libs.bean.vo.WifiVo;
 
 /**
  * Created by stephon on 2016/11/12.
@@ -128,7 +127,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
                 SPUtils.put(WifiManagerActivity.this, "longitude", String.valueOf(locationUtils.getBaseLocation().longitude));
                 SPUtils.put(WifiManagerActivity.this, "latitude", String.valueOf(locationUtils.getBaseLocation().latitude));
             } else {
-                Logg.d(TAG, "getLocation err:" + msg.what);
+                LogUtils.d(TAG, "getLocation err:" + msg.what);
             }
         }
     };
@@ -158,7 +157,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
         @Override
         public void onStateChanged(WifiState new_state, WifiState old_state) {
-            Logg.d(TAG, "onStateChanged");
+            LogUtils.d(TAG, "onStateChanged");
             // TODO: checkEnv
             mHandler.removeMessages(MSG_REFRESH_LIST);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
@@ -166,21 +165,21 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
         @Override
         public void onListChanged(List<AccessPoint> accessPoints) {
-            Logg.d(TAG, "onListChanged");
+            LogUtils.d(TAG, "onListChanged");
             mHandler.removeMessages(MSG_REFRESH_LIST);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 0));
         }
 
         @Override
         public void onRSSIChanged(int rssi) {
-            Logg.d(TAG, "onRSSIChanged");
+            LogUtils.d(TAG, "onRSSIChanged");
             mHandler.removeMessages(MSG_REFRESH_LIST);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
         }
 
         @Override
         public void onAuthError(AccessPoint ap) {
-            Logg.d(TAG, "onAuthError");
+            LogUtils.d(TAG, "onAuthError");
             mHandler.removeMessages(MSG_AUTH_ERROR);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_AUTH_ERROR, ap));
         }

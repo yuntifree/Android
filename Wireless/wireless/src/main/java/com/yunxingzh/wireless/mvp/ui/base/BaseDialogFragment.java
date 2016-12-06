@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yunxingzh.wireless.mview.dialog.LoadingDialogFragment;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IBaseView;
-import com.yunxingzh.wirelesslibs.wireless.lib.view.dialog.LoadingDialogFragment;
 
 /**
  * Created by Carey on 2016/5/28.

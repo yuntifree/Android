@@ -3,8 +3,6 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +22,13 @@ import com.yunxingzh.wireless.mvp.presenter.impl.ServicePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.SearchActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
+import com.yunxingzh.wireless.mvp.ui.utils.NetUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.ServiceVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 
 import java.util.List;
+
+import wireless.libs.bean.vo.ServiceVo;
 
 /**
  * Created by stephon_ on 2016/11/1.

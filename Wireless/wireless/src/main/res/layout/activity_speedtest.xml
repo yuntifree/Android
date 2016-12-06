@@ -32,7 +32,7 @@
             android:textColor="@color/white"
             android:textSize="30sp" />
 
-        <com.yunxingzh.wireless.mvp.view.RotatePointer
+        <com.yunxingzh.wireless.mview.RotatePointer
             android:id="@+id/rp_tspeed_pointer"
             android:layout_width="match_parent"
             android:layout_height="250dp"

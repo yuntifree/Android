@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.yunxingzh.wireless.utility.Logg;
+import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 
 import java.util.List;
@@ -85,7 +85,7 @@ public class FWService extends Service {
 
     @Override
     public void onCreate() {
-        Logg.d(TAG, "onCreate");
+        LogUtils.d(TAG, "onCreate");
         mWifiServiceManager = new FWServiceManager(this);
     }
 

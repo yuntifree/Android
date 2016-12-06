@@ -14,7 +14,7 @@
          android:focusable="true"
         android:focusableInTouchMode="true"-->
 
-        <com.yunxingzh.wirelesslibs.wireless.lib.view.ClearEditText
+        <com.yunxingzh.wireless.mview.ClearEditText
             android:id="@+id/search_et"
             android:layout_width="match_parent"
             android:layout_height="30dp"

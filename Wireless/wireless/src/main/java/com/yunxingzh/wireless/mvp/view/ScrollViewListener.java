@@ -1,6 +1,6 @@
 package com.yunxingzh.wireless.mvp.view;
 
-import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
+import com.yunxingzh.wireless.mview.MyScrollView;
 
 /**
  * Created by stephon on 2016/11/11.

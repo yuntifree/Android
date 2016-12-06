@@ -4,7 +4,8 @@ package com.yunxingzh.wireless.wifi;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 
-import com.yunxingzh.wireless.utility.Version;
+import com.yunxingzh.wireless.mvp.ui.utils.Version;
+
 
 public abstract class ConfigurationSecurities {
     /**

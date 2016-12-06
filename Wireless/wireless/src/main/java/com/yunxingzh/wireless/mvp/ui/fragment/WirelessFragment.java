@@ -39,7 +39,10 @@ import com.yunxingzh.wireless.mvp.ui.activity.WifiSpiritedActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
-import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
+import com.yunxingzh.wireless.mview.MyScrollView;
+import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.NetUtils;
+import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
@@ -49,14 +52,6 @@ import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
-import com.yunxingzh.wirelesslibs.convenientbanner.ConvenientBanner;
-import com.yunxingzh.wirelesslibs.convenientbanner.holder.CBViewHolderCreator;
-import com.yunxingzh.wirelesslibs.convenientbanner.listener.OnItemClickListener;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
-import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,6 +59,13 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+
+import wireless.libs.bean.vo.FontInfoVo;
+import wireless.libs.bean.vo.NewsVo;
+import wireless.libs.bean.vo.WeatherNewsVo;
+import wireless.libs.convenientbanner.ConvenientBanner;
+import wireless.libs.convenientbanner.holder.CBViewHolderCreator;
+import wireless.libs.convenientbanner.listener.OnItemClickListener;
 
 /**
  * Created by stephon_ on 2016/11/1.
@@ -461,6 +463,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                         iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
                         // 判断下按钮的状态
                         changeConnectState();
+                        break;
+                    default:
+                        LogUtils.d("scan error:",mCheckRet+"");
                         break;
                 }
             } else {

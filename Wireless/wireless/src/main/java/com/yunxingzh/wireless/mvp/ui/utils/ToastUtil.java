@@ -7,8 +7,9 @@ import android.widget.Toast;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
-import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
-import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpCallback;
+
+import wireless.libs.api.HttpCode;
+import wireless.libs.okhttp.response.OkHttpCallback;
 
 public class ToastUtil {
 

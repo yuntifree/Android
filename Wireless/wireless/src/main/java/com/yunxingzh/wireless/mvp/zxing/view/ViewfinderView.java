@@ -29,7 +29,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.google.zxing.ResultPoint;
-import com.yunxingzh.wirelesslibs.R;
+import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.zxing.camera.CameraManager;
 
 import java.util.Collection;
