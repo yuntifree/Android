@@ -18,5 +18,5 @@ public interface IWifiManagerModel {
      * @param
      * @param
      */
-    void getWifi(int uid, String token,int term,double version,long ts,int nettype,double longitude, double latitude,onGetWifiListener listener);
+    void getWifi(int uid, String token,int term,double version,long ts,int nettype,double longitude, double latitude,String[] ssids,onGetWifiListener listener);
 }

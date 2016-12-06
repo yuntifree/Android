@@ -9,6 +9,8 @@ import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.WifiManagerModelImpl;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
+import java.util.List;
+
 /**
  * Created by stephon on 2016/11/15.
  */
@@ -24,12 +26,12 @@ public class WifiManagerPresenterImpl implements IWifiManagerPresenter,IWifiMana
     }
 
     @Override
-    public void getWifi(double longitude, double latitude) {
+    public void getWifi(double longitude, double latitude, String[] ssids) {
         if (iWifiManagerView != null){
             iWifiManagerView.showProgress();
             iWifiManagerModel.getWifi(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
                     0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
-                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),longitude,latitude,this);
+                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),longitude,latitude,ssids,this);
         }
     }
 

@@ -1,7 +1,10 @@
 package com.yunxingzh.wirelesslibs.wireless.lib.utils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * 生成json的工具类
@@ -37,7 +40,7 @@ public class JsonUtils {
     }
 
     public static String jsonStirngForMain(int uid, String token, int term, double version, long ts,
-                                          int nettype,int type,int seq,int id,double longitude,double latitude,String ssid,String password) {
+                                           int nettype, int type, int seq, int id, double longitude, double latitude, String ssid, String password) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("uid", uid);
@@ -54,6 +57,33 @@ public class JsonUtils {
             data.put("latitude", latitude);
             data.put("ssid", ssid);
             data.put("password", password);
+            jsonObject.put("data", data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return jsonObject.toString();
+    }
+
+    public static String jsonStirngForMain(int uid, String token, int term, double version, long ts,
+                                           int nettype, double longitude, double latitude, String[] ssids) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("uid", uid);
+            jsonObject.put("token", token);
+            jsonObject.put("term", term);
+            jsonObject.put("version", version);
+            jsonObject.put("ts", ts);
+            jsonObject.put("nettype", nettype);
+            JSONObject data = new JSONObject();
+            data.put("longitude", longitude);
+            data.put("latitude", latitude);
+
+            JSONArray array = new JSONArray();
+            for (int i = 0; i < ssids.length; i++){
+                array.put(ssids[i]);
+            }
+            data.put("ssids", array);
             jsonObject.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();

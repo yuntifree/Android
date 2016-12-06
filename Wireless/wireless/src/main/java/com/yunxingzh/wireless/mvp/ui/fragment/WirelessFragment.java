@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +41,6 @@ import com.yunxingzh.wireless.mvp.ui.activity.WifiSpiritedActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
-import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
 import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
@@ -52,7 +50,6 @@ import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
-import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
 import com.yunxingzh.wirelesslibs.convenientbanner.ConvenientBanner;
@@ -88,9 +85,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, IWi
     private final static int NEWS = 1;//新闻点击上报
     private final static int SCANNIN_GREQUEST_CODE = 1;
     private static final int DG_SDK_TIME_OUT = 10 * 1000;
-
-    private int mPageHeight;
-    private FragmentManager fragmentManager;
 
     private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest,
             mMainHeadImg, mWeatherLay, mMainSpiritedLay;
@@ -188,7 +182,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, IWi
         //注册EventBus
         EventBus.getDefault().register(this);
 
-        fragmentManager = getFragmentManager();
         iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
         iConnectDGCountPresenter = new ConnectDGCountPresenterImpl(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
@@ -477,7 +470,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, IWi
                         changeConnectState();
                         break;
                 }
-                Logg.d(TAG, "~~hzg~~: checkenv " + mCheckRet);
             } else {
                 ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
             }
@@ -544,19 +536,19 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, IWi
     //服务器后台返回的附近wifi列表
     @Override
     public void getWifiSuccess(WifiVo wifiVo) {
-        mWifiInfos = wifiVo.getData().getInfos();
-        if (mWifiInfos != null) {
-            List<AccessPoint> nearList = FWManager.getInstance().getList();//先拿到附近列表
-            int nearSize = nearList.size();
-            for (int i = 0; i < nearSize; i++) {
-                String ssid = nearList.get(i).ssid;
-                if (mWifiInfos.contains(ssid)) {//如果附近列表存在，则连接
-                    FWManager.getInstance().connect(nearList.get(i));
-                } else{
-                    ToastUtil.showMiddle(getActivity(), "附近没有可用wifi");
-                }
-            }
-        }
+//        mWifiInfos = wifiVo.getData().getInfos();
+//        if (mWifiInfos != null) {
+//            List<AccessPoint> nearList = FWManager.getInstance().getList();//先拿到附近列表
+//            int nearSize = nearList.size();
+//            for (int i = 0; i < nearSize; i++) {
+//                String ssid = nearList.get(i).ssid;
+//                if (mWifiInfos.contains(ssid)) {//如果附近列表存在，则连接
+//                    FWManager.getInstance().connect(nearList.get(i));
+//                } else{
+//                    ToastUtil.showMiddle(getActivity(), "附近没有可用wifi");
+//                }
+//            }
+//        }
     }
 
     public void checkDGWifi() {
@@ -591,6 +583,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, IWi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        FWManager.getInstance().removeWifiObserver(wifiObserver);
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 

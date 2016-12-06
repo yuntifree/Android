@@ -1,7 +1,5 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,7 +22,6 @@ import com.yunxingzh.wireless.mvp.presenter.impl.WifiManagerPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.AccessPointAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
 import com.yunxingzh.wireless.utility.Logg;
@@ -32,6 +29,7 @@ import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -128,8 +126,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         public void handleMessage(Message msg) {
         super.handleMessage(msg);
             if (msg.what == 0) {
-                iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude);//从服务器获取附近wifi
-            } else {
+                } else {
                 Logg.d(TAG, "getLocation err:" + msg.what);
             }
         }
@@ -221,7 +218,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
     @Override
     public void getWifiSuccess(WifiVo wifiVo) {
-        mWifiInfos = wifiVo.getData().getInfos();
+        mWifiInfos = wifiVo.getData().getWifipass();
     }
 
     @Override

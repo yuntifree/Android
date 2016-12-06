@@ -9,6 +9,8 @@ import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkRequestParams;
 import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpResBeanHandler;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.JsonUtils;
 
+import java.util.List;
+
 import okhttp3.Headers;
 
 /**
@@ -18,8 +20,8 @@ import okhttp3.Headers;
 public class WifiManagerModelImpl implements IWifiManagerModel {
 
     @Override
-    public void getWifi(int uid, String token, int term, double version, long ts, int nettype, double longitude, double latitude, final onGetWifiListener listener) {
-        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,0,0,0,longitude,latitude,"","");
+    public void getWifi(int uid, String token, int term, double version, long ts, int nettype, double longitude, double latitude, String[] ssids, final onGetWifiListener listener) {
+        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,longitude,latitude,ssids);
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 

@@ -37,22 +37,19 @@ public class WifiVo implements Serializable{
     }
 
     public class WifiData  implements Serializable{
-        private List<MWifiInfo> infos;
+        private List<MWifiInfo> wifipass;
 
-        public List<MWifiInfo> getInfos() {
-            return infos;
+        public List<MWifiInfo> getWifipass() {
+            return wifipass;
         }
 
-        public void setInfos(List<MWifiInfo> infos) {
-            this.infos = infos;
+        public void setWifipass(List<MWifiInfo> wifipass) {
+            this.wifipass = wifipass;
         }
 
         public class MWifiInfo implements Serializable{
             private String ssid;
-            private String username;
-            private String password;
-            private double longitude;
-            private double latitude;
+            private String pass;
 
             public String getSsid() {
                 return ssid;
@@ -62,36 +59,12 @@ public class WifiVo implements Serializable{
                 this.ssid = ssid;
             }
 
-            public String getUsername() {
-                return username;
+            public String getPass() {
+                return pass;
             }
 
-            public void setUsername(String username) {
-                this.username = username;
-            }
-
-            public String getPassword() {
-                return password;
-            }
-
-            public void setPassword(String password) {
-                this.password = password;
-            }
-
-            public double getLongitude() {
-                return longitude;
-            }
-
-            public void setLongitude(double longitude) {
-                this.longitude = longitude;
-            }
-
-            public double getLatitude() {
-                return latitude;
-            }
-
-            public void setLatitude(double latitude) {
-                this.latitude = latitude;
+            public void setPass(String pass) {
+                this.pass = pass;
             }
         }
     }
