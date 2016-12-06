@@ -12,18 +12,29 @@ import android.widget.TextView;
 import com.truizlop.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.model.AccessData;
 import com.yunxingzh.wireless.mvp.ui.activity.DialogActivity;
 import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
+import com.yunxingzh.wirelesslibs.wireless.lib.api.Api;
+import com.yunxingzh.wirelesslibs.wireless.lib.api.HttpCode;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkHttpUtil;
+import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.OkRequestParams;
+import com.yunxingzh.wirelesslibs.wireless.lib.okhttp.response.OkHttpResBeanHandler;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.JsonUtils;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import okhttp3.Headers;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -57,6 +68,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     public class AccessPointEx {
         public int type;
         public AccessPoint ap;
+
         public AccessPointEx(AccessPoint ap, int type) {
             this.ap = ap;
             this.type = type;
@@ -107,6 +119,45 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         // 如果有改变，服务器端比较
         if (uploadList.size() > 0) {
             // TODO:此处进行服务器比较, 完成后 refreshData
+            String longitude = "";
+            String latitude = "";
+            String[] ssids = null;
+            if (mAccessPoints != null) {
+                ssids = new String[mAccessPoints.size()];
+                for (int i = 0; i < mAccessPoints.size(); i++) {
+                    ssids[i] = mAccessPoints.get(i).ssid;
+                }
+                longitude = SPUtils.get(mContext, "longitude", "");
+                latitude = SPUtils.get(mContext, "latitude", "");
+            }
+
+            String jsonStr = JsonUtils.jsonStirngForWifi(MyApplication.sApplication.getUser().getData().getUid(),
+                    MyApplication.sApplication.getToken(),
+                    0, Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
+                    StringUtils.getCurrentTime(), AppUtils.getNetWorkType(MyApplication.sApplication), Double.parseDouble(longitude), Double.parseDouble(latitude), ssids);
+            OkRequestParams params = new OkRequestParams();
+            params.put("key", jsonStr);
+            OkHttpUtil.post(Api.GET_WIFI_LIST, params, new OkHttpResBeanHandler<WifiVo>() {
+                @Override
+                public void onSuccess(int code, Headers headers, WifiVo response) {
+                    if (response.getErrno() == HttpCode.HTTP_OK) {
+                        List<WifiVo.WifiData.MWifiInfo> mWifiList = response.getData().getWifipass();
+                        if (mWifiList != null) {
+                            for (int i = 0; i < mWifiList.size(); i++) {
+                                mCurrentAPoint.setPassword(mWifiList.get(i).getPass(), AccessPoint.PasswordFrom.UNKNOWN);
+                            }
+                        }
+                    } else {
+                        //   listener.onGetWifiFailed(response.getErrno());
+                    }
+                }
+
+                @Override
+                public void onFailure(int code, Headers headers, int error, Throwable t) {
+                    //   listener.onGetWifiFailed(error);
+                }
+            });
+
             refreshData(true);
         } else {
             refreshData(true);
@@ -133,7 +184,8 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         for (AccessPoint ap : mAccessPoints) {
             apType = checkAPType(ap);
             switch (apType) {
-                case TYPE_CURRENT_AP: break;
+                case TYPE_CURRENT_AP:
+                    break;
                 case TYPE_FOCUS_AP:
                     mFocusPoints.add(new AccessPointEx(ap, TYPE_FOCUS_AP));
                     break;
@@ -341,11 +393,11 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 
         @Override
         public void onClick(View v) {
-            if(type == TYPE_CURRENT_AP){
+            if (type == TYPE_CURRENT_AP) {
                 // do nothing
-            } else if(type == TYPE_FOCUS_AP){
+            } else if (type == TYPE_FOCUS_AP) {
                 FWManager.getInstance().connect(accessPoint);
-            } else if(type == TYPE_NOAUTH_AP){
+            } else if (type == TYPE_NOAUTH_AP) {
                 DialogActivity.showInuptPWD(context, accessPoint, false);
             }
         }

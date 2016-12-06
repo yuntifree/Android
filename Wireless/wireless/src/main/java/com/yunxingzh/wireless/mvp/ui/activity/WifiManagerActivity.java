@@ -28,6 +28,7 @@ import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
+import com.yunxingzh.wirelesslibs.wireless.lib.utils.SPUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,14 +120,14 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         }
     }
 
-
-
     final Handler locationHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-        super.handleMessage(msg);
+            super.handleMessage(msg);
             if (msg.what == 0) {
-                } else {
+                SPUtils.put(WifiManagerActivity.this, "longitude", String.valueOf(locationUtils.getBaseLocation().longitude));
+                SPUtils.put(WifiManagerActivity.this, "latitude", String.valueOf(locationUtils.getBaseLocation().latitude));
+            } else {
                 Logg.d(TAG, "getLocation err:" + msg.what);
             }
         }

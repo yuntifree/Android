@@ -21,7 +21,7 @@ public class WifiManagerModelImpl implements IWifiManagerModel {
 
     @Override
     public void getWifi(int uid, String token, int term, double version, long ts, int nettype, double longitude, double latitude, String[] ssids, final onGetWifiListener listener) {
-        String jsonStr= JsonUtils.jsonStirngForMain(uid,token,term,version,ts,nettype,longitude,latitude,ssids);
+        String jsonStr= JsonUtils.jsonStirngForWifi(uid,token,term,version,ts,nettype,longitude,latitude,ssids);
         OkRequestParams params = new OkRequestParams();
         params.put("key", jsonStr);
 

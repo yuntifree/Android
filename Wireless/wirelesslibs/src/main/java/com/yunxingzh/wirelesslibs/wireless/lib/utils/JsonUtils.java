@@ -65,7 +65,7 @@ public class JsonUtils {
         return jsonObject.toString();
     }
 
-    public static String jsonStirngForMain(int uid, String token, int term, double version, long ts,
+    public static String jsonStirngForWifi(int uid, String token, int term, double version, long ts,
                                            int nettype, double longitude, double latitude, String[] ssids) {
         JSONObject jsonObject = new JSONObject();
         try {
