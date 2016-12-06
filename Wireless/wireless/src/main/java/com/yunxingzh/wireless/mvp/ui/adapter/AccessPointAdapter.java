@@ -1,27 +1,19 @@
 package com.yunxingzh.wireless.mvp.ui.adapter;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dgwx.app.lib.bl.WifiInterface;
 import com.truizlop.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.config.Constants;
-import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.model.AccessData;
 import com.yunxingzh.wireless.mvp.ui.activity.DialogActivity;
-import com.yunxingzh.wireless.mvp.ui.fragment.WirelessFragment;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.utility.Logg;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
@@ -29,6 +21,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import rx.Observable;
@@ -40,10 +33,10 @@ import rx.schedulers.Schedulers;
 public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         AccessPointAdapter.HeaderViewHolder, AccessPointAdapter.ItemViewHolder, AccessPointAdapter.FooterViewHolder> {
     private static String TAG = "AccessPointAdapter";
-    public static int TYPE_CURRENT_AP = 0;//当前连接的wifi
-    public static int TYPE_FOCUS_AP = 1;//已经配置好的wifi
-    public static int TYPE_NOAUTH_AP = 2;//需要密码连接的wifi
-    public static int TYPE_OTHER_AP = 3; //除了当前WiFi外的
+    public final static int TYPE_CURRENT_AP = 0;//当前连接的wifi
+    public final static int TYPE_FOCUS_AP = 1;//已经配置好的wifi
+    public final static int TYPE_NOAUTH_AP = 2;//需要密码连接的wifi
+    public final static int TYPE_OTHER_AP = 3; //除了当前WiFi外的
 
     private Context mContext;
 
@@ -58,6 +51,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     private List<Integer> sections;
     private HashMap<String, AccessData> mAccessDatas;
     private List<WifiVo.WifiData.MWifiInfo> mWifiInfoList;//服务器获取的附近wifi列表
+    private HashSet<String> mLocalSSIDs;
 
 
     public class AccessPointEx {
@@ -79,6 +73,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         mOtherPoints = new ArrayList<AccessPointEx>();
         sections = new ArrayList<Integer>();
         mAccessDatas = new HashMap<String, AccessData>();
+        mLocalSSIDs = new HashSet<String>();
     }
 
     public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, List<WifiVo.WifiData.MWifiInfo> mWifiInfos, boolean forceRefresh) {
@@ -95,7 +90,38 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         mCurrentAPoint = current;
         mAccessPoints = accessPoints;
 
-        refreshData(true);
+        // 判断本次改变的SSID,避免多次请求服务器
+        ArrayList<String> uploadList = new ArrayList<String>();
+        int apType;
+        for (AccessPoint ap : mAccessPoints) {
+            if (!mLocalSSIDs.contains(ap.ssid)) {
+                mLocalSSIDs.add(ap.ssid);
+                apType = checkAPType(ap);
+                // 搜集需要提交的ap
+                if (apType == TYPE_NOAUTH_AP) {
+                    uploadList.add(ap.ssid);
+                }
+            }
+        }
+
+        // 如果有改变，服务器端比较
+        if (uploadList.size() > 0) {
+            // TODO:此处进行服务器比较, 完成后 refreshData
+            refreshData(true);
+        } else {
+            refreshData(true);
+        }
+    }
+
+    private int checkAPType(AccessPoint ap) {
+        if (mCurrentAPoint != null) {
+            if (mCurrentAPoint.ssid.equals(ap.ssid)) return TYPE_CURRENT_AP;
+        }
+        if (ap.isOpen() || mAccessDatas.get(ap.ssid) != null || ap.isConfiged) {
+            return TYPE_FOCUS_AP;
+        } else {
+            return TYPE_NOAUTH_AP;
+        }
     }
 
     private void refreshData(boolean refreshPWD) {
@@ -103,14 +129,19 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         mFocusPoints.clear();
         mNoauthPoints.clear();
         mOtherPoints.clear();
+        int apType;
         for (AccessPoint ap : mAccessPoints) {
-            if (mCurrentAPoint != null) {
-                if (mCurrentAPoint.ssid.equals(ap.ssid)) continue;
-            }
-            if (ap.isOpen() || mAccessDatas.get(ap.ssid) != null || ap.isConfiged) {
-                mFocusPoints.add(new AccessPointEx(ap, TYPE_FOCUS_AP));
-            } else {
-                mNoauthPoints.add(new AccessPointEx(ap, TYPE_NOAUTH_AP));
+            apType = checkAPType(ap);
+            switch (apType) {
+                case TYPE_CURRENT_AP: break;
+                case TYPE_FOCUS_AP:
+                    mFocusPoints.add(new AccessPointEx(ap, TYPE_FOCUS_AP));
+                    break;
+                case TYPE_NOAUTH_AP:
+                    mNoauthPoints.add(new AccessPointEx(ap, TYPE_NOAUTH_AP));
+                    break;
+                default:
+                    break;
             }
         }
         mOtherPoints.addAll(mFocusPoints);
@@ -201,7 +232,6 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         return LayoutInflater.from(mContext);
     }
 
-    //TODO: fetch password from server
     private void refreshPassword() {
         List<AccessPoint> aps = new ArrayList<AccessPoint>();
         for (AccessPoint ap : mAccessPoints) {
