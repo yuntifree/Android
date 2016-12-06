@@ -138,9 +138,6 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     public void getFontInfoSuccess(FontInfoVo fontInfoVo) {}
 
     @Override
-    public void getWifiSuccess(WifiVo wifiVo) {}
-
-    @Override
     public void onRefresh() {
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         newsVo.clear();

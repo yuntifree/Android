@@ -2,8 +2,6 @@ package com.yunxingzh.wirelesslibs.wireless.lib.model;
 
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
 
-import java.util.ArrayList;
-
 /**
  * Created by stephon on 2016/11/15.
  */
@@ -20,5 +18,5 @@ public interface IWifiManagerModel {
      * @param
      * @param
      */
-    void getWifi(int uid, String token, int term, double version, long ts, int nettype, double longitude, double latitude, ArrayList<String> ssids, onGetWifiListener listener);
+    void getWifi(int uid, String token, int term, double version, long ts, int nettype, double longitude, double latitude, String[] ssids, onGetWifiListener listener);
 }

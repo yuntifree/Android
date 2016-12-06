@@ -75,7 +75,7 @@
 
                     </LinearLayout>
 
-                    <com.yunxingzh.wireless.mvp.view.CircleWaveView
+                    <com.yunxingzh.wireless.mview.CircleWaveView
                         android:id="@+id/animation_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

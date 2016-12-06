@@ -2,19 +2,15 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
-import com.yunxingzh.wireless.mvp.presenter.IWifiManagerPresenter;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.IHeadLineModel;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.IServiceModel;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.IWeatherNewsModel;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.IWifiManagerModel;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.HeadLineModelImpl;
-import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.ServiceModelImpl;
 import com.yunxingzh.wirelesslibs.wireless.lib.model.impl.WeatherNewsModelImpl;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.AppUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
@@ -24,7 +20,7 @@ import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
  */
 
 public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.onGetHeadLineListener,IHeadLineModel.onClickCountListener,
-        IWeatherNewsModel.onWeatherNewsListener,IHeadLineModel.onGetFontInfoListener,IWifiManagerModel.onGetWifiListener {
+        IWeatherNewsModel.onWeatherNewsListener,IHeadLineModel.onGetFontInfoListener {
 
     private IWeatherNewsModel iWeatherNewsModel;
     private IHeadLineView iHeadLineView;
@@ -141,22 +137,6 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
 
     @Override
     public void onGetFontInfoFailed(int error) {
-        if (iHeadLineView != null){
-            //iHeadLineView.hideProgress();
-            iHeadLineView.showError(error);
-        }
-    }
-
-    @Override
-    public void onGetWifiSuccess(WifiVo wifiVo) {
-        if(iHeadLineView != null){
-            //iHeadLineView.hideProgress();
-            iHeadLineView.getWifiSuccess(wifiVo);
-        }
-    }
-
-    @Override
-    public void onGetWifiFailed(int error) {
         if (iHeadLineView != null){
             //iHeadLineView.hideProgress();
             iHeadLineView.showError(error);

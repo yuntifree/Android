@@ -7,5 +7,5 @@ import java.util.ArrayList;
  */
 
 public interface IWifiManagerPresenter {
-    void getWifi(double longitude, double latitude, ArrayList<String> ssids);
+    void getWifi(double longitude, double latitude, String[] ssids);
 }

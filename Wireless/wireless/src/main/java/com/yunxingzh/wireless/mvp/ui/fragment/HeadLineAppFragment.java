@@ -107,10 +107,6 @@ public class HeadLineAppFragment extends BaseFragment implements IHeadLineView,S
     public void getFontInfoSuccess(FontInfoVo fontInfoVo) {}
 
     @Override
-    public void getWifiSuccess(WifiVo wifiVo) {
-    }
-
-    @Override
     public void onRefresh() {
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
     }

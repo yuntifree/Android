@@ -13,6 +13,7 @@ import android.os.Message;
 import android.util.AttributeSet;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.mview.BView;
 
 import java.lang.ref.WeakReference;
 

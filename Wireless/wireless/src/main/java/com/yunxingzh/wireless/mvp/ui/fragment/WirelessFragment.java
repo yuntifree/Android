@@ -28,10 +28,8 @@ import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IConnectDGCountPresenter;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
-import com.yunxingzh.wireless.mvp.presenter.IWifiManagerPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.ConnectDGCountPresenterImpl;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
-import com.yunxingzh.wireless.mvp.presenter.impl.WifiManagerPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.SpeedTestActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
@@ -45,10 +43,9 @@ import com.yunxingzh.wireless.mvp.ui.utils.MyScrollView;
 import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.ui.utils.Utility;
 import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
-import com.yunxingzh.wireless.mvp.view.CircleWaveView;
+import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
-import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
@@ -58,7 +55,6 @@ import com.yunxingzh.wirelesslibs.convenientbanner.listener.OnItemClickListener;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.FontInfoVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.NewsVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WeatherNewsVo;
-import com.yunxingzh.wirelesslibs.wireless.lib.bean.vo.WifiVo;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.NetUtils;
 import com.yunxingzh.wirelesslibs.wireless.lib.utils.StringUtils;
 
@@ -74,7 +70,7 @@ import java.util.List;
  * 无线
  */
 
-public class WirelessFragment extends BaseFragment implements IHeadLineView, IWifiManagerView, IConnectDGCountView, View.OnClickListener, ScrollViewListener {
+public class WirelessFragment extends BaseFragment implements IHeadLineView, IConnectDGCountView, View.OnClickListener, ScrollViewListener {
 
     private final static String TAG = "WirelessFragment";
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
@@ -95,7 +91,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, IWi
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private IConnectDGCountPresenter iConnectDGCountPresenter;
-    private IWifiManagerPresenter iWifiManagerPresenter;
     private CircleWaveView mAnimationTv;
     private TextView footView, mConnectText;
     private List<WeatherNewsVo.WeatherNewsData.mainNewsVo> mainNewsVos;
@@ -111,7 +106,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, IWi
     private CheckEnvTask mCheckTask = null;
     private AccessPoint currentAp;
 
-    private List<WifiVo.WifiData.MWifiInfo> mWifiInfos;
     private boolean mWifiConnected = false;
 
     @Nullable
@@ -182,7 +176,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, IWi
         //注册EventBus
         EventBus.getDefault().register(this);
 
-        iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
         iConnectDGCountPresenter = new ConnectDGCountPresenterImpl(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
@@ -531,24 +524,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, IWi
             }
         }
         return DGFreeAp;
-    }
-
-    //服务器后台返回的附近wifi列表
-    @Override
-    public void getWifiSuccess(WifiVo wifiVo) {
-//        mWifiInfos = wifiVo.getData().getInfos();
-//        if (mWifiInfos != null) {
-//            List<AccessPoint> nearList = FWManager.getInstance().getList();//先拿到附近列表
-//            int nearSize = nearList.size();
-//            for (int i = 0; i < nearSize; i++) {
-//                String ssid = nearList.get(i).ssid;
-//                if (mWifiInfos.contains(ssid)) {//如果附近列表存在，则连接
-//                    FWManager.getInstance().connect(nearList.get(i));
-//                } else{
-//                    ToastUtil.showMiddle(getActivity(), "附近没有可用wifi");
-//                }
-//            }
-//        }
     }
 
     public void checkDGWifi() {

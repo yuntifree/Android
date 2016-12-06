@@ -26,7 +26,7 @@ public class WifiManagerPresenterImpl implements IWifiManagerPresenter,IWifiMana
     }
 
     @Override
-    public void getWifi(double longitude, double latitude, ArrayList<String> ssids) {
+    public void getWifi(double longitude, double latitude, String[] ssids) {
         if (iWifiManagerView != null){
             iWifiManagerView.showProgress();
             iWifiManagerModel.getWifi(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),

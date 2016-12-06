@@ -13,5 +13,4 @@ public interface IHeadLineView extends IBaseView{
     void getHeadLineSuccess(NewsVo newsVo);
     void weatherNewsSuccess(WeatherNewsVo weatherNewsVo);
     void getFontInfoSuccess(FontInfoVo fontInfoVo);
-    void getWifiSuccess(WifiVo wifiVo);
 }

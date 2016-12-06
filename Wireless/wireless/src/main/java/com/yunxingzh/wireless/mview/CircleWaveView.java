@@ -1,4 +1,4 @@
-package com.yunxingzh.wireless.mvp.view;
+package com.yunxingzh.wireless.mview;
 
 import android.content.Context;
 import android.content.res.TypedArray;

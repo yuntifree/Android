@@ -172,10 +172,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     }
 
     @Override
-    public void getWifiSuccess(WifiVo wifiVo) {
-    }
-
-    @Override
     public void onRefresh() {
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         newsListNext.clear();
