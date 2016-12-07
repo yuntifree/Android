@@ -20,10 +20,10 @@ android {
     signingConfigs {
         myconfig {
             def Properties buildProps = buildSign()
-            storeFile file(buildProps['STORE_FILE'])
-            keyAlias buildProps['KEY_ALIAS']
-            keyPassword buildProps['KEY_PASSWORD']
-            storePassword buildProps['STORE_PASSWORD']
+            storeFile file('../keystore/yunxingzh.com.keystore.jks')
+            keyAlias 'yunxingzh'
+            keyPassword 'Yunti2016'
+            storePassword 'Yunti2016'
         }
     }
 
@@ -49,10 +49,12 @@ android {
         minSdkVersion 14
         targetSdkVersion 17
         versionName = "Local Version"
+        versionCode = 1
         ndk {
             abiFilters "armeabi-v7a" // 例如：abiFilter 'armeabi, x86'
         }
         multiDexEnabled true
+        signingConfig signingConfigs.myconfig
     }
 
     dexOptions {
@@ -102,7 +104,9 @@ android {
     /*友盟多渠道统计*/
     productFlavors {
         xiaomi {}
-        baidu {}
+        baidu {
+            signingConfig signingConfigs.myconfig
+        }
         c360 {}
         oppo {}
         vivo {}
@@ -115,6 +119,7 @@ android {
         buildDebug {
             buildConfigField "boolean", "MODEL_DEV", "true"
             versionName = "Local Version"
+            signingConfig signingConfigs.myconfig
         }
         buildDevelop {
             buildConfigField "boolean", "MODEL_DEV", "true"
@@ -123,6 +128,7 @@ android {
         buildRelease {
             buildConfigField "boolean", "MODEL_DEV", "false"
             versionName = mVersionName
+            signingConfig signingConfigs.myconfig
         }
     }
 
@@ -186,8 +192,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-appindexing:9.8.0'
     compile 'com.truizlop.sectionedrecyclerview:library:1.1.0'
     compile files('libs/dg360wifisdk_v1.0.4_out.jar')
-    compile "com.networkbench.newlens.agent.android:nbs.newlens.agent:2.5.1"
-
+    compile 'com.networkbench.newlens.agent.android:nbs.newlens.agent:2.5.1'
     compile 'com.android.support:support-v4:24.2.0'
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.android.support:recyclerview-v7:24.2.0'

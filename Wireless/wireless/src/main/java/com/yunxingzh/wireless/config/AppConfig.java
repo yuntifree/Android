@@ -27,6 +27,6 @@ public class AppConfig {
     /**
      * App 内部版本号
      */
-    public static final int VERSION = 1;
+    public static final int VERSION = BuildConfig.VERSION_CODE;
 
 }
