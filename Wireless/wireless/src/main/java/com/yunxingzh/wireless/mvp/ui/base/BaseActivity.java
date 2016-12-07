@@ -60,7 +60,7 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
     /* @Override
     protected void onStart() {
         super.onStart();
-        if (MyApplication.sApplication.isExit()) {
+        if (MainApplication.sApplication.isExit()) {
             finish();
         }
     }*/

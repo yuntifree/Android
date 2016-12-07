@@ -1,5 +1,6 @@
 package wireless.libs.model;
 
+import wireless.libs.bean.resp.ServiceList;
 import wireless.libs.bean.vo.ServiceVo;
 
 /**
@@ -7,9 +8,13 @@ import wireless.libs.bean.vo.ServiceVo;
  */
 
 public interface IServiceModel {
-    interface onGetServiceListener{
-        void onGetServiceSuccess(ServiceVo serviceVo);
-        void onGetServiceFailed(int error);
+//    interface onGetServiceListener{
+//        void onGetServiceSuccess(ServiceVo serviceVo);
+//        void onGetServiceFailed(int error);
+//    }
+
+    interface onGetServiceListListener{
+        void onGetServiceListSuccess(ServiceList serviceList);
     }
 
     /***
@@ -17,5 +22,7 @@ public interface IServiceModel {
      * @param
      * @param
      */
-    void getService(int uid, String token, int term, double version, long ts, int nettype, onGetServiceListener listener);
+    //void getService(int uid, String token, int term, double version, long ts, int nettype, onGetServiceListener listener);
+
+    void getServiceList(onGetServiceListListener listListener);
 }

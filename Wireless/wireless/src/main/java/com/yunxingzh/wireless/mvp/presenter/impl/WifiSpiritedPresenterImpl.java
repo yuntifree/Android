@@ -1,6 +1,6 @@
 package com.yunxingzh.wireless.mvp.presenter.impl;
 
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.presenter.IWifiSpiritedPresenter;
 import com.yunxingzh.wireless.mvp.view.IWifiSpiritedView;
 import com.yunxingzh.wireless.utils.AppUtils;
@@ -27,9 +27,9 @@ public class WifiSpiritedPresenterImpl implements IWifiSpiritedPresenter,IWifiSp
     public void wifiSpirited(double longitude, double latitude, String ssid, String password) {
         if (iWifiSpiritedView != null){
             iWifiSpiritedView.showProgress();
-            iWifiSpiritedModel.wifiSpirited(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
-                    0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
-                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),ssid,password,longitude,latitude,this);
+            iWifiSpiritedModel.wifiSpirited(MainApplication.sApplication.getUser().getData().getUid(), MainApplication.sApplication.getToken(),
+                    0,Double.parseDouble(AppUtils.getVersionName(MainApplication.sApplication)),
+                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MainApplication.sApplication),ssid,password,longitude,latitude,this);
         }
     }
 

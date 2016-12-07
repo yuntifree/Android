@@ -147,7 +147,7 @@ public class FWManager {
 
 
     private void onAttached() {
-        if (!MyApplication.isUIApplication(mContext))
+        if (!MainApplication.isUIApplication(mContext))
             return;
 
         if (mService == null)

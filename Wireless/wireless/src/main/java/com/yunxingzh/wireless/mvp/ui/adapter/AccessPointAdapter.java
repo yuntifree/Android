@@ -111,10 +111,10 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 //                latitude = SPUtils.get(mContext, "latitude", "");
 //            }
 //
-//            String jsonStr = JsonUtils.jsonStirngForWifi(MyApplication.sApplication.getUser().getData().getUid(),
-//                    MyApplication.sApplication.getToken(),
-//                    0, Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
-//                    StringUtils.getCurrentTime(), AppUtils.getNetWorkType(MyApplication.sApplication), Double.parseDouble(longitude), Double.parseDouble(latitude), ssids);
+//            String jsonStr = JsonUtils.jsonStirngForWifi(MainApplication.sApplication.getUser().getData().getUid(),
+//                    MainApplication.sApplication.getToken(),
+//                    0, Double.parseDouble(AppUtils.getVersionName(MainApplication.sApplication)),
+//                    StringUtils.getCurrentTime(), AppUtils.getNetWorkType(MainApplication.sApplication), Double.parseDouble(longitude), Double.parseDouble(latitude), ssids);
 //            OkRequestParams params = new OkRequestParams();
 //            params.put("key", jsonStr);
 //            OkHttpUtil.post(Api.GET_WIFI_LIST, params, new OkHttpResBeanHandler<WifiVo>() {

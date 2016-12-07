@@ -4,6 +4,8 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.dgwx.app.lib.bl.WifiInterface;
 import com.yunxingzh.wireless.FWManager;
@@ -20,14 +22,14 @@ import wireless.libs.okhttp.OkHttpUtil;
 /**
  * Created by Carey on 2016/5/25.
  */
-public class MyApplication extends Application {
+public class MainApplication extends Application {
     private static final String TAG = "Application";
 
     //TODO: change to private and getInstance
-    public static MyApplication sApplication;
+    public static MainApplication sApplication;
     private static String mCurrentProcessName;
 
-    public static MyApplication getInstance() { return sApplication; }
+    public static MainApplication getInstance() { return sApplication; }
     private static final String UI_PROCESS_NAME = "com.yunxingzh.wireless";
     private static final String SERVICE_PROCESS_NAME = "com.yunxingzh.wireless.service";
 
@@ -37,6 +39,8 @@ public class MyApplication extends Application {
     private String wifiPwd;
     private String userName;
     private UserInfoVo mUser;
+
+    public static Handler mHandler;
 
 
     @Override
@@ -57,6 +61,8 @@ public class MyApplication extends Application {
             WifiInterface.init(this);
             WifiInterface.initEnv(getResources().getString(R.string.wsmpurl), getResources().getString(R.string.ssids),getResources().getString(R.string.vnocode));
 
+            mHandler = new Handler(Looper.getMainLooper());
+
         } else {
             LogUtils.d(TAG, "on create in service thread");
         }
@@ -72,7 +78,7 @@ public class MyApplication extends Application {
     }
 
     public boolean needLogin() {
-        return StringUtils.isEmpty(getToken()) || MyApplication.sApplication.getUser() == null;
+        return StringUtils.isEmpty(getToken()) || MainApplication.sApplication.getUser() == null;
     }
 
     public String getMark() {
@@ -139,8 +145,8 @@ public class MyApplication extends Application {
     }
 
     public void loginOut() {
-        MyApplication.sApplication.setToken("");
-        MyApplication.sApplication.setUser(null);
+        MainApplication.sApplication.setToken("");
+        MainApplication.sApplication.setUser(null);
     }
 
     public static boolean isUIApplication(Context context) {
@@ -186,5 +192,17 @@ public class MyApplication extends Application {
             }
         }
         return mCurrentProcessName;
+    }
+
+    /**
+     * run code on UI thread
+     * @param runnable
+     */
+    public static void runUiThread(Runnable runnable) {
+        mHandler.post(runnable);
+    }
+
+    public static void runUiThread(Runnable runnable, long delay) {
+        mHandler.postDelayed(runnable, delay);
     }
 }

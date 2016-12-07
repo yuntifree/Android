@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.dialog.LoadingDialogFragment;
 import com.yunxingzh.wireless.mvp.ui.activity.HttpErrorActivity;
 import com.yunxingzh.wireless.mvp.view.IBaseView;
@@ -41,7 +41,7 @@ public class BaseFragment extends Fragment implements IBaseView, View.OnTouchLis
     }
 
     public void needLogin() {
-        if (MyApplication.sApplication.needLogin()) {
+        if (MainApplication.sApplication.needLogin()) {
             startActivity(new Intent());
         }
     }

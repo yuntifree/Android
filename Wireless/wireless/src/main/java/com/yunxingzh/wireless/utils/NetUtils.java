@@ -15,6 +15,13 @@ public class NetUtils {
 		throw new UnsupportedOperationException("cannot be instantiated");
 	}
 
+	public enum NetworkStatus {
+		init,   //初始　未检测网络 从未收到过网络状态改变的广播
+		none,   //无网络
+		mobile, //移动网络
+		wifi    //wifi网络
+	}
+
 	/**
 	 * 判断网络是否连接
 	 * 
@@ -57,5 +64,25 @@ public class NetUtils {
 		intent.setComponent(cm);
 		intent.setAction("android.intent.action.VIEW");
 		activity.startActivityForResult(intent, 0);
+	}
+
+	public static NetworkStatus getNetworkState(Context context) {
+		ConnectivityManager connManager = (ConnectivityManager) context.getApplicationContext()
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		// Wifi
+		NetworkInfo.State state = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+				.getState();
+		if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING) {
+			return NetworkStatus.wifi;
+		}
+
+		// 3G
+		state = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+				.getState();
+		if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING) {
+			return NetworkStatus.mobile;
+		}
+		return NetworkStatus.none;
 	}
 }

@@ -13,7 +13,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.ServiceFragment;
@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (StringUtils.isEmpty(MyApplication.sApplication.getToken()) || MyApplication.sApplication.needLogin()) {
+        if (StringUtils.isEmpty(MainApplication.sApplication.getToken()) || MainApplication.sApplication.needLogin()) {
             startActivity(new Intent(this, RegisterActivity.class));
             finish();
             return;

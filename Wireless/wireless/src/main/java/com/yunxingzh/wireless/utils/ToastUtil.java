@@ -5,7 +5,8 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.AppConfig;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
 
 import wireless.libs.api.HttpCode;
@@ -30,11 +31,23 @@ public class ToastUtil {
         showMiddle(context, context.getString(resId));
     }
 
+    public static void showDebug(String msg) {
+        if (AppConfig.DEV_MODEL) {
+            MainApplication appContext = MainApplication.getInstance();
+            Toast.makeText(appContext, msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void show(String msg) {
+        MainApplication appContext = MainApplication.getInstance();
+        Toast.makeText(appContext, msg, Toast.LENGTH_SHORT).show();
+    }
+
     public static void showError(Context context, int error) {
         if (error == HttpCode.E_TOKEN ) {
             showMiddle(context, R.string.lost_token);
-            MyApplication.sApplication.setToken("");
-            MyApplication.sApplication.setUser(null);
+            MainApplication.sApplication.setToken("");
+            MainApplication.sApplication.setUser(null);
             Intent intent = new Intent(context, RegisterActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);//清空栈
             context.startActivity(intent);

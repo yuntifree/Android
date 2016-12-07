@@ -81,6 +81,35 @@ public class AppUtils {
 		return null;
 	}
 
+	/**
+	 * 获取版本Code
+	 *
+	 * @param ctx
+	 * @param packageName
+	 * @return
+	 */
+	public static int getVersionCode(Context ctx, String packageName) {
+		final PackageManager packageManager = ctx.getPackageManager();
+		try {
+			PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+			return packageInfo.versionCode;
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
+	public static int getVersionCode(Context ctx) {
+		final PackageManager packageManager = ctx.getPackageManager();
+		try {
+			PackageInfo packageInfo = packageManager.getPackageInfo(ctx.getPackageName(), 0);
+			return packageInfo.versionCode;
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+
 	public static int getNetWorkClass(Context context) {
 		TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 

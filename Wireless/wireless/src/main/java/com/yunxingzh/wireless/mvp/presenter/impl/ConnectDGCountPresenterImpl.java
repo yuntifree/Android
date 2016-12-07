@@ -1,6 +1,6 @@
 package com.yunxingzh.wireless.mvp.presenter.impl;
 
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.presenter.IConnectDGCountPresenter;
 import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.utils.AppUtils;
@@ -27,9 +27,9 @@ public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter,ICo
     public void connectDGCount(String apmac) {
         if (iConnectDGCountView != null){
             iConnectDGCountView.showProgress();
-            iConnectDGCountModel.connectDGCount(MyApplication.sApplication.getUser().getData().getUid(),MyApplication.sApplication.getToken(),
-                    0,Double.parseDouble(AppUtils.getVersionName(MyApplication.sApplication)),
-                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MyApplication.sApplication),apmac,this);
+            iConnectDGCountModel.connectDGCount(MainApplication.sApplication.getUser().getData().getUid(), MainApplication.sApplication.getToken(),
+                    0,Double.parseDouble(AppUtils.getVersionName(MainApplication.sApplication)),
+                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MainApplication.sApplication),apmac,this);
         }
     }
 

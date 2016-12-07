@@ -2,7 +2,6 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
