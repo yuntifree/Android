@@ -1,9 +1,7 @@
 package wireless.libs.model;
 
-import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.vo.FontInfoVo;
 import wireless.libs.bean.vo.NewsVo;
-import wireless.libs.network.HttpHandler;
 
 /**
  * Created by stephon on 2016/11/3.

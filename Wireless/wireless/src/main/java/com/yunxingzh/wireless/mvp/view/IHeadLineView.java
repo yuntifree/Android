@@ -1,7 +1,6 @@
 package com.yunxingzh.wireless.mvp.view;
 
 
-import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.vo.FontInfoVo;
 import wireless.libs.bean.vo.NewsVo;
 import wireless.libs.bean.vo.WeatherNewsVo;

@@ -1,7 +1,6 @@
 package wireless.libs.model;
 
 import wireless.libs.bean.resp.ServiceList;
-import wireless.libs.bean.vo.ServiceVo;
 
 /**
  * Created by stephon on 2016/11/7.

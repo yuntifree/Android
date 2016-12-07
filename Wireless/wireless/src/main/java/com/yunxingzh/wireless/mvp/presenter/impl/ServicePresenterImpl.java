@@ -1,13 +1,9 @@
 package com.yunxingzh.wireless.mvp.presenter.impl;
 
-import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.presenter.IServicePresenter;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
-import com.yunxingzh.wireless.utils.AppUtils;
-import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.resp.ServiceList;
-import wireless.libs.bean.vo.ServiceVo;
 import wireless.libs.model.IServiceModel;
 import wireless.libs.model.impl.ServiceModelImpl;
 

@@ -3,13 +3,13 @@ package wireless.libs.model.impl;
 import com.yunxingzh.wireless.utils.JsonUtils;
 
 import okhttp3.Headers;
+import wireless.libs.api.Api;
 import wireless.libs.api.HttpCode;
 import wireless.libs.bean.dto.StringDto;
 import wireless.libs.model.IWifiSpiritedModel;
 import wireless.libs.okhttp.OkHttpUtil;
 import wireless.libs.okhttp.OkRequestParams;
 import wireless.libs.okhttp.response.OkHttpResBeanHandler;
-import wireless.libs.api.Api;
 
 /**
  * Created by stephon on 2016/11/29.
