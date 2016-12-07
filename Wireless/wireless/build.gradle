@@ -1,16 +1,73 @@
 apply plugin: 'com.android.application'
 apply plugin: 'newlens'
 
+/**
+ * 读取版本配置
+ */
+def Properties mVersionProps = getVersionProperty();
+
+/**
+ * 读取版本名
+ */
+def mVersionName = buildRelease() ? mVersionProps['VERSION_NAME'] : "build_" + buildTime('yyMMdd')
+
+/**
+ * 输出目录
+ */
+def mOutputs = "$rootDir/outputs/build_" + buildTime('yyMMdd')
+
 android {
+    signingConfigs {
+        myconfig {
+            def Properties buildProps = buildSign()
+            storeFile file(buildProps['STORE_FILE'])
+            keyAlias buildProps['KEY_ALIAS']
+            keyPassword buildProps['KEY_PASSWORD']
+            storePassword buildProps['STORE_PASSWORD']
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.myconfig
+        }
+        release {
+            signingConfig signingConfigs.myconfig
+            minifyEnabled true
+            zipAlignEnabled true
+            debuggable false
+            jniDebuggable false
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
     defaultConfig {
         applicationId "com.yunxingzh.wireless"
-        minSdkVersion 15
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion 14
+        targetSdkVersion 17
+        versionName = "Local Version"
+        ndk {
+            abiFilters "armeabi-v7a" // 例如：abiFilter 'armeabi, x86'
+        }
+        multiDexEnabled true
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
+    packagingOptions {
+        exclude 'META-INF/maven/com.squareup.okio/okio/pom.xml'
+        exclude 'META-INF/maven/com.squareup.okio/okio/pom.properties'
+        exclude 'META-INF/services/org.robolectric.internal.ShadowProvider'
     }
 
     buildTypes {
@@ -27,15 +84,20 @@ android {
 //        }
 //    }
 
-    allprojects {
-        repositories {
-            jcenter()
-        }
-        tasks.withType(JavaCompile) {
-            sourceCompatibility = 1.7
-            targetCompatibility = 1.7
-        }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
+
+//    allprojects {
+//        repositories {
+//            jcenter()
+//        }
+//        tasks.withType(JavaCompile) {
+//            sourceCompatibility = 1.7
+//            targetCompatibility = 1.7
+//        }
+//    }
 
     /*友盟多渠道统计*/
     productFlavors {
@@ -50,6 +112,65 @@ android {
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
         }
+        buildDebug {
+            buildConfigField "boolean", "MODEL_DEV", "true"
+            versionName = "Local Version"
+        }
+        buildDevelop {
+            buildConfigField "boolean", "MODEL_DEV", "true"
+            versionName = mVersionName
+        }
+        buildRelease {
+            buildConfigField "boolean", "MODEL_DEV", "false"
+            versionName = mVersionName
+        }
+    }
+
+    //过滤
+    if (buildRelease()) {
+        android.variantFilter { variant ->
+            if (variant.buildType.name.equals('release')) {
+                variant.getFlavors().each() { flavor ->
+                    if (flavor.name.equals('buildDebug')) {
+                        variant.setIgnore(true);
+                    }
+                }
+            }
+        }
+    }
+    //输出文件配置
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                if ("release".equals(variant.buildType.name)) {
+                    if ("buildDevelop".equals(variant.productFlavors.get(0).name)) {
+                        output.outputFile = new File(
+                                mOutputs,
+                                "Main_${buildTime("yyMMddHHmm")}_dev.apk")
+                    } else if ("buildRelease".equals(variant.productFlavors.get(0).name)) {
+                        output.outputFile = new File(
+                                mOutputs,
+                                "Main_${buildTime("yyMMddHHmm")}.apk")
+                    }
+                } else {
+                    output.outputFile = new File(
+                            outputFile.parent,
+                            "app-debug.apk")
+                }
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    tasks.matching {
+        it.name.startsWith('dex')
+    }.each { dx ->
+        if (dx.additionalParameters == null) {
+            dx.additionalParameters = []
+        }
+        dx.additionalParameters += '--set-max-idx-number=48000'
     }
 }
 
@@ -79,10 +200,98 @@ dependencies {
     compile 'com.zhy:percent-support-extends:1.1.1'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v2.0.0'
     compile 'de.hdodenhof:circleimageview:1.3.0'
-    compile 'com.google.code.gson:gson:2.8.0'
     compile 'io.reactivex:rxjava:1.0.14'
     compile 'io.reactivex:rxandroid:1.0.1'
+    // umeng
     compile 'com.umeng.analytics:analytics:latest.integration'
+}
+
+/****************************************
+ *
+ *          打包脚本片段　by jerry
+ *          修改: andy
+ *          描述: 修正一键打包多个版本
+ *
+ ****************************************/
+
+/**
+ * 构建版本
+ * @return
+ */
+def getVersionProperty() {
+    def Properties buildProps = new Properties()
+    buildProps.load(new FileInputStream(file('../config/version.properties')))
+    return buildProps;
+}
+
+/**
+ * 读取签名
+ * @return
+ */
+def buildSign() {
+    def Properties buildProperties = new Properties()
+    buildProperties.load(new FileInputStream(file('../config/sign.properties')))
+    return buildProperties
+}
+
+/**
+ * 构建时间
+ * @return
+ */
+def buildTime(String time) {
+    def date = new Date()
+    def formattedDate = date.format(time)
+    return formattedDate
+}
+
+/**
+ * 是否发布
+ * 发布为真
+ * 版本号自增
+ * @return
+ */
+def buildRelease() {
+    return false
+}
+
+/**
+ * 读取Git日志
+ * @return
+ */
+def getGitVersion() {
+
+    return 'git rev-parse --short HEAD'.execute().text.trim()
+}
+
+/**
+ * 输出日志
+ */
+def buildLog(String output,String vName,String vCode) {
+    File outputFile = new File(output)
+    if(!outputFile.exists())
+        outputFile.mkdirs()
+    FileWriter fw = new FileWriter(output + File.separator + "log.txt")
+    StringBuilder builder = new StringBuilder();
+    builder.append("[构建时间]=" + buildTime("yy-MM-dd HH:mm"))
+    builder.append("\r\n")
+    builder.append("[版本编号]=" + vCode)
+    builder.append("\r\n")
+    builder.append("[版本名称]=" + vName)
+    builder.append("\r\n")
+    builder.append("[提交记录]=" + getGitVersion())
+    fw.write(builder.toString())
+    fw.flush();
+    fw.close();
+}
+
+build {
+    doLast {
+        buildLog(mOutputs,mVersionName,mVersionProps['VERSION_CODE'])
+        copy {
+            from "$buildDir/outputs/mapping"
+            into mOutputs
+        }
+    }
 }
 
 

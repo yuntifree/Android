@@ -25,7 +25,7 @@ import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mview.MyScrollView;
 import com.yunxingzh.wireless.mvp.presenter.IConnectDGCountPresenter;

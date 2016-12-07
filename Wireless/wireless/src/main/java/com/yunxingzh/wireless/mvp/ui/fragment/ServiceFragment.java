@@ -30,7 +30,6 @@ import java.util.List;
 
 import wireless.libs.bean.Service;
 import wireless.libs.bean.resp.ServiceList;
-import wireless.libs.bean.vo.ServiceVo;
 
 /**
  * Created by stephon_ on 2016/11/1.
