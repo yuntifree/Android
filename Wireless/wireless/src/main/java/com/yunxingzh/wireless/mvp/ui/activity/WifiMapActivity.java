@@ -96,6 +96,32 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         }
     }
 
+    public void initMap(){
+        //定义Maker坐标点lat,lon:22.933103,113.903870
+        LatLng point = new LatLng(lat, lon);
+        //设置地图缩放比例
+        baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
+
+        MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
+        baiduMap.animateMapStatus(status);
+        // 构建Marker图标
+        BitmapDescriptor bitmap = BitmapDescriptorFactory
+                .fromResource(R.drawable.mine);
+        //构建MarkerOption，用于在地图上添加Marker
+        OverlayOptions option = new MarkerOptions()
+                .position(point)
+                .icon(bitmap);
+        //在地图上添加Marker，并显示
+        baiduMap.addOverlay(option);
+        iWifiMapPresenter.getWifiMap(lon, lat);//获取周围热点lon,lat
+        Bitmap mBit = bitmap.getBitmap();
+        //如果该图片为当前位置图，则跳过点击事件
+
+        if (mBit.getHeight() != 120 && mBit.getWidth() != 120){
+            initMarkerClickEvent();
+        }
+    }
+
     @Override
     public void getWifiMapSuccess(WifiMapList wifiMapVo) {
         wifiMapInfo = wifiMapVo.infos;
@@ -124,104 +150,84 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     final Handler locationHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        if (msg.what == 0) {
-            lat = locationUtils.getBaseLocation().latitude;
-            lon = locationUtils.getBaseLocation().longitude;
-            //定义Maker坐标点lat,lon:22.933103,113.903870
-            LatLng point = new LatLng(lat, lon);
-            //设置地图缩放比例
-            baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
-
-            MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
-            baiduMap.animateMapStatus(status);
-            // 构建Marker图标
-            BitmapDescriptor bitmap = BitmapDescriptorFactory
-                    .fromResource(R.drawable.mine);
-            //构建MarkerOption，用于在地图上添加Marker
-            OverlayOptions option = new MarkerOptions()
-                    .position(point)
-                    .icon(bitmap);
-            //在地图上添加Marker，并显示
-            baiduMap.addOverlay(option);
-            iWifiMapPresenter.getWifiMap(lon, lat);//获取周围热点lon,lat
-            Bitmap mBit = bitmap.getBitmap();
-            //如果该图片为当前位置图，则跳过点击事件
-
-            if (mBit.getHeight() != 120 && mBit.getWidth() != 120){
-                initMarkerClickEvent();
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                if (locationUtils.sum == 1) {
+                    lat = locationUtils.getBaseLocation().latitude;
+                    lon = locationUtils.getBaseLocation().longitude;
+                    initMap();
+                }
+            } else {
+                // TODO
             }
-        } else {
-            // TODO
-        }
         }
     };
 
-    private void initMarkerClickEvent(){
+    private void initMarkerClickEvent() {
         //对Marker的点击
         baiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
-        @Override
-        public boolean onMarkerClick ( final Marker marker){
-            //获得marker中的数据
-            WifiMapVo info = (WifiMapVo) marker.getExtraInfo().get("info");
+            @Override
+            public boolean onMarkerClick(final Marker marker) {
+                //获得marker中的数据
+                WifiMapVo info = (WifiMapVo) marker.getExtraInfo().get("info");
 
-            //计算p1、p2两点之间的直线距离，单位：米
-            LatLng p1LL = new LatLng(22.933103, 113.903870);
-            LatLng p2LL = new LatLng(info.latitude, info.longitude);
-            double distance = DistanceUtil. getDistance(p1LL, p2LL);
+                //计算p1、p2两点之间的直线距离，单位：米
+                LatLng p1LL = new LatLng(22.933103, 113.903870);
+                LatLng p2LL = new LatLng(info.latitude, info.longitude);
+                double distance = DistanceUtil.getDistance(p1LL, p2LL);
 
-            //生成一个TextView用户在地图中显示InfoWindow
-            LinearLayout markerLayout = new LinearLayout(getApplicationContext());
-            markerLayout.setOrientation(LinearLayout.HORIZONTAL);
-            markerLayout.setGravity(Gravity.CENTER);
-            markerLayout.setBackgroundResource(R.drawable.wifi_info);
+                //生成一个TextView用户在地图中显示InfoWindow
+                LinearLayout markerLayout = new LinearLayout(getApplicationContext());
+                markerLayout.setOrientation(LinearLayout.HORIZONTAL);
+                markerLayout.setGravity(Gravity.CENTER);
+                markerLayout.setBackgroundResource(R.drawable.wifi_info);
 
-            TextView address = new TextView(getApplicationContext());
-            address.setTextColor(getResources().getColor(R.color.gray_b4b4b4));
-            address.setTextSize(10);
-            address.setText(info.address);
+                TextView address = new TextView(getApplicationContext());
+                address.setTextColor(getResources().getColor(R.color.gray_b4b4b4));
+                address.setTextSize(10);
+                address.setText(info.address);
 
-            TextView distances = new TextView(getApplicationContext());
-            distances.setTextColor(getResources().getColor(R.color.blue_00a6f9));
-            distances.setTextSize(10);
-            distances.setText(new DecimalFormat("#").format(distance)+"m");
+                TextView distances = new TextView(getApplicationContext());
+                distances.setTextColor(getResources().getColor(R.color.blue_00a6f9));
+                distances.setTextSize(10);
+                distances.setText(new DecimalFormat("#").format(distance) + "m");
 
-            ImageView  addressImg = new ImageView(getApplicationContext());
-            addressImg.setImageResource(R.drawable.ico_location);
-            ImageView  distancesImg = new ImageView(getApplicationContext());
-            distancesImg.setImageResource(R.drawable.ico_walk);
+                ImageView addressImg = new ImageView(getApplicationContext());
+                addressImg.setImageResource(R.drawable.ico_location);
+                ImageView distancesImg = new ImageView(getApplicationContext());
+                distancesImg.setImageResource(R.drawable.ico_walk);
 
-            markerLayout.addView(addressImg);
-            markerLayout.addView(address);
-            markerLayout.addView(distancesImg);
-            markerLayout.addView(distances);
-            //将marker所在的经纬度的信息转化成屏幕上的坐标
-            final LatLng ll = marker.getPosition();
-            Point p = baiduMap.getProjection().toScreenLocation(ll);
-            p.y -= 90;
-            LatLng llInfo = baiduMap.getProjection().fromScreenLocation(p);
-           //为弹出的InfoWindow添加点击事件
-            mInfoWindow = new InfoWindow(markerLayout,llInfo,0);
-            if (flag){
-                //显示InfoWindow
-                baiduMap.showInfoWindow(mInfoWindow);
-                flag = false;
-            } else {
-                baiduMap.hideInfoWindow();
-                flag = true;
-            }
-            baiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
+                markerLayout.addView(addressImg);
+                markerLayout.addView(address);
+                markerLayout.addView(distancesImg);
+                markerLayout.addView(distances);
+                //将marker所在的经纬度的信息转化成屏幕上的坐标
+                final LatLng ll = marker.getPosition();
+                Point p = baiduMap.getProjection().toScreenLocation(ll);
+                p.y -= 90;
+                LatLng llInfo = baiduMap.getProjection().fromScreenLocation(p);
+                //为弹出的InfoWindow添加点击事件
+                mInfoWindow = new InfoWindow(markerLayout, llInfo, 0);
+                if (flag) {
+                    //显示InfoWindow
+                    baiduMap.showInfoWindow(mInfoWindow);
+                    flag = false;
+                } else {
                     baiduMap.hideInfoWindow();
+                    flag = true;
                 }
+                baiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(LatLng latLng) {
+                        baiduMap.hideInfoWindow();
+                    }
 
-                @Override
-                public boolean onMapPoiClick(MapPoi mapPoi) {
-                    return false;
-                }
-            });
-            return true;
+                    @Override
+                    public boolean onMapPoiClick(MapPoi mapPoi) {
+                        return false;
+                    }
+                });
+                return true;
             }
         });
     }

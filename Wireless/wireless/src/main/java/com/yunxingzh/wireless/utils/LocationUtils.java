@@ -25,6 +25,7 @@ public class LocationUtils {
     public BDLocationListener myListener = new MyLocationListener();
     private LocationClient mLocationClient;
     private Handler mHandler;
+    public static int sum = 0;
 
     public static LocationUtils getInstance(Context context) {
         if (mInstance == null) {
@@ -129,6 +130,7 @@ public class LocationUtils {
                         ret == BDLocation.TypeNetWorkLocation ||
                         ret == BDLocation.TypeOffLineLocation) {
                     msg.what = 0;
+                    sum ++;
                 } else {
                     msg.what = ret;
                 }
