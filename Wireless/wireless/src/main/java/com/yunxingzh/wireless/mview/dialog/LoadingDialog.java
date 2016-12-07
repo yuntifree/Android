@@ -62,28 +62,28 @@ public class LoadingDialog extends Dialog {
      *            按下返回键监听
      * @return
      */
-//    public static LoadingDialog show(Context context, CharSequence message, boolean cancelable, OnCancelListener cancelListener) {
-//        LoadingDialog dialog = new LoadingDialog(context, R.style.Loading_Progress);
-//        dialog.setTitle("");
-//        dialog.setContentView(R.layout.progress_loading);
-//        if (message == null || message.length() == 0) {
-//            dialog.findViewById(R.id.message).setVisibility(View.GONE);
-//        } else {
-//            TextView txt = (TextView) dialog.findViewById(R.id.message);
-//            txt.setText(message);
-//        }
-//        // 按返回键是否取消
-//        dialog.setCancelable(cancelable);
-//        // 监听返回键处理
-//        dialog.setOnCancelListener(cancelListener);
-//        // 设置居中
-//        dialog.getWindow().getAttributes().gravity = Gravity.CENTER;
-//        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-//        // 设置背景层透明度
-//        lp.dimAmount = 0.2f;
-//        dialog.getWindow().setAttributes(lp);
-//        // dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-//        dialog.show();
-//        return dialog;
-//    }
+    public static LoadingDialog show(Context context, CharSequence message, boolean cancelable, OnCancelListener cancelListener) {
+        LoadingDialog dialog = new LoadingDialog(context, R.style.Loading_Progress);
+        dialog.setTitle("");
+        dialog.setContentView(R.layout.progress_loading);
+        if (message == null || message.length() == 0) {
+            dialog.findViewById(R.id.message).setVisibility(View.GONE);
+        } else {
+            TextView txt = (TextView) dialog.findViewById(R.id.message);
+            txt.setText(message);
+        }
+        // 按返回键是否取消
+        dialog.setCancelable(cancelable);
+        // 监听返回键处理
+        dialog.setOnCancelListener(cancelListener);
+        // 设置居中
+        dialog.getWindow().getAttributes().gravity = Gravity.CENTER;
+        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+        // 设置背景层透明度
+        lp.dimAmount = 0.2f;
+        dialog.getWindow().setAttributes(lp);
+        // dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+        dialog.show();
+        return dialog;
+    }
 }

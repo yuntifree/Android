@@ -148,7 +148,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             mItemTop.setOrientation(LinearLayout.HORIZONTAL);
 
             ImageView mServiceImg = new ImageView(getActivity());
-            Glide.with(getActivity()).load(list.get(i).icon).placeholder(R.drawable.ic_close).into(mServiceImg);
+            Glide.with(getActivity()).load(list.get(i).icon).into(mServiceImg);
 
             TextView mServiceTitle = new TextView(getActivity());
             mServiceTitle.setTextColor(getResources().getColor(R.color.gray_3c3c3c));

@@ -36,7 +36,7 @@ public class LoadingDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Dialog_No_Border);
-        setCancelable(false);
+        setCancelable(true);
     }
 
 
