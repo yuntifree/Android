@@ -8,7 +8,7 @@ import android.view.KeyEvent;
 import android.view.Window;
 
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.mvp.ui.utils.NetUtils;
+import com.yunxingzh.wireless.utils.NetUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.Timer;

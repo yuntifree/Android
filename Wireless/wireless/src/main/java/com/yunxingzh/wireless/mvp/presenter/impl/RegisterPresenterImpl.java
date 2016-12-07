@@ -3,9 +3,9 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IRegisterPresenter;
-import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.view.IRegisterView;
+import com.yunxingzh.wireless.utils.AppUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.vo.UserInfoVo;
 import wireless.libs.model.IUserModel;

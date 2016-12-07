@@ -5,7 +5,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiConfiguration.AuthAlgorithm;
 import android.net.wifi.WifiConfiguration.KeyMgmt;
 
-import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
 
 public class ConfigurationSecuritiesV8 extends ConfigurationSecurities {
 

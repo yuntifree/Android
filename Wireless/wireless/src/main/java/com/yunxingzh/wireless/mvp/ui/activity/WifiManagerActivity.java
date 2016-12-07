@@ -21,11 +21,11 @@ import com.yunxingzh.wireless.mvp.presenter.IWifiManagerPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiManagerPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.AccessPointAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.SPUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.WifiUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
+import com.yunxingzh.wireless.utils.LocationUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
+import com.yunxingzh.wireless.utils.SPUtils;
+import com.yunxingzh.wireless.utils.WifiUtils;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
 

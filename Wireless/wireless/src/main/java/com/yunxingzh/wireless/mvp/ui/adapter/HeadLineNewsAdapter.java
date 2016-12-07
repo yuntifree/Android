@@ -17,8 +17,7 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
+import com.yunxingzh.wireless.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 

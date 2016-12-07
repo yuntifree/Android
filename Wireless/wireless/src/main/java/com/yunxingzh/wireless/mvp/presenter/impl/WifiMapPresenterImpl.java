@@ -2,9 +2,9 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.presenter.IWifiMapPresenter;
-import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiMapView;
+import com.yunxingzh.wireless.utils.AppUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.vo.WifiMapVo;
 import wireless.libs.model.IWifiMapModel;

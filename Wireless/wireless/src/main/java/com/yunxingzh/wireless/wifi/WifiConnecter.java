@@ -7,7 +7,7 @@ import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
 
 import java.util.Comparator;
 import java.util.List;

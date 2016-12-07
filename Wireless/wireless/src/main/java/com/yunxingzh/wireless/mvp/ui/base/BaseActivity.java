@@ -15,8 +15,8 @@ import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.dialog.LoadingDialogFragment;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IBaseView;
+import com.yunxingzh.wireless.utils.ToastUtil;
 
 /**
  * Created by Carey on 2016/5/25.

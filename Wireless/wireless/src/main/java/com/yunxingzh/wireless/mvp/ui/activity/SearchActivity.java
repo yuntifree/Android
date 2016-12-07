@@ -12,7 +12,7 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.ClearEditText;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 
 /**
  * Created by stephon on 2016/11/17.

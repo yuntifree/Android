@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 
 /**
  * Created by carey on 2016/6/12 0012.

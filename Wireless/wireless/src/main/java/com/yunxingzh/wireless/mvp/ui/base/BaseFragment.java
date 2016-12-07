@@ -14,9 +14,9 @@ import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mview.dialog.LoadingDialogFragment;
 import com.yunxingzh.wireless.mvp.ui.activity.HttpErrorActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.NetUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IBaseView;
+import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 
 
 /**

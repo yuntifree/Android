@@ -13,10 +13,10 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.presenter.IWifiSpiritedPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiSpiritedPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.LocationUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IWifiSpiritedView;
+import com.yunxingzh.wireless.utils.LocationUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 
 /**
  * Created by stephon on 2016/11/29.

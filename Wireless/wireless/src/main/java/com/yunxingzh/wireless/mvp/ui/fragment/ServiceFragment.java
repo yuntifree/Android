@@ -22,9 +22,9 @@ import com.yunxingzh.wireless.mvp.presenter.impl.ServicePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.SearchActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
-import com.yunxingzh.wireless.mvp.ui.utils.NetUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
+import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 
 import java.util.List;
 

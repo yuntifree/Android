@@ -7,17 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
+import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.wifi.AccessPoint;
-
-import java.io.Serializable;
-import java.util.List;
 
 /***
  * wifi管理-密码连接dialog

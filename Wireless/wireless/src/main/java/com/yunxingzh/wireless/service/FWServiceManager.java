@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.Message;
-
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.IConnectWorker;
 import com.yunxingzh.wireless.wifi.IWifiListener;

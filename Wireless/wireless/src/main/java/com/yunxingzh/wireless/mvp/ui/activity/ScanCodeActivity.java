@@ -1,6 +1,5 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
@@ -35,12 +34,11 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
-import com.yunxingzh.wireless.mvp.zxing.camera.CameraManager;
-import com.yunxingzh.wireless.mvp.zxing.decoding.CaptureActivityHandler;
-import com.yunxingzh.wireless.mvp.zxing.decoding.InactivityTimer;
-import com.yunxingzh.wireless.mvp.zxing.image.RGBLuminanceSource;
-import com.yunxingzh.wireless.mvp.zxing.view.ViewfinderView;
+import com.yunxingzh.wireless.zxing.camera.CameraManager;
+import com.yunxingzh.wireless.zxing.decoding.CaptureActivityHandler;
+import com.yunxingzh.wireless.zxing.decoding.InactivityTimer;
+import com.yunxingzh.wireless.zxing.decoding.RGBLuminanceSource;
+import com.yunxingzh.wireless.zxing.view.ViewfinderView;
 
 import java.io.IOException;
 import java.util.Hashtable;

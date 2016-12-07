@@ -8,11 +8,11 @@ import android.content.Intent;
 import com.dgwx.app.lib.bl.WifiInterface;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.mvp.ui.utils.DeviceUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.SPUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
 import com.yunxingzh.wireless.service.FWService;
+import com.yunxingzh.wireless.utils.DeviceUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
+import com.yunxingzh.wireless.utils.SPUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.vo.UserInfoVo;
 import wireless.libs.okhttp.OkHttpUtil;

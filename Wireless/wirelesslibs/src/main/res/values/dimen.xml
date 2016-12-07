@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="radio_button_conner_radius">4px</dimen>
-    <dimen name="radio_button_stroke_border">2px</dimen>
-</resources>

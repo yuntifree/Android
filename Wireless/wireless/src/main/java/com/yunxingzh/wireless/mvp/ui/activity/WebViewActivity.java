@@ -19,8 +19,8 @@ import android.widget.TextView;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.ui.base.NetWorkBaseActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
-import com.yunxingzh.wireless.mvp.ui.utils.WebViewUtil;
+import com.yunxingzh.wireless.utils.ToastUtil;
+import com.yunxingzh.wireless.utils.WebViewUtil;
 
 /**
  * Created by stephon on 2016/11/10.

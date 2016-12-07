@@ -18,11 +18,11 @@ import android.widget.TextView;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MyApplication;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.AppUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.SpeedTestDialog;
 import com.yunxingzh.wireless.mview.RotatePointer;
-import com.yunxingzh.wireless.mvp.ui.utils.NetUtil;
-import com.yunxingzh.wireless.mvp.ui.utils.Util;
+import com.yunxingzh.wireless.utils.AppUtils;
+import com.yunxingzh.wireless.utils.NetUtil;
+import com.yunxingzh.wireless.utils.SpeedTestDialog;
+import com.yunxingzh.wireless.utils.Util;
 
 import java.io.InputStream;
 import java.net.URL;

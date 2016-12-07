@@ -1,6 +1,5 @@
 package com.yunxingzh.wireless;
 
-import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,10 +10,10 @@ import android.os.Message;
 import android.os.RemoteException;
 
 import com.yunxingzh.wireless.config.MyApplication;
-import com.yunxingzh.wireless.mvp.ui.utils.LogUtils;
 import com.yunxingzh.wireless.service.FWService;
 import com.yunxingzh.wireless.service.IFWService;
 import com.yunxingzh.wireless.service.IFWServiceCallback;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
 

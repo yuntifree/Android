@@ -20,10 +20,10 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IRegisterPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.RegisterPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.NetWorkBaseActivity;
-import com.yunxingzh.wireless.mvp.ui.utils.NetUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.StringUtils;
-import com.yunxingzh.wireless.mvp.ui.utils.ToastUtil;
 import com.yunxingzh.wireless.mvp.view.IRegisterView;
+import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.json.JSONObject;
 
