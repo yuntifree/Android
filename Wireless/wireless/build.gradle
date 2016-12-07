@@ -46,8 +46,8 @@ android {
     buildToolsVersion "24.0.2"
     defaultConfig {
         applicationId "com.yunxingzh.wireless"
-        minSdkVersion 14
-        targetSdkVersion 17
+        minSdkVersion 17
+        targetSdkVersion 23
         versionName = "Local Version"
         versionCode = 1
         ndk {
