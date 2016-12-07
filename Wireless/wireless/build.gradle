@@ -37,7 +37,7 @@ android {
             zipAlignEnabled true
             debuggable false
             jniDebuggable false
-            shrinkResources true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -46,8 +46,8 @@ android {
     buildToolsVersion "24.0.2"
     defaultConfig {
         applicationId "com.yunxingzh.wireless"
-        minSdkVersion 14
-        targetSdkVersion 17
+        minSdkVersion 17
+        targetSdkVersion 23
         versionName = "Local Version"
         versionCode = 1
         ndk {
@@ -124,6 +124,7 @@ android {
         buildDevelop {
             buildConfigField "boolean", "MODEL_DEV", "true"
             versionName = mVersionName
+            signingConfig signingConfigs.myconfig
         }
         buildRelease {
             buildConfigField "boolean", "MODEL_DEV", "false"
