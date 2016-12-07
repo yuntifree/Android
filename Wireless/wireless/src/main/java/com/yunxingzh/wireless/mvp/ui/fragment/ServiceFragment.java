@@ -160,13 +160,14 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             lineSmall.setBackgroundColor(getResources().getColor(R.color.gray_e6e6e6));
 
             View line = new View(getActivity());
-            line.setMinimumHeight(20);
             line.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
 
             if (width <= 720 && height <= 1280){
+                line.setMinimumHeight(20);
                 mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 45, 45, 16, 20, 0, 20));
                 mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 5, 20, 0, 20));
             } else {
+                line.setMinimumHeight(40);
                 mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 100, 100, 35, 40, 0, 40));
                 mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 15, 20, 0, 20));
             }
