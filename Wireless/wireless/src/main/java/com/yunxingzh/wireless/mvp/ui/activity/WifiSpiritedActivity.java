@@ -74,7 +74,7 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
         public void handleMessage(Message msg) {
         super.handleMessage(msg);
         if (msg.what == 0) {
-            iWifiSpiritedPresenter.wifiSpirited(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude,getSsid(),getPwd());
+            iWifiSpiritedPresenter.wifiSpirited(getSsid(),getPwd(),locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);
         }
         }
     };

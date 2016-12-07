@@ -7,13 +7,11 @@ package wireless.libs.model;
 public interface IConnectDGCountModel {
     interface onConnectDGCountListener{
         void onConnectDGCountSuccess();
-        void onConnectDGCountFailed(int error);
     }
 
     /***
      * 上报连接东莞wifi次数
      * @param listener
      */
-    void connectDGCount(int uid, String token, int term, double version, long ts,
-                        int nettype, String apmac, onConnectDGCountListener listener);
+    void connectDGCount(String apmac, onConnectDGCountListener listener);
 }

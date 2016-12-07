@@ -7,6 +7,5 @@ import wireless.libs.bean.resp.ServiceList;
  */
 
 public interface IServiceView extends IBaseView{
-    //void getServiceSuccess(ServiceVo serviceVo);
     void getServiceListSuccess(ServiceList services);
 }

@@ -20,9 +20,9 @@ import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
-import wireless.libs.bean.vo.FontInfoVo;
-import wireless.libs.bean.vo.NewsVo;
-import wireless.libs.bean.vo.WeatherNewsVo;
+import wireless.libs.bean.resp.FontInfoList;
+import wireless.libs.bean.resp.HotInfoList;
+import wireless.libs.bean.resp.WeatherNewsList;
 
 /**
  * Created by stephon_ on 2016/11/2.
@@ -39,7 +39,7 @@ public class HeadLineGameFragment extends BaseFragment implements IHeadLineView,
     private HeadLineGameAdapter headLineGameAdapter;
     //下拉刷新
     private SwipeRefreshLayout mSwipeRefreshLay;
-    private NewsVo newsVo;
+    private HotInfoList newsVo;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class HeadLineGameFragment extends BaseFragment implements IHeadLineView,
     }
 
     @Override
-    public void getHeadLineSuccess(NewsVo newsVoList) {
+    public void getHeadLineSuccess(HotInfoList newsVoList) {
         mSwipeRefreshLay.setRefreshing(false);
         if (newsVoList != null) {
             newsVo = newsVoList;
@@ -101,10 +101,10 @@ public class HeadLineGameFragment extends BaseFragment implements IHeadLineView,
     }
 
     @Override
-    public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {}
+    public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {}
 
     @Override
-    public void getFontInfoSuccess(FontInfoVo fontInfoVo) {}
+    public void getFontInfoSuccess(FontInfoList fontInfoVo) {}
 
     @Override
     public void onRefresh() {

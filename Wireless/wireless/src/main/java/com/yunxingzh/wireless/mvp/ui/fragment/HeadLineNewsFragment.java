@@ -28,9 +28,10 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import wireless.libs.bean.vo.FontInfoVo;
-import wireless.libs.bean.vo.NewsVo;
-import wireless.libs.bean.vo.WeatherNewsVo;
+import wireless.libs.bean.vo.HotInfo;
+import wireless.libs.bean.resp.FontInfoList;
+import wireless.libs.bean.resp.HotInfoList;
+import wireless.libs.bean.resp.WeatherNewsList;
 
 /**
  * Created by stephon_ on 2016/11/2.
@@ -47,8 +48,8 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private HeadLineNewsAdapter headLineNewsAdapter;
-    private List<NewsVo.Data.NewsData> newsListNext;
-    private NewsVo.Data data;
+    private List<HotInfo> newsListNext;
+    private HotInfoList data;
     private LinearLayout mNetErrorLay;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,10 +72,10 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                     case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
                         // 判断滚动到底部
                         if (mMainNewsLv.getLastVisiblePosition() == (mMainNewsLv.getCount() - 1)) {
-                            if (data.getHasmore() == 0) {
+                            if (data.hasmore == 0) {
                                 ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
                             } else {
-                                iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, data.getInfos().get(19).getSeq());
+                                iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, data.infos.get(19).seq);
                             }
                         }
                         // 判断滚动到顶部
@@ -128,7 +129,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     public void onEventMainThread(EventBusType event) {
         int index = event.getChildMsg();
         if (event.getMsg() == Constants.HEAD_LINE_NEWS_FLAG && index != -1) {//上报
-            iHeadLinePresenter.clickCount(data.getInfos().get(index).getId(), CLICK_COUNT);
+            iHeadLinePresenter.clickCount(data.infos.get(index).id, CLICK_COUNT);
         }
     }
 
@@ -140,19 +141,19 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
 
     @Override
-    public void getHeadLineSuccess(NewsVo newsVo) {
+    public void getHeadLineSuccess(HotInfoList newsVo) {
         swipeRefreshLayout.setRefreshing(false);
         // swipeRefreshLayout.setLoading(false);
         if (newsVo != null) {
-            data = newsVo.getData();
+            data = newsVo;
         }
 
         if (newsListNext == null) {
-            newsListNext = new ArrayList<NewsVo.Data.NewsData>();
+            newsListNext = new ArrayList<HotInfo>();
         }
 
-        if (data.getInfos() != null) {
-            newsListNext.addAll(data.getInfos());
+        if (data.infos != null) {
+            newsListNext.addAll(data.infos);
             if (headLineNewsAdapter == null) {
                 headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsListNext);
                 mMainNewsLv.setAdapter(headLineNewsAdapter);
@@ -164,11 +165,11 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     }
 
     @Override
-    public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {
+    public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {
     }
 
     @Override
-    public void getFontInfoSuccess(FontInfoVo fontInfoVo) {
+    public void getFontInfoSuccess(FontInfoList fontInfoVo) {
     }
 
     @Override

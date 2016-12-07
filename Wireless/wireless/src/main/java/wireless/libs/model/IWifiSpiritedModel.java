@@ -7,7 +7,6 @@ package wireless.libs.model;
 public interface IWifiSpiritedModel {
     interface onWifiSpiritedListener{
         void onWifiSpiritedSuccess();
-        void onWifiSpiritedFailed(int error);
     }
 
     /***
@@ -15,6 +14,6 @@ public interface IWifiSpiritedModel {
      * @param
      * @param
      */
-    void wifiSpirited(int uid, String token, int term, double version, long ts, int nettype, String ssid, String password, double longitude, double latitude, onWifiSpiritedListener listener);
+    void wifiSpirited(String ssid, String password, double longitude, double latitude, onWifiSpiritedListener listener);
 
 }

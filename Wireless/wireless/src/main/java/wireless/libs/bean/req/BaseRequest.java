@@ -1,16 +1,12 @@
 package wireless.libs.bean.req;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.os.Build;
-
 import com.yunxingzh.wireless.config.AppConfig;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.utils.AppUtils;
-import com.yunxingzh.wireless.utils.NetUtils;
 
 import java.io.Serializable;
-import wireless.libs.bean.vo.UserInfoVo;
+
+import wireless.libs.bean.vo.User;
 
 /**
  * 请求封装实体类
@@ -33,11 +29,11 @@ public class BaseRequest implements Serializable {
 
     public BaseRequest() {
 
-        UserInfoVo user = MainApplication.getInstance().getUser();
+        User user = MainApplication.getInstance().getUser();
 
         if (user != null) {
-            uid = user.getData().getUid();
-            token = user.getData().getToken();
+            uid = user.uid;
+            token = user.token;
         }
         version = AppConfig.VERSION;
         ts = System.currentTimeMillis();

@@ -180,7 +180,7 @@ public class AppUtils {
 				ApplicationInfo applicationInfo = packageManager.getApplicationInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);
 				if (applicationInfo != null) {
 					if (applicationInfo.metaData != null) {
-						channelName = applicationInfo.metaData.getString("");
+						channelName = applicationInfo.metaData.getString("UMENG_CHANNEL");
 					}
 				}
 			}

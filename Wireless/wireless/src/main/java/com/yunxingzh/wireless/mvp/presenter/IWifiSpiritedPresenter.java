@@ -5,5 +5,5 @@ package com.yunxingzh.wireless.mvp.presenter;
  */
 
 public interface IWifiSpiritedPresenter {
-    void wifiSpirited(double longitude,double latitude,String ssid,String password);
+    void wifiSpirited(String ssid,String password,double longitude,double latitude);
 }

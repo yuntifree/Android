@@ -1,5 +1,6 @@
 package wireless.libs.model;
 
+import wireless.libs.bean.resp.WifiMapList;
 import wireless.libs.bean.vo.WifiMapVo;
 
 /**
@@ -8,8 +9,7 @@ import wireless.libs.bean.vo.WifiMapVo;
 
 public interface IWifiMapModel {
     interface onGetWifiMapListener{
-        void onGetWifiMapSuccess(WifiMapVo wifiMapVo);
-        void onGetWifiMapFailed(int error);
+        void onGetWifiMapSuccess(WifiMapList wifiMapVo);
     }
 
     /***
@@ -17,5 +17,5 @@ public interface IWifiMapModel {
      * @param
      * @param
      */
-    void getWifiMap(int uid, String token, int term, double version, long ts, int nettype, double longitude, double latitude, onGetWifiMapListener listener);
+    void getWifiMap(double longitude, double latitude, onGetWifiMapListener listener);
 }

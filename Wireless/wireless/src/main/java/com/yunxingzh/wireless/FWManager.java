@@ -9,7 +9,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.service.FWService;
 import com.yunxingzh.wireless.service.IFWService;
 import com.yunxingzh.wireless.service.IFWServiceCallback;

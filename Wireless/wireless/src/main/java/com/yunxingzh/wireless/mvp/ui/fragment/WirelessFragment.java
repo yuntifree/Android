@@ -25,7 +25,7 @@ import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
-import com.yunxingzh.wireless.config.MyApplication;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mview.MyScrollView;
 import com.yunxingzh.wireless.mvp.presenter.IConnectDGCountPresenter;
@@ -60,9 +60,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import wireless.libs.bean.vo.FontInfoVo;
-import wireless.libs.bean.vo.NewsVo;
-import wireless.libs.bean.vo.WeatherNewsVo;
+import wireless.libs.bean.resp.FontInfoList;
+import wireless.libs.bean.resp.HotInfoList;
+import wireless.libs.bean.resp.WeatherNewsList;
+import wireless.libs.bean.vo.BannerVo;
+import wireless.libs.bean.vo.MainNewsVo;
+import wireless.libs.bean.vo.UserConnectVo;
+import wireless.libs.bean.vo.WeatherVo;
 import wireless.libs.convenientbanner.ConvenientBanner;
 import wireless.libs.convenientbanner.holder.CBViewHolderCreator;
 import wireless.libs.convenientbanner.listener.OnItemClickListener;
@@ -95,13 +99,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private IConnectDGCountPresenter iConnectDGCountPresenter;
     private CircleWaveView mAnimationTv;
     private TextView footView, mConnectText;
-    private List<WeatherNewsVo.WeatherNewsData.mainNewsVo> mainNewsVos;
+    private List<MainNewsVo> mainNewsVos;
     private MainNewsAdapter mainNewsAdapter;
 
-    private List<FontInfoVo.FontData.BannersVo> bannersVo;
-    private FontInfoVo.FontData.UserVo userVo;
+    private List<BannerVo> bannersVo;
+    private UserConnectVo userVo;
     private TextView mMainTemperature, mMainWeather;
-    private WeatherNewsVo.WeatherNewsData.WeatherVo weatherNewsData;
+    private WeatherVo weatherNewsData;
     private ConvenientBanner mAdRotationBanner;
 
     private WifiUtils wifiUtils = null;
@@ -200,12 +204,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     @Override
-    public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {
-        weatherNewsData = weatherNewsVo.getData().getWeather();
-        mainNewsVos = weatherNewsVo.getData().getNews();
-        String info = weatherNewsData.getInfo();
-        int type = weatherNewsData.getType();
-        mMainTemperature.setText(weatherNewsData.getTemp() + "°C");
+    public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {
+        weatherNewsData = weatherNewsVo.weather;
+        mainNewsVos = weatherNewsVo.news;
+        String info = weatherNewsData.info;
+        int type = weatherNewsData.type;
+        mMainTemperature.setText(weatherNewsData.temp + "°C");
         mMainWeather.setText(info);
         //类型 0-晴 1-阴 2-雨 3-雪
         switch (type) {
@@ -228,7 +232,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         }
         //新闻
         if (weatherNewsVo != null) {
-            mainNewsVos = weatherNewsVo.getData().getNews();
+            mainNewsVos = weatherNewsVo.news;
         }
         mainNewsAdapter = new MainNewsAdapter(getActivity(), mainNewsVos);
 
@@ -247,16 +251,16 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     @Override
-    public void getFontInfoSuccess(FontInfoVo fontInfoVo) {
-        bannersVo = fontInfoVo.getData().getBanner();
-        userVo = fontInfoVo.getData().getUser();
-        mConnectCountTv.setText(userVo.getTotal() + "");
-        mEconomizeTv.setText(userVo.getSave() + "");
+    public void getFontInfoSuccess(FontInfoList fontInfoVo) {
+        bannersVo = fontInfoVo.banner;
+        userVo = fontInfoVo.user;
+        mConnectCountTv.setText(userVo.total + "");
+        mEconomizeTv.setText(userVo.save + "");
 
         if (bannersVo != null) {
             List<String> imageList = new ArrayList<String>(bannersVo.size());
-            for (FontInfoVo.FontData.BannersVo bannersList : bannersVo) {
-                imageList.add(bannersList.getImg());
+            for (BannerVo bannersList : bannersVo) {
+                imageList.add(bannersList.img);
             }
             mAdRotationBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
                 @Override
@@ -269,7 +273,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         mAdRotationBanner.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                String url = bannersVo.get(position).getDst();
+                String url = bannersVo.get(position).dst;
                 if (!StringUtils.isEmpty(url)) {
                     startActivity(WebViewActivity.class, Constants.URL, url, "", "");
                 }
@@ -556,7 +560,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     public void onEventMainThread(EventBusType event) {
         int index = event.getChildMsg();
         if (event.getMsg() == Constants.MAIN_NEWS_FLAG && index != -1) {//上报
-            iHeadLinePresenter.clickCount(mainNewsVos.get(index).getId(), NEWS);
+            iHeadLinePresenter.clickCount(mainNewsVos.get(index).id, NEWS);
         }
     }
 
@@ -616,6 +620,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     @Override
-    public void getHeadLineSuccess(NewsVo newsVo) {
+    public void getHeadLineSuccess(HotInfoList newsVo) {
     }
 }

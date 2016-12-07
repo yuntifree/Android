@@ -31,12 +31,15 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.presenter.IWifiMapPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiMapPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.utils.LocationUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiMapView;
 import com.yunxingzh.wireless.utils.LocationUtils;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
+import wireless.libs.bean.resp.WifiMapList;
+import wireless.libs.bean.vo.WifiInfoVo;
 import wireless.libs.bean.vo.WifiMapVo;
 
 /**
@@ -54,7 +57,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     private double lat;
     private double lon;
     private IWifiMapPresenter iWifiMapPresenter;
-    private List<WifiMapVo.WifiMapData.WifiMapInfo> wifiMapInfo;
+    private List<WifiMapVo> wifiMapInfo;
 
     private boolean flag = true;
     private InfoWindow mInfoWindow;
@@ -94,14 +97,14 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     }
 
     @Override
-    public void getWifiMapSuccess(WifiMapVo wifiMapVo) {
-        wifiMapInfo = wifiMapVo.getData().getInfos();
+    public void getWifiMapSuccess(WifiMapList wifiMapVo) {
+        wifiMapInfo = wifiMapVo.infos;
         LatLng latLng = null;
         OverlayOptions overlayOptions = null;
         Marker marker = null;
-        for (WifiMapVo.WifiMapData.WifiMapInfo info : wifiMapInfo) {
+        for (WifiMapVo info : wifiMapInfo) {
             // 位置
-            latLng = new LatLng(info.getLatitude(), info.getLongitude());
+            latLng = new LatLng(info.latitude, info.longitude);
             BitmapDescriptor bitmap = BitmapDescriptorFactory
                     .fromResource(R.drawable.hot_point);
             // 图标
@@ -160,11 +163,11 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         @Override
         public boolean onMarkerClick ( final Marker marker){
             //获得marker中的数据
-            WifiMapVo.WifiMapData.WifiMapInfo info = (WifiMapVo.WifiMapData.WifiMapInfo) marker.getExtraInfo().get("info");
+            WifiMapVo info = (WifiMapVo) marker.getExtraInfo().get("info");
 
             //计算p1、p2两点之间的直线距离，单位：米
             LatLng p1LL = new LatLng(22.933103, 113.903870);
-            LatLng p2LL = new LatLng(info.getLatitude(), info.getLongitude());
+            LatLng p2LL = new LatLng(info.latitude, info.longitude);
             double distance = DistanceUtil. getDistance(p1LL, p2LL);
 
             //生成一个TextView用户在地图中显示InfoWindow
@@ -176,7 +179,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             TextView address = new TextView(getApplicationContext());
             address.setTextColor(getResources().getColor(R.color.gray_b4b4b4));
             address.setTextSize(10);
-            address.setText(info.getAddress());
+            address.setText(info.address);
 
             TextView distances = new TextView(getApplicationContext());
             distances.setTextColor(getResources().getColor(R.color.blue_00a6f9));

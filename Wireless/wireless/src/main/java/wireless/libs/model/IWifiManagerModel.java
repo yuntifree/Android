@@ -1,6 +1,6 @@
 package wireless.libs.model;
 
-import wireless.libs.bean.vo.WifiVo;
+import wireless.libs.bean.resp.WifiList;
 
 /**
  * Created by stephon on 2016/11/15.
@@ -9,8 +9,7 @@ import wireless.libs.bean.vo.WifiVo;
 
 public interface IWifiManagerModel {
     interface onGetWifiListener{
-        void onGetWifiSuccess(WifiVo wifiVo);
-        void onGetWifiFailed(int error);
+        void onGetWifiSuccess(WifiList wifiVo);
     }
 
     /***
@@ -18,5 +17,5 @@ public interface IWifiManagerModel {
      * @param
      * @param
      */
-    void getWifi(int uid, String token, int term, double version, long ts, int nettype, double longitude, double latitude, String[] ssids, onGetWifiListener listener);
+    void getWifi(double longitude, double latitude, String[] ssids, onGetWifiListener listener);
 }

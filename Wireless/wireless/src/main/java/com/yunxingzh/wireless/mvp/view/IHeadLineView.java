@@ -1,17 +1,16 @@
 package com.yunxingzh.wireless.mvp.view;
 
 
+import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
-import wireless.libs.bean.vo.FontInfoVo;
-import wireless.libs.bean.vo.NewsVo;
-import wireless.libs.bean.vo.WeatherNewsVo;
+import wireless.libs.bean.resp.WeatherNewsList;
 
 /**
  * Created by stephon on 2016/11/3.
  */
 
 public interface IHeadLineView extends IBaseView{
-    void getHeadLineSuccess(NewsVo newsVo);
-    void weatherNewsSuccess(WeatherNewsVo weatherNewsVo);
-    void getFontInfoSuccess(FontInfoVo fontInfoVo);
+    void getHeadLineSuccess(HotInfoList newsVo);
+    void weatherNewsSuccess(WeatherNewsList weatherNewsVo);
+    void getFontInfoSuccess(FontInfoList fontInfoVo);
 }

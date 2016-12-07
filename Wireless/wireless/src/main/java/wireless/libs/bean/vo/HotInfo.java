@@ -1,4 +1,4 @@
-package wireless.libs.bean;
+package wireless.libs.bean.vo;
 
 import java.util.List;
 
@@ -16,4 +16,5 @@ public class HotInfo {
     public String dst; //源地址
     public int stype; // 1-广告
     public int play; //播放次数
+    public boolean isClickColor;
 }

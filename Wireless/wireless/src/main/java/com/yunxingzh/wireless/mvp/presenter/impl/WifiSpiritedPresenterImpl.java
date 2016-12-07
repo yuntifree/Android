@@ -24,12 +24,10 @@ public class WifiSpiritedPresenterImpl implements IWifiSpiritedPresenter,IWifiSp
     }
 
     @Override
-    public void wifiSpirited(double longitude, double latitude, String ssid, String password) {
+    public void wifiSpirited(String ssid,String password,double longitude,double latitude) {
         if (iWifiSpiritedView != null){
             iWifiSpiritedView.showProgress();
-            iWifiSpiritedModel.wifiSpirited(MainApplication.sApplication.getUser().getData().getUid(), MainApplication.sApplication.getToken(),
-                    0,Double.parseDouble(AppUtils.getVersionName(MainApplication.sApplication)),
-                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MainApplication.sApplication),ssid,password,longitude,latitude,this);
+            iWifiSpiritedModel.wifiSpirited(ssid,password,longitude,latitude,this);
         }
     }
 
@@ -38,14 +36,6 @@ public class WifiSpiritedPresenterImpl implements IWifiSpiritedPresenter,IWifiSp
         if (iWifiSpiritedView != null) {
             iWifiSpiritedView.hideProgress();
             iWifiSpiritedView.wifiSpiritedSuccess();
-        }
-    }
-
-    @Override
-    public void onWifiSpiritedFailed(int error) {
-        if (iWifiSpiritedView != null) {
-            iWifiSpiritedView.hideProgress();
-            iWifiSpiritedView.showError(error);
         }
     }
 }

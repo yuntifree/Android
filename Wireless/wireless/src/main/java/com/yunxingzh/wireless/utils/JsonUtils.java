@@ -66,38 +66,6 @@ public class JsonUtils {
         return jsonObject.toString();
     }
 
-   // public static JSONObject parentJsonNode() {
-//        MainApplication.sApplication.getUser().getData().getUid(),MainApplication.sApplication.getToken(),
-//                0,Double.parseDouble(AppUtils.getVersionName(MainApplication.sApplication)),
-//                StringUtils.getCurrentTime(),
-//        JSONObject jsonObject = new JSONObject();
-//        try {
-//            jsonObject.put("uid", uid);
-//            jsonObject.put("token", token);
-//            jsonObject.put("term", term);
-//            jsonObject.put("version", version);
-//            jsonObject.put("ts", ts);
-//            jsonObject.put("nettype", AppUtils.getNetWorkType());
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//        return jsonObject;
-   // }
-
-//    public static String childJsonNode(int a,int b){
-//        JSONObject jsObj = parentJsonNode(uid,token,term,version,ts,nettype);
-//        JSONObject jsonObject = new JSONObject();
-//        try {
-//            jsonObject.put("a",a);
-//            jsonObject.put("b",b);
-//            jsObj.put("data",jsonObject);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return jsObj.toString();
-//    }
-
     public static String jsonStirngForWifi(int uid, String token, int term, double version, long ts,
                                            int nettype, double longitude, double latitude, String[] ssids) {
         JSONObject jsonObject = new JSONObject();

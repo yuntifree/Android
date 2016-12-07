@@ -20,8 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import wireless.libs.bean.resp.WifiList;
 import wireless.libs.bean.vo.AccessData;
-import wireless.libs.bean.vo.WifiVo;
+import wireless.libs.bean.vo.WifiInfoVo;
 
 public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         AccessPointAdapter.HeaderViewHolder, AccessPointAdapter.ItemViewHolder, AccessPointAdapter.FooterViewHolder> {
@@ -43,7 +44,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     private List<AccessPointEx> mOtherPoints;
     private List<Integer> sections;
     private HashMap<String, AccessData> mAccessDatas;
-    private List<WifiVo.WifiData.MWifiInfo> mWifiInfoList;//服务器获取的附近wifi列表
+    private List<WifiInfoVo> mWifiInfoList;//服务器获取的附近wifi列表
 
 
     public class AccessPointEx {
@@ -68,7 +69,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         mAccessDatas = new HashMap<String, AccessData>();
     }
 
-    public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, List<WifiVo.WifiData.MWifiInfo> mWifiInfos, boolean forceRefresh) {
+    public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, List<WifiInfoVo> mWifiInfos, boolean forceRefresh) {
         if (!forceRefresh && mCurrentState != WifiState.UNKOWN && mCurrentAPoint != null) {
             if (mCurrentState == state && mCurrentAPoint.ssid.equals(current.ssid) && mAccessPoints.size() == accessPoints.size()) {
                 return;

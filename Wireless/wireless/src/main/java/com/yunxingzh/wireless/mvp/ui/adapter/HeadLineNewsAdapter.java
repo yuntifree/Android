@@ -20,7 +20,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-import wireless.libs.bean.vo.NewsVo;
+import wireless.libs.bean.vo.HotInfo;
 
 /**
  * Created by stephon on 2016/11/3.
@@ -29,7 +29,7 @@ import wireless.libs.bean.vo.NewsVo;
 public class HeadLineNewsAdapter extends BaseAdapter {
 
     private Context context;
-    private List<NewsVo.Data.NewsData> dataList;
+    private List<HotInfo> dataList;
     private LayoutInflater inflater;
     private final int TYPE_COUNT = 4;
     private final int TYPE_ONE = 1;//一张图片
@@ -39,7 +39,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
     private final int TYPE_ADVIER = 5;//广告
     private int currentType;
 
-    public HeadLineNewsAdapter(Context context, List<NewsVo.Data.NewsData> dataList) {
+    public HeadLineNewsAdapter(Context context, List<HotInfo> dataList) {
         this.context = context;
         this.dataList = dataList;
         inflater = LayoutInflater.from(context);
@@ -62,7 +62,7 @@ public class HeadLineNewsAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final NewsVo.Data.NewsData result = dataList.get(position);
+        final  HotInfo result = dataList.get(position);
         currentType = getItemViewType(position);
 
         if (currentType == TYPE_ADVIER) { //加载第一种布局(广告)
@@ -78,15 +78,15 @@ public class HeadLineNewsAdapter extends BaseAdapter {
                 viewHolderOne = (ViewHolderOne) convertView.getTag();
             }
 
-            if (result.isClickColor()) {//已点击
+            if (result.isClickColor) {//已点击
                 viewHolderOne.mTypeOneTitle.setTextColor(context.getResources().getColor(R.color.gray_848484));
             } else {
                 viewHolderOne.mTypeOneTitle.setTextColor(context.getResources().getColor(R.color.gray_434343));
             }
 
-            Glide.with(context).load(result.getImages().get(0)).placeholder(R.drawable.img_default).into(viewHolderOne.mTypeOneImg);
-            viewHolderOne.mTypeOneTime.setText(result.getSource() + "    " + StringUtils.formatDate(result.getCtime()));
-            viewHolderOne.mTypeOneTitle.setText(result.getTitle());
+            Glide.with(context).load(result.images.get(0)).placeholder(R.drawable.img_default).into(viewHolderOne.mTypeOneImg);
+            viewHolderOne.mTypeOneTime.setText(result.source + "    " + StringUtils.formatDate(result.ctime));
+            viewHolderOne.mTypeOneTitle.setText(result.title);
 
         } else if (currentType == TYPE_ONE || currentType == TYPE_TWO) { //加载第二种布局（一张或二张）
             ViewHolderTwo viewHolderTwo;
@@ -101,15 +101,15 @@ public class HeadLineNewsAdapter extends BaseAdapter {
                 viewHolderTwo = (ViewHolderTwo) convertView.getTag();
             }
 
-            if (result.isClickColor()) {//已点击
+            if (result.isClickColor) {//已点击
                 viewHolderTwo.mTypeTwoTitle.setTextColor(context.getResources().getColor(R.color.gray_848484));
             } else {
                 viewHolderTwo.mTypeTwoTitle.setTextColor(context.getResources().getColor(R.color.gray_434343));
             }
 
-            Glide.with(context).load(result.getImages().get(0)).placeholder(R.drawable.img_default).into(viewHolderTwo.mTypeTwoImg);
-            viewHolderTwo.mTypeTwoTime.setText(result.getSource() + "    " + StringUtils.formatDate(result.getCtime()));
-            viewHolderTwo.mTypeTwoTitle.setText(result.getTitle());
+            Glide.with(context).load(result.images.get(0)).placeholder(R.drawable.img_default).into(viewHolderTwo.mTypeTwoImg);
+            viewHolderTwo.mTypeTwoTime.setText(result.source + "    " + StringUtils.formatDate(result.ctime));
+            viewHolderTwo.mTypeTwoTitle.setText(result.title);
         } else if (currentType == TYPE_THREE) {//加载第三种布局（三张图片）
             ViewHolderThree viewHolderThree;
             if (convertView == null) {
@@ -125,13 +125,13 @@ public class HeadLineNewsAdapter extends BaseAdapter {
                 viewHolderThree = (ViewHolderThree) convertView.getTag();
             }
 
-            if (result.isClickColor()) {//已点击
+            if (result.isClickColor) {//已点击
                 viewHolderThree.mTypeThreeTitle.setTextColor(context.getResources().getColor(R.color.gray_848484));
             } else {
                 viewHolderThree.mTypeThreeTitle.setTextColor(context.getResources().getColor(R.color.gray_434343));
             }
 
-            List<String> imgs = result.getImages();
+            List<String> imgs = result.images;
             if (imgs.size() == 1) {
                 Glide.with(context).load(imgs.get(0)).placeholder(R.drawable.img_default).into(viewHolderThree.mTypeThreeLeftImg);
             } else if (imgs.size() == 2) {
@@ -143,8 +143,8 @@ public class HeadLineNewsAdapter extends BaseAdapter {
                 Glide.with(context).load(imgs.get(2)).placeholder(R.drawable.img_default).into(viewHolderThree.mTypeThreeRightImg);
             }
 
-            viewHolderThree.mTypeThreeTitle.setText(result.getTitle());
-            viewHolderThree.mTypeThreeTime.setText(result.getSource() + "    " + StringUtils.formatDate(result.getCtime()));
+            viewHolderThree.mTypeThreeTitle.setText(result.title);
+            viewHolderThree.mTypeThreeTime.setText(result.source + "    " + StringUtils.formatDate(result.ctime));
         } else if (currentType == TYPE_NULL) {//无图片
             ViewHolderOne viewHolderOne;
             if (convertView == null) {
@@ -158,22 +158,22 @@ public class HeadLineNewsAdapter extends BaseAdapter {
                 viewHolderOne = (ViewHolderOne) convertView.getTag();
             }
 
-            if (result.isClickColor()) {//已点击
+            if (result.isClickColor) {//已点击
                 viewHolderOne.mTypeOneTitle.setTextColor(context.getResources().getColor(R.color.gray_848484));
             } else {
                 viewHolderOne.mTypeOneTitle.setTextColor(context.getResources().getColor(R.color.gray_434343));
             }
 
             viewHolderOne.mTypeOneImg.setVisibility(View.GONE);
-            viewHolderOne.mTypeOneTime.setText(result.getSource() + "    " + StringUtils.formatDate(result.getCtime()));
-            viewHolderOne.mTypeOneTitle.setText(result.getTitle());
+            viewHolderOne.mTypeOneTime.setText(result.source + "    " + StringUtils.formatDate(result.ctime));
+            viewHolderOne.mTypeOneTitle.setText(result.title);
         }
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!result.isClickColor()) {
-                    result.setClickColor(true);
+                if (!result.isClickColor) {
+                    result.isClickColor = true;
                     startActivity(WebViewActivity.class, position, result,true);
                 } else {
                     startActivity(WebViewActivity.class, position, result,true);
@@ -184,11 +184,11 @@ public class HeadLineNewsAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void startActivity(Class activity, int position, NewsVo.Data.NewsData result,boolean fromNews) {
+    public void startActivity(Class activity, int position, HotInfo result,boolean fromNews) {
         EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE_NEWS_FLAG,position));
         Intent intent = new Intent(context, activity);
-        intent.putExtra(Constants.URL, result.getDst());
-        intent.putExtra(Constants.TITLE, result.getTitle());
+        intent.putExtra(Constants.URL, result.dst);
+        intent.putExtra(Constants.TITLE, result.title);
         intent.putExtra(Constants.FROM_NEWS, fromNews);
         context.startActivity(intent);
         notifyDataSetChanged();
@@ -217,14 +217,14 @@ public class HeadLineNewsAdapter extends BaseAdapter {
     @Override
     public int getItemViewType(int position) {
         int type;
-        if (dataList.get(position).getStype() == 1) {//广告
+        if (dataList.get(position).stype == 1) {//广告
             type = TYPE_ADVIER;
             return TYPE_ADVIER;
         } else {//新闻
-            if (dataList.get(position).getImages() == null) {
+            if (dataList.get(position).images == null) {
                 type = TYPE_NULL;
             } else {
-                type = dataList.get(position).getImages().size();//根据图片size确定item布局
+                type = dataList.get(position).images.size();//根据图片size确定item布局
             }
             switch (type) {
                 case TYPE_NULL://无图片

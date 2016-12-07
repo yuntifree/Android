@@ -10,24 +10,24 @@ import com.yunxingzh.wireless.utils.StringUtils;
 
 import java.util.List;
 
-import wireless.libs.bean.vo.NewsVo;
+import wireless.libs.bean.vo.HotInfo;
 
 /**
  * Created by stephon on 2016/11/6.
  * 头条-应用
  */
 
-public class HeadLineVideoAdapter extends BaseQuickAdapter<NewsVo.Data.NewsData> {
+public class HeadLineVideoAdapter extends BaseQuickAdapter<HotInfo> {
 
-    public HeadLineVideoAdapter(List<NewsVo.Data.NewsData> data) {
+    public HeadLineVideoAdapter(List<HotInfo> data) {
         super(R.layout.list_item_videos, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder baseViewHolder, NewsVo.Data.NewsData newsVo) {
-        Glide.with(mContext).load(newsVo.getImages().get(0)).placeholder(R.drawable.img_default).into((ImageView) baseViewHolder.getView(R.id.video_img));
-        baseViewHolder.setText(R.id.video_title, newsVo.getTitle());
-        baseViewHolder.setText(R.id.video_time, newsVo.getSource()+"    "+ StringUtils.formatDate(newsVo.getCtime()));
-        baseViewHolder.setText(R.id.video_play_count,  newsVo.getPlay()+"次播放");
+    protected void convert(BaseViewHolder baseViewHolder, HotInfo newsVo) {
+        Glide.with(mContext).load(newsVo.images.get(0)).placeholder(R.drawable.img_default).into((ImageView) baseViewHolder.getView(R.id.video_img));
+        baseViewHolder.setText(R.id.video_title, newsVo.title);
+        baseViewHolder.setText(R.id.video_time, newsVo.source+"    "+ StringUtils.formatDate(newsVo.ctime));
+        baseViewHolder.setText(R.id.video_play_count,  newsVo.play+"次播放");
     }
 }

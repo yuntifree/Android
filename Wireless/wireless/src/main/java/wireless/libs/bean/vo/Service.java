@@ -1,4 +1,4 @@
-package wireless.libs.bean;
+package wireless.libs.bean.vo;
 
 import java.util.List;
 

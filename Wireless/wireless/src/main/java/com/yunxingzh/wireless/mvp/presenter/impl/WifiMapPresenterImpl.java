@@ -1,12 +1,9 @@
 package com.yunxingzh.wireless.mvp.presenter.impl;
 
-import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.presenter.IWifiMapPresenter;
 import com.yunxingzh.wireless.mvp.view.IWifiMapView;
-import com.yunxingzh.wireless.utils.AppUtils;
-import com.yunxingzh.wireless.utils.StringUtils;
 
-import wireless.libs.bean.vo.WifiMapVo;
+import wireless.libs.bean.resp.WifiMapList;
 import wireless.libs.model.IWifiMapModel;
 import wireless.libs.model.impl.WifiMapModelImpl;
 
@@ -28,26 +25,15 @@ public class WifiMapPresenterImpl implements IWifiMapPresenter,IWifiMapModel.onG
     public void getWifiMap(double longitude, double latitude) {
         if (iWifiMapView != null){
             iWifiMapView.showProgress();
-            iWifiMapModel.getWifiMap(MainApplication.sApplication.getUser().getData().getUid(), MainApplication.sApplication.getToken(),
-                    0,Double.parseDouble(AppUtils.getVersionName(MainApplication.sApplication)),
-                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MainApplication.sApplication),longitude,latitude,this);
+            iWifiMapModel.getWifiMap(longitude,latitude,this);
         }
     }
 
     @Override
-    public void onGetWifiMapSuccess(WifiMapVo wifiMapVo) {
+    public void onGetWifiMapSuccess(WifiMapList wifiMapVo) {
         if (iWifiMapView != null) {
             iWifiMapView.hideProgress();
             iWifiMapView.getWifiMapSuccess(wifiMapVo);
         }
     }
-
-    @Override
-    public void onGetWifiMapFailed(int error) {
-        if (iWifiMapView != null) {
-            iWifiMapView.hideProgress();
-            iWifiMapView.showError(error);
-        }
-    }
-
 }

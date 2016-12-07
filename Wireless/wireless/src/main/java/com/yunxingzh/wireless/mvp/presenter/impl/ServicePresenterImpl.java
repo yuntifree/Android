@@ -7,7 +7,6 @@ import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.resp.ServiceList;
-import wireless.libs.bean.vo.ServiceVo;
 import wireless.libs.model.IServiceModel;
 import wireless.libs.model.impl.ServiceModelImpl;
 
@@ -29,28 +28,9 @@ public class ServicePresenterImpl implements IServicePresenter,IServiceModel.onG
     public void getService() {
         if (iServiceView != null){
             iServiceView.showProgress();
-//            iServiceModel.getService(MainApplication.sApplication.getUser().getData().getUid(), MainApplication.sApplication.getToken(),
-//                    0,Double.parseDouble(AppUtils.getVersionName(MainApplication.sApplication)),
-//                    StringUtils.getCurrentTime(),AppUtils.getNetWorkType(MainApplication.sApplication),this);
             iServiceModel.getServiceList(this);
         }
     }
-
-//    @Override
-//    public void onGetServiceSuccess(ServiceVo serviceVo) {
-//        if (iServiceView != null) {
-//            iServiceView.hideProgress();
-//            iServiceView.getServiceSuccess(serviceVo);
-//        }
-//    }
-
-//    @Override
-//    public void onGetServiceFailed(int error) {
-//        if (iServiceView != null) {
-//            iServiceView.hideProgress();
-//            iServiceView.showError(error);
-//        }
-//    }
 
     /**
      * hoge: new method

@@ -16,7 +16,7 @@ import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
-import wireless.libs.bean.vo.UserInfoVo;
+import wireless.libs.bean.vo.User;
 import wireless.libs.okhttp.OkHttpUtil;
 
 /**
@@ -38,7 +38,7 @@ public class MainApplication extends Application {
     private String mToken;
     private String wifiPwd;
     private String userName;
-    private UserInfoVo mUser;
+    private User mUser;
 
     public static Handler mHandler;
 
@@ -132,14 +132,14 @@ public class MainApplication extends Application {
 
 
 
-    public UserInfoVo getUser() {
+    public User getUser() {
         if (mUser == null) {
-            mUser = (UserInfoVo) SPUtils.getObject(sApplication, Constants.SP_KEY_USER);
+            mUser = (User) SPUtils.getObject(sApplication, Constants.SP_KEY_USER);
         }
         return mUser;
     }
 
-    public void setUser(UserInfoVo mUser) {
+    public void setUser(User mUser) {
         this.mUser = mUser;
         SPUtils.putObject(sApplication, Constants.SP_KEY_USER, mUser);
     }

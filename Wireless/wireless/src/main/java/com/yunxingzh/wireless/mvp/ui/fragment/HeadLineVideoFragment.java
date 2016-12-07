@@ -28,9 +28,10 @@ import com.yunxingzh.wireless.utils.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import wireless.libs.bean.vo.FontInfoVo;
-import wireless.libs.bean.vo.NewsVo;
-import wireless.libs.bean.vo.WeatherNewsVo;
+import wireless.libs.bean.vo.HotInfo;
+import wireless.libs.bean.resp.FontInfoList;
+import wireless.libs.bean.resp.HotInfoList;
+import wireless.libs.bean.resp.WeatherNewsList;
 
 /**
  * Created by stephon_ on 2016/11/2.
@@ -49,7 +50,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private HeadLineVideoAdapter headLineVideoAdapter;
     //下拉刷新
     private SwipeRefreshLayout mSwipeRefreshLay;
-    private List<NewsVo.Data.NewsData> newsVo;
+    private List<HotInfo> newsVo;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -69,7 +70,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     }
 
     public void initData() {
-        headLineVideoAdapter = new HeadLineVideoAdapter(new ArrayList<NewsVo.Data.NewsData>());
+        headLineVideoAdapter = new HeadLineVideoAdapter(new ArrayList<HotInfo>());
         headLineVideoAdapter.openLoadMore(Constants.PAGE_SIZE);
         headLineVideoAdapter.setOnLoadMoreListener(this);
         mListRv.setAdapter(headLineVideoAdapter);
@@ -106,20 +107,20 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         mListRv.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                List<NewsVo.Data.NewsData> data = baseQuickAdapter.getData();
-                iHeadLinePresenter.clickCount(data.get(i).getId(),CLICK_COUNT);//上报
-                startActivity(VideoPlayActivity.class,Constants.VIDEO_URL,data.get(i).getDst());
+                List<HotInfo> data = baseQuickAdapter.getData();
+                iHeadLinePresenter.clickCount(data.get(i).id,CLICK_COUNT);//上报
+                startActivity(VideoPlayActivity.class,Constants.VIDEO_URL,data.get(i).dst);
             }
         });
     }
 
     @Override
-    public void getHeadLineSuccess(NewsVo newsVoList) {
+    public void getHeadLineSuccess(HotInfoList newsVoList) {
         mSwipeRefreshLay.setRefreshing(false);
         if (newsVoList != null) {
-            newsVo = newsVoList.getData().getInfos();
-            if (newsVoList.getData().getHasmore() == 1) {
-                headLineVideoAdapter.addData(newsVoList.getData().getInfos());
+            newsVo = newsVoList.infos;
+            if (newsVoList.hasmore == 1) {
+                headLineVideoAdapter.addData(newsVoList.infos);
                // headLineVideoAdapter.setNewData(newsVoList.getData().getInfos());
             } else {
                 // 数据全部加载完毕就调用 loadComplete
@@ -132,10 +133,10 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     }
 
     @Override
-    public void weatherNewsSuccess(WeatherNewsVo weatherNewsVo) {}
+    public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {}
 
     @Override
-    public void getFontInfoSuccess(FontInfoVo fontInfoVo) {}
+    public void getFontInfoSuccess(FontInfoList fontInfoVo) {}
 
     @Override
     public void onRefresh() {
@@ -145,7 +146,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     @Override
     public void onLoadMoreRequested() {
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, newsVo.get(19).getSeq());
+        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, newsVo.get(19).seq);
     }
 
     public void startActivity(Class activity,String key,String videoUrl) {

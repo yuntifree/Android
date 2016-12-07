@@ -35,7 +35,8 @@ import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import wireless.libs.bean.vo.WifiVo;
+import wireless.libs.bean.resp.WifiList;
+import wireless.libs.bean.vo.WifiInfoVo;
 
 /**
  * Created by stephon on 2016/11/12.
@@ -59,7 +60,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     private View wifiClosedView;
 
 
-    private List<WifiVo.WifiData.MWifiInfo> mWifiInfos;
+    private List<WifiInfoVo> mWifiInfos;
     private IWifiManagerPresenter iWifiManagerPresenter;
 
     private LocationUtils locationUtils;
@@ -124,8 +125,16 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0) {
-                SPUtils.put(WifiManagerActivity.this, "longitude", String.valueOf(locationUtils.getBaseLocation().longitude));
-                SPUtils.put(WifiManagerActivity.this, "latitude", String.valueOf(locationUtils.getBaseLocation().latitude));
+//
+//                String[] ssids = null;
+//                ssids = new String[list.size()];
+//                for (int i = 0; i < list.size(); i++) {
+//                    ssids[i] = list.get(i).ssid;
+//                }
+                //  iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude,ssids);
+
+                //  SPUtils.put(WifiManagerActivity.this, "longitude", String.valueOf(locationUtils.getBaseLocation().longitude));
+                // SPUtils.put(WifiManagerActivity.this, "latitude", String.valueOf(locationUtils.getBaseLocation().latitude));
             } else {
                 LogUtils.d(TAG, "getLocation err:" + msg.what);
             }
@@ -217,8 +226,8 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     }
 
     @Override
-    public void getWifiSuccess(WifiVo wifiVo) {
-        mWifiInfos = wifiVo.getData().getWifipass();
+    public void getWifiSuccess(WifiList wifiVo) {
+        mWifiInfos = wifiVo.wifipass;
     }
 
     @Override
