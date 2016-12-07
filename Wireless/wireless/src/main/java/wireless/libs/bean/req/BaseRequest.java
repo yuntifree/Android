@@ -37,17 +37,6 @@ public class BaseRequest implements Serializable {
         }
         version = AppConfig.VERSION;
         ts = System.currentTimeMillis();
-
-        //added by andy 后续优化最好只取一次保存
-//        udid = DeviceUtils.getDeviceInfo(MainApplication.get());
-//        //暂时未作无网络判断,因为无网络,请求无法到达
-//        try {
-//            ApplicationInfo appinfo = MainApplication.get().getPackageManager().getApplicationInfo(MainApplication.get().getPackageName(), PackageManager.GET_META_DATA);
-//            channel = appinfo.metaData.get("UMENG_CHANNEL") + "";
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        model = Build.MODEL;
         nettype = AppUtils.getNetWorkType(MainApplication.getInstance());
     }
 }

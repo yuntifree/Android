@@ -1,6 +1,5 @@
 package com.yunxingzh.wireless.mvp.ui.base;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 

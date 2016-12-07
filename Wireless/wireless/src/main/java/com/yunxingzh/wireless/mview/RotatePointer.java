@@ -17,8 +17,9 @@ import android.os.Message;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import java.lang.ref.WeakReference;
 import com.yunxingzh.wireless.R;
+
+import java.lang.ref.WeakReference;
 
 public class RotatePointer extends ImageView {
 

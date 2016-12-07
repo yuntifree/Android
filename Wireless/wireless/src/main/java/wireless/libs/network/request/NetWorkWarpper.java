@@ -1,6 +1,5 @@
 package wireless.libs.network.request;
 
-import com.alibaba.fastjson.JSONArray;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.StringUtils;

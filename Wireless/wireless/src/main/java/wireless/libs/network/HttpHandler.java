@@ -1,10 +1,8 @@
 package wireless.libs.network;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
-
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MainApplication;

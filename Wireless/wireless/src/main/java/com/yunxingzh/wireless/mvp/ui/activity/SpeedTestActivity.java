@@ -21,6 +21,7 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.SpeedTestDialog;
 import com.yunxingzh.wireless.mview.RotatePointer;
+import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.NetUtil;
 import com.yunxingzh.wireless.utils.SpeedTestDialog;
