@@ -124,6 +124,7 @@ android {
         buildDevelop {
             buildConfigField "boolean", "MODEL_DEV", "true"
             versionName = mVersionName
+            signingConfig signingConfigs.myconfig
         }
         buildRelease {
             buildConfigField "boolean", "MODEL_DEV", "false"
