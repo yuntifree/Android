@@ -69,7 +69,7 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
         // TODO: model Destroy
         // iWeatherNewsModel = null;
         iHeadLineView = null;
-        iHeadLineModel = null;
+       // iHeadLineModel = null;
     }
 
     @Override
@@ -100,11 +100,5 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
             iHeadLineView.hideProgress();
             iHeadLineView.getFontInfoSuccess(fontInfoVo);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        iHeadLineView = null;
-        iServiceView = null;
     }
 }

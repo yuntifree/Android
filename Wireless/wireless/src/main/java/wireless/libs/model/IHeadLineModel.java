@@ -41,5 +41,4 @@ public interface IHeadLineModel {
      */
     void getFontInfo(onGetFontInfoListener listener);
 
-    void onDestroy();
 }
