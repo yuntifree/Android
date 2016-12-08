@@ -136,6 +136,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        iHeadLinePresenter.onDestroy();
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 

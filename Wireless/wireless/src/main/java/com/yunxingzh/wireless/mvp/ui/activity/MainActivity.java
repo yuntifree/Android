@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
@@ -47,6 +48,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //听云
+        NBSAppAgent.setLicenseKey("87fb7caacc08462a8aecd82cb1c6d4fd").withLocationServiceEnabled(true).start(this.getApplicationContext());
+
         if (StringUtils.isEmpty(MainApplication.sApplication.getToken()) || MainApplication.sApplication.needLogin()) {
             startActivity(new Intent(this, RegisterActivity.class));
             finish();

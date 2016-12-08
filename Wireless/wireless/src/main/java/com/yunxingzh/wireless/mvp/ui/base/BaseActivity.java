@@ -38,11 +38,6 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//        if (!NetUtils.isNetworkAvailable(getApplicationContext())) {
-//            ToastUtil.showMiddle(this,R.string.network_error);
-//        }
-        //听云
-        NBSAppAgent.setLicenseKey("87fb7caacc08462a8aecd82cb1c6d4fd").withLocationServiceEnabled(true).start(this.getApplicationContext());
     }
 
     @Override
@@ -57,13 +52,10 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
         MobclickAgent.onPause(this);
     }
 
-    /* @Override
+    @Override
     protected void onStart() {
         super.onStart();
-        if (MainApplication.sApplication.isExit()) {
-            finish();
-        }
-    }*/
+    }
 
     @Override
     protected void onDestroy() {

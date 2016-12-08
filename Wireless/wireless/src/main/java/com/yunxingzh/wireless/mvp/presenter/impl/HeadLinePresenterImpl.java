@@ -19,21 +19,17 @@ import wireless.libs.model.impl.WeatherNewsModelImpl;
 public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.onGetHeadLineListener,IHeadLineModel.onClickCountListener,
         IWeatherNewsModel.onWeatherNewsListener,IHeadLineModel.onGetFontInfoListener {
 
-    private IWeatherNewsModel iWeatherNewsModel;
-    private IHeadLineView iHeadLineView;
-    private IHeadLineModel iHeadLineModel;
-    private IServiceView iServiceView;
+    private IWeatherNewsModel iWeatherNewsModel = null;
+    private IHeadLineView iHeadLineView = null;
+    private IHeadLineModel iHeadLineModel = null;
 
     public HeadLinePresenterImpl(IHeadLineView view) {
         iHeadLineView = view;
-        iServiceView = null;
         iHeadLineModel = new HeadLineModelImpl();
         iWeatherNewsModel = new WeatherNewsModelImpl();
     }
 
-    public HeadLinePresenterImpl(IServiceView view) {
-        iHeadLineView = null;
-        iServiceView = view;
+    public HeadLinePresenterImpl() {
         iHeadLineModel = new HeadLineModelImpl();
     }
 
@@ -56,7 +52,6 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void weatherNews() {
         if (iHeadLineView != null){
-            //iHeadLineView.showProgress();
             iWeatherNewsModel.weatherNews(this);
         }
     }
@@ -67,6 +62,14 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
             iHeadLineView.showProgress();
             iHeadLineModel.getFontInfo(this);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        // TODO: model Destroy
+        // iWeatherNewsModel = null;
+        iHeadLineView = null;
+        iHeadLineModel = null;
     }
 
     @Override
@@ -87,7 +90,6 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void onWeatherNewsSuccess(WeatherNewsList weatherNewsVo) {
         if (iHeadLineView != null){
-            //iHeadLineView.hideProgress();
             iHeadLineView.weatherNewsSuccess(weatherNewsVo);
         }
     }
