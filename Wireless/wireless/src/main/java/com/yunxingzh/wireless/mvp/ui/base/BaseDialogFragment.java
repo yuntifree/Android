@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yunxingzh.wireless.mview.dialog.LoadingDialogFragment;
 import com.yunxingzh.wireless.mvp.view.IBaseView;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
@@ -20,7 +19,6 @@ public class BaseDialogFragment extends DialogFragment implements IBaseView {
         return (T) view.findViewById(id);
     }
 
-    protected LoadingDialogFragment mLoadingDialog;
 
     protected int mLoadingCount = 0;
 
@@ -28,34 +26,6 @@ public class BaseDialogFragment extends DialogFragment implements IBaseView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mLoadingDialog != null) {
-            mLoadingDialog.dismiss();
-        }
-    }
-
-    @Override
-    public void showProgress() {
-        if (mLoadingDialog == null) {
-            mLoadingDialog = LoadingDialogFragment.newInstance("");
-        }
-        if (mLoadingCount == 0) {
-            mLoadingDialog.show(getActivity().getSupportFragmentManager(), "loading_dialog");
-        }
-        mLoadingCount++;
-    }
-
-    @Override
-    public void hideProgress() {
-        mLoadingCount--;
-        if (mLoadingDialog != null && mLoadingCount <= 0) {
-            mLoadingDialog.dismiss();
-            mLoadingCount = 0;
-        }
     }
 
     @Override

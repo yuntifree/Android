@@ -23,7 +23,6 @@ public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter, IC
     @Override
     public void connectDGCount(String apmac) {
         if (iConnectDGCountView != null) {
-            iConnectDGCountView.showProgress();
             iConnectDGCountModel.connectDGCount(apmac, this);
         }
     }
@@ -31,7 +30,6 @@ public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter, IC
     @Override
     public void onConnectDGCountSuccess() {
         if (iConnectDGCountView != null) {
-            iConnectDGCountView.hideProgress();
             iConnectDGCountView.connectDGCountSuccess();
         }
     }

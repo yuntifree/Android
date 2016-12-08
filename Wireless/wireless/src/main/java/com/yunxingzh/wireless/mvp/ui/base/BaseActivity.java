@@ -5,16 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
-import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.mview.dialog.LoadingDialogFragment;
 import com.yunxingzh.wireless.mvp.view.IBaseView;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
@@ -28,8 +25,6 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
     protected <T extends View> T findView(int id) {
         return (T) findViewById(id);
     }
-
-    protected LoadingDialogFragment mLoadingDialog;
 
     protected int mLoadingCount = 0;
 
@@ -58,14 +53,6 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mLoadingDialog != null) {
-            mLoadingDialog.dismiss();
-        }
-    }
-
-    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.in_left_right, R.anim.out_left_right);
@@ -91,30 +78,6 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
             }
         }
         return super.onTouchEvent(event);
-    }
-
-    @Override
-    public void showProgress() {
-        mLoadingDialog = (LoadingDialogFragment) getSupportFragmentManager().findFragmentByTag("loading_dialog");
-        if (mLoadingDialog == null) {
-            mLoadingDialog = LoadingDialogFragment.newInstance("");
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(mLoadingDialog, "loading_dialog");
-            transaction.commitAllowingStateLoss();
-        } else {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.show(mLoadingDialog);
-        }
-        mLoadingCount++;
-    }
-
-    @Override
-    public void hideProgress() {
-        mLoadingCount--;
-        if (mLoadingDialog != null && mLoadingCount <= 0) {
-            mLoadingDialog.dismiss();
-            mLoadingCount = 0;
-        }
     }
 
     @Override

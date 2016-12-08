@@ -24,7 +24,6 @@ public class WifiMapPresenterImpl implements IWifiMapPresenter,IWifiMapModel.onG
     @Override
     public void getWifiMap(double longitude, double latitude) {
         if (iWifiMapView != null){
-            iWifiMapView.showProgress();
             iWifiMapModel.getWifiMap(longitude,latitude,this);
         }
     }
@@ -32,7 +31,6 @@ public class WifiMapPresenterImpl implements IWifiMapPresenter,IWifiMapModel.onG
     @Override
     public void onGetWifiMapSuccess(WifiMapList wifiMapVo) {
         if (iWifiMapView != null) {
-            iWifiMapView.hideProgress();
             iWifiMapView.getWifiMapSuccess(wifiMapVo);
         }
     }

@@ -36,7 +36,6 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void getHeadLine(int type, int seq) {
         if (iHeadLineView != null){
-            iHeadLineView.showProgress();
             iHeadLineModel.getHeadLine(type,seq,this);
         }
     }
@@ -44,7 +43,6 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void clickCount(int id,int type) {
         if (iHeadLineView != null){
-            iHeadLineView.showProgress();
             iHeadLineModel.clickCount(id,type,this);
         }
     }
@@ -59,7 +57,6 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void getFontInfo() {
         if (iHeadLineView != null){
-            iHeadLineView.showProgress();
             iHeadLineModel.getFontInfo(this);
         }
     }
@@ -75,14 +72,12 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void onClickCountSuccess() {
         if (iHeadLineView != null){
-            iHeadLineView.hideProgress();
         }
     }
 
     @Override
     public void onGetHeadLineSuccess(HotInfoList newsVo) {
         if (iHeadLineView != null){
-            iHeadLineView.hideProgress();
             iHeadLineView.getHeadLineSuccess(newsVo);
         }
     }
@@ -97,7 +92,6 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     @Override
     public void onGetFontInfoSuccess(FontInfoList fontInfoVo) {
         if (iHeadLineView != null){
-            iHeadLineView.hideProgress();
             iHeadLineView.getFontInfoSuccess(fontInfoVo);
         }
     }

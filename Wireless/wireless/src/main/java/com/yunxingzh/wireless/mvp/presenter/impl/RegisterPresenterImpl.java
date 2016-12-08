@@ -52,7 +52,6 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
     @Override
     public void register(String username, String code) {
         if (iLoginView != null){
-            iLoginView.showProgress();
             iUserModel.register(username,code,this);
         }
     }
@@ -60,7 +59,6 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
     @Override
     public void onValidateCodeSuccess() {
         if (iLoginView != null){
-            iLoginView.hideProgress();
             iLoginView.getValidateCodeSuccess();
         }
     }
@@ -72,7 +70,6 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
         MainApplication.sApplication.setUserName(iLoginView.getPhone());
         MainApplication.sApplication.setWifiPwd(iLoginView.getCode());
         if (iLoginView != null){
-            iLoginView.hideProgress();
             iLoginView.registerSuccess();
         }
     }

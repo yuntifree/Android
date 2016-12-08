@@ -9,10 +9,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.config.MainApplication;
-import com.yunxingzh.wireless.mview.dialog.LoadingDialogFragment;
 import com.yunxingzh.wireless.mvp.ui.activity.HttpErrorActivity;
 import com.yunxingzh.wireless.mvp.view.IBaseView;
 import com.yunxingzh.wireless.utils.NetUtils;
@@ -23,8 +21,6 @@ import com.yunxingzh.wireless.utils.ToastUtil;
  * Created by Carey on 2016/5/28.
  */
 public class BaseFragment extends Fragment implements IBaseView, View.OnTouchListener {
-
-    protected LoadingDialogFragment mLoadingDialog;
 
     protected int mLoadingCount = 0;
 
@@ -68,34 +64,6 @@ public class BaseFragment extends Fragment implements IBaseView, View.OnTouchLis
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return true;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mLoadingDialog != null) {
-            mLoadingDialog.dismiss();
-        }
-    }
-
-    @Override
-    public void showProgress() {
-        if (mLoadingDialog == null) {
-            mLoadingDialog = LoadingDialogFragment.newInstance("");
-        }
-        if (mLoadingCount == 0) {
-            mLoadingDialog.show(getActivity().getSupportFragmentManager(), "loading_dialog");
-        }
-        mLoadingCount++;
-    }
-
-    @Override
-    public void hideProgress() {
-        mLoadingCount--;
-        if (mLoadingDialog != null && mLoadingCount <= 0) {
-            mLoadingDialog.dismiss();
-            mLoadingCount = 0;
-        }
     }
 
     @Override

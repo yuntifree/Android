@@ -1,4 +1,4 @@
-package com.yunxingzh.wireless.mview.dialog;
+package com.yunxingzh.wireless.mview;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
-import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 

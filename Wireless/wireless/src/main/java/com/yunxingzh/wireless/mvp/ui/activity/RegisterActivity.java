@@ -19,7 +19,7 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IRegisterPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.RegisterPresenterImpl;
-import com.yunxingzh.wireless.mvp.ui.base.NetWorkBaseActivity;
+import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.view.IRegisterView;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
@@ -30,7 +30,7 @@ import org.json.JSONObject;
 /**
  * Created by Stephen on 2016/9/8.
  */
-public class RegisterActivity extends NetWorkBaseActivity implements IRegisterView, View.OnClickListener,TextWatcher {
+public class RegisterActivity extends BaseActivity implements IRegisterView, View.OnClickListener,TextWatcher {
 
     private final static int TYPE = 0;//验证类型 0-(注册)
     private final static int MILLISECOND = 1000;//毫秒

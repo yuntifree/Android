@@ -120,11 +120,12 @@
     <string name="no_wifi">附近没有可以连接的WiFi</string>
     <string name="please_open_wifi">请先打开WiFi</string>
     <string name="wifi_spirited">WiFi公益</string>
-    <string name="content_first">东莞无线是由东莞市政府全力打造的公益项目\n旨在帮助东莞市民随时随地，一键免费上网\n
-目前已覆盖全市政府/医院/学校等公共区域\n
-我们希望您一起加入WiFi公益项目\n
-只需将富余的WiFi密码分享给大家\n
-便为构建东莞智慧城市出了一份力</string>
+    <string name="content_first">东莞无线是由东莞市政府全力打造的公益项目</string>
+    <string name="content_two">旨在帮助东莞市民随时随地，一键免费上网</string>
+    <string name="content_three">目前已覆盖全市政府/医院/学校等公共区域</string>
+    <string name="content_four">我们希望您一起加入WiFi公益项目</string>
+    <string name="content_five">只需将富余的WiFi密码分享给大家</string>
+    <string name="content_six">便为构建东莞智慧城市出了一份力</string>
     <string name="input_ssid">请输入无线网络名称</string>
     <string name="spirited_input_pwd">请输入无线网络密码</string>
     <string name="spirited_join">参与公益</string>

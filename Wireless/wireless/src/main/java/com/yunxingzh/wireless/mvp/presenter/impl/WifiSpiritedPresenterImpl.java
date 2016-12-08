@@ -26,7 +26,6 @@ public class WifiSpiritedPresenterImpl implements IWifiSpiritedPresenter,IWifiSp
     @Override
     public void wifiSpirited(String ssid,String password,double longitude,double latitude) {
         if (iWifiSpiritedView != null){
-            iWifiSpiritedView.showProgress();
             iWifiSpiritedModel.wifiSpirited(ssid,password,longitude,latitude,this);
         }
     }
@@ -34,7 +33,6 @@ public class WifiSpiritedPresenterImpl implements IWifiSpiritedPresenter,IWifiSp
     @Override
     public void onWifiSpiritedSuccess() {
         if (iWifiSpiritedView != null) {
-            iWifiSpiritedView.hideProgress();
             iWifiSpiritedView.wifiSpiritedSuccess();
         }
     }

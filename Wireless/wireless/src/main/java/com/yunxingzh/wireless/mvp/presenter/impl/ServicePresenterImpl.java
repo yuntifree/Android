@@ -24,7 +24,6 @@ public class ServicePresenterImpl implements IServicePresenter,IServiceModel.onG
     @Override
     public void getService() {
         if (iServiceView != null){
-            iServiceView.showProgress();
             iServiceModel.getServiceList(this);
         }
     }
@@ -36,7 +35,6 @@ public class ServicePresenterImpl implements IServicePresenter,IServiceModel.onG
     @Override
     public void onGetServiceListSuccess(ServiceList serviceList) {
         if (iServiceView != null) {
-            iServiceView.hideProgress();
             iServiceView.getServiceListSuccess(serviceList);
         }
     }
