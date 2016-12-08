@@ -36,4 +36,9 @@ public class WifiManagerPresenterImpl implements IWifiManagerPresenter,IWifiMana
             iWifiManagerView.getWifiSuccess(wifiVo);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        iWifiManagerView = null;
+    }
 }

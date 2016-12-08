@@ -43,7 +43,7 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
 
     public void initView() {
         mTitleNameTv = findView(R.id.title_name_tv);
-        mTitleNameTv.setText(R.string.wifi_spirited);
+        mTitleNameTv.setVisibility(View.INVISIBLE);
         mTitleReturnIv = findView(R.id.title_return_iv);
         mTitleReturnIv.setOnClickListener(this);
         mSpJoinBtn = findView(R.id.sp_join_btn);

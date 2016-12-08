@@ -38,4 +38,9 @@ public class WifiSpiritedPresenterImpl implements IWifiSpiritedPresenter,IWifiSp
             iWifiSpiritedView.wifiSpiritedSuccess();
         }
     }
+
+    @Override
+    public void onDestroy() {
+        iWifiSpiritedView = null;
+    }
 }

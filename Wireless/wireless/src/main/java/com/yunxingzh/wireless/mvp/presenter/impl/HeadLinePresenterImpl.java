@@ -99,4 +99,10 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
             iHeadLineView.getFontInfoSuccess(fontInfoVo);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        iHeadLineView = null;
+        iServiceView = null;
+    }
 }

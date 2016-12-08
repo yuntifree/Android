@@ -10,7 +10,7 @@ import wireless.libs.model.impl.ConnectDGCountModelImpl;
  * Created by stephon on 2016/11/27.
  */
 
-public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter,IConnectDGCountModel.onConnectDGCountListener {
+public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter, IConnectDGCountModel.onConnectDGCountListener {
 
     private IConnectDGCountModel iConnectDGCountModel;
     private IConnectDGCountView iConnectDGCountView;
@@ -22,17 +22,22 @@ public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter,ICo
 
     @Override
     public void connectDGCount(String apmac) {
-        if (iConnectDGCountView != null){
+        if (iConnectDGCountView != null) {
             iConnectDGCountView.showProgress();
-            iConnectDGCountModel.connectDGCount(apmac,this);
+            iConnectDGCountModel.connectDGCount(apmac, this);
         }
     }
 
     @Override
     public void onConnectDGCountSuccess() {
-        if (iConnectDGCountView != null){
+        if (iConnectDGCountView != null) {
             iConnectDGCountView.hideProgress();
             iConnectDGCountView.connectDGCountSuccess();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        iConnectDGCountView = null;
     }
 }

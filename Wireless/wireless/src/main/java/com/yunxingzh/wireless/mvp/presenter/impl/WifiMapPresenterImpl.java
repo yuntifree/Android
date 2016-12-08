@@ -36,4 +36,9 @@ public class WifiMapPresenterImpl implements IWifiMapPresenter,IWifiMapModel.onG
             iWifiMapView.getWifiMapSuccess(wifiMapVo);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        iWifiMapView = null;
+    }
 }

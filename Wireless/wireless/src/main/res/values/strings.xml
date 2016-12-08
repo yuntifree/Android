@@ -120,7 +120,7 @@
     <string name="no_wifi">附近没有可以连接的WiFi</string>
     <string name="please_open_wifi">请先打开WiFi</string>
     <string name="wifi_spirited">WiFi公益</string>
-    <string name="content_first">3万个免费WiFi</string>
+    <string name="content_first">3万个免费WiFi\n打造全民WiFi服务\n你的生活，将因为我的到来，而万分精彩</string>
     <string name="content_seconed">打造全民WiFi服务</string>
     <string name="content_third">你的生活，将因为我的到来，而万分精彩</string>
     <string name="input_ssid">请输入无线网络名称</string>

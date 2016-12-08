@@ -40,4 +40,9 @@ public class ServicePresenterImpl implements IServicePresenter,IServiceModel.onG
             iServiceView.getServiceListSuccess(serviceList);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        iServiceView = null;
+    }
 }

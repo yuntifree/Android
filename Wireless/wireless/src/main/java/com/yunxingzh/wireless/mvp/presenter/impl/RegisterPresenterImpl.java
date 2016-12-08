@@ -76,4 +76,9 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
             iLoginView.registerSuccess();
         }
     }
+
+    @Override
+    public void onDestroy() {
+        iLoginView = null;
+    }
 }

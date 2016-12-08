@@ -19,22 +19,6 @@
         android:textColor="@color/gray_787878"
         android:textSize="14sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/content_seconed"
-        android:textColor="@color/gray_787878"
-        android:textSize="14sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/content_third"
-        android:textColor="@color/gray_787878"
-        android:textSize="14sp" />
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
