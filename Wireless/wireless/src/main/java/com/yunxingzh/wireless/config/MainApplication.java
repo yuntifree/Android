@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.dgwx.app.lib.bl.WifiInterface;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
@@ -57,7 +58,9 @@ public class MainApplication extends Application {
             OkHttpUtil.init(sApplication);
             startService();
             bindService();
-
+            //此方法要再setContentView方法之前实现
+            SDKInitializer.initialize(getApplicationContext());//百度地图初始化
+            //东莞无线sdk初始化
             WifiInterface.init(this);
             WifiInterface.initEnv(getResources().getString(R.string.wsmpurl), getResources().getString(R.string.ssids),getResources().getString(R.string.vnocode));
 

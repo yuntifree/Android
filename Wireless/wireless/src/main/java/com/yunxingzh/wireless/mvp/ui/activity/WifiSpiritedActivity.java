@@ -25,6 +25,8 @@ import com.yunxingzh.wireless.utils.ToastUtil;
 
 public class WifiSpiritedActivity extends BaseActivity implements View.OnClickListener, IWifiSpiritedView {
 
+    public static final int SPIRITED_PAGER = 3;
+
     private TextView mTitleNameTv, mSpJoinBtn;
     private EditText mSpSsidEt, mSpPwdEt;
     private ImageView mTitleReturnIv;
@@ -51,7 +53,7 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
     }
 
     public void initData() {
-        locationUtils = LocationUtils.getInstance(this);
+        locationUtils = new LocationUtils(this, SPIRITED_PAGER);
         iWifiSpiritedPresenter = new WifiSpiritedPresenterImpl(this);
     }
 
@@ -72,10 +74,10 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
     final Handler locationHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-        super.handleMessage(msg);
-        if (msg.what == 0) {
-            iWifiSpiritedPresenter.wifiSpirited(getSsid(),getPwd(),locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude);
-        }
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                iWifiSpiritedPresenter.wifiSpirited(getSsid(), getPwd(), locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude);
+            }
         }
     };
 

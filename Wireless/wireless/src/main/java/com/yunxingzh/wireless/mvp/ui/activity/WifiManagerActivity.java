@@ -47,6 +47,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = "WifiManagerActivity";
+    public static final int WIFI_PAGER = 2;
 
     private TextView mTitleNameTv, mOpenWifiBtn;
     private ImageView mTitleReturnIv;
@@ -100,7 +101,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     public void initData() {
         iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
 
-        locationUtils = LocationUtils.getInstance(this);
+        locationUtils = new LocationUtils(this, WIFI_PAGER);
         locationUtils.startMonitor(locationHandler);
 
         mAdapter = new AccessPointAdapter(this);
@@ -125,18 +126,16 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0) {
-//
-//                String[] ssids = null;
-//                ssids = new String[list.size()];
-//                for (int i = 0; i < list.size(); i++) {
-//                    ssids[i] = list.get(i).ssid;
-//                }
-                //  iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude,locationUtils.getBaseLocation().latitude,ssids);
-
-                //  SPUtils.put(WifiManagerActivity.this, "longitude", String.valueOf(locationUtils.getBaseLocation().longitude));
+                String[] ssids = null;
+                ssids = new String[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    ssids[i] = list.get(i).ssid;
+                }
+                iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude, ssids);
+                // SPUtils.put(WifiManagerActivity.this, "longitude", String.valueOf(locationUtils.getBaseLocation().longitude));
                 // SPUtils.put(WifiManagerActivity.this, "latitude", String.valueOf(locationUtils.getBaseLocation().latitude));
             } else {
-                LogUtils.d(TAG, "getLocation err:" + msg.what);
+                LogUtils.d("lsd", "getLocation err:" + msg.what);
             }
         }
     };

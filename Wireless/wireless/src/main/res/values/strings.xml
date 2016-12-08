@@ -100,7 +100,6 @@
     <string name="enter_right_phone">请输入正确的手机号</string>
     <string name="re_error">没有获取到相关新闻</string>
     <string name="no_resource">没有更多数据了</string>
-    <string name="i_kown">我知道了</string>
     <string name="speeding">正在测速</string>
     <string name="wait">请稍等片刻...</string>
     <string name="register_faild">注册失败</string>
@@ -170,7 +169,7 @@
     <string name="share_tips">分享给小伙伴</string>
     <string name="disconnect">断开连接</string>
 
-    <string name="net_work">你当前wifi正处于断开状态哦</string>
+    <string name="net_work">你当前正处于使用流量状态\n继续测速需要花费少许流量哦</string>
 
 
 

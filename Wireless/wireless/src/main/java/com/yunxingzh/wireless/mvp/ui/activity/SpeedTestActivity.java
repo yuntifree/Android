@@ -16,16 +16,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.AppUtils;
-import com.yunxingzh.wireless.utils.SpeedTestDialog;
+import com.yunxingzh.wireless.mview.dialog.SpeedTestDialog;
 import com.yunxingzh.wireless.mview.RotatePointer;
-import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.NetUtil;
-import com.yunxingzh.wireless.utils.SpeedTestDialog;
+import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.utils.Util;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -40,7 +44,7 @@ import java.util.concurrent.Executors;
 /***
  * wifi测速
  */
-public class SpeedTestActivity extends BaseActivity implements View.OnClickListener{
+public class SpeedTestActivity extends BaseActivity implements View.OnClickListener {
 
     private static String mApkUrl = "";
 
@@ -71,9 +75,10 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     private RotatePointer mRotatePointer;
     private ExecutorService mExecutorService;
 
-    private TextView mTitleNameTv,mMiddleContentTv,mMiddleSpeedTv;
+    private TextView mTitleNameTv, mMiddleContentTv, mMiddleSpeedTv;
     private ImageView mTitleReturnIv;
     private LinearLayout mMiddleNoticeLay;
+    private int speedFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,17 +112,35 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         mBtnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mBtnStart.getText().equals("开始测速")){
-                    initThread();
-                } else if(mBtnStart.getText().equals("停止测速")){
-                    shutdownAll();
-                    mMiddleNoticeLay.setVisibility(View.INVISIBLE);
-                    mBtnStart.setText(R.string.re_speed);
-                } else if(mBtnStart.getText().equals("重新测速")){
-                    startTestSpeed();
+                if (NetUtils.isNetworkAvailable(SpeedTestActivity.this)) {
+                    if (mBtnStart.getText().equals("开始测速")) {
+                        initThread();
+                    } else if (mBtnStart.getText().equals("停止测速")) {
+                        shutdownAll();
+                        mMiddleNoticeLay.setVisibility(View.INVISIBLE);
+                        mBtnStart.setText(R.string.re_speed);
+                    } else if (mBtnStart.getText().equals("重新测速")) {
+                        startTestSpeed();
+                    }
+                } else {
+                    ToastUtil.showMiddle(SpeedTestActivity.this, R.string.net_set);
                 }
             }
         });
+    }
+
+    @Subscribe
+    public void onEventMainThread(EventBusType event) {
+        speedFlag = event.getChildMsg();
+        if (event.getMsg() == Constants.SPEED_TEST) {
+            initThread();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
     private void initThread() {
@@ -143,10 +166,12 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     private void startTestSpeed() {
         int netType = AppUtils.getNetWorkType(this);
         if (netType != NETWORK_WIFI) {
-            SpeedTestDialog mDialog = new SpeedTestDialog(SpeedTestActivity.this);
-            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            mDialog.show();
-            return;
+            if (speedFlag != Constants.SPEED_FLAG) {
+                SpeedTestDialog mDialog = new SpeedTestDialog(SpeedTestActivity.this);
+                mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                mDialog.show();
+                return;
+            }
         }
 
         mMiddleNoticeLay.setVisibility(View.VISIBLE);
@@ -382,13 +407,13 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             angle = 0;
         } else if (speed < 1024 * 1024 && speed >= 1024) {
             // 0~1M, 每100k 11.25度
-            angle = (int)(speed * 11.25 / (1024 * 100));
+            angle = (int) (speed * 11.25 / (1024 * 100));
         } else if (speed < 5120 * 1024 && speed >= 1024 * 1024) {
             // 1M~5M, 每1M，11.25度
-            angle = (int)((speed * 1.0 / (1024 * 1024) - 1) * 11.25 + 112.5);
+            angle = (int) ((speed * 1.0 / (1024 * 1024) - 1) * 11.25 + 112.5);
         } else if (speed < 10240 * 1024 && speed >= 5120 * 1024) {
             // 5M~10M, 每2.5M 11.25度
-            angle = (int)((speed * 1.0 / (2560 * 1024) - 5) * 11.25 + 157.5);
+            angle = (int) ((speed * 1.0 / (2560 * 1024) - 5) * 11.25 + 157.5);
         } else if (speed >= 10240 * 1024) {
             angle = 180;
         }

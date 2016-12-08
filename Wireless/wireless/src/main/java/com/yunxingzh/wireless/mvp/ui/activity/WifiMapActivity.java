@@ -34,6 +34,7 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.LocationUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiMapView;
 import com.yunxingzh.wireless.utils.LocationUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -49,6 +50,8 @@ import wireless.libs.bean.vo.WifiMapVo;
 
 public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.OnClickListener {
 
+    public static final int MAP_PAGER = 1;
+
     private TextView mTitleNameTv;
     private ImageView mTitleReturnIv;
     private MapView mapView;
@@ -61,12 +64,11 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
 
     private boolean flag = true;
     private InfoWindow mInfoWindow;
+    private boolean isFirst = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //此方法要再setContentView方法之前实现
-        SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_wifi_map);
         initView();
         initData();
@@ -83,8 +85,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
 
     public void initData() {
         baiduMap = mapView.getMap();
-        locationUtils = LocationUtils.getInstance(this);
-        //new Thread(new GetLocationThread()).start();
+        locationUtils = new LocationUtils(this, MAP_PAGER);
         locationUtils.startMonitor(locationHandler);
         iWifiMapPresenter = new WifiMapPresenterImpl(this);
     }
@@ -96,29 +97,32 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         }
     }
 
-    public void initMap(){
-        //定义Maker坐标点lat,lon:22.933103,113.903870
+    public void initMap() {
         LatLng point = new LatLng(lat, lon);
-        //设置地图缩放比例
-        baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().zoom(16).build()));
+        if (isFirst) {
+            isFirst = false;
+            //定义Maker坐标点lat,lon:22.933103,113.903870
+            //设置地图缩放比例
+            baiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(new MapStatus.Builder().target(point).zoom(16).build()));
+            // 构建Marker图标
+            BitmapDescriptor bitmap = BitmapDescriptorFactory
+                    .fromResource(R.drawable.mine);
+            //构建MarkerOption，用于在地图上添加Marker
+            OverlayOptions option = new MarkerOptions()
+                    .position(point)
+                    .icon(bitmap);
+            //在地图上添加Marker，并显示
+            baiduMap.addOverlay(option);
+            iWifiMapPresenter.getWifiMap(lon, lat);//获取周围热点lon,lat
 
-        MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
-        baiduMap.animateMapStatus(status);
-        // 构建Marker图标
-        BitmapDescriptor bitmap = BitmapDescriptorFactory
-                .fromResource(R.drawable.mine);
-        //构建MarkerOption，用于在地图上添加Marker
-        OverlayOptions option = new MarkerOptions()
-                .position(point)
-                .icon(bitmap);
-        //在地图上添加Marker，并显示
-        baiduMap.addOverlay(option);
-        iWifiMapPresenter.getWifiMap(lon, lat);//获取周围热点lon,lat
-        Bitmap mBit = bitmap.getBitmap();
-        //如果该图片为当前位置图，则跳过点击事件
-
-        if (mBit.getHeight() != 120 && mBit.getWidth() != 120){
-            initMarkerClickEvent();
+            Bitmap mBit = bitmap.getBitmap();
+            //如果该图片为当前位置图，则跳过点击事件
+            if (mBit.getHeight() != 120 && mBit.getWidth() != 120) {
+                initMarkerClickEvent();
+            }
+        } else {
+            MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
+            baiduMap.animateMapStatus(status);
         }
     }
 
@@ -152,13 +156,11 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0) {
-                if (locationUtils.sum == 1) {
-                    lat = locationUtils.getBaseLocation().latitude;
-                    lon = locationUtils.getBaseLocation().longitude;
-                    initMap();
-                }
+                lat = locationUtils.getBaseLocation().latitude;
+                lon = locationUtils.getBaseLocation().longitude;
+                initMap();
             } else {
-                // TODO
+                LogUtils.i("lsd","location error:" + msg.what);
             }
         }
     };

@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="243dp"
     android:layout_height="130dp"
+    android:layout_gravity="center"
     android:background="@drawable/border_dialog"
     android:gravity="center"
-    android:layout_gravity="center"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -17,7 +17,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/buying" />
+            android:src="@drawable/ico_warning" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,25 +28,30 @@
             android:textSize="12sp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/my_cancel"
-        android:layout_width="110dp"
-        android:layout_height="31dp"
-        android:background="@drawable/border_dialog_style"
-        android:gravity="center"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="@string/i_kown"
-        android:textColor="@color/blue_009CFB" />
+        android:orientation="horizontal">
 
-    <!--    <TextView
-            android:id="@+id/my_query"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/my_cancel"
+            android:layout_width="110dp"
             android:layout_height="31dp"
+            android:background="@drawable/border_dialog_style"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/style_search"
-            android:layout_weight="1"
-            android:textColor="@color/white"
-            android:text="@string/query_speed" />-->
+            android:text="@string/cancel_speed"
+            android:textColor="@color/blue_009CFB" />
 
+        <TextView
+            android:id="@+id/my_query"
+            android:layout_width="110dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/style_search"
+            android:gravity="center"
+            android:text="@string/query_speed"
+            android:textColor="@color/white" />
+    </LinearLayout>
 </LinearLayout>

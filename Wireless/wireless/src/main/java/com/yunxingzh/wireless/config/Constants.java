@@ -30,6 +30,8 @@ public class Constants {
     public static final int HEAD_LINE = 2;//头条
     public static final int SERVICE = 3;//服务
     public static final int VIDEO = 4;//视频
+    public static final int SPEED_TEST = 5;//wifi测速
+    public static final int SPEED_FLAG = 6;//wifi测速flag
 
     //0、网络正常，可以发起调用认证、下线等接口。1、已经认证成功。
     public static final int NET_OK = 0;

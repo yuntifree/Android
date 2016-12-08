@@ -20,36 +20,40 @@ public class LocationUtils {
 
     private static LocationUtils mInstance;
     private BDLocation mLocation = null;
-    private MLocation  mBaseLocation = new MLocation();
+    private MLocation mBaseLocation = new MLocation();
 
     public BDLocationListener myListener = new MyLocationListener();
     private LocationClient mLocationClient;
     private Handler mHandler;
-    public static int sum = 0;
+    private int pageFrom;
+    private int span;
 
-    public static LocationUtils getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new LocationUtils(context);
-        }
-        return mInstance;
-    }
-
-    public LocationUtils(Context context) {
+    public LocationUtils(Context context,int pageFrom) {
+        this.pageFrom = pageFrom;
         mLocationClient = new LocationClient(context.getApplicationContext());
+        switch (pageFrom) {
+            case 1://地图
+                span = 5000;
+                break;
+            case 2://wifi列表
+                span = 0;
+                break;
+            case 3://wifi公益
+                span = 0;
+                break;
+        }
         initParams();
         mLocationClient.registerLocationListener(myListener);
     }
 
     public void startMonitor(Handler handler) {
-        mHandler = handler;
+        this.mHandler = handler;
         if (!mLocationClient.isStarted()) {
             mLocationClient.start();
         }
-//        if (mLocationClient != null && mLocationClient.isStarted()) {
-//            mLocationClient.requestLocation();
-//        } else {
-//
-//        }
+        if (mLocationClient != null && mLocationClient.isStarted()) {
+            mLocationClient.requestLocation();
+        }
     }
 
     public void stopMonitor() {
@@ -68,10 +72,9 @@ public class LocationUtils {
 
     private void initParams() {
         LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy
+        option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving
         );//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
-        int span = 5000;
         option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
         option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
         option.setOpenGps(true);//可选，默认false,设置是否使用gps
@@ -87,6 +90,8 @@ public class LocationUtils {
     public class MyLocationListener implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {
+            if (location == null)
+                return;
             mLocation = location;
             mBaseLocation.latitude = mLocation.getLatitude();
             mBaseLocation.longitude = mLocation.getLongitude();
@@ -122,7 +127,7 @@ public class LocationUtils {
             }
             sb.append("\nlocationdescribe : ");
             sb.append(location.getLocationDescribe());// 位置语义化信息
-            Log.i("sd",sb.toString());
+            Log.i("sd", sb.toString());
 
             if (mHandler != null) {
                 Message msg = mHandler.obtainMessage();
@@ -130,7 +135,6 @@ public class LocationUtils {
                         ret == BDLocation.TypeNetWorkLocation ||
                         ret == BDLocation.TypeOffLineLocation) {
                     msg.what = 0;
-                    sum ++;
                 } else {
                     msg.what = ret;
                 }
