@@ -1,1 +1,9 @@
-Wireless/wireless/src/main/java/com/yunxingzh/wireless/mvp/ui/activity/VideoPlayActivity.java
+*.iml
+.gradle
+local.properties
+.idea
+.DS_Store
+build
+captures
+.externalNativeBuild
+outputs
