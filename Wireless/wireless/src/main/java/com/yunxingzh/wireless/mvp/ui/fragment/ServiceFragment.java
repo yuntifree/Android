@@ -73,7 +73,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     }
 
     public void initData() {
-        iHeadLinePresenter = new HeadLinePresenterImpl(this);
+        iHeadLinePresenter = new HeadLinePresenterImpl();
         iServicePresenter = new ServicePresenterImpl(this);
         iServicePresenter.getService();
         if (!NetUtils.isNetworkAvailable(getActivity())){

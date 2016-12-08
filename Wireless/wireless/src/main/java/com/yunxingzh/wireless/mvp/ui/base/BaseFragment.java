@@ -35,8 +35,6 @@ public class BaseFragment extends Fragment implements IBaseView, View.OnTouchLis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //听云
-        NBSAppAgent.setLicenseKey("87fb7caacc08462a8aecd82cb1c6d4fd").withLocationServiceEnabled(true).start(getActivity().getApplicationContext());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

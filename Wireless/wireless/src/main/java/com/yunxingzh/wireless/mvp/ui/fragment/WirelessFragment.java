@@ -567,6 +567,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        iHeadLinePresenter.onDestroy();
         FWManager.getInstance().removeWifiObserver(wifiObserver);
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
