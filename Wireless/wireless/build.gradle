@@ -72,13 +72,6 @@ android {
         exclude 'META-INF/services/org.robolectric.internal.ShadowProvider'
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
     /*听云*/
 //    sourceSets {
 //        main{
@@ -119,7 +112,10 @@ android {
         buildDebug {
             buildConfigField "boolean", "MODEL_DEV", "true"
             versionName = "Local Version"
-            signingConfig signingConfigs.myconfig
+            /**
+             * 需要Debug下显示地图可以加上
+             * signingConfig signingConfigs.myconfig
+             */
         }
         buildDevelop {
             buildConfigField "boolean", "MODEL_DEV", "true"

@@ -63,6 +63,7 @@
         <activity
             android:name=".mvp.ui.activity.MainActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:theme="@android:style/Theme.NoTitleBar"/>
 
         <activity
@@ -101,7 +102,7 @@
             android:name=".mvp.ui.activity.DialogActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/BottomDialog"></activity>
+            android:theme="@style/BottomDialog"/>
 
         <activity
             android:name=".mvp.ui.activity.WifiSpiritedActivity"
@@ -133,7 +134,15 @@
         <service
             android:name=".service.FWService"
             android:exported="true"
-            android:process="org.focusapp.wifi.service" />
+            android:process="com.yunxingzh.wifi.service" />
+
+        <!-- 通知栏用的广播-->
+        <receiver android:name=".broadcast.NotificationReceiver"
+            android:process="com.yunxingzh.wifi.service"
+            />
+        <receiver android:name=".broadcast.ShowNotificationReceiver"
+            android:process="com.yunxingzh.wifi.service"
+            />
     </application>
 
 </manifest>
