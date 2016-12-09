@@ -17,7 +17,7 @@
     <!--默认-->
     <item>
         <shape>
-            <solid android:color="@color/blue_4492f2" />
+            <solid android:color="@color/blue_009CFB" />
             <corners android:radius="30dp" />
         </shape>
     </item>

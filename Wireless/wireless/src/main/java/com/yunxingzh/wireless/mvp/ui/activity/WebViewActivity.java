@@ -86,13 +86,13 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
                 super.onReceivedHttpError(view, request, errorResponse);
-                ToastUtil.showMiddle(WebViewActivity.this,R.string.internet_error);
+               // ToastUtil.showMiddle(WebViewActivity.this,R.string.internet_error);
             }
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                ToastUtil.showMiddle(WebViewActivity.this,R.string.internet_error);
+               // ToastUtil.showMiddle(WebViewActivity.this,R.string.internet_error);
             }
         });
         myWebView.loadUrl(mUrl);
