@@ -1,11 +1,13 @@
 package wireless.libs.network;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MainApplication;
+import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
 import com.yunxingzh.wireless.utils.JsonUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
 
@@ -134,12 +136,12 @@ public abstract class HttpHandler<T> implements Callback {
             public void run() {
                 if (serverTip.errno == ErrorType.E_TOKEN || serverTip.errno == ErrorType.E_DELETED_USER) {
                     //无Token或者被拉黑
-//                    final Intent intent = PreLoginActivity.getStartActIntent(MainApplication.get());
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    AppUtils.launchApp(MainApplication.get(), intent);
-//                    //被踢下线,弹出提示
-//                    ToastUtils.showShort(mAppContext, serverTip.desc() + "");
-                    // TODO 踢下线处理
+                    MainApplication app = MainApplication.getInstance();
+                    app.setToken("");
+                    app.setUser(null);
+                    Intent intent = new Intent(mAppContext, RegisterActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);//清空栈
+                    mAppContext.startActivity(intent);
                 } else {
                     onFailure(serverTip);
                 }

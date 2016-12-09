@@ -86,6 +86,7 @@ public class VideoPlayActivity extends BaseActivity {
             public void onPageFinished(WebView view, String url) {
                 //super.onPageFinished(view, url);
                 //view.loadUrl("javascript:try{autoplay();}catch(e){}");
+                // 页面做了跳转，loadCount最后一次再注入脚本
                 loadCount++;
                 if (loadCount > 1) {
                     view.loadUrl("javascript:(function() { " +
