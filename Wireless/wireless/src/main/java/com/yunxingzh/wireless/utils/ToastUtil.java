@@ -10,7 +10,6 @@ import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
 
 import wireless.libs.api.HttpCode;
-import wireless.libs.okhttp.response.OkHttpCallback;
 
 public class ToastUtil {
 
@@ -76,20 +75,6 @@ public class ToastUtil {
         } else if(error < HttpCode.E_SERVER){
             showMiddle(context, R.string.server_error);
             return;
-        }
-        switch (error) {
-            case OkHttpCallback.RESPONSE_ERROR_NET:
-                showMiddle(context, R.string.net_error_net);
-                break;
-            case OkHttpCallback.RESPONSE_ERROR_SERVER:
-                showMiddle(context, R.string.net_error_server);
-                break;
-            case OkHttpCallback.RESPONSE_ERROR_TIMEOUT:
-                showMiddle(context, R.string.net_error_timeout);
-                break;
-            case HttpCode.HTTP_OK:
-                showMiddle(context, R.string.success);
-                break;
         }
     }
 }
