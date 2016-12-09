@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.mview.ClearEditText;
 import com.yunxingzh.wireless.mvp.presenter.IWifiSpiritedPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiSpiritedPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
@@ -28,7 +29,7 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
     public static final int SPIRITED_PAGER = 3;
 
     private TextView mTitleNameTv, mSpJoinBtn;
-    private EditText mSpSsidEt, mSpPwdEt;
+    private ClearEditText mSpSsidEt, mSpPwdEt;
     private ImageView mTitleReturnIv;
     private IWifiSpiritedPresenter iWifiSpiritedPresenter;
     private LocationUtils locationUtils;

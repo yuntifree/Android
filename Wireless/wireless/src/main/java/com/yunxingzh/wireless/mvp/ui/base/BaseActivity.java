@@ -26,8 +26,6 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
         return (T) findViewById(id);
     }
 
-    protected int mLoadingCount = 0;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/title_lay"
     android:background="@color/blue_009CFB"
     android:orientation="vertical">
 
@@ -50,6 +51,15 @@
             android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="18sp"/>
+
+        <ImageView
+            android:id="@+id/title_main_img"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:src="@drawable/title_text" />
 
         <LinearLayout
             android:id="@+id/title_right_lay"

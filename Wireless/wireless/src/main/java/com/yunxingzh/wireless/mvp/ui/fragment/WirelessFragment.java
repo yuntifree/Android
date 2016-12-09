@@ -2,12 +2,15 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +79,7 @@ import wireless.libs.convenientbanner.listener.OnItemClickListener;
  * 无线
  */
 
-public class WirelessFragment extends BaseFragment implements IHeadLineView, IConnectDGCountView, View.OnClickListener, ScrollViewListener {
+public class WirelessFragment extends BaseFragment implements IHeadLineView, IConnectDGCountView, View.OnClickListener, ScrollViewListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final static String TAG = "WirelessFragment";
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
@@ -88,12 +91,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private final static int SCANNIN_GREQUEST_CODE = 1;
     private static final int DG_SDK_TIME_OUT = 10 * 1000;
 
-    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest,
-            mMainHeadImg, mWeatherLay, mMainSpiritedLay;
+    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest, mTitleLeftLay,
+            mMainHeadImg, mWeatherLay, mMainSpiritedLay, mTitleLay;
     private MyScrollView scrollView;
-    private TextView mConnectCountTv,
+    private TextView mConnectCountTv, mTitleNameTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
-    private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop, mConnectIv;
+    private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop, mConnectIv, mTitleMainImg;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private IConnectDGCountPresenter iConnectDGCountPresenter;
@@ -126,6 +129,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     public void initView(View view) {
+        mTitleLeftLay = findView(view, R.id.title_left_lay);
+        mTitleLeftLay.setVisibility(View.INVISIBLE);
+        mTitleNameTv = findView(view, R.id.title_name_tv);
+        mTitleNameTv.setVisibility(View.GONE);
+        mTitleMainImg = findView(view, R.id.title_main_img);
+        mTitleMainImg.setVisibility(View.VISIBLE);
+        mTitleLay = findView(view, R.id.title_lay);
         mTitleRightIv = findView(view, R.id.title_right_iv);
         mTitleRightIv.setVisibility(View.VISIBLE);
         mTitleRightIv.setOnClickListener(this);
@@ -242,8 +252,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         String hour = StringUtils.getTime();
         int h = Integer.parseInt(hour);
         if (h >= 6 && h < 19) {
+            mTitleLay.setBackgroundColor(Color.parseColor("#009CFB"));
             mMainHeadImg.setBackgroundResource(R.drawable.main_bg);
         } else {
+            mTitleLay.setBackgroundColor(Color.parseColor("#236EC5"));
             mMainHeadImg.setBackgroundResource(R.drawable.main_bg_night);
         }
 
@@ -320,307 +332,307 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 //        }
 //    };
 
-    @Override
-    public void onClick(View v) {
-        if (mConnectIv == v) {//一键连接
-            if (mWifiConnected) {
-                EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));//跳转新闻列表
-            } else {
-                if (wifiUtils.getWlanState()) {//是否打开
-                    checkDGWifi();
+        @Override
+        public void onClick(View v) {
+            if (mConnectIv == v) {//一键连接
+                if (mWifiConnected) {
+                    EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));//跳转新闻列表
                 } else {
-                    ToastUtil.showMiddle(getActivity(), R.string.please_open_wifi);
+                    if (wifiUtils.getWlanState()) {//是否打开
+                        checkDGWifi();
+                    } else {
+                        ToastUtil.showMiddle(getActivity(), R.string.please_open_wifi);
+                    }
+                }
+                //  WifiInterface.wifiLogout(logoOutHandler,MainApplication.sApplication.getUserName(),5000);
+            } else if (mWeatherLay == v) {
+                startActivity(WebViewActivity.class, Constants.URL, Constants.URL_WEATHER, Constants.TITLE, "东莞天气");
+            } else if (footView == v) {//查看更多新闻
+                EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
+            } else if (mMainWifiManager == v) {//wifi管理
+                startActivity(WifiManagerActivity.class, "", "", "", "");
+            } else if (mMainMapLay == v) {//wifi地图
+                startActivity(WifiMapActivity.class, "", "", "", "");
+            } else if (mTitleRightIv == v) {//扫码连接东莞wifi
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), ScanCodeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
+            } else if (mMainSpeedtest == v) { // wifi 测速
+                startActivity(SpeedTestActivity.class, "", "", "", "");
+            } else if (mMainSpiritedLay == v) {//wifi公益
+                startActivity(WifiSpiritedActivity.class, "", "", "", "");
+            } else if (mFontNewsTv == v) { // 东莞头条
+                EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
+            } else if (mFontVideoTv == v) { //热门视频
+                EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE, Constants.VIDEO));
+            } else if (mFontServiceTv == v) { //同城服务
+                // EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
+            } else if (mFontZhiTv == v) { //智慧服务
+                EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
+            } else if (mFontPlayingTv == v) { //同城直播
+
+            } else if (mFontBuyingTv == v) { //抢购
+
+            }
+        }
+
+        private void onNetChange() {
+            changeConnectState();
+            if (iHeadLinePresenter != null) {
+                iHeadLinePresenter.weatherNews();
+            }
+        }
+
+        private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
+            @Override
+            public void onStateChanged(WifiState new_state, WifiState old_state) {
+                // 连上网
+                if (new_state == WifiState.CONNECTED) {
+                    currentAp = FWManager.getInstance().getCurrent();
+                    if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
+                        CheckAndLogon();
+                    } else {
+                        // 先不处理
+                        onNetChange();
+                    }
+                } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
+                    // 断开网
+                    changeConnectState();
                 }
             }
-            //  WifiInterface.wifiLogout(logoOutHandler,MainApplication.sApplication.getUserName(),5000);
-        } else if (mWeatherLay == v) {
-            startActivity(WebViewActivity.class, Constants.URL, Constants.URL_WEATHER, Constants.TITLE, "东莞天气");
-        } else if (footView == v) {//查看更多新闻
-            EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
-        } else if (mMainWifiManager == v) {//wifi管理
-            startActivity(WifiManagerActivity.class, "", "", "", "");
-        } else if (mMainMapLay == v) {//wifi地图
-            startActivity(WifiMapActivity.class, "", "", "", "");
-        } else if (mTitleRightIv == v) {//扫码连接东莞wifi
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), ScanCodeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
-        } else if (mMainSpeedtest == v) { // wifi 测速
-            startActivity(SpeedTestActivity.class, "", "", "", "");
-        } else if (mMainSpiritedLay == v) {//wifi公益
-            startActivity(WifiSpiritedActivity.class, "", "", "", "");
-        } else if (mFontNewsTv == v) { // 东莞头条
-            EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
-        } else if (mFontVideoTv == v) { //热门视频
-            EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE, Constants.VIDEO));
-        } else if (mFontServiceTv == v) { //同城服务
-            // EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
-        } else if (mFontZhiTv == v) { //智慧服务
-            EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
-        } else if (mFontPlayingTv == v) { //同城直播
 
-        } else if (mFontBuyingTv == v) { //抢购
+            @Override
+            public void onListChanged(List<AccessPoint> accessPoints) {
+            }
 
-        }
-    }
+            @Override
+            public void onRSSIChanged(int rssi) {
+            }
 
-    private void onNetChange() {
-        changeConnectState();
-        if (iHeadLinePresenter != null) {
-            iHeadLinePresenter.weatherNews();
-        }
-    }
+            @Override
+            public void onAuthError(AccessPoint ap) {
+            }
+        };
 
-    private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
+        //扫码
         @Override
-        public void onStateChanged(WifiState new_state, WifiState old_state) {
-            // 连上网
-            if (new_state == WifiState.CONNECTED) {
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            switch (requestCode) {
+                case SCANNIN_GREQUEST_CODE:
+                    if (resultCode == Activity.RESULT_OK) {
+                        Bundle bundle = data.getExtras();
+                        String ssid = "";
+                        String url = "";
+                        try {
+                            url = bundle.getString("result");
+                            ssid = url.substring(url.indexOf("ssid=") + 5);
+                            ssid = java.net.URLDecoder.decode(ssid, "utf-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        if (ssid.equals(Constants.SSID)) {
+                            CheckAndLogon();
+                        } else {
+                            // 不是东莞无线
+                            if (URLUtil.isHttpsUrl(url) || URLUtil.isHttpUrl(url)) {
+                                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                                intent.putExtra(Constants.URL, url);
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent();
+                                intent.setAction("android.intent.action.VIEW");
+                                intent.setData(Uri.parse(url));
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
+        public class CheckEnvTask extends AsyncTask<Void, Void, Boolean> {
+            private int mCheckRet = -1;
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                try {
+                    mCheckRet = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
+                } catch (Exception e) {
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(final Boolean success) {
+                mCheckTask = null;
+                if (success) {
+                    switch (mCheckRet) {
+                        case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
+                            WifiInterface.wifiLogon(validateHandler, MainApplication.getInstance().getUserName(),
+                                    MainApplication.getInstance().getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
+                            break;
+                        case Constants.VALIDATE_SUCCESS://1、已经认证成功。
+                            ToastUtil.showMiddle(getActivity(), R.string.connect_success);
+                            iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
+                            // 判断下按钮的状态
+                            changeConnectState();
+                            break;
+                        default:
+                            LogUtils.d("scan error:", mCheckRet + "");
+                            break;
+                    }
+                } else {
+                    ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+                mCheckTask = null;
+            }
+        }
+
+        //连接后改变状态
+        public void changeConnectState() {
+            currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
+            if (currentAp != null) {
+                stopAnimation();
+                String ssidText;
+                if (currentAp.ssid.equals(Constants.SSID)) {
+                    ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
+                    mConnectText.setText(ssidText);
+                } else {
+                    mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
+                }
+                mWifiConnected = true;
+            } else {
+                startAnimation();
+                AccessPoint DGWifiAp = getDGWifiFromList();//找出附近wifi列表中的东莞wifi
+                if (DGWifiAp != null) {
+                    mConnectText.setText(R.string.find_wifi);
+                } else {
+                    mConnectText.setText(R.string.wireless_dg);
+                }
+                mWifiConnected = false;
+            }
+        }
+
+        private void startAnimation() {
+            mAnimationTv.setVisibility(View.VISIBLE);
+            mConnectIv.setVisibility(View.VISIBLE);
+            mConnectIv.setImageResource(R.drawable.need_connect);
+            mAnimationTv.start();
+        }
+
+        private void stopAnimation() {
+            mAnimationTv.setVisibility(View.GONE);
+            mConnectIv.setVisibility(View.VISIBLE);
+            mConnectIv.setImageResource(R.drawable.main_connected);
+            mAnimationTv.stop();
+        }
+
+        public AccessPoint getDGWifiFromList() {
+            AccessPoint DGFreeAp = null;
+            List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
+            for (int i = 0; i < apList.size(); i++) {//找出是否有东莞wifi
+                AccessPoint ap = apList.get(i);
+                if (ap.ssid.equals(Constants.SSID)) {
+                    DGFreeAp = ap;
+                    break;
+                }
+            }
+            return DGFreeAp;
+        }
+
+        public void checkDGWifi() {
+            // 1. 未联网，有DG-Free: 连接DG-Free
+            if (!NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
+                AccessPoint DGFreeAp = getDGWifiFromList();
+                if (DGFreeAp != null) {//不为空表示周围有东莞wifi
+                    FWManager.getInstance().connect(DGFreeAp);//先连接上wifi
+                } else if (DGFreeAp == null) { // 4. 未联网，没有DG-Free：如果周围有服务器返回的WiFi
+                    startActivity(WifiManagerActivity.class, "", "", "", "");
+                }
+            } else {
+                //已连上wifi
                 currentAp = FWManager.getInstance().getCurrent();
+                // 3. 已经连上DG-Free的情况
                 if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
                     CheckAndLogon();
                 } else {
-                    // 先不处理
-                    onNetChange();
+                    // 2. 已经连上其它WiFi，周围有DG-Free的情况，无需去连接DG-Free
                 }
-            } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
-                // 断开网
-                changeConnectState();
+            }
+        }
+
+        @Subscribe
+        public void onEventMainThread(EventBusType event) {
+            int index = event.getChildMsg();
+            if (event.getMsg() == Constants.MAIN_NEWS_FLAG && index != -1) {//上报
+                iHeadLinePresenter.clickCount(mainNewsVos.get(index).id, NEWS);
             }
         }
 
         @Override
-        public void onListChanged(List<AccessPoint> accessPoints) {
+        public void onDestroyView() {
+            super.onDestroyView();
+            iHeadLinePresenter.onDestroy();
+            FWManager.getInstance().removeWifiObserver(wifiObserver);
+            EventBus.getDefault().unregister(this);//反注册EventBus
         }
 
         @Override
-        public void onRSSIChanged(int rssi) {
+        public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
+            if (y > PULL_HEIGHT) { //下拉高度大于10
+                // mNoticeLay.setVisibility(View.GONE);
+                mShowMoreIv.setVisibility(View.INVISIBLE);
+            } else if (y == HEIGHT) {
+                // mNoticeLay.setVisibility(View.VISIBLE);
+            }
+        }
+
+        public String getCurrentWifiMacAddress() {
+            return wifiUtils.getCurrentWifiInfo().getMacAddress();
+        }
+
+        public void setAnimation(View view, float fromX, float toX, float fromY, float toY) {
+            TranslateAnimation translateAnimation = new TranslateAnimation(fromX, toX, fromY, toY);
+            translateAnimation.setDuration(4000);
+            translateAnimation.setFillAfter(true);
+            translateAnimation.setFillBefore(false);
+            translateAnimation.setRepeatCount(-1);
+            translateAnimation.setRepeatMode(Animation.REVERSE);//设置反方向执行
+            view.startAnimation(translateAnimation);
+        }
+
+        public void startActivity(Class activity, String key, String videoUrl, String titleKey, String title) {
+            Intent intent = new Intent(getActivity(), activity);
+            intent.putExtra(key, videoUrl);
+            intent.putExtra(titleKey, title);
+            startActivity(intent);
         }
 
         @Override
-        public void onAuthError(AccessPoint ap) {
-        }
-    };
-
-    //扫码
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case SCANNIN_GREQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK) {
-                    Bundle bundle = data.getExtras();
-                    String ssid = "";
-                    String url = "";
-                    try {
-                        url = bundle.getString("result");
-                        ssid = url.substring(url.indexOf("ssid=") + 5);
-                        ssid = java.net.URLDecoder.decode(ssid, "utf-8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    if (ssid.equals(Constants.SSID)) {
-                        CheckAndLogon();
-                    } else {
-                        // 不是东莞无线
-                        if (URLUtil.isHttpsUrl(url) || URLUtil.isHttpUrl(url)) {
-                            Intent intent = new Intent(getActivity(), WebViewActivity.class);
-                            intent.putExtra(Constants.URL, url);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent();
-                            intent.setAction("android.intent.action.VIEW");
-                            intent.setData(Uri.parse(url));
-                            startActivity(intent);
-                        }
-                    }
-                }
-                break;
-        }
-    }
-
-    public class CheckEnvTask extends AsyncTask<Void, Void, Boolean> {
-        private int mCheckRet = -1;
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                mCheckRet = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
-            } catch (Exception e) {
-                return false;
-            }
-            return true;
+        public void onPause() {
+            super.onPause();
+            mAdRotationBanner.stopTurning();
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            mCheckTask = null;
-            if (success) {
-                switch (mCheckRet) {
-                    case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
-                        WifiInterface.wifiLogon(validateHandler, MainApplication.getInstance().getUserName(),
-                                MainApplication.getInstance().getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
-                        break;
-                    case Constants.VALIDATE_SUCCESS://1、已经认证成功。
-                        ToastUtil.showMiddle(getActivity(), R.string.connect_success);
-                        iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
-                        // 判断下按钮的状态
-                        changeConnectState();
-                        break;
-                    default:
-                        LogUtils.d("scan error:",mCheckRet+"");
-                        break;
-                }
-            } else {
-                ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
-            }
+        public void onResume() {
+            super.onResume();
+            changeConnectState();
+            mAdRotationBanner.startTurning(1500);
         }
 
         @Override
-        protected void onCancelled() {
-            mCheckTask = null;
+        public void connectDGCountSuccess() {
+        }
+
+        @Override
+        public void getHeadLineSuccess(HotInfoList newsVo) {
         }
     }
-
-    //连接后改变状态
-    public void changeConnectState() {
-        currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
-        if (currentAp != null) {
-            stopAnimation();
-            String ssidText;
-            if (currentAp.ssid.equals(Constants.SSID)) {
-                ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
-                mConnectText.setText(ssidText);
-            } else {
-                mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
-            }
-            mWifiConnected = true;
-        } else {
-            startAnimation();
-            AccessPoint DGWifiAp = getDGWifiFromList();//找出附近wifi列表中的东莞wifi
-            if (DGWifiAp != null) {
-                mConnectText.setText(R.string.find_wifi);
-            } else {
-                mConnectText.setText(R.string.wireless_dg);
-            }
-            mWifiConnected = false;
-        }
-    }
-
-    private void startAnimation() {
-        mAnimationTv.setVisibility(View.VISIBLE);
-        mConnectIv.setVisibility(View.VISIBLE);
-        mConnectIv.setImageResource(R.drawable.need_connect);
-        mAnimationTv.start();
-    }
-
-    private void stopAnimation() {
-        mAnimationTv.setVisibility(View.GONE);
-        mConnectIv.setVisibility(View.VISIBLE);
-        mConnectIv.setImageResource(R.drawable.main_connected);
-        mAnimationTv.stop();
-    }
-
-    public AccessPoint getDGWifiFromList() {
-        AccessPoint DGFreeAp = null;
-        List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
-        for (int i = 0; i < apList.size(); i++) {//找出是否有东莞wifi
-            AccessPoint ap = apList.get(i);
-            if (ap.ssid.equals(Constants.SSID)) {
-                DGFreeAp = ap;
-                break;
-            }
-        }
-        return DGFreeAp;
-    }
-
-    public void checkDGWifi() {
-        // 1. 未联网，有DG-Free: 连接DG-Free
-        if (!NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
-            AccessPoint DGFreeAp = getDGWifiFromList();
-            if (DGFreeAp != null) {//不为空表示周围有东莞wifi
-                FWManager.getInstance().connect(DGFreeAp);//先连接上wifi
-            } else if (DGFreeAp == null) { // 4. 未联网，没有DG-Free：如果周围有服务器返回的WiFi
-                startActivity(WifiManagerActivity.class, "", "", "", "");
-            }
-        } else {
-            //已连上wifi
-            currentAp = FWManager.getInstance().getCurrent();
-            // 3. 已经连上DG-Free的情况
-            if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
-                CheckAndLogon();
-            } else {
-                // 2. 已经连上其它WiFi，周围有DG-Free的情况，无需去连接DG-Free
-            }
-        }
-    }
-
-    @Subscribe
-    public void onEventMainThread(EventBusType event) {
-        int index = event.getChildMsg();
-        if (event.getMsg() == Constants.MAIN_NEWS_FLAG && index != -1) {//上报
-            iHeadLinePresenter.clickCount(mainNewsVos.get(index).id, NEWS);
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        iHeadLinePresenter.onDestroy();
-        FWManager.getInstance().removeWifiObserver(wifiObserver);
-        EventBus.getDefault().unregister(this);//反注册EventBus
-    }
-
-    @Override
-    public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
-        if (y > PULL_HEIGHT) { //下拉高度大于10
-            // mNoticeLay.setVisibility(View.GONE);
-            mShowMoreIv.setVisibility(View.INVISIBLE);
-        } else if (y == HEIGHT) {
-            // mNoticeLay.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public String getCurrentWifiMacAddress(){
-        return wifiUtils.getCurrentWifiInfo().getMacAddress();
-    }
-
-    public void setAnimation(View view, float fromX, float toX, float fromY, float toY) {
-        TranslateAnimation translateAnimation = new TranslateAnimation(fromX, toX, fromY, toY);
-        translateAnimation.setDuration(4000);
-        translateAnimation.setFillAfter(true);
-        translateAnimation.setFillBefore(false);
-        translateAnimation.setRepeatCount(-1);
-        translateAnimation.setRepeatMode(Animation.REVERSE);//设置反方向执行
-        view.startAnimation(translateAnimation);
-    }
-
-    public void startActivity(Class activity, String key, String videoUrl, String titleKey, String title) {
-        Intent intent = new Intent(getActivity(), activity);
-        intent.putExtra(key, videoUrl);
-        intent.putExtra(titleKey, title);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mAdRotationBanner.stopTurning();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        changeConnectState();
-        mAdRotationBanner.startTurning(1500);
-    }
-
-    @Override
-    public void connectDGCountSuccess() {
-    }
-
-    @Override
-    public void getHeadLineSuccess(HotInfoList newsVo) {
-    }
-}
