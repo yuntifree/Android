@@ -34,7 +34,7 @@
         <EditText
             android:id="@+id/edt_password"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="match_parent"
             android:hint="@string/input_password"
             android:background="@null"
             android:textColor="@color/gray_b4b4b4"

@@ -133,8 +133,6 @@ public class MainApplication extends Application {
         return userName;
     }
 
-
-
     public User getUser() {
         if (mUser == null) {
             mUser = (User) SPUtils.getObject(sApplication, Constants.SP_KEY_USER);

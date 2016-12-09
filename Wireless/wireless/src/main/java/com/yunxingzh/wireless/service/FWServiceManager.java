@@ -217,7 +217,7 @@ public class FWServiceManager {
             }
             // 判断通知栏
             for (AccessPoint ap : aps) {
-                if (ap.ssid.equals(Constants.SSIDDEV)) {
+                if (ap.ssid.equals(Constants.SSID)) {
                     checkNotify(ap);
                     break;
                 }
@@ -255,7 +255,8 @@ public class FWServiceManager {
      */
     private void checkNotify(AccessPoint ap) {
         // 当前连接的不是指定ap
-        if (ap != getCurrent()) {
+        AccessPoint current = getCurrent();
+        if (current == null || !current.ssid.equals(ap.ssid)) {
             int day = getToday();
             if (day > mDay) {
                 mDay = day;
