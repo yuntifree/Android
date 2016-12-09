@@ -34,6 +34,7 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.zxing.camera.CameraManager;
 import com.yunxingzh.wireless.zxing.decoding.CaptureActivityHandler;
 import com.yunxingzh.wireless.zxing.decoding.InactivityTimer;
@@ -269,10 +270,10 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
         try {
             CameraManager.get().openDriver(surfaceHolder);
         } catch (IOException ioe) {
-            // TODO: 跳转到系统设置页面camara error
             return;
         } catch (RuntimeException e) {
             // camare error
+            // TODO: 跳转到系统设置页面camara error
             return;
         }
         if (handler == null) {

@@ -47,7 +47,7 @@ android {
     defaultConfig {
         applicationId "com.yunxingzh.wireless"
         minSdkVersion 17
-        targetSdkVersion 23
+        targetSdkVersion 22
         versionName = "Local Version"
         versionCode = 1
         ndk {
