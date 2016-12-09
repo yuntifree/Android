@@ -18,7 +18,6 @@ import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.vo.User;
-import wireless.libs.okhttp.OkHttpUtil;
 
 /**
  * Created by Carey on 2016/5/25.
@@ -55,7 +54,6 @@ public class MainApplication extends Application {
                 e.printStackTrace();
             }
             FWManager.init(this);
-            OkHttpUtil.init(sApplication);
             startService();
             bindService();
             //此方法要再setContentView方法之前实现
