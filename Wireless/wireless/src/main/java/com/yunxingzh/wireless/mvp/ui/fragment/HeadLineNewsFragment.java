@@ -19,6 +19,7 @@ import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
@@ -51,6 +52,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private List<HotInfo> newsListNext;
     private HotInfoList data;
     private LinearLayout mNetErrorLay;
+    private boolean isFastClick = true;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child_news, container, false);
@@ -75,7 +77,13 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                             if (data.hasmore == 0) {
                                 ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
                             } else {
-                                iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, data.infos.get(19).seq);
+                                if (isFastClick) {
+                                    isFastClick = false;
+                                    if (data != null && data.infos.size() > 0) {
+                                        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, data.infos.get(data.infos.size() - 1).seq);
+                                        LogUtils.e("lsd", data.infos.get(data.infos.size() - 1).seq + "");
+                                    }
+                                }
                             }
                         }
                         // 判断滚动到顶部
@@ -120,8 +128,8 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void getHeadLineSuccess(HotInfoList newsVo) {
+        isFastClick = true;
         swipeRefreshLayout.setRefreshing(false);
-        // swipeRefreshLayout.setLoading(false);
         if (newsVo != null) {
             data = newsVo;
         }
@@ -142,8 +150,8 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         }
     }
 
-    public void netErrorLay(){
-        if (!NetUtils.isNetworkAvailable(getActivity())){
+    public void netErrorLay() {
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
             View netView = LayoutInflater.from(getActivity()).inflate(R.layout.wifi_closed, null);
             swipeRefreshLayout.setVisibility(View.GONE);
             mNetErrorLay.setVisibility(View.VISIBLE);

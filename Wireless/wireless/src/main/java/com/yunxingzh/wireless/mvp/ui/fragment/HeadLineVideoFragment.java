@@ -54,6 +54,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     //下拉刷新
     private SwipeRefreshLayout mSwipeRefreshLay;
     private List<HotInfo> newsVo;
+    private boolean isFirstRefresh = true;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -121,8 +122,12 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         if (newsVoList != null) {
             newsVo = newsVoList.infos;
             if (newsVoList.hasmore == 1) {
-                headLineVideoAdapter.addData(newsVo);
-               // headLineVideoAdapter.setNewData(newsVoList.getData().getInfos());
+                if (isFirstRefresh){
+                    isFirstRefresh = false;
+                    headLineVideoAdapter.setNewData(newsVo);
+                } else {
+                    headLineVideoAdapter.addData(newsVo);
+                }
             } else {
                 // 数据全部加载完毕就调用 loadComplete
                 headLineVideoAdapter.loadComplete();
@@ -131,6 +136,33 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         } else {
             ToastUtil.showMiddle(getActivity(), R.string.re_error);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+       // newsVo.clear();
+        isFirstRefresh = true;
+        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        if (newsVo != null) {
+            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, newsVo.get(newsVo.size() - 1).seq);
+            LogUtils.e("lsd", newsVo.get(newsVo.size() - 1).seq + "");
+        }
+    }
+
+    @Override
+    public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {}
+
+    @Override
+    public void getFontInfoSuccess(FontInfoList fontInfoVo) {}
+
+    public void startActivity(Class activity,String key,String videoUrl) {
+        Intent intent = new Intent(getActivity(), activity);
+        intent.putExtra(key, videoUrl);
+        startActivity(intent);
     }
 
     public void netErrorLay(){
@@ -159,29 +191,5 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 }
             });
         }
-    }
-
-    @Override
-    public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {}
-
-    @Override
-    public void getFontInfoSuccess(FontInfoList fontInfoVo) {}
-
-    @Override
-    public void onRefresh() {
-        newsVo.clear();
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
-    }
-
-    @Override
-    public void onLoadMoreRequested() {
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, newsVo.get(19).seq);
-        LogUtils.i("lsd",newsVo.get(19).seq+"");
-    }
-
-    public void startActivity(Class activity,String key,String videoUrl) {
-        Intent intent = new Intent(getActivity(), activity);
-        intent.putExtra(key, videoUrl);
-        startActivity(intent);
     }
 }
