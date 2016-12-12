@@ -415,7 +415,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             angle = (int) ((speed * 1.0 / (1024 * 1024) - 1) * 11.25 + 112.5);
         } else if (speed < 10240 * 1024 && speed >= 5120 * 1024) {
             // 5M~10M, 每2.5M 11.25度
-            angle = (int) ((speed * 1.0 / (2560 * 1024) - 5) * 11.25 + 157.5);
+            angle = (int) ((speed * 1.0 / (1024 * 1024) - 5) / 2.5 * 11.25 + 157.5);
         } else if (speed >= 10240 * 1024) {
             angle = 180;
         }
