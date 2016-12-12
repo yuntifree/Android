@@ -6,9 +6,12 @@ import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.GeolocationPermissions;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -20,6 +23,7 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.utils.WebViewUtil;
 
@@ -36,7 +40,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     private WebView myWebView;
     private ProgressBar myProgressBar;
     private String mUrl;
-    private String title;
+    private String mTitle;
     private boolean fromNews;
 
     @Override
@@ -67,9 +71,15 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             mTitleLeftLay.setLayoutParams(setParams(0));
         }
         mUrl = getIntent().getStringExtra(Constants.URL);
-        title = getIntent().getStringExtra(Constants.TITLE);
-        mTitleNameTv.setText(title);
+        mTitle = getIntent().getStringExtra(Constants.TITLE);
+        if (!StringUtils.isEmpty(mTitle)) {
+            mTitleNameTv.setText(mTitle);
+        }
         WebViewUtil.initWebView(myWebView, myProgressBar);
+        WebSettings settings = myWebView.getSettings();
+        settings.setGeolocationEnabled(true);
+        settings.setDomStorageEnabled(true);
+
         myWebView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -84,8 +94,23 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onPageFinished(WebView view,String url){
                 myProgressBar.setVisibility(View.GONE);
+                if (StringUtils.isEmpty(mTitle)) {
+                    mTitle = view.getTitle();
+                    mTitleNameTv.setText(mTitle);
+                }
             }
         });
+
+        myWebView.setWebChromeClient(new WebChromeClient() {
+            //配置权限（同样在WebChromeClient中实现）
+           @Override
+           public void onGeolocationPermissionsShowPrompt(String origin,
+                                                          GeolocationPermissions.Callback callback) {
+               callback.invoke(origin, true, false);
+               super.onGeolocationPermissionsShowPrompt(origin, callback);
+           }
+        });
+
         myWebView.loadUrl(mUrl);
     }
 

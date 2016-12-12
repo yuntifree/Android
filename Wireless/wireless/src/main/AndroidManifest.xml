@@ -109,7 +109,7 @@
             android:name=".mvp.ui.activity.DialogActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
+            android:theme="@style/BottomDialog"/>
 
         <activity
             android:name=".mvp.ui.activity.WifiSpiritedActivity"
