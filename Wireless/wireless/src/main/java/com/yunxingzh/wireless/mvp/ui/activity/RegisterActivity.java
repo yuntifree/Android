@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.dgwx.app.lib.bl.WifiInterface;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.presenter.IRegisterPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.RegisterPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
@@ -65,6 +66,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
     }
 
     public void initData() {
+        StatusBarColor.compat(this, getResources().getColor(R.color.transparent));
         iLoginPresenter = new RegisterPresenterImpl(this);
     }
 

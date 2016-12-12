@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -35,6 +36,7 @@ import com.google.zxing.qrcode.QRCodeReader;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.LogUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.zxing.camera.CameraManager;
 import com.yunxingzh.wireless.zxing.decoding.CaptureActivityHandler;
 import com.yunxingzh.wireless.zxing.decoding.InactivityTimer;
@@ -272,8 +274,10 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
         } catch (IOException ioe) {
             return;
         } catch (RuntimeException e) {
-            // camare error
             // TODO: 跳转到系统设置页面camara error
+            ToastUtil.showMiddle(this,R.string.open_set);
+            startActivity(new Intent(Settings.ACTION_SETTINGS));
+            finish();
             return;
         }
         if (handler == null) {

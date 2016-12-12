@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.SPUtils;
 
@@ -24,6 +25,7 @@ public class WelcomActivity extends BaseActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        StatusBarColor.compat(this, getResources().getColor(R.color.transparent));
         //实现欢迎界面的自动跳转
         Timer timer = new Timer();
         isFirst = SPUtils.get(this,"isFirst",true);

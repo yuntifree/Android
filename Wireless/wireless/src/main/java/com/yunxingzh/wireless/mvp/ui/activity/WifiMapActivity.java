@@ -28,6 +28,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.presenter.IWifiMapPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiMapPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
@@ -84,6 +85,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     }
 
     public void initData() {
+        StatusBarColor.compat(this,getResources().getColor(R.color.blue_009CFB));
         baiduMap = mapView.getMap();
         locationUtils = new LocationUtils(this, MAP_PAGER);
         locationUtils.startMonitor(locationHandler);

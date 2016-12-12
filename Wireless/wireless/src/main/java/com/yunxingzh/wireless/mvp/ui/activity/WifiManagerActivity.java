@@ -17,6 +17,7 @@ import android.widget.ToggleButton;
 
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.presenter.IWifiManagerPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiManagerPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.AccessPointAdapter;
@@ -99,6 +100,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     }
 
     public void initData() {
+        StatusBarColor.compat(this,getResources().getColor(R.color.blue_009CFB));
         iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
 
         locationUtils = new LocationUtils(this, WIFI_PAGER);

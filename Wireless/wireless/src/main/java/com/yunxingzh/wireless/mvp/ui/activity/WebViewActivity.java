@@ -1,5 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.utils.WebViewUtil;
@@ -57,6 +59,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void initData() {
+        StatusBarColor.compat(this, getResources().getColor(R.color.blue_009CFB));
         fromNews = getIntent().getBooleanExtra(Constants.FROM_NEWS,false);
         if (fromNews){
             mTitleRightLay.setVisibility(View.INVISIBLE);

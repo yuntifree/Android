@@ -10,359 +10,365 @@
     <!--android:fitsSystemWindows="true"-->
     <!--android:clipToPadding="true"-->
 
-    <include layout="@layout/title_public"
+    <include
+        layout="@layout/title_public"
         android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+        android:layout_height="50dp" />
 
-    <com.yunxingzh.wireless.mview.MyScrollView
-        android:id="@+id/scrollView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/main_refresh_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
+        <com.yunxingzh.wireless.mview.MyScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/main_head_img"
                 android:layout_width="match_parent"
-                android:layout_height="292dp"
-                android:background="@drawable/main_bg"
-                android:gravity="center"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <FrameLayout
+                <LinearLayout
+                    android:id="@+id/main_head_img"
                     android:layout_width="match_parent"
-                    android:layout_height="230dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_height="294dp"
+                    android:background="@drawable/main_bg"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="230dp"
+                        android:layout_marginBottom="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/weather_img_top"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginLeft="280dp"
+                                android:scaleType="matrix" />
+
+                            <ImageView
+                                android:id="@+id/weather_img_bottom"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="50dp"
+                                android:scaleType="matrix" />
+
+                        </LinearLayout>
+
+                        <com.yunxingzh.wireless.mview.CircleWaveView
+                            android:id="@+id/animation_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            app:diffuse_color="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/connect_iv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:visibility="gone" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/connect_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/weather_img_top"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_marginLeft="280dp"
-                            android:scaleType="matrix" />
-
-                        <ImageView
-                            android:id="@+id/weather_img_bottom"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="50dp"
-                            android:scaleType="matrix" />
-
-                    </LinearLayout>
-
-                    <com.yunxingzh.wireless.mview.CircleWaveView
-                        android:id="@+id/animation_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
                         android:gravity="center"
-                        app:diffuse_color="@color/white"
-                        />
-
-                   <ImageView
-                        android:id="@+id/connect_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:visibility="gone"
-                        android:gravity="center" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/connect_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
-
-                <LinearLayout
-                    android:id="@+id/weather_lay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/main_temperature"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center|left"
-                        android:text="18°C"
-                        android:textStyle="bold"
-                        android:textColor="@color/gray_98ffffff"
+                        android:textColor="@color/white"
                         android:textSize="18sp" />
 
-                    <TextView
-                        android:id="@+id/main_weather"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/weather_lay"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="多云"
-                        android:textColor="@color/gray_98ffffff"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/main_temperature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|left"
+                            android:text="18°C"
+                            android:textColor="@color/gray_98ffffff"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/main_weather"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="多云"
+                            android:textColor="@color/gray_98ffffff"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="98dp"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/main_wifi_manager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="46dp"
+                            android:layout_height="46dp"
+                            android:src="@drawable/wifi" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/wifi"
+                                android:textColor="@color/gray_323232"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/find_more"
+                                android:textColor="@color/gray_646464"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View style="@style/divide_line_vertical" />
+
+                    <LinearLayout
+                        android:id="@+id/main_speedtest_lay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="46dp"
+                            android:layout_height="46dp"
+                            android:src="@drawable/speed" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/speed"
+                                android:textColor="@color/gray_323232"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/speed_font"
+                                android:textColor="@color/gray_646464"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View style="@style/divide_line_horizontal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="98dp"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/main_map_lay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp">
+
+                        <ImageView
+                            android:layout_width="46dp"
+                            android:layout_height="46dp"
+                            android:src="@drawable/map" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/map"
+                                android:textColor="@color/gray_323232"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/map_content"
+                                android:textColor="@color/gray_646464"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View style="@style/divide_line_vertical" />
+
+                    <LinearLayout
+                        android:id="@+id/main_spirited_lay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="46dp"
+                            android:layout_height="46dp"
+                            android:src="@drawable/yun" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:layout_marginTop="30dp"
+                                android:text="@string/yun"
+                                android:textColor="@color/gray_323232"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:layout_marginBottom="10dp"
+                                android:text="@string/yun_content"
+                                android:textColor="@color/gray_646464"
+                                android:textSize="10sp" />
+
+                            <ImageView
+                                android:id="@+id/show_more_iv"
+                                android:layout_width="80dp"
+                                android:layout_height="24dp"
+                                android:paddingBottom="3dp"
+                                android:src="@drawable/more" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View style="@style/divide_line_horizontal" />
+
+                <LinearLayout
+                    android:id="@+id/notice_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="@color/blue_def2fe"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="14dp"
+                        android:layout_marginRight="2.5dp"
+                        android:src="@drawable/notice" />
+
+                    <TextView
+                        android:id="@+id/notice_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:lines="1"
+                        android:text="东莞头条"
+                        android:textColor="@color/blue_4a90e2"
                         android:textSize="12sp" />
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="98dp"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/main_wifi_manager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="46dp"
-                        android:layout_height="46dp"
-                        android:src="@drawable/wifi" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/wifi"
-                            android:textColor="@color/gray_323232"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/find_more"
-                            android:textColor="@color/gray_646464"
-                            android:textSize="10sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <View style="@style/divide_line_vertical" />
-
-                <LinearLayout
-                    android:id="@+id/main_speedtest_lay"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="46dp"
-                        android:layout_height="46dp"
-                        android:src="@drawable/speed" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/speed"
-                            android:textColor="@color/gray_323232"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/speed_font"
-                            android:textColor="@color/gray_646464"
-                            android:textSize="10sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View style="@style/divide_line_horizontal" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="98dp"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/main_map_lay"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp">
-
-                    <ImageView
-                        android:layout_width="46dp"
-                        android:layout_height="46dp"
-                        android:src="@drawable/map" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/textView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/map"
-                            android:textColor="@color/gray_323232"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/map_content"
-                            android:textColor="@color/gray_646464"
-                            android:textSize="10sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <View style="@style/divide_line_vertical" />
-
-                <LinearLayout
-                    android:id="@+id/main_spirited_lay"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="46dp"
-                        android:layout_height="46dp"
-                        android:src="@drawable/yun" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="5dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_marginTop="30dp"
-                            android:text="@string/yun"
-                            android:textColor="@color/gray_323232"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:layout_marginBottom="10dp"
-                            android:text="@string/yun_content"
-                            android:textColor="@color/gray_646464"
-                            android:textSize="10sp" />
-
-                        <ImageView
-                            android:id="@+id/show_more_iv"
-                            android:layout_width="80dp"
-                            android:layout_height="24dp"
-                            android:paddingBottom="3dp"
-                            android:src="@drawable/more" />
-
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <View style="@style/divide_line_horizontal" />
-
-            <LinearLayout
-                android:id="@+id/notice_lay"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:background="@color/blue_def2fe"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:layout_marginLeft="14dp"
-                    android:layout_marginRight="2.5dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/notice" />
-
-                <TextView
-                    android:id="@+id/notice_tv"
+                <ListView
+                    android:id="@+id/main_news_lv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:lines="1"
-                    android:layout_gravity="center"
-                    android:text="东莞头条"
-                    android:textColor="@color/blue_4a90e2"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                    android:background="@color/white"
+                    android:divider="@color/gray_e6e6e6"
+                    android:dividerHeight="1dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:scrollbars="none" />
 
-            <ListView
-                android:id="@+id/main_news_lv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:scrollbars="none"
-                android:background="@color/white"
-                android:divider="@color/gray_e6e6e6"
-                android:dividerHeight="1dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/foot_view"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="24dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/blue_63C7FF"
-                    android:gravity="center"
-                    android:text="@string/get_more"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/foot_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="24dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@color/blue_63C7FF"
+                        android:gravity="center"
+                        android:text="@string/get_more"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <include layout="@layout/activity_main_font_info" />
+
             </LinearLayout>
-
-            <include layout="@layout/activity_main_font_info" />
-
-        </LinearLayout>
-    </com.yunxingzh.wireless.mview.MyScrollView>
+        </com.yunxingzh.wireless.mview.MyScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </com.zhy.android.percent.support.PercentLinearLayout>

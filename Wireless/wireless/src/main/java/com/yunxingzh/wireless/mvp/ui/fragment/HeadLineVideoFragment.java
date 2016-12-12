@@ -76,34 +76,10 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         mListRv.setAdapter(headLineVideoAdapter);
 
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
-
-        if (!NetUtils.isNetworkAvailable(getActivity())){
-            View netView = LayoutInflater.from(getActivity()).inflate(R.layout.wifi_closed, null);
-            netView.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
-            mSwipeRefreshLay.setVisibility(View.GONE);
-            mNetErrorVideoLay.setVisibility(View.VISIBLE);
-            TextView openTv = (TextView) netView.findViewById(R.id.net_open_tv);
-            TextView contentTv = (TextView) netView.findViewById(R.id.net_content_tv);
-            TextView refreshBtn = (TextView) netView.findViewById(R.id.open_wifi_btn);
-            openTv.setVisibility(View.GONE);
-            contentTv.setText(R.string.network_error);
-            refreshBtn.setText(R.string.refresh_net);
-            mNetErrorVideoLay.addView(netView);
-            refreshBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!NetUtils.isNetworkAvailable(getActivity())) {
-                        ToastUtil.showMiddle(getActivity(), "请检查网络设置");
-                    } else {
-                        mNetErrorVideoLay.setVisibility(View.GONE);
-                        mSwipeRefreshLay.setVisibility(View.VISIBLE);
-                        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
-                    }
-                }
-            });
+        if (NetUtils.isNetworkAvailable(getActivity())) {
+            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         }
-
+        netErrorLay();
         mListRv.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
@@ -129,6 +105,34 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             }
         } else {
             ToastUtil.showMiddle(getActivity(), R.string.re_error);
+        }
+    }
+
+    public void netErrorLay(){
+        if (!NetUtils.isNetworkAvailable(getActivity())){
+            View netView = LayoutInflater.from(getActivity()).inflate(R.layout.wifi_closed, null);
+            netView.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
+            mSwipeRefreshLay.setVisibility(View.GONE);
+            mNetErrorVideoLay.setVisibility(View.VISIBLE);
+            TextView openTv = (TextView) netView.findViewById(R.id.net_open_tv);
+            TextView contentTv = (TextView) netView.findViewById(R.id.net_content_tv);
+            TextView refreshBtn = (TextView) netView.findViewById(R.id.open_wifi_btn);
+            openTv.setVisibility(View.GONE);
+            contentTv.setText(R.string.network_error);
+            refreshBtn.setText(R.string.refresh_net);
+            mNetErrorVideoLay.addView(netView);
+            refreshBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!NetUtils.isNetworkAvailable(getActivity())) {
+                        ToastUtil.showMiddle(getActivity(), "请检查网络设置");
+                    } else {
+                        mNetErrorVideoLay.setVisibility(View.GONE);
+                        mSwipeRefreshLay.setVisibility(View.VISIBLE);
+                        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+                    }
+                }
+            });
         }
     }
 

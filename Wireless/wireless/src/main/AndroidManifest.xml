@@ -64,18 +64,18 @@
         <activity
             android:name=".mvp.ui.activity.GuidedActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/AppThemes" />
 
         <activity
             android:name=".mvp.ui.activity.MainActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            android:theme="@android:style/Theme.NoTitleBar"/>
+            android:theme="@style/AppThemes"/>
 
         <activity
             android:name=".mvp.ui.activity.RegisterActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/AppThemes" />
         <activity
             android:name=".mvp.ui.activity.VideoPlayActivity"
             android:hardwareAccelerated="true"
@@ -84,19 +84,19 @@
         <activity
             android:name=".mvp.ui.activity.WebViewActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/AppThemes" />
         <activity
             android:name=".mvp.ui.activity.WifiManagerActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/AppThemes" />
         <activity
             android:name=".mvp.ui.activity.WifiMapActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/AppThemes" />
         <activity
             android:name=".mvp.ui.activity.SearchActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@style/AppThemes" />
         <activity
             android:name="com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity"
             android:screenOrientation="portrait"

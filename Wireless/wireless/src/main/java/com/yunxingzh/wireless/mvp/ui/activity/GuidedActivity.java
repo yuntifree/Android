@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class GuidedActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void initData() {
+        StatusBarColor.compat(this, getResources().getColor(R.color.transparent));
         //载入图片资源ID
         imgIdArray = new int[]{R.drawable.loading1, R.drawable.loading2, R.drawable.loading3};
         //将图片装载到数组中

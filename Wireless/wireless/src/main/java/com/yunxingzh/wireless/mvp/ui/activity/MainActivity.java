@@ -1,6 +1,7 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,7 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MainApplication;
+import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.ServiceFragment;
@@ -86,18 +88,28 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 if (wirelessFragment == null) {
                     wirelessFragment = new WirelessFragment();
                 }
+                //不同时间段状态栏显示的颜色
+                String hour = StringUtils.getTime();
+                int h = Integer.parseInt(hour);
+                if (h >= 6 && h < 19) {
+                    getStatusBarColor(R.color.blue_009CFB);
+                } else {
+                    getStatusBarColor(R.color.blue_236EC5);
+                }
                 showFragment(wirelessFragment);//无线
                 break;
             case R.id.head_line_radio:
                 if (headlineFragment == null) {
                     headlineFragment = new HeadLineFragment();
                 }
+                getStatusBarColor(R.color.blue_009CFB);
                 showFragment(headlineFragment);//头条
                 break;
             case R.id.service_radio:
                 if (serviceFragment == null) {
                     serviceFragment = new ServiceFragment();
                 }
+                getStatusBarColor(R.color.blue_009CFB);
                 showFragment(serviceFragment);//服务
                 break;
 //            case R.id.four_radio:
@@ -107,6 +119,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 //                showFragment(buyingFragment);//抢购
 //                break;
         }
+    }
+
+    public void getStatusBarColor(int colorId){
+        StatusBarColor.compat(this,getResources().getColor(colorId));
     }
 
     @Subscribe
