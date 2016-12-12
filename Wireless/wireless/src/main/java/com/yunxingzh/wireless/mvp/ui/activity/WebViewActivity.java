@@ -6,9 +6,12 @@ import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.GeolocationPermissions;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -73,6 +76,10 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             mTitleNameTv.setText(mTitle);
         }
         WebViewUtil.initWebView(myWebView, myProgressBar);
+        WebSettings settings = myWebView.getSettings();
+        settings.setGeolocationEnabled(true);
+        settings.setDomStorageEnabled(true);
+
         myWebView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -93,6 +100,17 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
                 }
             }
         });
+
+        myWebView.setWebChromeClient(new WebChromeClient() {
+            //配置权限（同样在WebChromeClient中实现）
+           @Override
+           public void onGeolocationPermissionsShowPrompt(String origin,
+                                                          GeolocationPermissions.Callback callback) {
+               callback.invoke(origin, true, false);
+               super.onGeolocationPermissionsShowPrompt(origin, callback);
+           }
+        });
+
         myWebView.loadUrl(mUrl);
     }
 
