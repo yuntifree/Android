@@ -20,6 +20,7 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.utils.WebViewUtil;
 
@@ -36,7 +37,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     private WebView myWebView;
     private ProgressBar myProgressBar;
     private String mUrl;
-    private String title;
+    private String mTitle;
     private boolean fromNews;
 
     @Override
@@ -67,8 +68,10 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             mTitleLeftLay.setLayoutParams(setParams(0));
         }
         mUrl = getIntent().getStringExtra(Constants.URL);
-        title = getIntent().getStringExtra(Constants.TITLE);
-        mTitleNameTv.setText(title);
+        mTitle = getIntent().getStringExtra(Constants.TITLE);
+        if (!StringUtils.isEmpty(mTitle)) {
+            mTitleNameTv.setText(mTitle);
+        }
         WebViewUtil.initWebView(myWebView, myProgressBar);
         myWebView.setWebViewClient(new WebViewClient(){
             @Override
@@ -84,6 +87,10 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onPageFinished(WebView view,String url){
                 myProgressBar.setVisibility(View.GONE);
+                if (StringUtils.isEmpty(mTitle)) {
+                    mTitle = view.getTitle();
+                    mTitleNameTv.setText(mTitle);
+                }
             }
         });
         myWebView.loadUrl(mUrl);

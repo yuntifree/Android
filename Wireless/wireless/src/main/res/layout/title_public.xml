@@ -47,7 +47,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="标题"
+            android:text="@string/dg_wifi"
             android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="18sp"/>
