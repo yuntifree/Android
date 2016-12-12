@@ -1,8 +1,10 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import com.yunxingzh.wireless.mvp.ui.activity.VideoPlayActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineVideoAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -28,10 +31,10 @@ import com.yunxingzh.wireless.utils.ToastUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import wireless.libs.bean.vo.HotInfo;
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.resp.WeatherNewsList;
+import wireless.libs.bean.vo.HotInfo;
 
 /**
  * Created by stephon_ on 2016/11/2.
@@ -82,10 +85,32 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         netErrorLay();
         mListRv.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                List<HotInfo> data = baseQuickAdapter.getData();
-                iHeadLinePresenter.clickCount(data.get(i).id,CLICK_COUNT);//上报
-                startActivity(VideoPlayActivity.class,Constants.VIDEO_URL,data.get(i).dst);
+            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, final int i) {
+                final List<HotInfo> data = baseQuickAdapter.getData();
+                if (NetUtils.isWifi(getActivity())) {
+                    iHeadLinePresenter.clickCount(data.get(i).id, CLICK_COUNT);//上报
+                    startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, data.get(i).dst);
+                } else {
+                    final AlertDialog.Builder mDialog = new AlertDialog.Builder(getActivity());
+                    mDialog.setTitle(R.string.dialog_notices);
+                    mDialog.setMessage(R.string.dialog_msg);
+                    mDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    mDialog.setPositiveButton(R.string.query, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (data != null) {
+                                iHeadLinePresenter.clickCount(data.get(i).id, CLICK_COUNT);//上报
+                                startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, data.get(i).dst);
+                            }
+                        }
+                    });
+                    mDialog.create().show();
+                }
             }
         });
     }
@@ -96,7 +121,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         if (newsVoList != null) {
             newsVo = newsVoList.infos;
             if (newsVoList.hasmore == 1) {
-                headLineVideoAdapter.addData(newsVoList.infos);
+                headLineVideoAdapter.addData(newsVo);
                // headLineVideoAdapter.setNewData(newsVoList.getData().getInfos());
             } else {
                 // 数据全部加载完毕就调用 loadComplete
@@ -125,7 +150,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 @Override
                 public void onClick(View v) {
                     if (!NetUtils.isNetworkAvailable(getActivity())) {
-                        ToastUtil.showMiddle(getActivity(), "请检查网络设置");
+                        ToastUtil.showMiddle(getActivity(), R.string.net_set);
                     } else {
                         mNetErrorVideoLay.setVisibility(View.GONE);
                         mSwipeRefreshLay.setVisibility(View.VISIBLE);
@@ -144,13 +169,14 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     @Override
     public void onRefresh() {
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         newsVo.clear();
+        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
     }
 
     @Override
     public void onLoadMoreRequested() {
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, newsVo.get(19).seq);
+        LogUtils.i("lsd",newsVo.get(19).seq+"");
     }
 
     public void startActivity(Class activity,String key,String videoUrl) {

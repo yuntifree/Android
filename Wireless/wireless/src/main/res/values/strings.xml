@@ -97,7 +97,7 @@
     <string name="input_content">搜索或输入网址</string>
     <string name="enter_phone">请输入手机号</string>
     <string name="enter_right_phone">请输入正确的手机号</string>
-    <string name="re_error">没有获取到相关新闻</string>
+    <string name="re_error">没有获取到相关信息</string>
     <string name="no_resource">没有更多数据了</string>
     <string name="speeding">正在测速</string>
     <string name="wait">请稍等片刻...</string>
@@ -134,7 +134,8 @@
     <string name="wireless_dg">东莞无限开启智慧生活</string>
     <string name="refresh_net">刷新重试</string>
     <string name="open_set">请打开应用相应的权限</string>
-
+    <string name="dialog_notices">温馨提示</string>
+    <string name="dialog_msg">您当前处于流量状态下，继续观看需要花费少许流量哦!</string>
 
 
     <string name="wsmpurl">http://120.234.130.196:880/wsmp/interface</string>
