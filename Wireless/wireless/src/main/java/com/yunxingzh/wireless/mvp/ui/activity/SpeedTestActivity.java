@@ -20,6 +20,7 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.SpeedTestDialog;
+import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.mview.RotatePointer;
@@ -127,6 +128,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
                 }
             }
         });
+        StatusBarColor.compat(this,getResources().getColor(R.color.blue_009CFB));
     }
 
     @Subscribe

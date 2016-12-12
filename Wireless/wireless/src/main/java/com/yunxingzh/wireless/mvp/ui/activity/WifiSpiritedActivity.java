@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.ClearEditText;
+import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.presenter.IWifiSpiritedPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiSpiritedPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
@@ -54,6 +55,7 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
     }
 
     public void initData() {
+        StatusBarColor.compat(this,getResources().getColor(R.color.blue_009CFB));
         locationUtils = new LocationUtils(this, SPIRITED_PAGER);
         iWifiSpiritedPresenter = new WifiSpiritedPresenterImpl(this);
     }

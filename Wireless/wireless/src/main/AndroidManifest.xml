@@ -103,17 +103,18 @@
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name=".mvp.ui.activity.SpeedTestActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemes"/>
         <activity
             android:name=".mvp.ui.activity.DialogActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/BottomDialog"/>
+            android:theme="@android:style/Theme.NoTitleBar"/>
 
         <activity
             android:name=".mvp.ui.activity.WifiSpiritedActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"/>
+            android:theme="@style/AppThemes"/>
 
 
         <!--定位所需服务-->

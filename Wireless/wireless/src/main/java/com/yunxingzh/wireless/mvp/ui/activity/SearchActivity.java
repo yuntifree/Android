@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.ClearEditText;
+import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.StringUtils;
 
@@ -40,6 +41,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void initData() {
+        StatusBarColor.compat(this,getResources().getColor(R.color.blue_009CFB));
         //定时弹出软键盘
         StringUtils.popUpKeyboard(mSearchEt);
     }
