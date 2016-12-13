@@ -5,6 +5,7 @@ import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
+import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.User;
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
@@ -36,6 +37,15 @@ public class NetWorkWarpper {
         httpParams.add("type", type);
         httpParams.add("phone", phone);
         HttpUtils.post(path, httpParams, httpHandler);
+    }
+
+    /***
+     * 获取应用首页广告
+     */
+    public static void getAdvert(HttpHandler<AdvertVo> handler) {
+        String path = "get_flash_ad";
+        HttpParams httpParams = new HttpParams();
+        HttpUtils.post(path, httpParams, handler);
     }
 
     /**

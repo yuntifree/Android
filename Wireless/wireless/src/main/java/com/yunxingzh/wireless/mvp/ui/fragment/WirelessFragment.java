@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -68,6 +67,7 @@ import java.util.List;
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.resp.WeatherNewsList;
+import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.BannerVo;
 import wireless.libs.bean.vo.MainNewsVo;
 import wireless.libs.bean.vo.UserConnectVo;
@@ -377,11 +377,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
     private void onNetChange() {
         changeConnectState();
-        if (NetUtils.isNetworkAvailable(getActivity())) {
-            if (iHeadLinePresenter != null) {
-                iHeadLinePresenter.weatherNews();
-            }
-        }
+//        if (NetUtils.isNetworkAvailable(getActivity())) {
+//            if (iHeadLinePresenter != null) {
+//                iHeadLinePresenter.weatherNews();
+//            }
+//        }
     }
 
     private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
@@ -657,6 +657,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
     @Override
     public void connectDGCountSuccess() {
+    }
+
+    @Override
+    public void getAdvertSuccess(AdvertVo advertData) {
     }
 
     @Override

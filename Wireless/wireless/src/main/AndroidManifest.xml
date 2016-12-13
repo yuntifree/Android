@@ -62,6 +62,11 @@
         </activity>
 
         <activity
+            android:name=".mvp.ui.activity.AdvertActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemes" />
+
+        <activity
             android:name=".mvp.ui.activity.GuidedActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemes" />

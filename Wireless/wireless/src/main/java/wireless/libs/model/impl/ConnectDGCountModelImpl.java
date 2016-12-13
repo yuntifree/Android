@@ -1,6 +1,7 @@
 package wireless.libs.model.impl;
 
 import wireless.libs.bean.resp.ServerTip;
+import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.model.IConnectDGCountModel;
 import wireless.libs.network.HttpHandler;
 import wireless.libs.network.request.NetWorkWarpper;
@@ -17,6 +18,16 @@ public class ConnectDGCountModelImpl implements IConnectDGCountModel{
             @Override
             public void onSuccess(ServerTip serverTip, Object resquestVo) {
                 listener.onConnectDGCountSuccess();
+            }
+        });
+    }
+
+    @Override
+    public void getAdvert(final onGetAdvertListener listener) {
+        NetWorkWarpper.getAdvert(new HttpHandler<AdvertVo>() {
+            @Override
+            public void onSuccess(ServerTip serverTip, AdvertVo resquestVo) {
+                listener.onGetAdvertSuccess(resquestVo);
             }
         });
     }

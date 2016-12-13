@@ -136,6 +136,11 @@
     <string name="open_set">请打开应用相应的权限</string>
     <string name="dialog_notices">温馨提示</string>
     <string name="dialog_msg">您当前处于流量状态下，继续观看需要花费少许流量哦!</string>
+    <string name="jumper">跳过</string>
+    <string name="click_info">点击了解详情</string>
+
+
+
 
 
     <string name="wsmpurl">http://120.234.130.196:880/wsmp/interface</string>

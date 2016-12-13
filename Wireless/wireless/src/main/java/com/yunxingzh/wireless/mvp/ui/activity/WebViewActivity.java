@@ -1,9 +1,11 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.GeolocationPermissions;
@@ -42,6 +44,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     private String mUrl;
     private String mTitle;
     private boolean fromNews;
+    private String fromAdvert;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         }
         mUrl = getIntent().getStringExtra(Constants.URL);
         mTitle = getIntent().getStringExtra(Constants.TITLE);
+        fromAdvert = getIntent().getStringExtra(Constants.FROM_ADVERT);
         if (!StringUtils.isEmpty(mTitle)) {
             mTitleNameTv.setText(mTitle);
         }
@@ -117,8 +121,26 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (mTitleReturnIv == v ){
+            if (!StringUtils.isEmpty(fromAdvert) && fromAdvert.equals(Constants.FROM_ADVERT)){
+                startActivity(new Intent(this,MainActivity.class));
+            }
             finish();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            if (!StringUtils.isEmpty(fromAdvert) && fromAdvert.equals(Constants.FROM_ADVERT)){
+                startActivity(new Intent(this,MainActivity.class));
+                finish();
+            } else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     public LinearLayout.LayoutParams setParams(int right){

@@ -85,6 +85,7 @@
     <color name="gray_7a">#FF7A7A7A</color>
     <color name="gray_f9">#FFF9F9F9</color>
     <color name="gray_ea">#FFEAEAEA</color>
+    <color name="gray_e0000000">#32000000</color>
 
 
     <color name="radio_button_selected_color">#ff33b5e5</color>

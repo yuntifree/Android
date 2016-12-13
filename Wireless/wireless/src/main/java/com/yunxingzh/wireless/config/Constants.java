@@ -22,6 +22,10 @@ public class Constants {
     public static final String URL = "url";
     public static final String TITLE = "title";
     public static final String FROM_NEWS = "fromNews";
+    public static final String FROM_ADVERT = "fromAdvert";
+    public static final String ADVERT_IMG = "advertImg";
+    public static final String ADVERT_URL = "advertUrl";
+
 
     //eventBus flag
     public static final int HEAD_LINE_NEWS_FLAG = 100;//头条新闻点击上报flag

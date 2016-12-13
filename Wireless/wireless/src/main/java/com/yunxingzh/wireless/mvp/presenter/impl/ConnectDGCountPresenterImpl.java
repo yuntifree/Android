@@ -3,6 +3,7 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 import com.yunxingzh.wireless.mvp.presenter.IConnectDGCountPresenter;
 import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 
+import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.model.IConnectDGCountModel;
 import wireless.libs.model.impl.ConnectDGCountModelImpl;
 
@@ -10,7 +11,7 @@ import wireless.libs.model.impl.ConnectDGCountModelImpl;
  * Created by stephon on 2016/11/27.
  */
 
-public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter, IConnectDGCountModel.onConnectDGCountListener {
+public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter, IConnectDGCountModel.onConnectDGCountListener,IConnectDGCountModel.onGetAdvertListener {
 
     private IConnectDGCountModel iConnectDGCountModel;
     private IConnectDGCountView iConnectDGCountView;
@@ -28,6 +29,13 @@ public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter, IC
     }
 
     @Override
+    public void getAdvert() {
+        if (iConnectDGCountView != null) {
+            iConnectDGCountModel.getAdvert(this);
+        }
+    }
+
+    @Override
     public void onConnectDGCountSuccess() {
         if (iConnectDGCountView != null) {
             iConnectDGCountView.connectDGCountSuccess();
@@ -35,7 +43,15 @@ public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter, IC
     }
 
     @Override
+    public void onGetAdvertSuccess(AdvertVo advertData) {
+        if (iConnectDGCountView != null) {
+            iConnectDGCountView.getAdvertSuccess(advertData);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         iConnectDGCountView = null;
     }
+
 }
