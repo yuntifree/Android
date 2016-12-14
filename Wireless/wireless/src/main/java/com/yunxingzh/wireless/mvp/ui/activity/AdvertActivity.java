@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
@@ -54,16 +55,13 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void initData() {
-        //img = getIntent().getStringExtra(Constants.ADVERT_IMG);
+       // img = getIntent().getStringExtra(Constants.ADVERT_IMG);
         url = getIntent().getStringExtra(Constants.ADVERT_URL);
         img = WelcomActivity.drawableStream;
-//        if (!StringUtils.isEmpty(img)) {
-//            byte[] myByte = img.getBytes();
-        mAdvertBgIv.setImageBitmap(img);
-           // Glide.with(this).load(myByte).into(mAdvertBgIv);
-
-    //    }
-      //  handler.postDelayed(runnable, 1000);
+        if (WelcomActivity.drawableStream != null) {
+            mAdvertBgIv.setImageBitmap(img);
+        }
+        handler.postDelayed(runnable, 1000);
     }
 
     public Runnable runnable = new Runnable() {

@@ -56,17 +56,17 @@ public class BaseActivity extends FragmentActivity implements IBaseView {
         overridePendingTransition(R.anim.in_left_right, R.anim.out_left_right);
     }
 
-//    @Override
-//    public void startActivity(Intent intent) {
-//        super.startActivity(intent);
-//        overridePendingTransition(R.anim.in_right_left, R.anim.out_right_left);
-//    }
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(R.anim.in_right_left, R.anim.out_right_left);
+    }
 
-//    @Override
-//    public void startActivityForResult(Intent intent, int requestCode) {
-//        super.startActivityForResult(intent, requestCode);
-//        overridePendingTransition(R.anim.in_right_left, R.anim.out_right_left);
-//    }
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.in_right_left, R.anim.out_right_left);
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
