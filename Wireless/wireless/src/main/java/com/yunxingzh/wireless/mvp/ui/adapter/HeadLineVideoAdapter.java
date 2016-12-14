@@ -11,6 +11,7 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.utils.StringUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,10 +39,9 @@ public class HeadLineVideoAdapter extends BaseQuickAdapter<HotInfo> {
         Glide.with(mContext).load(newsVo.images.get(0)).placeholder(R.drawable.img_default).into((ImageView) baseViewHolder.getView(R.id.video_img));
         baseViewHolder.setText(R.id.video_title, newsVo.title);
         baseViewHolder.setText(R.id.video_time, newsVo.source + "    " + StringUtils.formatDate(newsVo.ctime));
-       if (handler != null) {
-           baseViewHolder.setText(R.id.video_play_count, newsVo.play + "次播放");
-       }
+        baseViewHolder.setText(R.id.video_play_count, newsVo.play + "次播放");
     }
+}
 
     public Handler clickHandler = new Handler(){
         @Override

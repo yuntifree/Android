@@ -277,6 +277,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                     return new NetworkImageHolderView();
                 }
             }, imageList);
+
+            bannersState();
         }
         //banner图跳转
         mAdRotationBanner.setOnItemClickListener(new OnItemClickListener() {
@@ -652,9 +654,18 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         super.onResume();
         onNetChange();
         if (bannersVo != null) {
-            if (bannersVo.size() > 1) {
-                mAdRotationBanner.startTurning(2000);
-            }
+            bannersState();
+        }
+    }
+
+    public void bannersState(){
+        if (bannersVo.size() > 1) {
+            mAdRotationBanner.setCanLoop(true);
+            mAdRotationBanner.setPointViewVisible(true);
+            mAdRotationBanner.startTurning(2000);
+        } else {
+            mAdRotationBanner.setCanLoop(false);
+            mAdRotationBanner.setPointViewVisible(false);
         }
     }
 
