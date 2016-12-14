@@ -149,8 +149,8 @@ public class WelcomActivity extends BaseActivity implements IConnectDGCountView 
     public void getAdvertSuccess(AdvertVo advertData) {
         if (advertData != null) {
             url = advertData.target;
-            new DownLoadImage().execute(advertData.img);//下载图片
             SPUtils.put(this, Constants.ADVERT_URL, advertData.target);
+            new DownLoadImage().execute(advertData.img);//下载图片
         }
     }
 

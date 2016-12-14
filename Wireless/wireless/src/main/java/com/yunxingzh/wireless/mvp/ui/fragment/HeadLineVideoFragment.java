@@ -96,7 +96,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 if (NetUtils.isWifi(getActivity())) {
                     if ((System.currentTimeMillis() - exitTime) > SECONDS) {
                         iHeadLinePresenter.clickCount(data.get(i).id, CLICK_COUNT);//上报
-                        int s = data.get(i).play + 1;
+                        //int s = data.get(i).play + 1;
                         exitTime = System.currentTimeMillis();
                     }
                     startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, data.get(i).dst);

@@ -63,7 +63,7 @@ public class GuidedActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if (v == enter) {
-            startActivity(new Intent(GuidedActivity.this, MainActivity.class));
+            startActivity(new Intent(GuidedActivity.this, RegisterActivity.class));
             finish();
         }
     }
