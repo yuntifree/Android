@@ -82,7 +82,7 @@ import wireless.libs.convenientbanner.listener.OnItemClickListener;
  */
 
 public class WirelessFragment extends BaseFragment implements IHeadLineView, IConnectDGCountView, View.OnClickListener, ScrollViewListener,
-        ActivityCompat.OnRequestPermissionsResultCallback,SwipeRefreshLayout.OnRefreshListener {
+        ActivityCompat.OnRequestPermissionsResultCallback, SwipeRefreshLayout.OnRefreshListener {
 
     private final static String TAG = "WirelessFragment";
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
@@ -197,7 +197,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         wifiUtils = new WifiUtils(getActivity());
         //注册EventBus
         EventBus.getDefault().register(this);
-
         iConnectDGCountPresenter = new ConnectDGCountPresenterImpl(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
@@ -576,7 +575,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 iHeadLinePresenter.weatherNews();
             }
         } else {
-            ToastUtil.showMiddle(getActivity(),R.string.net_error);
+            ToastUtil.showMiddle(getActivity(), R.string.net_error);
         }
     }
 
@@ -627,16 +626,16 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         startActivity(intent);
     }
 
-    public void timeChanged(){
+    public void timeChanged() {
         //时间
         String hour = StringUtils.getTime();
         int h = Integer.parseInt(hour);
         if (h >= 6 && h < 19) {
-            StatusBarColor.compat(getActivity(),getResources().getColor(R.color.blue_009CFB));
+            StatusBarColor.compat(getActivity(), getResources().getColor(R.color.blue_009CFB));
             mTitleLay.setBackgroundColor(Color.parseColor("#009CFB"));
             mMainHeadImg.setBackgroundResource(R.drawable.main_bg);
         } else {
-            StatusBarColor.compat(getActivity(),getResources().getColor(R.color.blue_236EC5));
+            StatusBarColor.compat(getActivity(), getResources().getColor(R.color.blue_236EC5));
             mTitleLay.setBackgroundColor(Color.parseColor("#236EC5"));
             mMainHeadImg.setBackgroundResource(R.drawable.main_bg_night);
         }
@@ -652,7 +651,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     public void onResume() {
         super.onResume();
         onNetChange();
-        mAdRotationBanner.startTurning(1500);
+        if (bannersVo != null) {
+            if (bannersVo.size() > 1) {
+                mAdRotationBanner.startTurning(2000);
+            }
+        }
     }
 
     @Override

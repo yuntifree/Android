@@ -44,9 +44,15 @@ public class SpeedTestDialog extends Dialog{
         @Override
         public void onClick(View view) {
             if(view.getId() == R.id.my_cancel){
+                if (EventBus.getDefault().isRegistered(context)) {
+                    EventBus.getDefault().unregister(context);
+                }
                 dismiss();
             } else if (view.getId() == R.id.my_query){
                 EventBus.getDefault().post(new EventBusType(Constants.SPEED_TEST,Constants.SPEED_FLAG));
+                if (EventBus.getDefault().isRegistered(context)) {
+                    EventBus.getDefault().unregister(context);
+                }
                 dismiss();
             }
         }

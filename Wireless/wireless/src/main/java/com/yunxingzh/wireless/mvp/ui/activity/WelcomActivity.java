@@ -70,10 +70,10 @@ public class WelcomActivity extends BaseActivity implements IConnectDGCountView 
                     startActivity(GuidedActivity.class, "", "", "", "");
                     finish();
                 } else {
-                    //没网直接跳首页
                     if (NetUtils.isNetworkAvailable(WelcomActivity.this)) {
                         iConnectDGCountPresenter.getAdvert();
                     } else {
+                        //没网取之前保存的地址
                         url = SPUtils.get(WelcomActivity.this, Constants.ADVERT_URL, "");
                         if (!StringUtils.isEmpty(url)) {
                             startActivity(AdvertActivity.class, Constants.ADVERT_URL, url, "", "");
@@ -151,6 +151,15 @@ public class WelcomActivity extends BaseActivity implements IConnectDGCountView 
             url = advertData.target;
             new DownLoadImage().execute(advertData.img);//下载图片
             SPUtils.put(this, Constants.ADVERT_URL, advertData.target);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (drawableStream != null && !drawableStream.isRecycled()){
+            drawableStream.recycle();
+            drawableStream = null;
         }
     }
 

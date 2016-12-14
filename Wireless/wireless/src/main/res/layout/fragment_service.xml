@@ -8,7 +8,7 @@
     <include
         layout="@layout/title_service"
         android:layout_width="match_parent"
-        android:layout_height="45dp" />
+        android:layout_height="50dp" />
 
     <com.yunxingzh.wireless.mview.MyScrollView
         android:layout_width="match_parent"

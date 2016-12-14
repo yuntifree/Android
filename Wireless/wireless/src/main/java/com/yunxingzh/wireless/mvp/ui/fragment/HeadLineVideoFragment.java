@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.VideoPlayActivity;
@@ -27,6 +28,8 @@ import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +49,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private final static int HEAD_LINE_TYPE = 1;// 0-新闻 1-视频 2-应用 3-游戏 5-东莞新闻
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
     private final static int CLICK_COUNT = 0;//0- 视频播放 1-新闻点击 2-广告展示 3-广告点击 4-服务
+    private final static int SECONDS = 60 * 1000;
 
     private LinearLayout mNetErrorVideoLay;
     private RecyclerView mListRv;
@@ -55,6 +59,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private SwipeRefreshLayout mSwipeRefreshLay;
     private List<HotInfo> newsVo;
     private boolean isFirstRefresh = true;
+    private long exitTime = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -89,7 +94,11 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, final int i) {
                 final List<HotInfo> data = baseQuickAdapter.getData();
                 if (NetUtils.isWifi(getActivity())) {
-                    iHeadLinePresenter.clickCount(data.get(i).id, CLICK_COUNT);//上报
+                    if ((System.currentTimeMillis() - exitTime) > SECONDS) {
+                        iHeadLinePresenter.clickCount(data.get(i).id, CLICK_COUNT);//上报
+                        int s = data.get(i).play + 1;
+                        exitTime = System.currentTimeMillis();
+                    }
                     startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, data.get(i).dst);
                 } else {
                     final AlertDialog.Builder mDialog = new AlertDialog.Builder(getActivity());
@@ -105,7 +114,10 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (data != null) {
-                                iHeadLinePresenter.clickCount(data.get(i).id, CLICK_COUNT);//上报
+                                if ((System.currentTimeMillis() - exitTime) > SECONDS) {
+                                    iHeadLinePresenter.clickCount(data.get(i).id, CLICK_COUNT);//上报
+                                    exitTime = System.currentTimeMillis();
+                                }
                                 startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, data.get(i).dst);
                             }
                         }
@@ -150,6 +162,14 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         if (newsVo != null) {
             iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, newsVo.get(newsVo.size() - 1).seq);
             LogUtils.e("lsd", newsVo.get(newsVo.size() - 1).seq + "");
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (EventBus.getDefault().isRegistered(getActivity())){
+            EventBus.getDefault().unregister(getActivity());
         }
     }
 
