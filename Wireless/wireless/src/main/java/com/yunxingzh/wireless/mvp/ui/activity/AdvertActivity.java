@@ -2,6 +2,7 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -32,7 +33,6 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
     private int recLen = 3;
     private Handler handler = new Handler();
 
-    private Bitmap img;
     private String url;
 
     @Override
@@ -55,11 +55,13 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void initData() {
-       // img = getIntent().getStringExtra(Constants.ADVERT_IMG);
         url = getIntent().getStringExtra(Constants.ADVERT_URL);
-        img = WelcomActivity.drawableStream;
-        if (WelcomActivity.drawableStream != null) {
+        if (!StringUtils.isEmpty(WelcomActivity.path)) {
+            Bitmap img = BitmapFactory.decodeFile(WelcomActivity.path);
             mAdvertBgIv.setImageBitmap(img);
+        } else {
+            startActivity(MainActivity.class, "", "", "", "", "");
+            finish();
         }
         handler.postDelayed(runnable, 1000);
     }

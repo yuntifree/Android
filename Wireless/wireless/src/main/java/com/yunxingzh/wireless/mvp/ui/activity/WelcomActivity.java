@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -21,11 +22,14 @@ import com.yunxingzh.wireless.mvp.presenter.impl.ConnectDGCountPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.utils.BitmapUtils;
+import com.yunxingzh.wireless.utils.FileUtil;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -45,7 +49,8 @@ public class WelcomActivity extends BaseActivity implements IConnectDGCountView 
     boolean isFirst;
     private IConnectDGCountPresenter iConnectDGCountPresenter;
     private String url;
-    public static Bitmap drawableStream;
+    private Bitmap drawableStream;
+    public static String path = Environment.getExternalStorageDirectory().toString()+"/advert_img.jpeg";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,18 +74,8 @@ public class WelcomActivity extends BaseActivity implements IConnectDGCountView 
                     if (NetUtils.isNetworkAvailable(WelcomActivity.this)) {
                         iConnectDGCountPresenter.getAdvert();
                     } else {
-                        String imgStream = SPUtils.get(WelcomActivity.this,Constants.ADVERT_IMG,"");
-                        byte[] mByte = imgStream.getBytes();
-
-                        //把string格式的byte传至advertactivity处理？
-//                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                        yuvimage.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 80, baos);  //这里 80 是图片质量，取值范围 0-100，100为品质最高
-                        // byte[] jdata = baos.toByteArray();//这时候 bmp 就不为 null 了
-                        // Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-
-                        drawableStream = BitmapFactory.decodeByteArray(mByte, 0, mByte.length);
                         url = SPUtils.get(WelcomActivity.this, Constants.ADVERT_URL, "");
-                        if (drawableStream != null && !StringUtils.isEmpty(url)) {
+                        if (!StringUtils.isEmpty(url)) {
                             startActivity(AdvertActivity.class, Constants.ADVERT_URL, url, "", "");
                         } else {
                             //本地没有直接跳首页
@@ -128,12 +123,16 @@ public class WelcomActivity extends BaseActivity implements IConnectDGCountView 
         }
 
         protected void onPostExecute(byte[] result) {
-            SPUtils.put(WelcomActivity.this,Constants.ADVERT_IMG,result.toString());
             drawableStream = BitmapFactory.decodeByteArray(result, 0, result.length);
-            if (drawableStream != null && !StringUtils.isEmpty(url)) {
-                startActivity(AdvertActivity.class, Constants.ADVERT_URL, url, Constants.ADVERT_IMG, result.toString());
+            boolean saved = FileUtil.writeBitmapToFile(drawableStream,new File(path),100);
+            if (saved){
+                if (drawableStream != null && !StringUtils.isEmpty(url)) {
+                    startActivity(AdvertActivity.class, Constants.ADVERT_URL, url, Constants.ADVERT_IMG,path);
+                } else {
+                    startActivity(MainActivity.class, "", "", "", "");
+                }
             } else {
-                startActivity(MainActivity.class, "", "", "", "");
+                ToastUtil.showMiddle(WelcomActivity.this,"写入文件失败");
             }
             finish();
         }
