@@ -11,6 +11,8 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -50,7 +52,7 @@ public class WelcomActivity extends BaseActivity implements IConnectDGCountView 
     private IConnectDGCountPresenter iConnectDGCountPresenter;
     private String url;
     private Bitmap drawableStream;
-    public static String path = Environment.getExternalStorageDirectory().toString()+"/advert_img.jpeg";
+    public static String path = Environment.getExternalStorageDirectory().toString() + "/advert_img.jpeg";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,15 +126,15 @@ public class WelcomActivity extends BaseActivity implements IConnectDGCountView 
 
         protected void onPostExecute(byte[] result) {
             drawableStream = BitmapFactory.decodeByteArray(result, 0, result.length);
-            boolean saved = FileUtil.writeBitmapToFile(drawableStream,new File(path),100);
-            if (saved){
+            boolean saved = FileUtil.writeBitmapToFile(drawableStream, new File(path), 100);
+            if (saved) {
                 if (drawableStream != null && !StringUtils.isEmpty(url)) {
                     startActivity(AdvertActivity.class, Constants.ADVERT_URL, url, Constants.ADVERT_IMG,path);
                 } else {
                     startActivity(MainActivity.class, "", "", "", "");
                 }
             } else {
-                ToastUtil.showMiddle(WelcomActivity.this,"写入文件失败");
+                ToastUtil.showMiddle(WelcomActivity.this, "写入文件失败");
             }
             finish();
         }
@@ -149,15 +151,43 @@ public class WelcomActivity extends BaseActivity implements IConnectDGCountView 
     public void getAdvertSuccess(AdvertVo advertData) {
         if (advertData != null) {
             url = advertData.target;
-            new DownLoadImage().execute(advertData.img);//下载图片
             SPUtils.put(this, Constants.ADVERT_URL, advertData.target);
+            new Thread(new TimeThread()).start();//3秒后图片未拉取下来就跳至首页
+            new DownLoadImage().execute(advertData.img);//下载图片
         }
     }
+
+    public class TimeThread implements Runnable{
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(3000);
+                Message message = timeHandler.obtainMessage();
+                message.what = 1;
+                timeHandler.sendMessage(message);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Handler timeHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1){
+                if (drawableStream == null){
+                    startActivity(MainActivity.class, "", "", "", "");
+                    finish();
+                }
+            }
+        }
+    };
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (drawableStream != null && !drawableStream.isRecycled()){
+        if (drawableStream != null && !drawableStream.isRecycled()) {
             drawableStream.recycle();
             drawableStream = null;
         }

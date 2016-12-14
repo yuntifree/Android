@@ -122,10 +122,10 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             if (mBit.getHeight() != 120 && mBit.getWidth() != 120) {
                 initMarkerClickEvent();
             }
-        } else {
+        } /*else {
             MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
             baiduMap.animateMapStatus(status);
-        }
+        }*/
     }
 
     @Override

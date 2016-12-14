@@ -1,5 +1,7 @@
 package com.yunxingzh.wireless.mvp.ui.adapter;
 
+import android.os.Handler;
+import android.os.Message;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -24,11 +26,11 @@ import wireless.libs.bean.vo.HotInfo;
 
 public class HeadLineVideoAdapter extends BaseQuickAdapter<HotInfo> {
 
-    private EventBus eventBus;
+    private Handler handler;
 
-    public HeadLineVideoAdapter(List<HotInfo> data) {
+    public HeadLineVideoAdapter(List<HotInfo> data/*,Handler handler*/) {
         super(R.layout.list_item_videos, data);
-       /// eventBus.register(mContext);
+       // this.handler = handler;
     }
 
     @Override
@@ -36,6 +38,16 @@ public class HeadLineVideoAdapter extends BaseQuickAdapter<HotInfo> {
         Glide.with(mContext).load(newsVo.images.get(0)).placeholder(R.drawable.img_default).into((ImageView) baseViewHolder.getView(R.id.video_img));
         baseViewHolder.setText(R.id.video_title, newsVo.title);
         baseViewHolder.setText(R.id.video_time, newsVo.source + "    " + StringUtils.formatDate(newsVo.ctime));
-        baseViewHolder.setText(R.id.video_play_count, newsVo.play + "次播放");
+       if (handler != null) {
+           baseViewHolder.setText(R.id.video_play_count, newsVo.play + "次播放");
+       }
     }
+
+    public Handler clickHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+        }
+    };
 }

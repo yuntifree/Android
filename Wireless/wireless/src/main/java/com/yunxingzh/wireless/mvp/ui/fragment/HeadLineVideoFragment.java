@@ -3,6 +3,8 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -97,6 +99,11 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                     if ((System.currentTimeMillis() - exitTime) > SECONDS) {
                         iHeadLinePresenter.clickCount(data.get(i).id, CLICK_COUNT);//上报
                         int s = data.get(i).play + 1;
+//                        if (clickHandler != null){
+//                            Message message = clickHandler.;
+//                            message.what = 1;
+//                            clickHandler
+//                        }
                         exitTime = System.currentTimeMillis();
                     }
                     startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, data.get(i).dst);
