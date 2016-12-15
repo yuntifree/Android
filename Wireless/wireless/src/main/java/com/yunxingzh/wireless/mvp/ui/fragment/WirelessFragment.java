@@ -304,7 +304,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
             }
             // 判断下按钮的状态
-            onNetChange();
+            updateConnectState();
         }
     };
 
@@ -315,21 +315,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         mCheckTask = new CheckEnvTask();
         mCheckTask.execute((Void) null);
     }
-
-//    final Handler logoOutHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch (msg.what) {
-//                case 0:
-//                    ToastUtil.showMiddle(getActivity(), "下线成功");
-//                    break;
-//                default:
-//                    ToastUtil.showMiddle(getActivity(), "下线失败");
-//                    break;
-//            }
-//        }
-//    };
 
     @Override
     public void onClick(View v) {
@@ -376,15 +361,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         }
     }
 
-    private void onNetChange() {
-        changeConnectState();
-//        if (NetUtils.isNetworkAvailable(getActivity())) {
-//            if (iHeadLinePresenter != null) {
-//                iHeadLinePresenter.weatherNews();
-//            }
-//        }
-    }
-
     private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
         @Override
         public void onStateChanged(WifiState new_state, WifiState old_state) {
@@ -395,11 +371,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                     CheckAndLogon();
                 } else {
                     // 先不处理
-                    changeConnectState();
+                    updateConnectState();
                 }
             } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
                 // 断开网
-                changeConnectState();
+                updateConnectState();
             }
         }
 
@@ -479,7 +455,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                         ToastUtil.showMiddle(getActivity(), R.string.connect_success);
                         iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
                         // 判断下按钮的状态
-                        onNetChange();
+                        updateConnectState();
                         break;
                     default:
                         LogUtils.d("scan error:", mCheckRet + "");
@@ -497,7 +473,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     //连接后改变状态
-    public void changeConnectState() {
+    public void updateConnectState() {
         currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
         if (currentAp != null) {
             stopAnimation();
@@ -554,7 +530,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             AccessPoint DGFreeAp = getDGWifiFromList();
             if (DGFreeAp != null) {//不为空表示周围有东莞wifi
                 FWManager.getInstance().connect(DGFreeAp);//先连接上wifi
-            } else if (DGFreeAp == null) { // 4. 未联网，没有DG-Free：如果周围有服务器返回的WiFi
+            } else { // 4. 未联网，没有DG-Free：跳转到wifi列表
                 startActivity(WifiManagerActivity.class, "", "", "", "");
             }
         } else {
@@ -652,7 +628,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     @Override
     public void onResume() {
         super.onResume();
-        onNetChange();
+        updateConnectState();
         if (bannersVo != null) {
             bannersState();
         }
