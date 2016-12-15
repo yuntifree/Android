@@ -34,6 +34,7 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
     private Handler handler = new Handler();
 
     private String url;
+    private String imgPath;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,13 +56,11 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void initData() {
+        imgPath = getIntent().getStringExtra(Constants.ADVERT_IMG);
         url = getIntent().getStringExtra(Constants.ADVERT_URL);
-        if (!StringUtils.isEmpty(WelcomActivity.path)) {
-            Bitmap img = BitmapFactory.decodeFile(WelcomActivity.path);
+        if (!StringUtils.isEmpty(imgPath) && !StringUtils.isEmpty(url)) {
+            Bitmap img = BitmapFactory.decodeFile(imgPath);
             mAdvertBgIv.setImageBitmap(img);
-        } else {
-            startActivity(MainActivity.class, "", "", "", "", "");
-            finish();
         }
         handler.postDelayed(runnable, 1000);
     }

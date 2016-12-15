@@ -21,14 +21,4 @@ public class ConnectDGCountModelImpl implements IConnectDGCountModel{
             }
         });
     }
-
-    @Override
-    public void getAdvert(final onGetAdvertListener listener) {
-        NetWorkWarpper.getAdvert(new HttpHandler<AdvertVo>() {
-            @Override
-            public void onSuccess(ServerTip serverTip, AdvertVo resquestVo) {
-                listener.onGetAdvertSuccess(resquestVo);
-            }
-        });
-    }
 }

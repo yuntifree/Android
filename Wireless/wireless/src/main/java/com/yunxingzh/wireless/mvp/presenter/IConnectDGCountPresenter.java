@@ -6,5 +6,4 @@ package com.yunxingzh.wireless.mvp.presenter;
 
 public interface IConnectDGCountPresenter extends IBasePresenter {
     void connectDGCount(String apmac);
-    void getAdvert();
 }

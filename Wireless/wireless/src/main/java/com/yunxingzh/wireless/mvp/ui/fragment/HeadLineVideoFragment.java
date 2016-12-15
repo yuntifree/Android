@@ -1,12 +1,10 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,7 +17,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
-import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.VideoPlayActivity;
@@ -27,7 +24,6 @@ import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineVideoAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.utils.LogUtils;
-import com.yunxingzh.wireless.utils.NetUtil;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -62,7 +58,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private SwipeRefreshLayout mSwipeRefreshLay;
     private List<HotInfo> newsVo;
     private boolean isFirstRefresh = true;
-    private long exitTime = 0;
+    private boolean count = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -127,7 +123,10 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     }
 
     private void videoItemClick(HotInfo item, int position) {
-        item.play++;
+        if (!count) {
+            count = true;
+            item.play++;
+        }
         headLineVideoAdapter.notifyItemChanged(position);
         iHeadLinePresenter.clickCount(item.id, CLICK_COUNT);//上报
         startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, item.dst);

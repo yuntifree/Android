@@ -11,7 +11,7 @@ import wireless.libs.model.impl.ConnectDGCountModelImpl;
  * Created by stephon on 2016/11/27.
  */
 
-public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter, IConnectDGCountModel.onConnectDGCountListener,IConnectDGCountModel.onGetAdvertListener {
+public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter, IConnectDGCountModel.onConnectDGCountListener {
 
     private IConnectDGCountModel iConnectDGCountModel;
     private IConnectDGCountView iConnectDGCountView;
@@ -29,23 +29,9 @@ public class ConnectDGCountPresenterImpl implements IConnectDGCountPresenter, IC
     }
 
     @Override
-    public void getAdvert() {
-        if (iConnectDGCountView != null) {
-            iConnectDGCountModel.getAdvert(this);
-        }
-    }
-
-    @Override
     public void onConnectDGCountSuccess() {
         if (iConnectDGCountView != null) {
             iConnectDGCountView.connectDGCountSuccess();
-        }
-    }
-
-    @Override
-    public void onGetAdvertSuccess(AdvertVo advertData) {
-        if (iConnectDGCountView != null) {
-            iConnectDGCountView.getAdvertSuccess(advertData);
         }
     }
 

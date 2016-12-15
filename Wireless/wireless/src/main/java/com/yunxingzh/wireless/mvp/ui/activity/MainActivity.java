@@ -1,8 +1,12 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,21 +21,33 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.StatusBarColor;
+import com.yunxingzh.wireless.mvp.presenter.impl.GetAdvertPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.ServiceFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.WirelessFragment;
+import com.yunxingzh.wireless.mvp.view.IGetAdvertView;
+import com.yunxingzh.wireless.utils.FileUtil;
+import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import wireless.libs.bean.vo.AdvertVo;
+
 /***
  * 首页底部导航
  */
 
-public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener,IGetAdvertView {
 
     private final static int SECONDS = 2000;//按下的间隔秒数
     private final static int STATUS = 0;//0 正常结束程序;1 异常关闭程序
@@ -45,6 +61,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private FragmentManager fragmentManager;
     private long exitTime = 0;
     private RadioButton mHeadLineRadio, mWirelessRadio, mServiceRadio;
+    private GetAdvertPresenterImpl getAdvertPresenter;
+
+    private String url;
+    private Bitmap drawableStream;
+    private String path = Environment.getExternalStorageDirectory().toString() + "/advert_img.jpeg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +95,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void initData() {
         //注册EventBus
         EventBus.getDefault().register(this);
-
+        getAdvertPresenter = new GetAdvertPresenterImpl(this);
         fragmentManager = getSupportFragmentManager();
         wirelessFragment = new WirelessFragment();
         currentFragment = wirelessFragment;
         fragmentManager.beginTransaction().replace(R.id.main_fragment_parent, currentFragment).commit();
+        getAdvertPresenter.getAdvert();
     }
 
     @Override
@@ -141,13 +163,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (event.getMsg() == Constants.SERVICE) {
             mServiceRadio.setChecked(true);
         }
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);//反注册EventBus
+        if (drawableStream != null && !drawableStream.isRecycled()) {
+            drawableStream.recycle();
+            drawableStream = null;
+        }
     }
 
     public Fragment showFragment(Fragment fragment) {
@@ -164,7 +189,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     //代码实现控件添加drawableTop
-//        mTwoRadio.setCompoundDrawablesRelativeWithIntrinsicBounds(null,getResources().getDrawable(R.drawable.news),null,null);
+//  mTwoRadio.setCompoundDrawablesRelativeWithIntrinsicBounds(null,getResources().getDrawable(R.drawable.news),null,null);
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -180,5 +205,64 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void getAdvertSuccess(AdvertVo advertData) {
+        if (advertData != null) {
+            url = advertData.target;
+            SPUtils.put(this, Constants.ADVERT_URL, advertData.target);
+            new DownLoadImage().execute(advertData.img);//下载图片
+        }
+    }
+
+    private class DownLoadImage extends AsyncTask<String, Integer, byte[]> {
+
+        protected byte[] doInBackground(String... urls) {
+            String url = urls[0];
+            byte[] tmpBuffer = new byte[1024];
+            HttpURLConnection connection = null;
+            ByteArrayOutputStream outStream = null;
+            try {
+                URL httpUrl = new URL(url);
+                connection = (HttpURLConnection) httpUrl.openConnection();
+                connection.setConnectTimeout(5000); //超时设置
+                connection.setDoInput(true);
+                connection.setUseCaches(false); //设置不使用缓存
+                InputStream is = new URL(url).openStream();
+                outStream = new ByteArrayOutputStream();
+                int len = 0;
+                while ((len = is.read(tmpBuffer)) != -1) {
+                    outStream.write(tmpBuffer, 0, len);
+                }
+                outStream.close();
+                is.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (outStream == null) {
+                return null;
+            }
+            return outStream.toByteArray();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            // TODO Auto-generated method stub
+            super.onProgressUpdate(values);
+        }
+
+        protected void onPostExecute(byte[] result) {
+            drawableStream = BitmapFactory.decodeByteArray(result, 0, result.length);
+            boolean saved = false;
+            if (drawableStream != null) {
+                saved = FileUtil.writeBitmapToFile(drawableStream, new File(path), 100);
+            }
+            if (saved) {
+                SPUtils.put(MainActivity.this,Constants.ADVERT_IMG,path);//保存图片路径
+            } else {
+                ToastUtil.showMiddle(MainActivity.this, "写入文件失败");
+            }
+        }
     }
 }

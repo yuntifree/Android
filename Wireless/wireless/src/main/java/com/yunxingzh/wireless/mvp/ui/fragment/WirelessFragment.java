@@ -674,10 +674,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     @Override
-    public void getAdvertSuccess(AdvertVo advertData) {
-    }
-
-    @Override
     public void getHeadLineSuccess(HotInfoList newsVo) {
     }
 }
