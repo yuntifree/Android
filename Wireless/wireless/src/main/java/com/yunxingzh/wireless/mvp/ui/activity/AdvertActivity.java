@@ -30,7 +30,7 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
     private TextView mAdvertInfoTv, mAdvertTimeTv;
     private ImageView mAdvertBgIv;
     private LinearLayout mAdvertJumpLay;
-    private int recLen = 3;
+    private int recLen = 2;
     private Handler handler = new Handler();
 
     private String url;

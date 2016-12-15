@@ -81,7 +81,7 @@ public class WelcomActivity extends BaseActivity {
                 }
             }
         };
-        timer.schedule(task, 1000 * 2); //2秒后
+        timer.schedule(task, 1000); //2秒后
     }
 
     public void startActivity(Class activity, String urlKey, String url, String byteKey, String mByte) {

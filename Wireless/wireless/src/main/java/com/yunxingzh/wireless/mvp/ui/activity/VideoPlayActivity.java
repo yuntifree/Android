@@ -50,14 +50,6 @@ public class VideoPlayActivity extends BaseActivity {
         playUrl = getIntent().getStringExtra(Constants.VIDEO_URL);
         WebViewUtil.initWebView(webView, mProgressBar);
 
-        WebSettings settings = webView.getSettings();
-        //设置JS脚本
-        settings.setJavaScriptEnabled(true);
-        //支持缩放
-        settings.setSupportZoom(false);
-        //启用内置缩放装置
-        settings.setBuiltInZoomControls(false);
-
         webView.addJavascriptInterface(new JSClass(), "JSHost");
 
         loadCount = 0;

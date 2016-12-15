@@ -108,8 +108,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         myWebView.setWebChromeClient(new WebChromeClient() {
             //配置权限（同样在WebChromeClient中实现）
            @Override
-           public void onGeolocationPermissionsShowPrompt(String origin,
-                                                          GeolocationPermissions.Callback callback) {
+           public void onGeolocationPermissionsShowPrompt(String origin,GeolocationPermissions.Callback callback) {
                callback.invoke(origin, true, false);
                super.onGeolocationPermissionsShowPrompt(origin, callback);
            }
@@ -123,8 +122,13 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         if (mTitleReturnIv == v ){
             if (!StringUtils.isEmpty(fromAdvert) && fromAdvert.equals(Constants.FROM_ADVERT)){
                 startActivity(new Intent(this,MainActivity.class));
+                finish();
             }
-            finish();
+            if(myWebView.canGoBack()){
+                myWebView.goBack();
+            } else {
+                finish();
+            }
         }
     }
 
@@ -135,6 +139,8 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             if (!StringUtils.isEmpty(fromAdvert) && fromAdvert.equals(Constants.FROM_ADVERT)){
                 startActivity(new Intent(this,MainActivity.class));
                 finish();
+            } else if ((keyCode == KeyEvent.KEYCODE_BACK) && myWebView.canGoBack()) {
+                myWebView.goBack(); // goBack()表示返回WebView的上一页面
             } else {
                 finish();
             }
