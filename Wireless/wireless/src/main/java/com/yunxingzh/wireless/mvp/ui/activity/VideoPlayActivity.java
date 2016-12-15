@@ -56,7 +56,8 @@ public class VideoPlayActivity extends BaseActivity {
         //支持缩放
         settings.setSupportZoom(false);
         //启用内置缩放装置
-        settings.setBuiltInZoomControls(false);
+        settings.setBuiltInZoomControls(true);// 隐藏缩放按钮
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
 
         webView.addJavascriptInterface(new JSClass(), "JSHost");
 
