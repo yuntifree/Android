@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -36,6 +37,7 @@ import com.yunxingzh.wireless.utils.LocationUtils;
 import com.yunxingzh.wireless.mvp.view.IWifiMapView;
 import com.yunxingzh.wireless.utils.LocationUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -125,6 +127,14 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         }
     }
 
+//    BaiduMap.OnMyLocationClickListener listener = new BaiduMap.OnMyLocationClickListener() {
+//        /**
+//         * 地图定位图标点击事件监听函数
+//         */
+//        public boolean onMyLocationClick(){
+//        }
+//    };
+
     @Override
     public void getWifiMapSuccess(WifiMapList wifiMapVo) {
         wifiMapInfo = wifiMapVo.infos;
@@ -161,6 +171,8 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                 lat = locationUtils.getBaseLocation().latitude;
                 lon = locationUtils.getBaseLocation().longitude;
                 initMap();
+            } else if(msg.what == BDLocation.TypeServerError) {
+                ToastUtil.showMiddle(WifiMapActivity.this,R.string.location_error);
             } else {
                 LogUtils.i("lsd","location error:" + msg.what);
             }

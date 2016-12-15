@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.ClearEditText;
 import com.yunxingzh.wireless.mview.StatusBarColor;
@@ -17,6 +18,7 @@ import com.yunxingzh.wireless.mvp.presenter.impl.WifiSpiritedPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.view.IWifiSpiritedView;
 import com.yunxingzh.wireless.utils.LocationUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
@@ -73,13 +75,16 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-
     final Handler locationHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0) {
                 iWifiSpiritedPresenter.wifiSpirited(getSsid(), getPwd(), locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude);
+            } else if(msg.what == BDLocation.TypeServerError) {
+                ToastUtil.showMiddle(WifiSpiritedActivity.this,R.string.location_error);
+            } else {
+                LogUtils.i("lsd","location error:" + msg.what);
             }
         }
     };

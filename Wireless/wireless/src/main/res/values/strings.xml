@@ -138,6 +138,7 @@
     <string name="dialog_msg">您当前处于流量状态下，继续观看需要花费少许流量哦!</string>
     <string name="jumper">跳过</string>
     <string name="click_info">点击了解详情</string>
+    <string name="location_error">定位失败,请设置打开获取位置信息权限或定位权限</string>
 
 
 

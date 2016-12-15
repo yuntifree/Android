@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.baidu.location.BDLocation;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.StatusBarColor;
@@ -26,6 +27,7 @@ import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
 import com.yunxingzh.wireless.utils.LocationUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.utils.WifiUtils;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
@@ -136,8 +138,10 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
                 iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude, ssids);
                 // SPUtils.put(WifiManagerActivity.this, "longitude", String.valueOf(locationUtils.getBaseLocation().longitude));
                 // SPUtils.put(WifiManagerActivity.this, "latitude", String.valueOf(locationUtils.getBaseLocation().latitude));
+            } else if(msg.what == BDLocation.TypeServerError) {
+                ToastUtil.showMiddle(WifiManagerActivity.this,R.string.location_error);
             } else {
-                LogUtils.d("lsd", "getLocation err:" + msg.what);
+                LogUtils.i("lsd","location error:" + msg.what);
             }
         }
     };

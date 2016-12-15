@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue_1296db">
+        android:background="@color/blue_009CFB">
 
         <!--禁止EditText获得焦点
          android:focusable="true"
