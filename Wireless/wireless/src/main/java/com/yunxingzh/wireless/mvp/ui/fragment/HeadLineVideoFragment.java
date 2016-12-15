@@ -27,6 +27,7 @@ import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineVideoAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.utils.LogUtils;
+import com.yunxingzh.wireless.utils.NetUtil;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -94,20 +95,12 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         mListRv.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, final int i) {
-                final List<HotInfo> data = baseQuickAdapter.getData();
-                if (NetUtils.isWifi(getActivity())) {
-                    if ((System.currentTimeMillis() - exitTime) > SECONDS) {
-                        iHeadLinePresenter.clickCount(data.get(i).id, CLICK_COUNT);//上报
-                        int s = data.get(i).play + 1;
-//                        if (clickHandler != null){
-//                            Message message = clickHandler.;
-//                            message.what = 1;
-//                            clickHandler
-//                        }
-                        exitTime = System.currentTimeMillis();
-                    }
-                    startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, data.get(i).dst);
-                } else {
+                List<HotInfo> data = baseQuickAdapter.getData();
+                // TODO: 临时用final来满足dialog的要求，找更好的方法替代
+                final List<HotInfo> data2 = data;
+                HotInfo item = data.get(i);
+
+                if (!NetUtils.isWifi(getActivity())) {
                     final AlertDialog.Builder mDialog = new AlertDialog.Builder(getActivity());
                     mDialog.setTitle(R.string.dialog_notices);
                     mDialog.setMessage(R.string.dialog_msg);
@@ -117,22 +110,27 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                             dialog.dismiss();
                         }
                     });
+
                     mDialog.setPositiveButton(R.string.query, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (data != null) {
-                                if ((System.currentTimeMillis() - exitTime) > SECONDS) {
-                                    iHeadLinePresenter.clickCount(data.get(i).id, CLICK_COUNT);//上报
-                                    exitTime = System.currentTimeMillis();
-                                }
-                                startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, data.get(i).dst);
-                            }
+                            HotInfo item = data2.get(i);
+                            videoItemClick(item, i);
                         }
                     });
                     mDialog.create().show();
+                } else {
+                    videoItemClick(item, i);
                 }
             }
         });
+    }
+
+    private void videoItemClick(HotInfo item, int position) {
+        item.play++;
+        headLineVideoAdapter.notifyItemChanged(position);
+        iHeadLinePresenter.clickCount(item.id, CLICK_COUNT);//上报
+        startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, item.dst);
     }
 
     @Override

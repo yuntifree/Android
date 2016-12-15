@@ -41,7 +41,6 @@ public class HeadLineVideoAdapter extends BaseQuickAdapter<HotInfo> {
         baseViewHolder.setText(R.id.video_time, newsVo.source + "    " + StringUtils.formatDate(newsVo.ctime));
         baseViewHolder.setText(R.id.video_play_count, newsVo.play + "次播放");
     }
-}
 
     public Handler clickHandler = new Handler(){
         @Override
