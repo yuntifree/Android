@@ -54,7 +54,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     public static final int MAP_PAGER = 1;
 
     private TextView mTitleNameTv;
-    private ImageView mTitleReturnIv;
+    private ImageView mTitleReturnIv,mMapLocationIv;
     private MapView mapView;
     private BaiduMap baiduMap;
     private LocationUtils locationUtils;
@@ -82,6 +82,8 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         mTitleReturnIv = findView(R.id.title_return_iv);
         mTitleReturnIv.setOnClickListener(this);
         mapView = findView(R.id.baidu_mv);
+        mMapLocationIv = findView(R.id.map_location_iv);
+        mMapLocationIv.setOnClickListener(this);
     }
 
     public void initData() {
@@ -96,6 +98,10 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     public void onClick(View v) {
         if (mTitleReturnIv == v) {
             finish();
+        } else if(mMapLocationIv == v){//点击定位到当前位置
+            LatLng point = new LatLng(lat, lon);
+            MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(point);
+            baiduMap.setMapStatus(u);
         }
     }
 
@@ -116,16 +122,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             //在地图上添加Marker，并显示
             baiduMap.addOverlay(option);
             iWifiMapPresenter.getWifiMap(lon, lat);//获取周围热点lon,lat
-
-            Bitmap mBit = bitmap.getBitmap();
-            //如果该图片为当前位置图，则跳过点击事件
-            if (mBit.getHeight() != 120 && mBit.getWidth() != 120) {
-                initMarkerClickEvent();
-            }
-        } /*else {
-            MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(point);
-            baiduMap.animateMapStatus(status);
-        }*/
+        }
     }
 
     @Override
@@ -150,6 +147,9 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         // 将地图移到到最后一个经纬度位置
         MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
         baiduMap.setMapStatus(u);
+       if (wifiMapInfo.size() > 0){
+           initMarkerClickEvent();
+       }
     }
 
 
@@ -174,7 +174,6 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             public boolean onMarkerClick(final Marker marker) {
                 //获得marker中的数据
                 WifiMapVo info = (WifiMapVo) marker.getExtraInfo().get("info");
-
                 //计算p1、p2两点之间的直线距离，单位：米
                 LatLng p1LL = new LatLng(22.933103, 113.903870);
                 LatLng p2LL = new LatLng(info.latitude, info.longitude);
