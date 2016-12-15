@@ -452,7 +452,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                                 MainApplication.getInstance().getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
                         break;
                     case Constants.VALIDATE_SUCCESS://1、已经认证成功。
-                        ToastUtil.showMiddle(getActivity(), R.string.connect_success);
                         iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
                         // 判断下按钮的状态
                         updateConnectState();

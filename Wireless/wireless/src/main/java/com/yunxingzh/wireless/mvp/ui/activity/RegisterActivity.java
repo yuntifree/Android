@@ -132,7 +132,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
 
     @Override
     public void registerSuccess() {
-        ToastUtil.showMiddle(this, R.string.register_success);
+        //ToastUtil.showMiddle(this, R.string.register_success);
         startActivity(MainActivity.class,"","");
         finish();
     }
