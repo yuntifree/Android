@@ -83,6 +83,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         WebSettings settings = myWebView.getSettings();
         settings.setGeolocationEnabled(true);
         settings.setDomStorageEnabled(true);
+        settings.setBuiltInZoomControls(true);// 隐藏缩放按钮
 
         myWebView.setWebViewClient(new WebViewClient(){
             @Override
@@ -96,12 +97,8 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             }
 
             @Override
-            public void onPageFinished(WebView view,String url){
+            public void onPageFinished(WebView view,String url) {
                 myProgressBar.setVisibility(View.GONE);
-                if (StringUtils.isEmpty(mTitle)) {
-                    mTitle = view.getTitle();
-                    mTitleNameTv.setText(mTitle);
-                }
             }
         });
 
@@ -113,6 +110,13 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
                callback.invoke(origin, true, false);
                super.onGeolocationPermissionsShowPrompt(origin, callback);
            }
+
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                mTitle = title;
+                mTitleNameTv.setText(title);
+            }
         });
 
         myWebView.loadUrl(mUrl);
