@@ -56,7 +56,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     public static final int MAP_PAGER = 1;
 
     private TextView mTitleNameTv;
-    private ImageView mTitleReturnIv,mMapLocationIv;
+    private ImageView mTitleReturnIv, mMapLocationIv;
     private MapView mapView;
     private BaiduMap baiduMap;
     private LocationUtils locationUtils;
@@ -89,7 +89,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     }
 
     public void initData() {
-        StatusBarColor.compat(this,getResources().getColor(R.color.blue_009CFB));
+        StatusBarColor.compat(this, getResources().getColor(R.color.blue_009CFB));
         baiduMap = mapView.getMap();
         locationUtils = new LocationUtils(this, MAP_PAGER);
         locationUtils.startMonitor(locationHandler);
@@ -100,7 +100,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     public void onClick(View v) {
         if (mTitleReturnIv == v) {
             finish();
-        } else if(mMapLocationIv == v){//点击定位到当前位置
+        } else if (mMapLocationIv == v) {//点击定位到当前位置
             LatLng point = new LatLng(lat, lon);
             MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(point);
             baiduMap.setMapStatus(u);
@@ -127,14 +127,11 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         }
     }
 
-//    BaiduMap.OnMyLocationClickListener listener = new BaiduMap.OnMyLocationClickListener() {
-//        /**
-//         * 地图定位图标点击事件监听函数
-//         */
-//        public boolean onMyLocationClick(){
-//        }
-//    };
-
+    /***
+     * 获取周围热点
+     *
+     * @param wifiMapVo
+     */
     @Override
     public void getWifiMapSuccess(WifiMapList wifiMapVo) {
         wifiMapInfo = wifiMapVo.infos;
@@ -157,9 +154,9 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         // 将地图移到到最后一个经纬度位置
         MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
         baiduMap.setMapStatus(u);
-       if (wifiMapInfo.size() > 0){
-           initMarkerClickEvent();
-       }
+        if (wifiMapInfo.size() > 0) {
+            initMarkerClickEvent();
+        }
     }
 
 
@@ -171,10 +168,10 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                 lat = locationUtils.getBaseLocation().latitude;
                 lon = locationUtils.getBaseLocation().longitude;
                 initMap();
-            } else if(msg.what == BDLocation.TypeServerError) {
-                ToastUtil.showMiddle(WifiMapActivity.this,R.string.location_error);
+            } else if (msg.what == BDLocation.TypeServerError) {
+                ToastUtil.showMiddle(WifiMapActivity.this, R.string.location_error);
             } else {
-                LogUtils.i("lsd","location error:" + msg.what);
+                LogUtils.i("lsd", "location error:" + msg.what);
             }
         }
     };
@@ -185,7 +182,14 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             @Override
             public boolean onMarkerClick(final Marker marker) {
                 //获得marker中的数据
-                WifiMapVo info = (WifiMapVo) marker.getExtraInfo().get("info");
+                Bundle bun = marker.getExtraInfo();
+                if (bun == null) {
+                    return false;
+                }
+                WifiMapVo info = (WifiMapVo) bun.get("info");
+                if (info == null) {
+                    return false;
+                }
                 //计算p1、p2两点之间的直线距离，单位：米
                 LatLng p1LL = new LatLng(22.933103, 113.903870);
                 LatLng p2LL = new LatLng(info.latitude, info.longitude);

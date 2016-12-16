@@ -28,6 +28,7 @@ import com.yunxingzh.wireless.mvp.ui.fragment.ServiceFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.WirelessFragment;
 import com.yunxingzh.wireless.mvp.view.IGetAdvertView;
 import com.yunxingzh.wireless.utils.FileUtil;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -261,7 +262,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             if (saved) {
                 SPUtils.put(MainActivity.this,Constants.ADVERT_IMG,path);//保存图片路径
             } else {
-                ToastUtil.showMiddle(MainActivity.this, "写入文件失败");
+                LogUtils.e("lsd", "写入文件失败");
             }
         }
     }

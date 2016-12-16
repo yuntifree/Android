@@ -367,7 +367,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             // 连上网
             if (new_state == WifiState.CONNECTED) {
                 currentAp = FWManager.getInstance().getCurrent();
-                if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
+                if (currentAp != null /*&& currentAp.ssid.equals(Constants.SSID)*/) {
                     CheckAndLogon();
                 } else {
                     // 先不处理
@@ -410,7 +410,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                         e.printStackTrace();
                     }
                     if (ssid.equals(Constants.SSID)) {
-                        CheckAndLogon();
+                       // CheckAndLogon();
+                        checkDGWifi();
                     } else {
                         // 不是东莞无线
                         if (URLUtil.isHttpsUrl(url) || URLUtil.isHttpUrl(url)) {
