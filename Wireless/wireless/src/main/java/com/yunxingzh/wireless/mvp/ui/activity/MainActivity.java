@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         wirelessFragment = new WirelessFragment();
         currentFragment = wirelessFragment;
         fragmentManager.beginTransaction().replace(R.id.main_fragment_parent, currentFragment).commit();
-        getAdvertPresenter.getAdvert();
+       // getAdvertPresenter.getAdvert();
     }
 
     @Override

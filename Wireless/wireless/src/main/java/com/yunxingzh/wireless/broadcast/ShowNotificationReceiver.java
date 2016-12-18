@@ -29,8 +29,8 @@ public class ShowNotificationReceiver extends BroadcastReceiver {
         //Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
         //            R.drawable.state_title_notice);
         Notification noti = new Notification.Builder(context)
-                .setContentTitle("发现东莞无线免费WiFi")
-                .setContentText("一键连接东莞无线~")
+                .setContentTitle("发现东莞无限免费WiFi")
+                .setContentText("一键连接东莞无限~")
                 //.setLargeIcon(icon)
                 .setSmallIcon(R.drawable.state_title_notice)
                 .setContentIntent(pendingIntent)
