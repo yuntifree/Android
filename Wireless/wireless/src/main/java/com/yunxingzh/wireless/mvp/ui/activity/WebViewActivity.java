@@ -23,11 +23,14 @@ import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.utils.WebViewUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by stephon on 2016/11/10.
@@ -110,12 +113,12 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
                super.onGeolocationPermissionsShowPrompt(origin, callback);
            }
 
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-                mTitle = title;
-                mTitleNameTv.setText(title);
-            }
+//            @Override
+//            public void onReceivedTitle(WebView view, String title) {
+//                super.onReceivedTitle(view, title);
+//                mTitle = title;
+//                mTitleNameTv.setText(title);
+//            }
         });
 
         myWebView.loadUrl(mUrl);
@@ -125,12 +128,13 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         if (mTitleReturnIv == v ){
             if (!StringUtils.isEmpty(fromAdvert) && fromAdvert.equals(Constants.FROM_ADVERT)){
-                startActivity(new Intent(this,MainActivity.class));
+                startActivity(MainActivity.class,"",0);
                 finish();
             }
             if(myWebView.canGoBack()){
                 myWebView.goBack();
             } else {
+                startActivity(MainActivity.class,Constants.FRAGMENT_FLAG,Constants.FRAGMENT);
                 finish();
             }
         }
@@ -146,6 +150,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             } else if ((keyCode == KeyEvent.KEYCODE_BACK) && myWebView.canGoBack()) {
                 myWebView.goBack(); // goBack()表示返回WebView的上一页面
             } else {
+                startActivity(MainActivity.class,Constants.FRAGMENT_FLAG,Constants.FRAGMENT);
                 finish();
             }
             return true;
@@ -160,5 +165,11 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         lp.gravity = Gravity.CENTER;
         lp.width = LinearLayout.LayoutParams.WRAP_CONTENT;
         return lp;
+    }
+
+    public void startActivity(Class activity,String flag,int value){
+        Intent intent = new Intent(this,activity);
+        intent.putExtra(flag,value);
+        startActivity(intent);
     }
 }

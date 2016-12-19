@@ -6,6 +6,7 @@ import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.vo.AdvertVo;
+import wireless.libs.bean.vo.StretchVo;
 import wireless.libs.bean.vo.User;
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
@@ -169,5 +170,13 @@ public class NetWorkWarpper {
         HttpUtils.post(path, httpParams, handler);
     }
 
-
+    /**
+     * 获取首页活动信息
+     * @param handler
+     */
+    public static void getStretch(HttpHandler<StretchVo> handler) {
+        String path = "get_activity";
+        HttpParams httpParams = new HttpParams();
+        HttpUtils.post(path, httpParams, handler);
+    }
 }

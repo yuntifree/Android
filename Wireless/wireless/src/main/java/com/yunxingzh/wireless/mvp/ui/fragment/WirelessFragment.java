@@ -486,9 +486,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     public void updateConnectState() {
         currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
         if (currentAp != null) {
-            stopAnimation();
             String ssidText;
             if (currentAp.ssid.equals(Constants.SSID)) {
+                stopAnimation();
                 ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
                 mConnectText.setText(ssidText);
             } else {

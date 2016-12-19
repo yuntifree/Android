@@ -3,7 +3,6 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -43,12 +42,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import wireless.libs.bean.vo.AdvertVo;
+import wireless.libs.bean.vo.StretchVo;
 
 /***
  * 首页底部导航
  */
 
-public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener,IGetAdvertView {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, IGetAdvertView {
 
     private final static int SECONDS = 2000;//按下的间隔秒数
     private final static int STATUS = 0;//0 正常结束程序;1 异常关闭程序
@@ -61,8 +61,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private Fragment currentFragment;
     private FragmentManager fragmentManager;
     private long exitTime = 0;
-    private RadioButton mHeadLineRadio, mWirelessRadio, mServiceRadio;
+    private RadioButton mHeadLineRadio, mWirelessRadio, mServiceRadio, mStretchRadio;
     private GetAdvertPresenterImpl getAdvertPresenter;
+    private StretchVo mStretch;
 
     private String url;
     private Bitmap drawableStream;
@@ -91,6 +92,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mHeadLineRadio = findView(R.id.head_line_radio);
         mWirelessRadio = findView(R.id.wireless_radio);
         mServiceRadio = findView(R.id.service_radio);
+        mStretchRadio = findView(R.id.stretch_radio);
     }
 
     public void initData() {
@@ -101,7 +103,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         wirelessFragment = new WirelessFragment();
         currentFragment = wirelessFragment;
         fragmentManager.beginTransaction().replace(R.id.main_fragment_parent, currentFragment).commit();
-       // getAdvertPresenter.getAdvert();
+        getAdvertPresenter.getStretch();//获取活动模块
     }
 
     @Override
@@ -119,6 +121,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 } else {
                     getStatusBarColor(R.color.blue_236EC5);
                 }
+                Constants.FRAGMENT = Constants.WIRELESS_FLAG;
                 showFragment(wirelessFragment);//无线
                 break;
             case R.id.head_line_radio:
@@ -126,6 +129,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     headlineFragment = new HeadLineFragment();
                 }
                 getStatusBarColor(R.color.blue_009CFB);
+                Constants.FRAGMENT = Constants.HEADLINE_FLAG;
                 showFragment(headlineFragment);//头条
                 break;
             case R.id.service_radio:
@@ -133,19 +137,20 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     serviceFragment = new ServiceFragment();
                 }
                 getStatusBarColor(R.color.blue_009CFB);
+                Constants.FRAGMENT = Constants.SERVICE_FLAG;
                 showFragment(serviceFragment);//服务
                 break;
-//            case R.id.four_radio:
-//                if (buyingFragment == null) {
-//                    buyingFragment = new BuyingFragment();
-//                }
-//                showFragment(buyingFragment);//抢购
-//                break;
+            case R.id.stretch_radio:
+                Intent intent = new Intent(this, WebViewActivity.class);
+                intent.putExtra(Constants.TITLE, mStretch.title);
+                intent.putExtra(Constants.URL, mStretch.dst);
+                startActivity(intent);
+                break;
         }
     }
 
-    public void getStatusBarColor(int colorId){
-        StatusBarColor.compat(this,getResources().getColor(colorId));
+    public void getStatusBarColor(int colorId) {
+        StatusBarColor.compat(this, getResources().getColor(colorId));
     }
 
     @Subscribe
@@ -173,6 +178,26 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (drawableStream != null && !drawableStream.isRecycled()) {
             drawableStream.recycle();
             drawableStream = null;
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        //点击活动后返回上一次停留的界面
+        switch (Constants.FRAGMENT) {
+            case Constants.WIRELESS_FLAG:
+                mWirelessRadio.setChecked(true);
+                break;
+            case Constants.HEADLINE_FLAG:
+                mHeadLineRadio.setChecked(true);
+                break;
+            case Constants.SERVICE_FLAG:
+                mServiceRadio.setChecked(true);
+                break;
+            default:
+                mWirelessRadio.setChecked(true);
+                break;
         }
     }
 
@@ -215,6 +240,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             SPUtils.put(this, Constants.ADVERT_URL, advertData.target);
             new DownLoadImage().execute(advertData.img);//下载图片
         }
+    }
+
+    @Override
+    public void getStretchSuccess(StretchVo stretchVo) {
+        if (stretchVo != null) {
+            mStretch = stretchVo;
+        }
+        // getAdvertPresenter.getAdvert();//获取广告
     }
 
     private class DownLoadImage extends AsyncTask<String, Integer, byte[]> {
@@ -260,7 +293,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 saved = FileUtil.writeBitmapToFile(drawableStream, new File(path), 100);
             }
             if (saved) {
-                SPUtils.put(MainActivity.this,Constants.ADVERT_IMG,path);//保存图片路径
+                SPUtils.put(MainActivity.this, Constants.ADVERT_IMG, path);//保存图片路径
             } else {
                 LogUtils.e("lsd", "写入文件失败");
             }

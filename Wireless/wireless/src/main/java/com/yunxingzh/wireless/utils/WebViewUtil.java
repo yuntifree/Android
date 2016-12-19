@@ -18,9 +18,8 @@ public class WebViewUtil {
     public static void initWebView(WebView webView, final ProgressBar bar){
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);// 设置js可以直接打开窗口，如window.open()，默认为false
         webView.getSettings().setJavaScriptEnabled(true);// 是否允许执行js，默认为false。设置true时，会提醒可能造成XSS漏洞
-        webView.getSettings().setSupportZoom(false);// 是否可以缩放，默认true
-        webView.getSettings().setBuiltInZoomControls(false);// 是否显示缩放按钮，默认false
-        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+        webView.getSettings().setSupportZoom(true);// 是否可以缩放，默认true
+        webView.getSettings().setBuiltInZoomControls(true);// 是否显示缩放按钮，默认false
         webView.getSettings().setUseWideViewPort(true);// 设置此属性，可任意比例缩放。大视图模式
         webView.getSettings().setLoadWithOverviewMode(true);// 和setUseWideViewPort(true)一起解决网页自适应问题
         webView.getSettings().setAppCacheEnabled(true);// 是否使用缓存

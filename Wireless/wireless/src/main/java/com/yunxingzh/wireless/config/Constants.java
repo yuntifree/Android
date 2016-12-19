@@ -36,6 +36,7 @@ public class Constants {
     public static final int VIDEO = 4;//视频
     public static final int SPEED_TEST = 5;//wifi测速
     public static final int SPEED_FLAG = 6;//wifi测速flag
+    public static final String FRAGMENT_FLAG = "fragment_flag";//fragment flag
 
     //0、网络正常，可以发起调用认证、下线等接口。1、已经认证成功。
     public static final int NET_OK = 0;
@@ -55,4 +56,9 @@ public class Constants {
     public static final String URL_AGREEMENT = "http://www.yunxingzh.com/app/agreement.html";
     public static final String URL_WEATHER = "http://shenbao.dg.gov.cn/dgcsfw_zfb/csfw/dg_qxj/weixinportal.jsp";
 
+    // fragment flag
+    public static int FRAGMENT = 0;
+    public static final int WIRELESS_FLAG = 1;//首页
+    public static final int HEADLINE_FLAG = 2;//头条
+    public static final int SERVICE_FLAG = 3;//服务
 }
