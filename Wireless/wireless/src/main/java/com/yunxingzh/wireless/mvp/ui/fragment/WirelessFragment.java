@@ -324,7 +324,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     public void onClick(View v) {
         if (mConnectIv == v) {//一键连接
             if (mWifiConnected) {
-                EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));//跳转新闻列表
+                startActivity(WifiManagerActivity.class,"","","","");
             } else {
                 if (wifiUtils.getWlanState()) {//是否打开
                     checkDGWifi();
@@ -334,7 +334,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             }
             //  WifiInterface.wifiLogout(logoOutHandler,MainApplication.sApplication.getUserName(),5000);
         } else if (mWeatherLay == v) {
-            startActivity(WebViewActivity.class, Constants.URL, Constants.URL_WEATHER, Constants.TITLE, "东莞天气");
+            if (weatherNewsData != null) {
+                startActivity(WebViewActivity.class, Constants.URL, weatherNewsData.dst, Constants.TITLE, "东莞天气");
+            }
         } else if (footView == v) {//查看更多新闻
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mMainWifiManager == v) {//wifi管理
@@ -380,7 +382,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                             iHeadLinePresenter.weatherNews();
                         }
                     } else {
-                        ToastUtil.showMiddle(getActivity(),R.string.network_error);
+                        ToastUtil.showMiddle(getActivity(), R.string.network_error);
                     }
                     updateConnectState();
                 }
@@ -492,6 +494,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
                 mConnectText.setText(ssidText);
             } else {
+                startAnimation();
                 mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
             }
             mWifiConnected = true;

@@ -8,4 +8,5 @@ public class WeatherVo {
     public int temp;
     public int type;
     public String info;
+    public String dst;
 }

@@ -54,7 +54,6 @@ public class Constants {
 
     // url
     public static final String URL_AGREEMENT = "http://www.yunxingzh.com/app/agreement.html";
-    public static final String URL_WEATHER = "http://shenbao.dg.gov.cn/dgcsfw_zfb/csfw/dg_qxj/weixinportal.jsp";
 
     // fragment flag
     public static int FRAGMENT = 0;

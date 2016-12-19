@@ -160,7 +160,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mHeadLineRadio.setChecked(true);
         }
 
-        //首页先跳转到头条父fragment再指定viewpager中的setCurrentItem
+        //跳转视频-首页先跳转到头条父fragment再指定viewpager中的setCurrentItem
         if (event.getMsg() == Constants.HEAD_LINE && event.getChildMsg() == Constants.VIDEO) {
             mHeadLineRadio.setChecked(true);
         }
