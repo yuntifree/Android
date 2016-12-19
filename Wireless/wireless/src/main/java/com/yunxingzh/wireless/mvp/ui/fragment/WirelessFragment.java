@@ -49,6 +49,7 @@ import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wireless.utils.LogUtils;
+import com.yunxingzh.wireless.utils.NetUtil;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -299,6 +300,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             if (msg.what == 0) {//认证成功
                 ToastUtil.showMiddle(getActivity(), R.string.validate_success);
                 EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));//跳转新闻列表
+                if (iHeadLinePresenter != null) {
+                    iHeadLinePresenter.weatherNews();
+                }
                 iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
             } else {
                 ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
@@ -367,10 +371,17 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             // 连上网
             if (new_state == WifiState.CONNECTED) {
                 currentAp = FWManager.getInstance().getCurrent();
-                if (currentAp != null /*&& currentAp.ssid.equals(Constants.SSID)*/) {
+                if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
                     CheckAndLogon();
                 } else {
-                    // 先不处理
+                    //连接的是其他wifi
+                    if (NetUtils.isNetworkAvailable(getActivity())) {
+                        if (iHeadLinePresenter != null) {
+                            iHeadLinePresenter.weatherNews();
+                        }
+                    } else {
+                        ToastUtil.showMiddle(getActivity(),R.string.network_error);
+                    }
                     updateConnectState();
                 }
             } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
@@ -410,7 +421,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                         e.printStackTrace();
                     }
                     if (ssid.equals(Constants.SSID)) {
-                       // CheckAndLogon();
                         checkDGWifi();
                     } else {
                         // 不是东莞无线
@@ -541,6 +551,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 CheckAndLogon();
             } else {
                 // 2. 已经连上其它WiFi，周围有DG-Free的情况，无需去连接DG-Free
+                if (iHeadLinePresenter != null) {
+                    iHeadLinePresenter.weatherNews();
+                }
             }
         }
     }
@@ -634,7 +647,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         }
     }
 
-    public void bannersState(){
+    public void bannersState() {
         if (bannersVo.size() > 1) {
             mAdRotationBanner.setCanLoop(true);
             mAdRotationBanner.setPointViewVisible(true);

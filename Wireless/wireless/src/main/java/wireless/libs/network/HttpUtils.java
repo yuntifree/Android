@@ -116,9 +116,6 @@ public class HttpUtils {
      * @param handler
      */
     public static void post(String url, HttpParams params, final HttpHandler handler) {
-        if (!NetUtils.isNetworkAvailable(MainApplication.getInstance())) {
-            ToastUtil.showMiddle(MainApplication.getInstance(), R.string.net_error);
-        }
         Request request = getPostRequest(url, params, null);
         getClient().newCall(request).enqueue(handler != null ? handler : nullHttpHandler);
         notifyHandlerStart(handler);
