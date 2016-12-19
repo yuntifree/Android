@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private final static int STATUS = 0;//0 正常结束程序;1 异常关闭程序
 
     private RadioGroup main_class_group;
-    // private BuyingFragment buyingFragment;
+    //private BuyingFragment buyingFragment;
     private HeadLineFragment headlineFragment;
     private ServiceFragment serviceFragment;
     private WirelessFragment wirelessFragment;

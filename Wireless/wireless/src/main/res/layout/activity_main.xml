@@ -61,8 +61,8 @@
             android:textColor="@drawable/main_class_text_selector"
             android:textSize="12sp" />
 
-        <!-- <RadioButton
-             android:id="@+id/buying_radio"
+         <RadioButton
+             android:id="@+id/stretch_radio"
              android:layout_width="0dp"
              android:layout_height="match_parent"
              android:layout_weight="1"
@@ -70,7 +70,7 @@
              android:drawableTop="@drawable/main_class_img_radio4_selector"
              android:gravity="center"
              android:textSize="12sp"
-             android:text="@string/buy"
-             android:textColor="@drawable/main_class_text_selector" />-->
+             android:text="@string/stretch"
+             android:textColor="@drawable/main_class_text_selector" />
     </com.yunxingzh.wireless.mview.PercentRadioGroup>
 </com.zhy.android.percent.support.PercentLinearLayout>

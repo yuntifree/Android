@@ -25,6 +25,7 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
@@ -51,7 +52,7 @@ import wireless.libs.bean.vo.WifiMapVo;
  * wifi地图
  */
 
-public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.OnClickListener {
+public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.OnClickListener,BaiduMap.OnMapStatusChangeListener {
 
     public static final int MAP_PAGER = 1;
 
@@ -94,6 +95,8 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         locationUtils = new LocationUtils(this, MAP_PAGER);
         locationUtils.startMonitor(locationHandler);
         iWifiMapPresenter = new WifiMapPresenterImpl(this);
+        baiduMap.setOnMapStatusChangeListener(this);
+       // baiduMap.setOnMyLocationClickListener(this);
     }
 
     @Override
@@ -152,8 +155,8 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             marker.setExtraInfo(bundle);
         }
         // 将地图移到到最后一个经纬度位置
-        MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
-        baiduMap.setMapStatus(u);
+//        MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
+//        baiduMap.setMapStatus(u);
         if (wifiMapInfo.size() > 0) {
             initMarkerClickEvent();
         }
@@ -191,7 +194,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                     return false;
                 }
                 //计算p1、p2两点之间的直线距离，单位：米
-                LatLng p1LL = new LatLng(22.933103, 113.903870);
+                LatLng p1LL = new LatLng(lat, lon);
                 LatLng p2LL = new LatLng(info.latitude, info.longitude);
                 double distance = DistanceUtil.getDistance(p1LL, p2LL);
 
@@ -250,6 +253,34 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             }
         });
     }
+
+    @Override
+    public void onMapStatusChangeStart(MapStatus mapStatus) {
+       // 手势操作地图，设置地图状态等操作导致地图状态开始改变。
+        //地图状态改变开始时的地图状态
+    }
+
+    @Override
+    public void onMapStatusChange(MapStatus mapStatus) {
+        //地图状态变化中
+    }
+
+    @Override
+    public void onMapStatusChangeFinish(MapStatus mapStatus) {
+        //地图状态改变结束
+        Point centerPoint = mapStatus.targetScreen;//获取屏幕中心点坐标
+        LatLng centerLat = baiduMap.getProjection().fromScreenLocation(centerPoint);
+        if (iWifiMapPresenter != null) {
+            iWifiMapPresenter.getWifiMap(centerLat.longitude, centerLat.latitude);//获取周围热点lon,lat
+        }
+    }
+
+//    @Override
+//    public boolean onMyLocationClick() {
+//        //地图定位图标点击事件监听接口
+//        ToastUtil.showMiddle(this,"ssss");
+//        return false;
+//    }
 
     @Override
     protected void onDestroy() {
