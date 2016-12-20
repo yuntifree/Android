@@ -242,9 +242,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void getAdvertSuccess(AdvertVo advertData) {
         if (advertData != null) {
             url = advertData.dst;
-            SPUtils.put(this, Constants.ADVERT_URL, advertData.dst);
-            SPUtils.put(this, Constants.TITLE, advertData.title);
-            new DownLoadImage().execute(advertData.img);//下载图片
+            if (!StringUtils.isEmpty(advertData.dst) && !StringUtils.isEmpty(advertData.title)) {
+                SPUtils.put(this, Constants.ADVERT_URL, advertData.dst);
+                SPUtils.put(this, Constants.TITLE, advertData.title);
+                new DownLoadImage().execute(advertData.img);//下载图片
+            }
         }
     }
 
@@ -295,7 +297,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
 
         protected void onPostExecute(byte[] result) {
-            drawableStream = BitmapFactory.decodeByteArray(result, 0, result.length);
+            if (result.length > 0) {
+                drawableStream = BitmapFactory.decodeByteArray(result, 0, result.length);
+            }
             boolean saved = false;
             if (drawableStream != null) {
                 saved = FileUtil.writeBitmapToFile(drawableStream, new File(path), 100);

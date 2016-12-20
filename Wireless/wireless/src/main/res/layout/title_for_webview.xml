@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/web_return_iv"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="match_parent"
         android:src="@drawable/return_img"/>
 
@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:gravity="center|left"
         android:text="@string/close"
-        android:singleLine="true"
+        android:visibility="invisible"
         android:textColor="@color/white"
         android:textSize="18sp"/>
 
@@ -25,10 +25,8 @@
         android:id="@+id/web_name_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingRight="40dp"
-        android:paddingLeft="10dp"
-        android:gravity="center|left"
+        android:paddingRight="70dp"
+        android:gravity="center"
         android:text="@string/dg_wifi"
         android:singleLine="true"
         android:textColor="@color/white"

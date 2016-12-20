@@ -87,7 +87,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         if (NetUtils.isNetworkAvailable(getActivity())) {
             iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         }
-        HeadLineNewsFragment.netErrorLay(getActivity(),mSwipeRefreshLay,mNetErrorVideoLay);
+        netErrorLay();
         mListRv.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, final int i) {

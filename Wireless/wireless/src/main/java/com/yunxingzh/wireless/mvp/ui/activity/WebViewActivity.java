@@ -97,6 +97,15 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onPageFinished(WebView view, String url) {
                 myProgressBar.setVisibility(View.GONE);
+                if (mWebCloseTv.getVisibility() == View.INVISIBLE){
+                    if (myWebView.canGoBack()) {
+                        mWebCloseTv.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (!myWebView.canGoBack()) {
+                        mWebCloseTv.setVisibility(View.INVISIBLE);
+                    }
+                }
             }
         });
 
