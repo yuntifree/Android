@@ -89,7 +89,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 @Override
                 public void onClick(View v) {
                     if (!NetUtils.isNetworkAvailable(getActivity())) {
-                        ToastUtil.showMiddle(getActivity(), "请检查网络设置");
+                        ToastUtil.showMiddle(getActivity(), R.string.net_set);
                     } else {
                         netView.setVisibility(View.GONE);
                         iServicePresenter.getService();

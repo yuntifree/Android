@@ -142,8 +142,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 break;
             case R.id.stretch_radio:
                 Intent intent = new Intent(this, WebViewActivity.class);
-                intent.putExtra(Constants.TITLE, mStretch.title);
-                intent.putExtra(Constants.URL, mStretch.dst);
+                if (mStretch != null) {
+                    intent.putExtra(Constants.TITLE, mStretch.title);
+                    intent.putExtra(Constants.URL, mStretch.dst);
+                }
                 startActivity(intent);
                 break;
         }
@@ -184,6 +186,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     protected void onRestart() {
         super.onRestart();
+        if (getAdvertPresenter != null) {
+            getAdvertPresenter.getStretch();//获取活动模块
+        }
         //点击活动后返回上一次停留的界面
         switch (Constants.FRAGMENT) {
             case Constants.WIRELESS_FLAG:
