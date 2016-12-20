@@ -16,9 +16,9 @@
 
         <TextView
             android:id="@+id/web_close_tv"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center|left"
+            android:gravity="center"
             android:text="@string/close"
             android:singleLine="true"
             android:textColor="@color/white"
@@ -31,7 +31,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:paddingLeft="90dp"
-        android:paddingRight="60dp"
+        android:paddingRight="70dp"
         android:gravity="center"
         android:text="@string/dg_wifi"
         android:singleLine="true"
