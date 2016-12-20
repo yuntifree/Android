@@ -22,7 +22,6 @@ public class Constants {
     public static final String URL = "url";
     public static final String TITLE = "title";
     public static final String FROM_NEWS = "fromNews";
-    public static final String FROM_ADVERT = "fromAdvert";
     public static final String ADVERT_IMG = "advertImg";
     public static final String ADVERT_URL = "advertUrl";
 

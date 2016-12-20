@@ -1,6 +1,8 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -534,7 +536,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     public void checkDGWifi() {
-        AccessPoint DGFreeAp = getDGWifiFromList();
+        final AccessPoint DGFreeAp = getDGWifiFromList();
         // 1. 未联网，有DG-Free: 连接DG-Free
         if (!NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
             if (DGFreeAp != null) {//不为空表示周围有东莞wifi
@@ -549,10 +551,28 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
                 CheckAndLogon();
             } else if (DGFreeAp != null) {
-                // 2. 已经连上其它WiFi，周围有DG-Free的情况，无需去连接DG-Free
-                // TODO: 弹窗确认后连接
-                FWManager.getInstance().connect(DGFreeAp);
-                startActivity(WifiManagerActivity.class, "", "", "", "");
+                // 2. 已经连上其它WiFi，周围有DG-Free的情况，询问是否连接DG-Free
+                final AlertDialog.Builder mDialog = new AlertDialog.Builder(getActivity());
+                mDialog.setTitle(R.string.dialog_notices);
+                mDialog.setMessage("您已连上" + currentAp.ssid + ",确定要切换吗？");
+                mDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                mDialog.setPositiveButton(R.string.query, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FWManager.getInstance().connect(DGFreeAp);
+                        startActivity(WifiManagerActivity.class, "", "", "", "");
+                    }
+                });
+                mDialog.show();
+            } else {
+                //已连上wifi，周围没有DG-free
+                ToastUtil.showMiddle(getActivity(), R.string.notice_toast);
             }
         }
     }

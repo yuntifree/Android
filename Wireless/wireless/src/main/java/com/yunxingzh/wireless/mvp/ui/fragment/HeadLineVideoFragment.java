@@ -114,7 +114,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                             videoItemClick(item, i);
                         }
                     });
-                    mDialog.create().show();
+                    mDialog.show();
                 } else {
                     videoItemClick(item, i);
                 }

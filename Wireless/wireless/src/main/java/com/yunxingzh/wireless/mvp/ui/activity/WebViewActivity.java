@@ -37,9 +37,9 @@ import org.greenrobot.eventbus.EventBus;
  * 新闻详情
  */
 
-public class WebViewActivity extends BaseActivity implements View.OnClickListener{
+public class WebViewActivity extends BaseActivity implements View.OnClickListener {
 
-    private LinearLayout mTitleRightLay,mTitleLeftLay;
+    private LinearLayout mTitleRightLay, mTitleLeftLay;
     private ImageView mTitleReturnIv;
     private TextView mTitleNameTv;
     private WebView myWebView;
@@ -47,7 +47,6 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     private String mUrl;
     private String mTitle;
     private boolean fromNews;
-    private String fromAdvert;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,15 +69,14 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 
     public void initData() {
         StatusBarColor.compat(this, getResources().getColor(R.color.blue_009CFB));
-        fromNews = getIntent().getBooleanExtra(Constants.FROM_NEWS,false);
-        if (fromNews){
+        fromNews = getIntent().getBooleanExtra(Constants.FROM_NEWS, false);
+        if (fromNews) {
             mTitleRightLay.setVisibility(View.INVISIBLE);
             mTitleNameTv.setLayoutParams(setParams(50));
             mTitleLeftLay.setLayoutParams(setParams(0));
         }
         mUrl = getIntent().getStringExtra(Constants.URL);
         mTitle = getIntent().getStringExtra(Constants.TITLE);
-        fromAdvert = getIntent().getStringExtra(Constants.FROM_ADVERT);
         if (!StringUtils.isEmpty(mTitle)) {
             mTitleNameTv.setText(mTitle);
         }
@@ -88,7 +86,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         settings.setDomStorageEnabled(true);
         settings.setBuiltInZoomControls(true);// 隐藏缩放按钮
 
-        myWebView.setWebViewClient(new WebViewClient(){
+        myWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 return false;
@@ -100,18 +98,18 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             }
 
             @Override
-            public void onPageFinished(WebView view,String url) {
+            public void onPageFinished(WebView view, String url) {
                 myProgressBar.setVisibility(View.GONE);
             }
         });
 
         myWebView.setWebChromeClient(new WebChromeClient() {
             //配置权限（同样在WebChromeClient中实现）
-           @Override
-           public void onGeolocationPermissionsShowPrompt(String origin,GeolocationPermissions.Callback callback) {
-               callback.invoke(origin, true, false);
-               super.onGeolocationPermissionsShowPrompt(origin, callback);
-           }
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                callback.invoke(origin, true, false);
+                super.onGeolocationPermissionsShowPrompt(origin, callback);
+            }
 
 //            @Override
 //            public void onReceivedTitle(WebView view, String title) {
@@ -126,15 +124,11 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        if (mTitleReturnIv == v ){
-            if (!StringUtils.isEmpty(fromAdvert) && fromAdvert.equals(Constants.FROM_ADVERT)){
-                startActivity(MainActivity.class,"",0);
-                finish();
-            }
-            if(myWebView.canGoBack()){
+        if (mTitleReturnIv == v) {
+            if (myWebView.canGoBack()) {
                 myWebView.goBack();
             } else {
-                startActivity(MainActivity.class,Constants.FRAGMENT_FLAG,Constants.FRAGMENT);
+                startActivity(MainActivity.class);
                 finish();
             }
         }
@@ -144,13 +138,10 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
-            if (!StringUtils.isEmpty(fromAdvert) && fromAdvert.equals(Constants.FROM_ADVERT)){
-                startActivity(new Intent(this,MainActivity.class));
-                finish();
-            } else if ((keyCode == KeyEvent.KEYCODE_BACK) && myWebView.canGoBack()) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && myWebView.canGoBack()) {
                 myWebView.goBack(); // goBack()表示返回WebView的上一页面
             } else {
-                startActivity(MainActivity.class,Constants.FRAGMENT_FLAG,Constants.FRAGMENT);
+                startActivity(MainActivity.class);
                 finish();
             }
             return true;
@@ -158,18 +149,17 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         return super.onKeyDown(keyCode, event);
     }
 
-    public LinearLayout.LayoutParams setParams(int right){
+    public LinearLayout.LayoutParams setParams(int right) {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.weight = 0;
-        lp.setMargins(0,0,right,0);
+        lp.setMargins(0, 0, right, 0);
         lp.gravity = Gravity.CENTER;
         lp.width = LinearLayout.LayoutParams.WRAP_CONTENT;
         return lp;
     }
 
-    public void startActivity(Class activity,String flag,int value){
-        Intent intent = new Intent(this,activity);
-        intent.putExtra(flag,value);
+    public void startActivity(Class activity) {
+        Intent intent = new Intent(this, activity);
         startActivity(intent);
     }
 }

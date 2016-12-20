@@ -184,8 +184,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onResume() {
+        super.onResume();
         if (getAdvertPresenter != null) {
             getAdvertPresenter.getStretch();//获取活动模块
         }
@@ -252,7 +252,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (stretchVo != null) {
             mStretch = stretchVo;
         }
-        // getAdvertPresenter.getAdvert();//获取广告
+        if (getAdvertPresenter != null) {
+            getAdvertPresenter.getAdvert();//获取广告
+        }
     }
 
     private class DownLoadImage extends AsyncTask<String, Integer, byte[]> {
