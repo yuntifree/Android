@@ -49,7 +49,6 @@ import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wireless.utils.LogUtils;
-import com.yunxingzh.wireless.utils.NetUtil;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -68,7 +67,6 @@ import java.util.List;
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.resp.WeatherNewsList;
-import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.BannerVo;
 import wireless.libs.bean.vo.MainNewsVo;
 import wireless.libs.bean.vo.UserConnectVo;
@@ -120,7 +118,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private CheckEnvTask mCheckTask = null;
     private AccessPoint currentAp;
 
-    private boolean mWifiConnected = false;
+    private boolean mDGFreeConnected = false;
 
     @Nullable
     @Override
@@ -298,14 +296,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0) {//认证成功
-                ToastUtil.showMiddle(getActivity(), R.string.validate_success);
+                //ToastUtil.showMiddle(getActivity(), R.string.validate_success);
                 EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));//跳转新闻列表
-                if (iHeadLinePresenter != null) {
-                    iHeadLinePresenter.weatherNews();
-                }
                 iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
             } else {
-                ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                //ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
             }
             // 判断下按钮的状态
             updateConnectState();
@@ -323,8 +318,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     @Override
     public void onClick(View v) {
         if (mConnectIv == v) {//一键连接
-            if (mWifiConnected) {
-                startActivity(WifiManagerActivity.class,"","","","");
+            if (mDGFreeConnected) {
+                EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
             } else {
                 if (wifiUtils.getWlanState()) {//是否打开
                     checkDGWifi();
@@ -376,14 +371,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
                     CheckAndLogon();
                 } else {
-                    //连接的是其他wifi
-                    if (NetUtils.isNetworkAvailable(getActivity())) {
-                        if (iHeadLinePresenter != null) {
-                            iHeadLinePresenter.weatherNews();
-                        }
-                    } else {
-                        ToastUtil.showMiddle(getActivity(), R.string.network_error);
-                    }
                     updateConnectState();
                 }
             } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
@@ -487,26 +474,35 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     //连接后改变状态
     public void updateConnectState() {
         currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
+        mDGFreeConnected = false;
         if (currentAp != null) {
             String ssidText;
             if (currentAp.ssid.equals(Constants.SSID)) {
-                stopAnimation();
                 ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
                 mConnectText.setText(ssidText);
+                mDGFreeConnected = true;
             } else {
-                startAnimation();
                 mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
             }
-            mWifiConnected = true;
+
         } else {
-            startAnimation();
             AccessPoint DGWifiAp = getDGWifiFromList();//找出附近wifi列表中的东莞wifi
             if (DGWifiAp != null) {
                 mConnectText.setText(R.string.find_wifi);
             } else {
                 mConnectText.setText(R.string.wireless_dg);
             }
-            mWifiConnected = false;
+        }
+        if (mDGFreeConnected) {
+            stopAnimation();
+        } else {
+            startAnimation();
+        }
+        // 网络更新时尝试刷新新闻
+        if (NetUtils.isNetworkAvailable(getActivity())) {
+            if (iHeadLinePresenter != null) {
+                iHeadLinePresenter.weatherNews();
+            }
         }
     }
 
@@ -538,9 +534,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     public void checkDGWifi() {
+        AccessPoint DGFreeAp = getDGWifiFromList();
         // 1. 未联网，有DG-Free: 连接DG-Free
         if (!NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
-            AccessPoint DGFreeAp = getDGWifiFromList();
             if (DGFreeAp != null) {//不为空表示周围有东莞wifi
                 FWManager.getInstance().connect(DGFreeAp);//先连接上wifi
             } else { // 4. 未联网，没有DG-Free：跳转到wifi列表
@@ -552,11 +548,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             // 3. 已经连上DG-Free的情况
             if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
                 CheckAndLogon();
-            } else {
+            } else if (DGFreeAp != null) {
                 // 2. 已经连上其它WiFi，周围有DG-Free的情况，无需去连接DG-Free
-                if (iHeadLinePresenter != null) {
-                    iHeadLinePresenter.weatherNews();
-                }
+                // TODO: 弹窗确认后连接
+                FWManager.getInstance().connect(DGFreeAp);
+                startActivity(WifiManagerActivity.class, "", "", "", "");
             }
         }
     }
