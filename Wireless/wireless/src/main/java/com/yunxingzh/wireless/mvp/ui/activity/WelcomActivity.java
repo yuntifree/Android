@@ -69,14 +69,14 @@ public class WelcomActivity extends BaseActivity {
                     startActivity(GuidedActivity.class, "", "", "", "");
                     finish();
                 } else {
-                    imgPath = SPUtils.get(WelcomActivity.this, Constants.ADVERT_IMG, "");
-                    url = SPUtils.get(WelcomActivity.this, Constants.ADVERT_URL, "");
-                    if (!StringUtils.isEmpty(imgPath) && !StringUtils.isEmpty(url)) {
-                        startActivity(AdvertActivity.class, Constants.ADVERT_URL, url, Constants.ADVERT_IMG, imgPath);
-                    } else {
+//                    imgPath = SPUtils.get(WelcomActivity.this, Constants.ADVERT_IMG, "");
+//                    url = SPUtils.get(WelcomActivity.this, Constants.ADVERT_URL, "");
+//                    if (!StringUtils.isEmpty(imgPath) && !StringUtils.isEmpty(url)) {
+//                        startActivity(AdvertActivity.class, Constants.ADVERT_URL, url, Constants.ADVERT_IMG, imgPath);
+//                    } else {
                         //本地没有直接跳首页
                         startActivity(MainActivity.class, "", "", "", "");
-                    }
+                  //  }
                     finish();
                 }
             }

@@ -255,9 +255,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (stretchVo != null) {
             mStretch = stretchVo;
         }
-        if (getAdvertPresenter != null) {
-            getAdvertPresenter.getAdvert();//获取广告
-        }
+//        if (getAdvertPresenter != null) {
+//            getAdvertPresenter.getAdvert();//获取广告
+//        }
     }
 
     private class DownLoadImage extends AsyncTask<String, Integer, byte[]> {
