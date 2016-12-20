@@ -108,12 +108,14 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
                 super.onGeolocationPermissionsShowPrompt(origin, callback);
             }
 
-//            @Override
-//            public void onReceivedTitle(WebView view, String title) {
-//                super.onReceivedTitle(view, title);
-//                mTitle = title;
-//                mTitleNameTv.setText(title);
-//            }
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                if (StringUtils.isEmpty(mTitle) && !StringUtils.isEmpty(title)) {
+                    mTitle = title;
+                    mTitleNameTv.setText(title);
+                }
+            }
         });
 
         myWebView.loadUrl(mUrl);
