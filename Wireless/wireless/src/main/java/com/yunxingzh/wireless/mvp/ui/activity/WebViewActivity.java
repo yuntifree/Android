@@ -69,9 +69,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     public void initData() {
         StatusBarColor.compat(this, getResources().getColor(R.color.blue_009CFB));
         fromNews = getIntent().getBooleanExtra(Constants.FROM_NEWS, false);
-        if (fromNews) {
-            mTitleNameTv.setLayoutParams(setParams(50));
-        }
+
         mUrl = getIntent().getStringExtra(Constants.URL);
         mTitle = getIntent().getStringExtra(Constants.TITLE);
         if (!StringUtils.isEmpty(mTitle)) {
@@ -158,15 +156,6 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    public LinearLayout.LayoutParams setParams(int right) {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp.weight = 0;
-        lp.setMargins(0, 0, right, 0);
-        lp.gravity = Gravity.CENTER;
-        lp.width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        return lp;
     }
 
     public void startActivity(Class activity) {
