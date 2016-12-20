@@ -241,8 +241,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void getAdvertSuccess(AdvertVo advertData) {
         if (advertData != null) {
-            url = advertData.target;
-            SPUtils.put(this, Constants.ADVERT_URL, advertData.target);
+            url = advertData.dst;
+            SPUtils.put(this, Constants.ADVERT_URL, advertData.dst);
+            SPUtils.put(this, Constants.TITLE, advertData.title);
             new DownLoadImage().execute(advertData.img);//下载图片
         }
     }

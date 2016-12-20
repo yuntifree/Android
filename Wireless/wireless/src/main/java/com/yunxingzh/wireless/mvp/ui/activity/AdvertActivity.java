@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
 /**
@@ -32,6 +33,7 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
 
     private String url;
     private String imgPath;
+    private String title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,11 +52,13 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
         mAdvertJumpLay.setOnClickListener(this);
         mAdvertTimeTv = findView(R.id.advert_time_tv);
         mAdvertBgIv = findView(R.id.advert_bg_iv);
+        mAdvertBgIv.setOnClickListener(this);
     }
 
     public void initData() {
         imgPath = getIntent().getStringExtra(Constants.ADVERT_IMG);
         url = getIntent().getStringExtra(Constants.ADVERT_URL);
+        title = SPUtils.get(this,Constants.TITLE,"");
         if (!StringUtils.isEmpty(imgPath) && !StringUtils.isEmpty(url)) {
             Bitmap img = BitmapFactory.decodeFile(imgPath);
             mAdvertBgIv.setImageBitmap(img);
@@ -78,10 +82,10 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if (mAdvertInfoTv == v) {//了解详情
-            if (!StringUtils.isEmpty(url)) {
+        if (mAdvertInfoTv == v || mAdvertBgIv == v) {//了解详情
+            if (!StringUtils.isEmpty(url) && !StringUtils.isEmpty(title)) {
                 handler.removeCallbacks(runnable);
-                startActivity(WebViewActivity.class, Constants.URL, url, Constants.TITLE, "");
+                startActivity(WebViewActivity.class, Constants.URL, url, Constants.TITLE, title);
                 finish();
             }
         } else if (mAdvertJumpLay == v) {//跳过

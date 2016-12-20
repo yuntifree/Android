@@ -39,9 +39,8 @@ import org.greenrobot.eventbus.EventBus;
 
 public class WebViewActivity extends BaseActivity implements View.OnClickListener {
 
-    private LinearLayout mTitleRightLay, mTitleLeftLay;
     private ImageView mTitleReturnIv;
-    private TextView mTitleNameTv;
+    private TextView mTitleNameTv,mWebCloseTv;
     private WebView myWebView;
     private ProgressBar myProgressBar;
     private String mUrl;
@@ -57,23 +56,21 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void initView() {
-        mTitleNameTv = findView(R.id.title_name_tv);
+        mWebCloseTv = findView(R.id.web_close_tv);
+        mWebCloseTv.setOnClickListener(this);
+        mTitleNameTv = findView(R.id.web_name_tv);
         mTitleNameTv.setVisibility(View.VISIBLE);
-        mTitleReturnIv = findView(R.id.title_return_iv);
+        mTitleReturnIv = findView(R.id.web_return_iv);
         mTitleReturnIv.setOnClickListener(this);
         myWebView = findView(R.id.webView);
         myProgressBar = findView(R.id.progress_bar);
-        mTitleRightLay = findView(R.id.title_right_lay);
-        mTitleLeftLay = findView(R.id.title_left_lay);
     }
 
     public void initData() {
         StatusBarColor.compat(this, getResources().getColor(R.color.blue_009CFB));
         fromNews = getIntent().getBooleanExtra(Constants.FROM_NEWS, false);
         if (fromNews) {
-            mTitleRightLay.setVisibility(View.INVISIBLE);
             mTitleNameTv.setLayoutParams(setParams(50));
-            mTitleLeftLay.setLayoutParams(setParams(0));
         }
         mUrl = getIntent().getStringExtra(Constants.URL);
         mTitle = getIntent().getStringExtra(Constants.TITLE);
@@ -124,13 +121,16 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        if (mTitleReturnIv == v) {
+        if (mTitleReturnIv == v) {//返回
             if (myWebView.canGoBack()) {
                 myWebView.goBack();
             } else {
                 startActivity(MainActivity.class);
                 finish();
             }
+        } else if (mWebCloseTv == v){//关闭
+            startActivity(MainActivity.class);
+            finish();
         }
     }
 

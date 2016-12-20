@@ -8,5 +8,6 @@ import java.io.Serializable;
 
 public class AdvertVo implements Serializable{
     public String img;
-    public String target;
+    public String dst;
+    public String title;
 }
