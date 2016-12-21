@@ -25,11 +25,11 @@ import wireless.libs.bean.vo.User;
 public class MainApplication extends Application {
     private static final String TAG = "Application";
 
-    //TODO: change to private and getInstance
+    //TODO: change to private and get
     public static MainApplication sApplication;
     private static String mCurrentProcessName;
 
-    public static MainApplication getInstance() { return sApplication; }
+    public static MainApplication get() { return sApplication; }
     private static final String UI_PROCESS_NAME = "com.yunxingzh.wireless";
     private static final String SERVICE_PROCESS_NAME = "com.yunxingzh.wireless.service";
 

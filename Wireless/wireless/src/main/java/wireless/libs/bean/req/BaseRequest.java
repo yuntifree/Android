@@ -29,7 +29,7 @@ public class BaseRequest implements Serializable {
 
     public BaseRequest() {
 
-        User user = MainApplication.getInstance().getUser();
+        User user = MainApplication.get().getUser();
 
         if (user != null) {
             uid = user.uid;
@@ -37,6 +37,6 @@ public class BaseRequest implements Serializable {
         }
         version = AppConfig.VERSION;
         ts = System.currentTimeMillis();
-        nettype = AppUtils.getNetWorkType(MainApplication.getInstance());
+        nettype = AppUtils.getNetWorkType(MainApplication.get());
     }
 }

@@ -2,7 +2,6 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,13 +34,8 @@ import com.yunxingzh.wireless.utils.ToastUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import wireless.libs.bean.vo.AdvertVo;
@@ -70,7 +64,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     private String url;
     private Bitmap drawableStream;
-    private String path = Environment.getExternalStorageDirectory().toString() + "/advert_img.jpeg";
+    private String path = Environment.getExternalStorageDirectory().toString() + "/advert_img";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +100,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         wirelessFragment = new WirelessFragment();
         currentFragment = wirelessFragment;
         fragmentManager.beginTransaction().replace(R.id.main_fragment_parent, currentFragment).commit();
-        getAdvertPresenter.getStretch();//获取活动模块
+        // 拉取广告
+        getAdvertPresenter.getAdvert();
     }
 
     @Override
@@ -144,12 +139,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 showFragment(serviceFragment);//服务
                 break;
             case R.id.stretch_radio:
-                Intent intent = new Intent(this, WebViewActivity.class);
-                if (mStretch != null) {
-                    intent.putExtra(Constants.TITLE, mStretch.title);
-                    intent.putExtra(Constants.URL, mStretch.dst);
-                }
-                startActivity(intent);
+                getAdvertPresenter.getStretch();//获取活动模块
                 break;
         }
     }
@@ -189,9 +179,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     protected void onResume() {
         super.onResume();
-        if (getAdvertPresenter != null) {
-            getAdvertPresenter.getStretch();//获取活动模块
-        }
         //点击活动后返回上一次停留的界面
         switch (Constants.FRAGMENT) {
             case Constants.WIRELESS_FLAG:
@@ -244,11 +231,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void getAdvertSuccess(AdvertVo advertData) {
         if (advertData != null) {
-            url = advertData.dst;
-            if (!StringUtils.isEmpty(advertData.dst) && !StringUtils.isEmpty(advertData.title)) {
+            url = SPUtils.get(MainApplication.get(), Constants.ADVERT_URL, "");
+            if (!(advertData.dst.equals(url) && FileUtil.isFileExist(path))) {
                 SPUtils.put(this, Constants.ADVERT_URL, advertData.dst);
                 SPUtils.put(this, Constants.TITLE, advertData.title);
-                new DownLoadImage().execute(advertData.img);//下载图片
+                new DownLoadFile().execute(advertData.img);//下载图片
             }
         }
     }
@@ -256,40 +243,35 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void getStretchSuccess(StretchVo stretchVo) {
         if (stretchVo != null) {
-            mStretch = stretchVo;
+            Intent intent = new Intent(this, WebViewActivity.class);
+            intent.putExtra(Constants.TITLE, stretchVo.title);
+            intent.putExtra(Constants.URL, stretchVo.dst);
+            startActivity(intent);
         }
-//        if (getAdvertPresenter != null) {
-//            getAdvertPresenter.getAdvert();//获取广告
-//        }
     }
 
-    private class DownLoadImage extends AsyncTask<String, Integer, byte[]> {
-        protected byte[] doInBackground(String... urls) {
+    private class DownLoadFile extends AsyncTask<String, Integer, String> {
+
+        protected String doInBackground(String... urls) {
             String url = urls[0];
-            byte[] tmpBuffer = new byte[1024];
-            HttpURLConnection connection = null;
-            ByteArrayOutputStream outStream = null;
+            HttpURLConnection conn;
+            InputStream is;
+            String ret = "";
             try {
                 URL httpUrl = new URL(url);
-                connection = (HttpURLConnection) httpUrl.openConnection();
-                connection.setConnectTimeout(5000); //超时设置
-                connection.setDoInput(true);
-                connection.setUseCaches(false); //设置不使用缓存
-                InputStream is = new URL(url).openStream();
-                outStream = new ByteArrayOutputStream();
-                int len = 0;
-                while ((len = is.read(tmpBuffer)) != -1) {
-                    outStream.write(tmpBuffer, 0, len);
+                conn = (HttpURLConnection) httpUrl.openConnection();
+                conn.setConnectTimeout(5 * 1000); //超时设置
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    is = new URL(url).openStream();
+                    // writeFile里面close了is
+                    if (FileUtil.writeFile(path, is)) {
+                        ret = path;
+                    }
                 }
-                outStream.close();
-                is.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (outStream == null) {
-                return null;
-            }
-            return outStream.toByteArray();
+            return ret;
         }
 
         @Override
@@ -298,16 +280,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             super.onProgressUpdate(values);
         }
 
-        protected void onPostExecute(byte[] result) {
-            if (result.length > 0) {
-                drawableStream = BitmapFactory.decodeByteArray(result, 0, result.length);
-            }
-            boolean saved = false;
-            if (drawableStream != null) {
-                saved = FileUtil.writeBitmapToFile(drawableStream, new File(path), 100);
-            }
-            if (saved) {
-                SPUtils.put(MainActivity.this, Constants.ADVERT_IMG, path);//保存图片路径
+        protected void onPostExecute(String result) {
+            if (!StringUtils.isEmpty(result)) {
+                SPUtils.put(MainApplication.get(), Constants.ADVERT_IMG, path);//保存图片路径
             } else {
                 LogUtils.e("lsd", "写入文件失败");
             }

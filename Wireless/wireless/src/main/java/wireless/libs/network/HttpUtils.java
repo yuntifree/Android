@@ -2,7 +2,6 @@ package wireless.libs.network;
 
 import android.util.Log;
 
-import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.AppConfig;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.utils.LogUtils;
@@ -131,7 +130,7 @@ public class HttpUtils {
      * @param handler
      */
     public static void tagPost(String url, HttpParams params, Object tag, final HttpHandler handler) {
-        if (!NetUtils.isNetworkAvailable(MainApplication.getInstance())) {
+        if (!NetUtils.isNetworkAvailable(MainApplication.get())) {
             ToastUtil.show("请检查网络～");
         }
         Request request = getPostRequest(url, params, tag);
