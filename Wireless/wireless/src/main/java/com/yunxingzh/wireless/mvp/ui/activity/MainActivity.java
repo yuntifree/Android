@@ -37,8 +37,11 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import wireless.libs.bean.vo.AdvertVo;
@@ -261,7 +264,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     private class DownLoadImage extends AsyncTask<String, Integer, byte[]> {
-
         protected byte[] doInBackground(String... urls) {
             String url = urls[0];
             byte[] tmpBuffer = new byte[1024];

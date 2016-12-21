@@ -45,7 +45,7 @@ import java.util.concurrent.Executors;
 /***
  * wifi测速
  */
-public class SpeedTestActivity extends BaseActivity implements View.OnClickListener {
+public class SpeedTestActivity extends BaseActivity implements View.OnClickListener, SpeedTestDialog.OnDialogBtnClickListener{
 
     private static String mApkUrl = "";
 
@@ -80,6 +80,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     private ImageView mTitleReturnIv;
     private LinearLayout mMiddleNoticeLay;
     private int speedFlag;
+    private SpeedTestDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,15 +130,24 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             }
         });
         StatusBarColor.compat(this,getResources().getColor(R.color.blue_009CFB));
+        mDialog = new SpeedTestDialog(SpeedTestActivity.this);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setOnDialogBtnClickListener(this);
     }
 
-    @Subscribe
-    public void onEventMainThread(EventBusType event) {
-        speedFlag = event.getChildMsg();
-        if (event.getMsg() == Constants.SPEED_TEST) {
-            initThread();
-        }
+    @Override
+    public void onQueryClick(int flag) {
+        speedFlag = flag;
+        initThread();
     }
+
+//    @Subscribe
+//    public void onEventMainThread(EventBusType event) {
+//        speedFlag = event.getChildMsg();
+//        if (event.getMsg() == Constants.SPEED_TEST) {
+//            initThread();
+//        }
+//    }
 
     @Override
     protected void onDestroy() {
@@ -168,9 +178,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     private void startTestSpeed() {
         int netType = AppUtils.getNetWorkType(this);
         if (netType != NETWORK_WIFI) {
-            if (speedFlag != Constants.SPEED_FLAG) {
-                SpeedTestDialog mDialog = new SpeedTestDialog(SpeedTestActivity.this);
-                mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            if (speedFlag != 1) {
                 mDialog.show();
                 return;
             }

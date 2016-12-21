@@ -151,21 +151,20 @@ public class MainNewsAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (!result.isClick) {
                     result.isClick = true;
-                    startActivity(WebViewActivity.class, position, result,true);
+                    startActivity(WebViewActivity.class, position, result);
                 } else {
-                    startActivity(WebViewActivity.class, position, result,true);
+                    startActivity(WebViewActivity.class, position, result);
                 }
             }
         });
         return convertView;
     }
 
-    public void startActivity(Class activity, int position, MainNewsVo result,boolean fromNews) {
+    public void startActivity(Class activity, int position, MainNewsVo result) {
         EventBus.getDefault().post(new EventBusType(Constants.MAIN_NEWS_FLAG, position));
         Intent intent = new Intent(context, activity);
         intent.putExtra(Constants.URL, result.dst);
         intent.putExtra(Constants.TITLE, result.title);
-        intent.putExtra(Constants.FROM_NEWS,fromNews);
         context.startActivity(intent);
         notifyDataSetChanged();
     }

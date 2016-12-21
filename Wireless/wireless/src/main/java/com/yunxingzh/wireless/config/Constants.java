@@ -21,7 +21,6 @@ public class Constants {
     public static final String VIDEO_URL = "video_url";
     public static final String URL = "url";
     public static final String TITLE = "title";
-    public static final String FROM_NEWS = "fromNews";
     public static final String ADVERT_IMG = "advertImg";
     public static final String ADVERT_URL = "advertUrl";
 
@@ -33,8 +32,6 @@ public class Constants {
     public static final int HEAD_LINE = 2;//头条
     public static final int SERVICE = 3;//服务
     public static final int VIDEO = 4;//视频
-    public static final int SPEED_TEST = 5;//wifi测速
-    public static final int SPEED_FLAG = 6;//wifi测速flag
     public static final String FRAGMENT_FLAG = "fragment_flag";//fragment flag
 
     //0、网络正常，可以发起调用认证、下线等接口。1、已经认证成功。

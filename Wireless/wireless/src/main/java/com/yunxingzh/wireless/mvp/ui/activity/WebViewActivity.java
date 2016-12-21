@@ -1,36 +1,26 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
-import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.StringUtils;
-import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.utils.WebViewUtil;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by stephon on 2016/11/10.
@@ -45,7 +35,6 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     private ProgressBar myProgressBar;
     private String mUrl;
     private String mTitle;
-    private boolean fromNews;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +57,6 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 
     public void initData() {
         StatusBarColor.compat(this, getResources().getColor(R.color.blue_009CFB));
-        fromNews = getIntent().getBooleanExtra(Constants.FROM_NEWS, false);
 
         mUrl = getIntent().getStringExtra(Constants.URL);
         mTitle = getIntent().getStringExtra(Constants.TITLE);

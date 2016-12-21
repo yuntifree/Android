@@ -21,6 +21,7 @@ public class SpeedTestDialog extends Dialog{
 
     private Context context;
     private TextView mMyQueryBtn,mMyCancel;
+    private OnDialogBtnClickListener onDialogBtnClickListener;
 
     public SpeedTestDialog(Context context) {
         super(context);
@@ -35,8 +36,6 @@ public class SpeedTestDialog extends Dialog{
         mMyCancel.setOnClickListener(buttonDialogListener);
         mMyQueryBtn = (TextView)findViewById(R.id.my_query);
         mMyQueryBtn.setOnClickListener(buttonDialogListener);
-        //注册EventBus
-        EventBus.getDefault().register(context);
     }
 
     private View.OnClickListener buttonDialogListener = new View.OnClickListener() {
@@ -44,17 +43,19 @@ public class SpeedTestDialog extends Dialog{
         @Override
         public void onClick(View view) {
             if(view.getId() == R.id.my_cancel){
-                if (EventBus.getDefault().isRegistered(context)) {
-                    EventBus.getDefault().unregister(context);
-                }
                 dismiss();
             } else if (view.getId() == R.id.my_query){
-                EventBus.getDefault().post(new EventBusType(Constants.SPEED_TEST,Constants.SPEED_FLAG));
-                if (EventBus.getDefault().isRegistered(context)) {
-                    EventBus.getDefault().unregister(context);
-                }
+                onDialogBtnClickListener.onQueryClick(1);
                 dismiss();
             }
         }
     };
+
+    public interface OnDialogBtnClickListener{
+        void onQueryClick(int flag);
+    }
+
+    public void setOnDialogBtnClickListener(OnDialogBtnClickListener onDialogBtnClickListener){
+        this.onDialogBtnClickListener = onDialogBtnClickListener;
+    }
 }
