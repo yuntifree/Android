@@ -34,7 +34,7 @@ public class BaseFragment extends Fragment implements IBaseView, View.OnTouchLis
     }
 
     public void needLogin() {
-        if (MainApplication.sApplication.needLogin()) {
+        if (MainApplication.get().needLogin()) {
             startActivity(new Intent());
         }
     }

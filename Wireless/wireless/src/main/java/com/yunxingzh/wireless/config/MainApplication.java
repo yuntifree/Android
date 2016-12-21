@@ -26,10 +26,10 @@ public class MainApplication extends Application {
     private static final String TAG = "Application";
 
     //TODO: change to private and get
-    public static MainApplication sApplication;
+    private static MainApplication sInst;
     private static String mCurrentProcessName;
 
-    public static MainApplication get() { return sApplication; }
+    public static MainApplication get() { return sInst; }
     private static final String UI_PROCESS_NAME = "com.yunxingzh.wireless";
     private static final String SERVICE_PROCESS_NAME = "com.yunxingzh.wireless.service";
 
@@ -46,7 +46,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        sApplication = this;
+        sInst = this;
         if (isUIApplication(this)) {
             try {
                 startService(new Intent(this, FWService.class));
@@ -79,14 +79,14 @@ public class MainApplication extends Application {
     }
 
     public boolean needLogin() {
-        return StringUtils.isEmpty(getToken()) || MainApplication.sApplication.getUser() == null;
+        return StringUtils.isEmpty(getToken()) || sInst.getUser() == null;
     }
 
     public String getMark() {
         if (StringUtils.isEmpty(mMark)) {
-            mMark = SPUtils.get(sApplication, Constants.SP_KEY_MARK, "");
+            mMark = SPUtils.get(sInst, Constants.SP_KEY_MARK, "");
             if (StringUtils.isEmpty(mMark.trim())) {
-                mMark = DeviceUtils.createUUID(sApplication);
+                mMark = DeviceUtils.createUUID(sInst);
             }
         }
         return mMark;
@@ -94,9 +94,9 @@ public class MainApplication extends Application {
 
     public String getToken() {
         if (StringUtils.isEmpty(mToken)) {
-            mToken = SPUtils.get(sApplication, Constants.SP_KEY_TOKEN, "");
+            mToken = SPUtils.get(sInst, Constants.SP_KEY_TOKEN, "");
 //            if (StringUtils.isEmpty(mToken)) {
-//                startActivity(new Intent(sApplication, RegisterActivity.class));
+//                startActivity(new Intent(sInst, RegisterActivity.class));
 //            }
         }
         return mToken;
@@ -104,48 +104,48 @@ public class MainApplication extends Application {
 
     public void setToken(String token) {
         mToken = token;
-        SPUtils.put(sApplication, Constants.SP_KEY_TOKEN, token);
+        SPUtils.put(sInst, Constants.SP_KEY_TOKEN, token);
     }
 
     public void setWifiPwd(String wifiPwd) {
         this.wifiPwd = wifiPwd;
-        SPUtils.put(sApplication, Constants.SP_WIFI_PWD, wifiPwd);
+        SPUtils.put(sInst, Constants.SP_WIFI_PWD, wifiPwd);
     }
 
     public String getWifiPwd() {
         if (wifiPwd == null) {
-            wifiPwd = SPUtils.get(sApplication, Constants.SP_WIFI_PWD,"");
+            wifiPwd = SPUtils.get(sInst, Constants.SP_WIFI_PWD,"");
         }
         return wifiPwd;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
-        SPUtils.put(sApplication, Constants.SP_TIME_OUT, userName);
+        SPUtils.put(sInst, Constants.SP_TIME_OUT, userName);
     }
 
     public String getUserName() {
         if (userName == null) {
-            userName = SPUtils.get(sApplication, Constants.SP_USER_NAME,"");
+            userName = SPUtils.get(sInst, Constants.SP_USER_NAME,"");
         }
         return userName;
     }
 
     public User getUser() {
         if (mUser == null) {
-            mUser = (User) SPUtils.getObject(sApplication, Constants.SP_KEY_USER);
+            mUser = (User) SPUtils.getObject(sInst, Constants.SP_KEY_USER);
         }
         return mUser;
     }
 
     public void setUser(User mUser) {
         this.mUser = mUser;
-        SPUtils.putObject(sApplication, Constants.SP_KEY_USER, mUser);
+        SPUtils.putObject(sInst, Constants.SP_KEY_USER, mUser);
     }
 
     public void loginOut() {
-        MainApplication.sApplication.setToken("");
-        MainApplication.sApplication.setUser(null);
+        MainApplication.sInst.setToken("");
+        MainApplication.sInst.setUser(null);
     }
 
     public static boolean isUIApplication(Context context) {

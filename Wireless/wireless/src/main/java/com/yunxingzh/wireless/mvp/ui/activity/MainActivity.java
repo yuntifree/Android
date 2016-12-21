@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         //听云
         NBSAppAgent.setLicenseKey("87fb7caacc08462a8aecd82cb1c6d4fd").withLocationServiceEnabled(true).start(this.getApplicationContext());
 
-        if (StringUtils.isEmpty(MainApplication.sApplication.getToken()) || MainApplication.sApplication.needLogin()) {
+        if (StringUtils.isEmpty(MainApplication.get().getToken()) || MainApplication.get().needLogin()) {
             startActivity(new Intent(this, RegisterActivity.class));
             finish();
             return;
