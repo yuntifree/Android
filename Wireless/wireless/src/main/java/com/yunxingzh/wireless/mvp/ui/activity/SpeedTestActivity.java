@@ -448,7 +448,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             if (++mRunnableCount > 10) {
                 return;
             }
-            if (!TextUtils.isEmpty(mUrl) && !mShutDown && NetUtil.isConnectedWifi(MainApplication.getInstance())) {
+            if (!TextUtils.isEmpty(mUrl) && !mShutDown && NetUtil.isConnectedWifi(MainApplication.get())) {
                 InputStream is = null;
                 try {
                     URL myURL = new URL(mUrl);
@@ -463,12 +463,12 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
                     while (!mShutDown && (is.read(buf) > 0)) {
                         if (count++ > 25) {
                             count = 0;
-                            if (!NetUtil.isConnectedWifi(MainApplication.getInstance())) {
+                            if (!NetUtil.isConnectedWifi(MainApplication.get())) {
                                 break;
                             }
                         }
                     }
-                    if (!mShutDown && NetUtil.isConnectedWifi(MainApplication.getInstance())) {
+                    if (!mShutDown && NetUtil.isConnectedWifi(MainApplication.get())) {
                         new DefaultRunnable(mApkUrl).run();
                     }
                 } catch (Exception e) {

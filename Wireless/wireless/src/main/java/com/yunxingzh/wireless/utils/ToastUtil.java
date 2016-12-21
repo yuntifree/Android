@@ -32,13 +32,13 @@ public class ToastUtil {
 
     public static void showDebug(String msg) {
         if (AppConfig.DEV_MODEL) {
-            MainApplication appContext = MainApplication.getInstance();
+            MainApplication appContext = MainApplication.get();
             Toast.makeText(appContext, msg, Toast.LENGTH_SHORT).show();
         }
     }
 
     public static void show(String msg) {
-        MainApplication appContext = MainApplication.getInstance();
+        MainApplication appContext = MainApplication.get();
         Toast.makeText(appContext, msg, Toast.LENGTH_SHORT).show();
     }
 

@@ -450,8 +450,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             if (success) {
                 switch (mCheckRet) {
                     case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
-                        WifiInterface.wifiLogon(validateHandler, MainApplication.getInstance().getUserName(),
-                                MainApplication.getInstance().getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
+                        WifiInterface.wifiLogon(validateHandler, MainApplication.get().getUserName(),
+                                MainApplication.get().getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
                         break;
                     case Constants.VALIDATE_SUCCESS://1、已经认证成功。
                         iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报

@@ -46,7 +46,7 @@ public abstract class HttpHandler<T> implements Callback {
     protected Class<T> entityClass;   //T.class 泛型的class类型  用于gson解析\
 
     public HttpHandler() {
-        this.mAppContext = MainApplication.getInstance();
+        this.mAppContext = MainApplication.get();
         try {
             entityClass = (Class<T>) ((ParameterizedType) getClass()
                     .getGenericSuperclass()).getActualTypeArguments()[0];
@@ -136,7 +136,7 @@ public abstract class HttpHandler<T> implements Callback {
             public void run() {
                 if (serverTip.errno == ErrorType.E_TOKEN || serverTip.errno == ErrorType.E_DELETED_USER) {
                     //无Token或者被拉黑
-                    MainApplication app = MainApplication.getInstance();
+                    MainApplication app = MainApplication.get();
                     app.setToken("");
                     app.setUser(null);
                     Intent intent = new Intent(mAppContext, RegisterActivity.class);

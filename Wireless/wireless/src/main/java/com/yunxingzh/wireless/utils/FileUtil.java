@@ -665,14 +665,14 @@ public class FileUtil {
      * @param filePath
      * @return
      */
-    /*public static boolean isFileExist(String filePath) {
-        if (StringUtil.isBlank(filePath)) {
+    public static boolean isFileExist(String filePath) {
+        if (StringUtils.isEmpty(filePath)) {
             return false;
         }
 
         File file = new File(filePath);
         return (file.exists() && file.isFile());
-    }*/
+    }
 
     /**
      * Indicates if this file represents a directory on the underlying file system.
@@ -680,14 +680,14 @@ public class FileUtil {
      * @param directoryPath
      * @return
      */
-   /* public static boolean isFolderExist(String directoryPath) {
-        if (StringUtils.isBlank(directoryPath)) {
+    public static boolean isFolderExist(String directoryPath) {
+        if (StringUtils.isEmpty(directoryPath)) {
             return false;
         }
 
         File dire = new File(directoryPath);
         return (dire.exists() && dire.isDirectory());
-    }*/
+    }
 
     /**
      * delete file or directory

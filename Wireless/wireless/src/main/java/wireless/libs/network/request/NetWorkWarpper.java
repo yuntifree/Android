@@ -59,8 +59,8 @@ public class NetWorkWarpper {
         httpParams.add("username", phone);
         httpParams.add("password", StringUtils.getMD5(code));
         httpParams.add("model", AppUtils.getPhoneModel());
-        httpParams.add("channel", AppUtils.getChannelName(MainApplication.getInstance()));
-        httpParams.add("udid", MainApplication.getInstance().getMark());
+        httpParams.add("channel", AppUtils.getChannelName(MainApplication.get()));
+        httpParams.add("udid", MainApplication.get().getMark());
         HttpUtils.post(path, httpParams, httpHandler);
     }
 
