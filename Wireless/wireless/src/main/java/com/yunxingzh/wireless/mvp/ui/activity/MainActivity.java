@@ -282,7 +282,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         protected void onPostExecute(String result) {
             if (!StringUtils.isEmpty(result)) {
-                SPUtils.put(MainApplication.get(), Constants.ADVERT_IMG, path);//保存图片路径
+                SPUtils.put(MainApplication.get(), Constants.ADVERT_IMG, path);//保存文件路径
             } else {
                 LogUtils.e("lsd", "写入文件失败");
             }

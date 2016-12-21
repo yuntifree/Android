@@ -65,6 +65,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
@@ -305,7 +307,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 //ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
             }
             // 判断下按钮的状态
-            updateConnectState();
+            updateConnectState(true);
         }
     };
 
@@ -373,11 +375,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
                     CheckAndLogon();
                 } else {
-                    updateConnectState();
+                    updateConnectState(true);
                 }
             } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
                 // 断开网
-                updateConnectState();
+                updateConnectState(false);
             }
         }
 
@@ -456,7 +458,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                     case Constants.VALIDATE_SUCCESS://1、已经认证成功。
                         iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
                         // 判断下按钮的状态
-                        updateConnectState();
+                        updateConnectState(true);
                         break;
                     default:
                         LogUtils.d("scan error:", mCheckRet + "");
@@ -474,7 +476,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     //连接后改变状态
-    public void updateConnectState() {
+    public void updateConnectState(boolean updateNews) {
         currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
         mDGFreeConnected = false;
         if (currentAp != null) {
@@ -500,11 +502,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         } else {
             startAnimation();
         }
-        // 网络更新时尝试刷新新闻
-        if (NetUtils.isNetworkAvailable(getActivity())) {
-            if (iHeadLinePresenter != null) {
-                iHeadLinePresenter.weatherNews();
-            }
+        if (updateNews) {
+            // 网络更新时尝试刷新新闻
+            new Thread(new RefreshNewsThread()).start();
         }
     }
 
@@ -589,6 +589,34 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         }
     }
 
+    public class RefreshNewsThread implements Runnable {
+        @Override
+        public void run() {
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                public void run() {
+                    if (NetUtils.isNetworkAvailable(getActivity())) {
+                        Message message = new Message();
+                        message.what = 1;
+                        refreshNewsHandler.sendMessage(message);
+                    }
+                }
+            }, 1000);
+        }
+    }
+
+    public Handler refreshNewsHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {//网络可用则刷新新闻列表
+                if (iHeadLinePresenter != null) {
+                    iHeadLinePresenter.weatherNews();
+                }
+            }
+        }
+    };
+
     @Subscribe
     public void onEventMainThread(EventBusType event) {
         int index = event.getChildMsg();
@@ -660,7 +688,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     @Override
     public void onResume() {
         super.onResume();
-        updateConnectState();
+        updateConnectState(true);
         if (bannersVo != null) {
             bannersState();
         }

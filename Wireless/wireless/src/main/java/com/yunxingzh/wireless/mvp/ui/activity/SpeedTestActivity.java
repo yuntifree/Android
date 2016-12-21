@@ -16,21 +16,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.config.Constants;
-import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MainApplication;
+import com.yunxingzh.wireless.mview.RotatePointer;
 import com.yunxingzh.wireless.mview.SpeedTestDialog;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.AppUtils;
-import com.yunxingzh.wireless.mview.RotatePointer;
 import com.yunxingzh.wireless.utils.NetUtil;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.utils.Util;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -139,20 +134,6 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     public void onQueryClick(int flag) {
         speedFlag = flag;
         initThread();
-    }
-
-//    @Subscribe
-//    public void onEventMainThread(EventBusType event) {
-//        speedFlag = event.getChildMsg();
-//        if (event.getMsg() == Constants.SPEED_TEST) {
-//            initThread();
-//        }
-//    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
     private void initThread() {
