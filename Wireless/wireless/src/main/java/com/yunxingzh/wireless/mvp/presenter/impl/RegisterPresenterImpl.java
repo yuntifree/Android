@@ -43,8 +43,8 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
     public void getValidateCode(int type) {
         if (iLoginView != null && inputValidate()) {
           //  iLoginView.showProgress();
-//            iUserModel.getValidateCode(0,Double.parseDouble(AppUtils.getVersionName(MainApplication.sApplication)),
-//                    StringUtils.getCurrentTime(), AppUtils.getNetWorkType(MainApplication.sApplication),
+//            iUserModel.getValidateCode(0,Double.parseDouble(AppUtils.getVersionName(MainApplication.get())),
+//                    StringUtils.getCurrentTime(), AppUtils.getNetWorkType(MainApplication.get()),
 //                    type, this);
         }
     }
@@ -65,10 +65,10 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
 
     @Override
     public void onRegisterSuccess(User userVo) {
-        MainApplication.sApplication.setUser(userVo);
-        MainApplication.sApplication.setToken(userVo.token);
-        MainApplication.sApplication.setUserName(iLoginView.getPhone());
-        MainApplication.sApplication.setWifiPwd(iLoginView.getCode());
+        MainApplication.get().setUser(userVo);
+        MainApplication.get().setToken(userVo.token);
+        MainApplication.get().setUserName(iLoginView.getPhone());
+        MainApplication.get().setWifiPwd(iLoginView.getCode());
         if (iLoginView != null){
             iLoginView.registerSuccess();
         }

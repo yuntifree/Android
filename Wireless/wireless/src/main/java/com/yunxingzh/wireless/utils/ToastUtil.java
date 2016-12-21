@@ -45,8 +45,8 @@ public class ToastUtil {
     public static void showError(Context context, int error) {
         if (error == HttpCode.E_TOKEN ) {
             showMiddle(context, R.string.lost_token);
-            MainApplication.sApplication.setToken("");
-            MainApplication.sApplication.setUser(null);
+            MainApplication.get().setToken("");
+            MainApplication.get().setUser(null);
             Intent intent = new Intent(context, RegisterActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);//清空栈
             context.startActivity(intent);
