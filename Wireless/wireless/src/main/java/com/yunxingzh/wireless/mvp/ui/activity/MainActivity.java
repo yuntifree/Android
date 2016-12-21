@@ -237,6 +237,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 SPUtils.put(this, Constants.TITLE, advertData.title);
                 new DownLoadFile().execute(advertData.img);//下载图片
             }
+        } else {
+            //如果为空则清空保存的广告
+            SPUtils.put(this,Constants.ADVERT_URL,"");
+            SPUtils.put(this,Constants.ADVERT_IMG,"");
         }
     }
 

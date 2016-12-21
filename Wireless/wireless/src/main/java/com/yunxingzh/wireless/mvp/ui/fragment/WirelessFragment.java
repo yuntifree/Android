@@ -601,7 +601,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                         refreshNewsHandler.sendMessage(message);
                     }
                 }
-            }, 1000);
+            }, 2000);
         }
     }
 
