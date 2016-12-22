@@ -109,11 +109,11 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         swipeRefreshLayout.setRefreshing(true);
         if (!NetUtils.isNetworkAvailable(getActivity())) {
-            netErrorLayout = new NetErrorLayout();
+            netErrorLayout = new NetErrorLayout(getActivity());
             netErrorLayout.setOnNetErrorClickListener(this);
             swipeRefreshLayout.setVisibility(View.GONE);
             mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(getActivity(), 0);
+            View netErrorView = netErrorLayout.netErrorLay(0);
             mNetErrorLay.addView(netErrorView);
         }
     }

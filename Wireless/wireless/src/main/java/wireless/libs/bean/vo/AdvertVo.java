@@ -10,4 +10,5 @@ public class AdvertVo implements Serializable{
     public String img;
     public String dst;
     public String title;
+    public String expire;//活动过期时间
 }

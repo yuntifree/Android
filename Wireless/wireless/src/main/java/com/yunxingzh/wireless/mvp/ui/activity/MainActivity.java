@@ -39,6 +39,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.StretchVo;
@@ -234,16 +236,18 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void getAdvertSuccess(AdvertVo advertData) {
         if (advertData != null) {
-            url = SPUtils.get(MainApplication.get(), Constants.ADVERT_URL, "");
-            if (!(advertData.dst.equals(url) && FileUtil.isFileExist(path))) {
-                SPUtils.put(this, Constants.ADVERT_URL, advertData.dst);
-                SPUtils.put(this, Constants.TITLE, advertData.title);
-                new DownLoadFile().execute(advertData.img);//下载图片
+            if(!advertData.expire.equals(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))) {
+                url = SPUtils.get(MainApplication.get(), Constants.ADVERT_URL, "");
+                if (!(advertData.dst.equals(url) && FileUtil.isFileExist(path))) {
+                    SPUtils.put(this, Constants.ADVERT_URL, advertData.dst);
+                    SPUtils.put(this, Constants.TITLE, advertData.title);
+                    new DownLoadFile().execute(advertData.img);//下载图片
+                }
+            } else {
+                //如果日期相同则活动到期，并清空本地数据
+                SPUtils.put(this,Constants.ADVERT_URL,"");
+                SPUtils.put(this,Constants.ADVERT_IMG,"");
             }
-        } else {
-            //如果为空则清空保存的广告
-            SPUtils.put(this,Constants.ADVERT_URL,"");
-            SPUtils.put(this,Constants.ADVERT_IMG,"");
         }
     }
 

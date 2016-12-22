@@ -79,8 +79,8 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         iServicePresenter = new ServicePresenterImpl(this);
         iServicePresenter.getService();
         if (!NetUtils.isNetworkAvailable(getActivity())) {
-            netErrorLayout = new NetErrorLayout();
-            final View netErrorView = netErrorLayout.netErrorLay(getActivity(), 0);
+            netErrorLayout = new NetErrorLayout(getActivity());
+            final View netErrorView = netErrorLayout.netErrorLay(0);
             netErrorLayout.setOnNetErrorClickListener(new NetErrorLayout.OnNetErrorClickListener() {
                 @Override
                 public void netErrorClick() {

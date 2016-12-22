@@ -90,11 +90,11 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         }
         if (!NetUtils.isNetworkAvailable(getActivity())) {
-            netErrorLayout = new NetErrorLayout();
+            netErrorLayout = new NetErrorLayout(getActivity());
             netErrorLayout.setOnNetErrorClickListener(this);
             mSwipeRefreshLay.setVisibility(View.GONE);
             mNetErrorVideoLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(getActivity(), getResources().getColor(R.color.gray_f5f5f5));
+            View netErrorView = netErrorLayout.netErrorLay(getResources().getColor(R.color.gray_f5f5f5));
             mNetErrorVideoLay.addView(netErrorView);
         }
         mListRv.addOnItemTouchListener(new OnItemClickListener() {

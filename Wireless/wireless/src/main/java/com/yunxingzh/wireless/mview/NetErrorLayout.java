@@ -14,12 +14,14 @@ import com.yunxingzh.wireless.R;
 
 public class NetErrorLayout {
 
-    public NetErrorLayout() {
-    }
-
+    private Context context;
     private OnNetErrorClickListener onNetErrorClickListener;
 
-    public View netErrorLay(Context context, int color) {
+    public NetErrorLayout(Context context) {
+        this.context = context;
+    }
+
+    public View netErrorLay(int color) {
         View netView = LayoutInflater.from(context).inflate(R.layout.wifi_closed, null);
         netView.setBackgroundColor(color);
         TextView openTv = (TextView) netView.findViewById(R.id.net_open_tv);
