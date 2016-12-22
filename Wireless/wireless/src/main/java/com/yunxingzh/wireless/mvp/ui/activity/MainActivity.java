@@ -235,20 +235,29 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Override
     public void getAdvertSuccess(AdvertVo advertData) {
+        boolean removeAd = false;
         if (advertData != null) {
-            if(!StringUtils.isExpired(advertData.expire)) {
+            if (!StringUtils.isExpired(advertData.expire)) {
                 SPUtils.put(this, Constants.ADVERT_DATE, advertData.expire);
                 url = SPUtils.get(MainApplication.get(), Constants.ADVERT_URL, "");
                 if (!(advertData.dst.equals(url) && FileUtil.isFileExist(path))) {
-                    SPUtils.put(this, Constants.ADVERT_URL, advertData.dst);
-                    SPUtils.put(this, Constants.TITLE, advertData.title);
+                    SPUtils.put(MainApplication.get(), Constants.ADVERT_URL, advertData.dst);
+                    SPUtils.put(MainApplication.get(), Constants.TITLE, advertData.title);
                     new DownLoadFile().execute(advertData.img);//下载图片
                 }
             } else {
-                //如果活动到期，并清空本地数据
-                SPUtils.remove(this,Constants.ADVERT_URL);
-                SPUtils.remove(this,Constants.ADVERT_IMG);
+                // 广告到期
+                removeAd = true;
             }
+        } else {
+            // 广告下线
+            removeAd = true;
+        }
+        if (removeAd) {
+            //如果广告下线或者到期，并清空本地数据
+            SPUtils.remove(MainApplication.get(), Constants.ADVERT_URL);
+            SPUtils.remove(MainApplication.get(), Constants.ADVERT_IMG);
+            SPUtils.remove(MainApplication.get(), Constants.ADVERT_DATE);
         }
     }
 

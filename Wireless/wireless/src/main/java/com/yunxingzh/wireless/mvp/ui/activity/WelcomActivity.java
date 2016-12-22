@@ -46,16 +46,14 @@ public class WelcomActivity extends BaseActivity {
                     finish();
                 } else {
                     String expireDate = SPUtils.get(MainApplication.get(),Constants.ADVERT_DATE,"");
-                    if (!StringUtils.isEmpty(expireDate)) {
-                        if (!StringUtils.isExpired(expireDate)) {
-                            imgPath = SPUtils.get(MainApplication.get(), Constants.ADVERT_IMG, "");
-                            url = SPUtils.get(MainApplication.get(), Constants.ADVERT_URL, "");
-                            if (FileUtil.isFileExist(imgPath) && !StringUtils.isEmpty(url)) {
-                                startActivity(AdvertActivity.class, Constants.ADVERT_URL, url, Constants.ADVERT_IMG, imgPath);
-                            } else {
-                                //本地没有直接跳首页
-                                startActivity(MainActivity.class, "", "", "", "");
-                            }
+                    if (!StringUtils.isExpired(expireDate)) {
+                        imgPath = SPUtils.get(MainApplication.get(), Constants.ADVERT_IMG, "");
+                        url = SPUtils.get(MainApplication.get(), Constants.ADVERT_URL, "");
+                        if (FileUtil.isFileExist(imgPath) && !StringUtils.isEmpty(url)) {
+                            startActivity(AdvertActivity.class, Constants.ADVERT_URL, url, Constants.ADVERT_IMG, imgPath);
+                        } else {
+                            //本地没有直接跳首页
+                            startActivity(MainActivity.class, "", "", "", "");
                         }
                     } else {
                         //活动过期直接跳首页
