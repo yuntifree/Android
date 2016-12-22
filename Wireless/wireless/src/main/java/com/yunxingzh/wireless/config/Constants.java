@@ -23,6 +23,7 @@ public class Constants {
     public static final String TITLE = "title";
     public static final String ADVERT_IMG = "advertImg";
     public static final String ADVERT_URL = "advertUrl";
+    public static final String ADVERT_DATE = "advertDate";
 
 
     //eventBus flag

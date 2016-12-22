@@ -52,6 +52,22 @@ public class StringUtils {
         return (System.currentTimeMillis() / 1000L + 1);
     }
 
+    /**
+     * 是否到达某个日期（与当前时间比）
+     *
+     * @param date
+     */
+    public static boolean isExpired(String date) {
+        Date nowDate = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        Date mDate = null;
+        try {
+            mDate = sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return mDate.before(nowDate);
+    }
 
     /**
      * 格式化价格 返回(￥00.00)
@@ -69,7 +85,7 @@ public class StringUtils {
     /**
      * 定时弹出软键盘
      */
-    public static void popUpKeyboard(final View view){
+    public static void popUpKeyboard(final View view) {
         view.setFocusable(true);
         view.setFocusableInTouchMode(true);
         view.requestFocus();
@@ -77,7 +93,7 @@ public class StringUtils {
         timer.schedule(new TimerTask() {
                            public void run() {
                                InputMethodManager inputManager =
-                                       (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                       (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                                inputManager.showSoftInput(view, 0);
                            }
                        },
@@ -106,9 +122,10 @@ public class StringUtils {
 
     /**
      * 获取当前时间(时：小写的“h”是12小时制，大写的“H”是24小时制)
+     *
      * @return
      */
-    public static String getTime(){
+    public static String getTime() {
         SimpleDateFormat sDateFormat = new SimpleDateFormat("HH");
         return sDateFormat.format(new Date());
     }
@@ -218,9 +235,9 @@ public class StringUtils {
     /**
      * 格式化日期显示
      */
-    public static String formatDate(String mDate){
+    public static String formatDate(String mDate) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date d= null;
+        Date d = null;
         try {
             d = formatter.parse(mDate);
         } catch (ParseException e) {
