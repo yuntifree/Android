@@ -55,18 +55,20 @@ public class StringUtils {
     /**
      * 是否到达某个日期（与当前时间比）
      *
-     * @param date
+     * @param date ""表示过期
      */
     public static boolean isExpired(String date) {
         Date nowDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-        Date mDate = null;
+        boolean bRet = true;
+        Date mDate;
         try {
             mDate = sdf.parse(date);
+            bRet = mDate.before(nowDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return mDate.before(nowDate);
+        return bRet;
     }
 
     /**
