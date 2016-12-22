@@ -11,12 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.VideoPlayActivity;
@@ -43,7 +43,8 @@ import wireless.libs.bean.vo.HotInfo;
  * 头条-视频
  */
 
-public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener,
+        NetErrorLayout.OnNetErrorClickListener {
 
     private final static int HEAD_LINE_TYPE = 1;// 0-新闻 1-视频 2-应用 3-游戏 5-东莞新闻
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -59,6 +60,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private List<HotInfo> newsVo;
     private boolean isFirstRefresh = true;
     private boolean count = false;
+    private NetErrorLayout netErrorLayout;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -87,7 +89,14 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         if (NetUtils.isNetworkAvailable(getActivity())) {
             iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         }
-        netErrorLay();
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            netErrorLayout = new NetErrorLayout();
+            netErrorLayout.setOnNetErrorClickListener(this);
+            mSwipeRefreshLay.setVisibility(View.GONE);
+            mNetErrorVideoLay.setVisibility(View.VISIBLE);
+            View netErrorView = netErrorLayout.netErrorLay(getActivity(), getResources().getColor(R.color.gray_f5f5f5));
+            mNetErrorVideoLay.addView(netErrorView);
+        }
         mListRv.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, final int i) {
@@ -189,31 +198,14 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         startActivity(intent);
     }
 
-    public void netErrorLay(){
-        if (!NetUtils.isNetworkAvailable(getActivity())){
-            View netView = LayoutInflater.from(getActivity()).inflate(R.layout.wifi_closed, null);
-            netView.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
-            mSwipeRefreshLay.setVisibility(View.GONE);
-            mNetErrorVideoLay.setVisibility(View.VISIBLE);
-            TextView openTv = (TextView) netView.findViewById(R.id.net_open_tv);
-            TextView contentTv = (TextView) netView.findViewById(R.id.net_content_tv);
-            TextView refreshBtn = (TextView) netView.findViewById(R.id.open_wifi_btn);
-            openTv.setVisibility(View.GONE);
-            contentTv.setText(R.string.network_error);
-            refreshBtn.setText(R.string.refresh_net);
-            mNetErrorVideoLay.addView(netView);
-            refreshBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!NetUtils.isNetworkAvailable(getActivity())) {
-                        ToastUtil.showMiddle(getActivity(), R.string.net_set);
-                    } else {
-                        mNetErrorVideoLay.setVisibility(View.GONE);
-                        mSwipeRefreshLay.setVisibility(View.VISIBLE);
-                        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
-                    }
-                }
-            });
+    @Override
+    public void netErrorClick() {
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            ToastUtil.showMiddle(getActivity(), R.string.net_set);
+        } else {
+            mNetErrorVideoLay.setVisibility(View.GONE);
+            mSwipeRefreshLay.setVisibility(View.VISIBLE);
+            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         }
     }
 }

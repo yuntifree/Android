@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.IServicePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
@@ -28,8 +29,8 @@ import com.yunxingzh.wireless.utils.ToastUtil;
 
 import java.util.List;
 
-import wireless.libs.bean.vo.Service;
 import wireless.libs.bean.resp.ServiceList;
+import wireless.libs.bean.vo.Service;
 
 /**
  * Created by stephon_ on 2016/11/1.
@@ -46,6 +47,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     private LinearLayout mServiceParentGroup;
     private IServicePresenter iServicePresenter;
     private IHeadLinePresenter iHeadLinePresenter;
+    private NetErrorLayout netErrorLayout;
 
     @Nullable
     @Override
@@ -76,26 +78,21 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         iHeadLinePresenter = new HeadLinePresenterImpl();
         iServicePresenter = new ServicePresenterImpl(this);
         iServicePresenter.getService();
-        if (!NetUtils.isNetworkAvailable(getActivity())){
-            final View netView = LayoutInflater.from(getActivity()).inflate(R.layout.wifi_closed, null);
-            TextView openTv = (TextView) netView.findViewById(R.id.net_open_tv);
-            TextView contentTv = (TextView) netView.findViewById(R.id.net_content_tv);
-            TextView refreshBtn = (TextView) netView.findViewById(R.id.open_wifi_btn);
-            openTv.setVisibility(View.GONE);
-            contentTv.setText(R.string.network_error);
-            refreshBtn.setText(R.string.refresh_net);
-            mServiceParentGroup.addView(netView,getLayoutParams(0,Gravity.CENTER,LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,0,200,0,0));
-            refreshBtn.setOnClickListener(new View.OnClickListener() {
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            netErrorLayout = new NetErrorLayout();
+            final View netErrorView = netErrorLayout.netErrorLay(getActivity(), 0);
+            netErrorLayout.setOnNetErrorClickListener(new NetErrorLayout.OnNetErrorClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void netErrorClick() {
                     if (!NetUtils.isNetworkAvailable(getActivity())) {
                         ToastUtil.showMiddle(getActivity(), R.string.net_set);
                     } else {
-                        netView.setVisibility(View.GONE);
+                        netErrorView.setVisibility(View.GONE);
                         iServicePresenter.getService();
                     }
                 }
             });
+            mServiceParentGroup.addView(netErrorView,getLayoutParams(0,Gravity.CENTER,LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,0,200,0,0));
         }
     }
 
@@ -252,4 +249,5 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             serviceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
         }
     }
+
 }

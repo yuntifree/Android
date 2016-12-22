@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
@@ -29,17 +29,17 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import wireless.libs.bean.vo.HotInfo;
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.resp.WeatherNewsList;
+import wireless.libs.bean.vo.HotInfo;
 
 /**
  * Created by stephon_ on 2016/11/2.
  * 头条-新闻
  */
 
-public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener {
+public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener,NetErrorLayout.OnNetErrorClickListener {
 
     private final static int HEAD_LINE_TYPE = 0;// 0-新闻 1-视频 2-应用 3-游戏 5-东莞新闻
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
@@ -53,6 +53,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private HotInfoList data;
     private LinearLayout mNetErrorLay;
     private boolean isFastClick = true;
+    private NetErrorLayout netErrorLayout;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child_news, container, false);
@@ -107,7 +108,14 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         swipeRefreshLayout.setRefreshing(true);
-        netErrorLay();
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            netErrorLayout = new NetErrorLayout();
+            netErrorLayout.setOnNetErrorClickListener(this);
+            swipeRefreshLayout.setVisibility(View.GONE);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+            View netErrorView = netErrorLayout.netErrorLay(getActivity(), 0);
+            mNetErrorLay.addView(netErrorView);
+        }
     }
 
     @Subscribe
@@ -150,33 +158,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         }
     }
 
-    public void netErrorLay() {
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            View netView = LayoutInflater.from(getActivity()).inflate(R.layout.wifi_closed, null);
-            swipeRefreshLayout.setVisibility(View.GONE);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            TextView openTv = (TextView) netView.findViewById(R.id.net_open_tv);
-            TextView contentTv = (TextView) netView.findViewById(R.id.net_content_tv);
-            TextView refreshBtn = (TextView) netView.findViewById(R.id.open_wifi_btn);
-            openTv.setVisibility(View.GONE);
-            contentTv.setText(R.string.network_error);
-            refreshBtn.setText(R.string.refresh_net);
-            mNetErrorLay.addView(netView);
-            refreshBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!NetUtils.isNetworkAvailable(getActivity())) {
-                        ToastUtil.showMiddle(getActivity(), R.string.net_set);
-                    } else {
-                        mNetErrorLay.setVisibility(View.GONE);
-                        swipeRefreshLayout.setVisibility(View.VISIBLE);
-                        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
-                    }
-                }
-            });
-        }
-    }
-
     @Override
     public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {
     }
@@ -189,6 +170,18 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     public void onRefresh() {
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         newsListNext.clear();
+    }
+
+
+    @Override
+    public void netErrorClick() {
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            ToastUtil.showMiddle(getActivity(), R.string.net_set);
+        } else {
+            mNetErrorLay.setVisibility(View.GONE);
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
+            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+        }
     }
 
     public void startActivity(Class activity, String key, String videoUrl, String titleKey, String title) {
