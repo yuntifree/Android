@@ -179,4 +179,15 @@ public class NetWorkWarpper {
         HttpParams httpParams = new HttpParams();
         HttpUtils.post(path, httpParams, handler);
     }
+
+    /**
+     * 用户反馈
+     * @param handler
+     */
+    public static void feedBack(String content,HttpHandler<Object> handler) {
+        String path = "feedback";
+        HttpParams httpParams = new HttpParams();
+        httpParams.add("content",content);
+        HttpUtils.post(path, httpParams, handler);
+    }
 }

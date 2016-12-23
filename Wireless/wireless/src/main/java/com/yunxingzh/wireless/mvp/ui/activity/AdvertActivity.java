@@ -74,7 +74,7 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
                 mAdvertTimeTv.setText(recLen + "");
                 handler.postDelayed(this, 1000);
             } else {
-                startActivity(MainActivity.class, "", "", "", "");
+                startActivity(MainActivity.class, "", "", "", "", "");
                 finish();
             }
         }
@@ -85,11 +85,11 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
         if (mAdvertInfoTv == v || mAdvertBgIv == v) {//了解详情
             if (!StringUtils.isEmpty(url) && !StringUtils.isEmpty(title)) {
                 handler.removeCallbacks(runnable);
-                startActivity(WebViewActivity.class, Constants.URL, url, Constants.TITLE, title);
+                startActivity(WebViewActivity.class, Constants.URL, url, Constants.TITLE, title, Constants.ADVERT_FLAG);
                 finish();
             }
         } else if (mAdvertJumpLay == v) {//跳过
-            startActivity(MainActivity.class, "", "", "", "");
+            startActivity(MainActivity.class, "", "", "", "", "");
             finish();
         }
     }
@@ -101,10 +101,11 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
         handler.removeCallbacks(runnable);
     }
 
-    public void startActivity(Class activity, String urlKey, String url, String titleKey, String title) {
+    public void startActivity(Class activity, String urlKey, String url, String titleKey, String title, String advertFlag) {
         Intent intent = new Intent(this, activity);
         intent.putExtra(urlKey, url);
         intent.putExtra(titleKey, title);
+        intent.putExtra(Constants.ADVERT_FLAG, advertFlag);
         startActivity(intent);
     }
 }

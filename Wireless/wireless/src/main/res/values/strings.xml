@@ -143,6 +143,17 @@
     <string name="connect_content">您已连接。。。wifi，确定要切换吗？</string>
     <string name="notice_toast">周围没有发现东莞免费WiFi</string>
     <string name="close">关闭</string>
+    <string name="clean">清理缓存</string>
+    <string name="feed_back">意见反馈</string>
+    <string name="about_us">关于我们</string>
+    <string name="set">通用设置</string>
+    <string name="app_content">CopyRight2016 东莞无限</string>
+    <string name="hint">请详细描述您遇到的问题或建议，我们将在收到的第一时间跟进…（120字以内）</string>
+    <string name="commit">提交</string>
+    <string name="commit_success">感谢您的反馈</string>
+    <string name="input_feed_content">请输入要反馈的内容</string>
+
+
 
 
     <string name="wsmpurl">http://120.234.130.196:880/wsmp/interface</string>

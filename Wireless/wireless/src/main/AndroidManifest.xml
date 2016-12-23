@@ -121,6 +121,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemes"/>
 
+        <activity
+            android:name=".mvp.ui.activity.SetActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemes"/>
+
+        <activity
+            android:name=".mvp.ui.activity.FeedBackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemes"/>
+
 
         <!--定位所需服务-->
         <service

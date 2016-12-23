@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_f0f0f0"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/title_public"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/bg_write" />
+
+        <EditText
+            android:id="@+id/feed_context_et"
+            android:layout_width="280dp"
+            android:layout_height="168dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="8dp"
+            android:gravity="top"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray_b4b4b4"
+            android:background="@null"
+            android:hint="@string/hint" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp">
+
+        <Button
+            android:id="@+id/feed_commit_btn"
+            android:layout_width="145dp"
+            android:layout_height="35dp"
+            android:textColor="@color/white"
+            android:background="@drawable/style_feed_back_btn"
+            android:layout_gravity="center"
+            android:text="@string/commit"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/img_letter"
+            android:layout_marginRight="80dp"
+            android:layout_gravity="center|bottom"/>
+
+    </FrameLayout>
+
+</LinearLayout>

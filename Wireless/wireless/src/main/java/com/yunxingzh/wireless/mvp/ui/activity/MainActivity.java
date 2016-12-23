@@ -14,7 +14,6 @@ import android.widget.RadioGroup;
 
 import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
-import com.yunxingzh.wireless.BuildConfig;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.AppConfig;
 import com.yunxingzh.wireless.config.Constants;
@@ -39,8 +38,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.StretchVo;

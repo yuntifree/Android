@@ -39,6 +39,7 @@ import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.ConnectDGCountPresenterImpl;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.SetActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.SpeedTestActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
@@ -97,12 +98,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private final static int SCANNIN_GREQUEST_CODE = 1;
     private static final int DG_SDK_TIME_OUT = 10 * 1000;
 
-    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest, mTitleLeftLay,
+    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest,
             mMainHeadImg, mWeatherLay, mMainSpiritedLay, mTitleLay;
     private MyScrollView scrollView;
     private TextView mConnectCountTv, mTitleNameTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
-    private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop, mConnectIv, mTitleMainImg;
+    private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop, mConnectIv, mTitleMainImg,mTitleReturnIv;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private IConnectDGCountPresenter iConnectDGCountPresenter;
@@ -136,8 +137,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     public void initView(View view) {
-        mTitleLeftLay = findView(view, R.id.title_left_lay);
-        mTitleLeftLay.setVisibility(View.INVISIBLE);
+        mTitleReturnIv = findView(view, R.id.title_return_iv);
+        mTitleReturnIv.setOnClickListener(this);
+        mTitleReturnIv.setImageResource(R.drawable.wireless_ico_setting);
         mTitleNameTv = findView(view, R.id.title_name_tv);
         mTitleNameTv.setVisibility(View.GONE);
         mTitleMainImg = findView(view, R.id.title_main_img);
@@ -363,6 +365,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
         } else if (mFontBuyingTv == v) { //抢购
 
+        } else if (mTitleReturnIv == v){
+            startActivity(SetActivity.class, "", "", "", "");
         }
     }
 

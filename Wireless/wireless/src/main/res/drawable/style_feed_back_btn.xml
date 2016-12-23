@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--获得焦点时-->
+    <item android:state_focused="true">
+        <shape>
+            <solid android:color="@color/blue_0187ee" />
+        </shape>
+    </item>
+    <!--按下时-->
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/blue_0187ee" />
+        </shape>
+    </item>
+    <!--默认-->
+    <item>
+        <shape>
+            <solid android:color="@color/blue_009CFB" />
+        </shape>
+    </item>
+</selector>

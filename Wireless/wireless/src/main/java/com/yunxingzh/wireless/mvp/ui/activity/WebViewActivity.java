@@ -35,6 +35,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     private ProgressBar myProgressBar;
     private String mUrl;
     private String mTitle;
+    private String advertFlag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 
         mUrl = getIntent().getStringExtra(Constants.URL);
         mTitle = getIntent().getStringExtra(Constants.TITLE);
+        advertFlag = getIntent().getStringExtra(Constants.ADVERT_FLAG);
         if (!StringUtils.isEmpty(mTitle)) {
             mTitleNameTv.setText(mTitle);
         }
@@ -122,7 +124,9 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             if (myWebView.canGoBack()) {
                 myWebView.goBack();
             } else {
-                startActivity(MainActivity.class);
+                if (!StringUtils.isEmpty(advertFlag)){
+                    startActivity(MainActivity.class);
+                }
                 finish();
             }
         } else if (mWebCloseTv == v){//关闭
@@ -138,7 +142,9 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             if (keyCode == KeyEvent.KEYCODE_BACK && myWebView.canGoBack()) {
                 myWebView.goBack(); // goBack()表示返回WebView的上一页面
             } else {
-                startActivity(MainActivity.class);
+                if (!StringUtils.isEmpty(advertFlag)) {
+                    startActivity(MainActivity.class);
+                }
                 finish();
             }
             return true;
