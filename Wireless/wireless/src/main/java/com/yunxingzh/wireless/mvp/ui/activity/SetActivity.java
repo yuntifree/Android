@@ -1,7 +1,9 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +14,8 @@ import com.yunxingzh.wireless.BuildConfig;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.StatusBarColor;
+import com.yunxingzh.wireless.mview.loading.ACProgressConstant;
+import com.yunxingzh.wireless.mview.loading.ACProgressFlower;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.CacheCleanUtil;
 
@@ -62,7 +66,20 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
         if (mTitleReturnIv == v) {
             finish();
         } else if (mSetCleanLay == v) {//清除缓存
-            CacheCleanUtil.clearAllCache(this);
+            final ACProgressFlower acProgressPie = new ACProgressFlower.Builder(this)
+                    .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                    .themeColor(Color.WHITE)
+                    .text("请稍候...")
+                    .fadeColor(Color.DKGRAY).build();
+            acProgressPie.show();
+            CacheCleanUtil.clearAllCache(this);//清缓存
+            new Handler().postDelayed(new Runnable(){
+                public void run() {
+                    acProgressPie.dismiss();
+                    mSetCacheSizeTv.setText(CacheCleanUtil.getTotalCacheSize(SetActivity.this));
+                }
+            }, 2000);
+
         } else if (mSetIdeaLay == v) {//意见反馈
             startActivity(FeedBackActivity.class, "", "");
         } else if (mSetAboutLay == v) {//关于我们

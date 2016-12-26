@@ -29,13 +29,14 @@ import com.yunxingzh.wireless.utils.WebViewUtil;
 
 public class WebViewActivity extends BaseActivity implements View.OnClickListener {
 
-    private ImageView mTitleReturnIv;
-    private TextView mTitleNameTv,mWebCloseTv;
+    private ImageView mTitleReturnIv, mWebCloseTv;
+    private TextView mTitleNameTv;
     private WebView myWebView;
     private ProgressBar myProgressBar;
     private String mUrl;
     private String mTitle;
     private String advertFlag;
+    private View mWebLine;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         mTitleReturnIv.setOnClickListener(this);
         myWebView = findView(R.id.webView);
         myProgressBar = findView(R.id.progress_bar);
+        mWebLine = findView(R.id.web_line);
     }
 
     public void initData() {
@@ -88,10 +90,12 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
                 if (mWebCloseTv.getVisibility() == View.INVISIBLE){
                     if (myWebView.canGoBack()) {
                         mWebCloseTv.setVisibility(View.VISIBLE);
+                        mWebLine.setVisibility(View.VISIBLE);
                     }
                 } else {
                     if (!myWebView.canGoBack()) {
                         mWebCloseTv.setVisibility(View.INVISIBLE);
+                        mWebLine.setVisibility(View.INVISIBLE);
                     }
                 }
             }

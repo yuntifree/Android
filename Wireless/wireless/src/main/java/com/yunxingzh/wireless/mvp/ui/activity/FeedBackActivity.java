@@ -23,9 +23,8 @@ import com.yunxingzh.wireless.utils.ToastUtil;
 public class FeedBackActivity extends BaseActivity implements View.OnClickListener, IFeedBackView {
 
     private ImageView mTitleReturnIv;
-    private TextView mTitleNameTv;
+    private TextView mTitleNameTv, mFeedCommitTv;
     private EditText mFeedContextEt;
-    private Button mFeedCommitBtn;
     private FeedBackPresenterImpl feedBackPresenter;
 
     @Override
@@ -42,8 +41,8 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
         mTitleNameTv = findView(R.id.title_name_tv);
         mTitleNameTv.setText(R.string.feed_back);
         mFeedContextEt = findView(R.id.feed_context_et);
-        mFeedCommitBtn = findView(R.id.feed_commit_btn);
-        mFeedCommitBtn.setOnClickListener(this);
+        mFeedCommitTv = findView(R.id.feed_commit_tv);
+        mFeedCommitTv.setOnClickListener(this);
     }
 
     public void initData() {
@@ -55,17 +54,27 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         if (mTitleReturnIv == v) {
             finish();
-        } else if (mFeedCommitBtn == v) {
-            if (!StringUtils.isEmpty(mFeedContextEt.getText().toString())) {
-                feedBackPresenter.feedBack(mFeedContextEt.getText().toString());
+        } else if (mFeedCommitTv == v) {
+            if (!StringUtils.isEmpty(getContent())) {
+                if (getContent().contains("\"")) {
+                    String newStr = getContent().replace("\"","");
+                    feedBackPresenter.feedBack(newStr);
+                } else {
+                    feedBackPresenter.feedBack(getContent());
+                }
             } else {
-                ToastUtil.showMiddle(this,R.string.input_feed_content);
+                ToastUtil.showMiddle(this, R.string.input_feed_content);
             }
         }
     }
 
     @Override
     public void feedBackSuccess() {
-        ToastUtil.showMiddle(this,R.string.commit_success);
+        ToastUtil.showMiddle(this, R.string.commit_success);
+        finish();
+    }
+
+    public String getContent() {
+        return mFeedContextEt.getText() + "";
     }
 }

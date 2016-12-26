@@ -11,53 +11,54 @@
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/bg_write" />
+            android:layout_marginTop="30dp">
 
-        <EditText
-            android:id="@+id/feed_context_et"
-            android:layout_width="280dp"
-            android:layout_height="168dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="8dp"
-            android:gravity="top"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/gray_b4b4b4"
-            android:background="@null"
-            android:hint="@string/hint" />
-    </FrameLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/bg_write" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp">
+            <EditText
+                android:id="@+id/feed_context_et"
+                android:layout_width="280dp"
+                android:layout_height="168dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="25dp"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="@string/hint"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray_b4b4b4"
+                android:textSize="14sp" />
+        </FrameLayout>
 
-        <Button
-            android:id="@+id/feed_commit_btn"
-            android:layout_width="145dp"
-            android:layout_height="35dp"
-            android:textColor="@color/white"
-            android:background="@drawable/style_feed_back_btn"
-            android:layout_gravity="center"
-            android:text="@string/commit"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/img_letter"
-            android:layout_marginRight="80dp"
-            android:layout_gravity="center|bottom"/>
+            android:layout_marginTop="45dp">
 
-    </FrameLayout>
+            <TextView
+                android:id="@+id/feed_commit_tv"
+                android:layout_width="145dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/style_feed_back_btn"
+                android:text="@string/commit"
+                android:textColor="@color/white" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_marginRight="80dp"
+                android:src="@drawable/img_letter" />
+
+        </FrameLayout>
 </LinearLayout>

@@ -23,15 +23,6 @@
             android:orientation="horizontal"
             android:paddingLeft="10dp">
 
-            <TextView
-                android:id="@+id/title_left_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:visibility="gone"
-                android:text="@string/dg_wifi" />
-
             <ImageView
                 android:id="@+id/title_return_iv"
                 android:layout_width="wrap_content"
