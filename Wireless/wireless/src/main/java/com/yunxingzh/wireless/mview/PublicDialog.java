@@ -7,6 +7,8 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -92,7 +94,7 @@ public class PublicDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Dialog_No_Border);
+        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.Dialog_No_Border);
     }
 
     @Nullable
@@ -104,7 +106,7 @@ public class PublicDialog extends DialogFragment {
         String positiveBtn = getArguments().getString(ARG_POSITIVE);
         String negativeBtn = getArguments().getString(ARG_NEGATIVE);
 
-        View contentView = View.inflate(getActivity(), R.layout.common_dialog, null);
+        View contentView = View.inflate(getActivity(), R.layout.public_dialog, null);
         mTitleTv = (TextView) contentView.findViewById(R.id.dialog_title_tv);
         mMessageTv = (TextView) contentView.findViewById(R.id.dialog_message_tv);
         mContainerLay = (LinearLayout) contentView.findViewById(R.id.dialog_container_ll);

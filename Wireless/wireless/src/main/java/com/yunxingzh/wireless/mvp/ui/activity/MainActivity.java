@@ -102,6 +102,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         wirelessFragment = new WirelessFragment();
         currentFragment = wirelessFragment;
         fragmentManager.beginTransaction().replace(R.id.main_fragment_parent, currentFragment).commit();
+        getStatusOnTimes();
         // 拉取广告
         getAdvertPresenter.getAdvert();
     }
@@ -113,14 +114,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 if (wirelessFragment == null) {
                     wirelessFragment = new WirelessFragment();
                 }
-                //不同时间段状态栏显示的颜色
-                String hour = StringUtils.getTime();
-                int h = Integer.parseInt(hour);
-                if (h >= 6 && h < 19) {
-                    getStatusBarColor(R.color.blue_009CFB);
-                } else {
-                    getStatusBarColor(R.color.blue_236EC5);
-                }
+                getStatusOnTimes();
                 Constants.FRAGMENT = Constants.WIRELESS_FLAG;
                 showFragment(wirelessFragment);//无线
                 break;
@@ -143,6 +137,17 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             case R.id.stretch_radio:
                 getAdvertPresenter.getStretch();//获取活动模块
                 break;
+        }
+    }
+
+    public void getStatusOnTimes(){
+        //不同时间段状态栏显示的颜色
+        String hour = StringUtils.getTime();
+        int h = Integer.parseInt(hour);
+        if (h >= 6 && h < 19) {
+            getStatusBarColor(R.color.blue_009CFB);
+        } else {
+            getStatusBarColor(R.color.blue_236EC5);
         }
     }
 
