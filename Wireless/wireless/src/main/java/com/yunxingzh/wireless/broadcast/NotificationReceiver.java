@@ -27,7 +27,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             //如果存活的话，就直接启动DetailActivity，但要考虑一种情况，就是app的进程虽然仍然在
             //但Task栈已经空了，比如用户点击Back键退出应用，但进程还没有被系统回收，如果直接启动
             //DetailActivity,再按Back键就不会返回MainActivity了。所以在启动
-            //DetailActivity前，要先启动MainActivity。
+            //DetailActivity前，要先启动MainActivitsy。
             Intent mainIntent = new Intent(context, MainActivity.class);
             //将MainAtivity的launchMode设置成SingleTask, 或者在下面flag中加上Intent.FLAG_CLEAR_TOP,
             //如果Task栈中有MainActivity的实例，就会把它移到栈顶，把在它之上的Activity都清理出栈，

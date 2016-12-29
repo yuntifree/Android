@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 
 import com.yunxingzh.wireless.R;
 
@@ -31,13 +32,15 @@ public class ShowNotificationReceiver extends BroadcastReceiver {
         Notification noti = new Notification.Builder(context)
                 .setContentTitle("发现东莞无限免费WiFi")
                 .setContentText("一键连接东莞无限~")
+                .setDefaults(Notification.DEFAULT_ALL)
                 //.setLargeIcon(icon)
                 .setSmallIcon(R.drawable.state_title_notice)
                 .setContentIntent(pendingIntent)
                 .build();
+
         //用NotificationManager的notify方法通知用户生成标题栏消息通知
         NotificationManager nManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        noti.flags |= Notification.FLAG_AUTO_CANCEL;
+        noti.flags |= Notification.FLAG_AUTO_CANCEL;// FLAG_AUTO_CANCEL表明当通知被用户点击时，通知将被清除。
         nManager.notify(100, noti);//id是应用中通知的唯一标识
     }
 }
