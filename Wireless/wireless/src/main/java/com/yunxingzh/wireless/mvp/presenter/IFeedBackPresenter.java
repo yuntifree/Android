@@ -5,5 +5,5 @@ package com.yunxingzh.wireless.mvp.presenter;
  */
 
 public interface IFeedBackPresenter extends IBasePresenter {
-    void feedBack(String content);
+    void feedBack(String content, String contact);
 }
