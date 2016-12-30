@@ -13,8 +13,8 @@ import wireless.libs.network.request.NetWorkWarpper;
 public class FeedBackModelImpl implements IFeedBackModel {
 
     @Override
-    public void feedBack(String content, final onFeedBackListener listener) {
-        NetWorkWarpper.feedBack(content, new HttpHandler<Object>() {
+    public void feedBack(String content, String contact, final onFeedBackListener listener) {
+        NetWorkWarpper.feedBack(content, contact, new HttpHandler<Object>() {
             @Override
             public void onSuccess(ServerTip serverTip, Object resquestVo) {
                 listener.onFeedBackSuccess();

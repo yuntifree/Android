@@ -21,9 +21,9 @@ public class FeedBackPresenterImpl implements IFeedBackPresenter, IFeedBackModel
     }
 
     @Override
-    public void feedBack(String content) {
+    public void feedBack(String content, String contact) {
         if (iFeedBackView != null){
-            iFeedBackModel.feedBack(content,this);
+            iFeedBackModel.feedBack(content,contact,this);
         }
     }
 

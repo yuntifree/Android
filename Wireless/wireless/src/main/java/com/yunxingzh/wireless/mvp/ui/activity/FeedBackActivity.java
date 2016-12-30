@@ -24,7 +24,7 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
 
     private ImageView mTitleReturnIv;
     private TextView mTitleNameTv, mFeedCommitTv;
-    private EditText mFeedContextEt;
+    private EditText mFeedContextEt,mFeedPhoneEt;
     private FeedBackPresenterImpl feedBackPresenter;
 
     @Override
@@ -43,6 +43,7 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
         mFeedContextEt = findView(R.id.feed_context_et);
         mFeedCommitTv = findView(R.id.feed_commit_tv);
         mFeedCommitTv.setOnClickListener(this);
+        mFeedPhoneEt = findView(R.id.feed_phone_et);
     }
 
     public void initData() {
@@ -58,9 +59,9 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
             if (!StringUtils.isEmpty(getContent())) {
                 if (getContent().contains("\"")) {
                     String newStr = getContent().replace("\"","");
-                    feedBackPresenter.feedBack(newStr);
+                    feedBackPresenter.feedBack(newStr,getContact());
                 } else {
-                    feedBackPresenter.feedBack(getContent());
+                    feedBackPresenter.feedBack(getContent(),getContact());
                 }
             } else {
                 ToastUtil.showMiddle(this, R.string.input_feed_content);
@@ -76,5 +77,9 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
 
     public String getContent() {
         return mFeedContextEt.getText() + "";
+    }
+
+    public String getContact() {
+        return mFeedPhoneEt.getText() + "";
     }
 }

@@ -19,7 +19,7 @@
             android:id="@+id/type_one_img"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:scaleType="centerCrop"/>
 
     <TextView
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="东莞阳光网    8:34"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="7dp"
         android:textColor="@color/gray_848484"
         android:textSize="12sp" />
 

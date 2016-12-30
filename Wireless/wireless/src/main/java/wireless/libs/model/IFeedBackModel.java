@@ -14,5 +14,5 @@ public interface IFeedBackModel {
      * 用户反馈
      * @param listener
      */
-    void feedBack(String content, onFeedBackListener listener);
+    void feedBack(String content, String contact, onFeedBackListener listener);
 }

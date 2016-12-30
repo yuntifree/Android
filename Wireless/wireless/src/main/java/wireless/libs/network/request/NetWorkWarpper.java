@@ -184,10 +184,11 @@ public class NetWorkWarpper {
      * 用户反馈
      * @param handler
      */
-    public static void feedBack(String content,HttpHandler<Object> handler) {
+    public static void feedBack(String content, String contact, HttpHandler<Object> handler) {
         String path = "feedback";
         HttpParams httpParams = new HttpParams();
         httpParams.add("content",content);
+        httpParams.add("contact",contact);
         HttpUtils.post(path, httpParams, handler);
     }
 }
