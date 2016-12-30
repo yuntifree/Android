@@ -36,6 +36,7 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
     private ImageView mTitleReturnIv;
     private IWifiSpiritedPresenter iWifiSpiritedPresenter;
     private LocationUtils locationUtils;
+    private String mSSID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +59,14 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
 
     public void initData() {
         StatusBarColor.compat(this,getResources().getColor(R.color.blue_009CFB));
+        mSSID = getIntent().getStringExtra("ssid");
+        if (!StringUtils.isEmpty(mSSID)) {
+            mSpSsidEt.setText(mSSID);
+            mSpPwdEt.setFocusable(true);
+            mSpPwdEt.setFocusableInTouchMode(true);
+            mSpPwdEt.requestFocus();
+            mSpPwdEt.requestFocusFromTouch();
+        }
         locationUtils = new LocationUtils(this, SPIRITED_PAGER);
         iWifiSpiritedPresenter = new WifiSpiritedPresenterImpl(this);
     }

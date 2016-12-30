@@ -91,7 +91,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         mTitleReturnIv.setOnClickListener(this);
         mTitleNameTv = (TextView) findViewById(R.id.title_name_tv);
         mTitleNameTv.setVisibility(View.VISIBLE);
-        mTitleNameTv.setText(R.string.app_name);
+        mTitleNameTv.setText(R.string.speed);
         mRotatePointer = (RotatePointer) findViewById(R.id.rp_tspeed_pointer);
         mRotatePointer.setPointer(mRotatePointer);
         mRotatePointer.setPointerRotate(180);

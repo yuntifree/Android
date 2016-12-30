@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -357,7 +358,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         } else if (mMainSpeedtest == v) { // wifi 测速
             startActivity(SpeedTestActivity.class, "", "", "", "");
         } else if (mMainSpiritedLay == v) {//wifi公益
-            startActivity(WifiSpiritedActivity.class, "", "", "", "");
+            if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid)) {
+                startActivity(WifiSpiritedActivity.class, "ssid", currentAp.ssid, "", "");
+            } else {
+                startActivity(WifiSpiritedActivity.class, "", "", "", "");
+            }
         } else if (mFontNewsTv == v) { // 东莞头条
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mFontVideoTv == v) { //热门视频
@@ -490,7 +495,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         mDGFreeConnected = false;
         if (currentAp != null) {
             String ssidText;
-            if (currentAp.ssid.equals(Constants.SSID)) {
+            if (currentAp.ssid.equals(Constants.SSID)
+                    && currentAp.detailedState == NetworkInfo.DetailedState.CONNECTED) {
                 ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
                 mConnectText.setText(ssidText);
                 mDGFreeConnected = true;

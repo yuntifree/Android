@@ -82,6 +82,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
         } else if (view == mGetValidateCodeBtn) {
             if (StringUtils.validatePhoneNumber(getPhone())) {
                 if (NetUtils.isNetworkAvailable(this)) {
+                    mGetValidateCodeBtn.setText("正在获取");
                     WifiInterface.wifiRegister(handler, getPhone(), "", Constants.TIME_OUT);
                 } else {
                     ToastUtil.showMiddle(this, R.string.net_error);

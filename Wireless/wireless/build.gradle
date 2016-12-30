@@ -48,8 +48,8 @@ android {
         applicationId "com.yunxingzh.wireless"
         minSdkVersion 17
         targetSdkVersion 22
-        versionName = "1.0.2"
-        versionCode = 3
+        versionName = "1.0.3"
+        versionCode = 4
         ndk {
             abiFilters "armeabi-v7a" // 例如：abiFilter 'armeabi, x86'
         }
@@ -97,15 +97,15 @@ android {
     /*友盟多渠道统计*/
     productFlavors {
         xiaomi {}
-        baidu {
-            signingConfig signingConfigs.myconfig
-        }
+        baidu {}
         c360 {}
         oppo {}
         vivo {}
         huawei {}
         meizu {}
         tengxun {}
+        wandoujia {}
+        anzhi {}
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
         }
