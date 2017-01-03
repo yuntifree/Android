@@ -10,7 +10,7 @@
 
     <string name="net_error_timeout">网络连接超时</string>
     <string name="net_error_server">服务器错误</string>
-    <string name="net_error">网络错误</string>
+    <string name="net_error">网络不可用哦~</string>
     <string name="net_error_unknow">未知错误</string>
     <string name="json_parse_error">JSON解析错误</string>
 
@@ -122,7 +122,7 @@
     <string name="wifi_spirited">WiFi公益</string>
     <string name="content_first">东莞无限是由东莞市政府全力打造的公益项目</string>
     <string name="content_two">旨在帮助东莞市民随时随地，一键免费上网</string>
-    <string name="content_three">目前已覆盖全市政府/医院/学校等公共区域</string>
+    <string name="content_three">目前已覆盖全市政府/医院/广场等公共区域</string>
     <string name="content_four">我们希望您一起加入WiFi公益项目</string>
     <string name="content_five">只需将富余的WiFi密码分享给大家</string>
     <string name="content_six">便为构建东莞智慧城市出了一份力</string>
@@ -146,15 +146,14 @@
     <string name="clean">清理缓存</string>
     <string name="feed_back">意见反馈</string>
     <string name="about_us">关于我们</string>
-    <string name="set">通用设置</string>
-    <string name="app_content">CopyRight2016 东莞无限</string>
+    <string name="set">设置</string>
+    <string name="app_content">版权所有 ©️ 2016-2017 东莞无限</string>
     <string name="hint">请详细描述您遇到的问题或建议，我们将在收到的第一时间跟进…（120字以内）</string>
     <string name="commit">提交</string>
     <string name="input_phone">请输入您的QQ号码或者手机号</string>
     <string name="commit_success">感谢您的反馈</string>
     <string name="input_feed_content">请输入要反馈的内容</string>
     <string name="concect_dg_free">请稍候...正在连接东莞无限</string>
-
 
 
     <string name="wsmpurl">http://120.234.130.196:880/wsmp/interface</string>
