@@ -9,12 +9,12 @@ def Properties mVersionProps = getVersionProperty();
 /**
  * 读取版本名
  */
-def mVersionName = buildRelease() ? mVersionProps['VERSION_NAME'] : "build_" + buildTime('yyMMdd')
+def mVersionName = buildRelease() ? mVersionProps['VERSION_NAME'] : "build_" + buildTime('yyyyMMdd')
 
 /**
  * 输出目录
  */
-def mOutputs = "$rootDir/outputs/build_" + buildTime('yyMMdd')
+def mOutputs = "$rootDir/outputs/build_" + buildTime('yyyyMMdd')
 
 android {
     signingConfigs {
@@ -109,23 +109,6 @@ android {
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
         }
-        buildDebug {
-            buildConfigField "boolean", "MODEL_DEV", "true"
-            /**
-             * 需要Debug下显示地图可以加上
-             * signingConfig signingConfigs.myconfig
-             */
-        }
-        buildDevelop {
-            buildConfigField "boolean", "MODEL_DEV", "true"
-            versionName = mVersionName
-            signingConfig signingConfigs.myconfig
-        }
-        buildRelease {
-            buildConfigField "boolean", "MODEL_DEV", "false"
-            versionName = mVersionName
-            signingConfig signingConfigs.myconfig
-        }
     }
 
     //过滤
@@ -144,17 +127,12 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def outputFile = output.outputFile
+            def fileName
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 if ("release".equals(variant.buildType.name)) {
-                    if ("buildDevelop".equals(variant.productFlavors.get(0).name)) {
-                        output.outputFile = new File(
-                                mOutputs,
-                                "Main_${buildTime("yyMMddHHmm")}_dev.apk")
-                    } else if ("buildRelease".equals(variant.productFlavors.get(0).name)) {
-                        output.outputFile = new File(
-                                mOutputs,
-                                "Main_${buildTime("yyMMddHHmm")}.apk")
-                    }
+                    fileName = variant.productFlavors.get(0).name + "_" +
+                            variant.mergedFlavor.versionName + "_" + buildTime("yyyyMMddHHmm") + "_release.apk";
+                    output.outputFile = new File(mOutputs, fileName);
                 } else {
                     output.outputFile = new File(
                             outputFile.parent,
