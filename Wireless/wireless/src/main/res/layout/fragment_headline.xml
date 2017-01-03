@@ -1,92 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <com.yunxingzh.wireless.mview.PagerSlidingTabStrip
+        android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/blue_009CFB"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/id_news"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/news"
-                    android:textColor="@color/white"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/id_tab_left_line"
-                    android:layout_width="41dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="center"
-                    android:background="@color/white" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/id_video"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:text="@string/video"
-                    android:textColor="@color/blue_C0D8F4"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/id_tab_right_line"
-                    android:layout_width="41dp"
-                    android:layout_height="2dp"
-                    android:visibility="invisible"
-                    android:layout_gravity="center"
-                    android:background="@color/white" />
-            </LinearLayout>
-
-            <!--
-                 <TextView
-                     android:id="@+id/id_app"
-                     android:layout_width="100dp"
-                     android:layout_height="match_parent"
-                     android:gravity="center"
-                     android:text="@string/apps"
-                     android:textColor="@color/blue_C0D8F4"
-                     android:textSize="18dp" />
-
-                 <TextView
-                     android:id="@+id/id_game"
-                     android:layout_width="100dp"
-                     android:layout_height="match_parent"
-                     android:gravity="center"
-                     android:text="@string/games"
-                     android:textColor="@color/blue_C0D8F4"
-                     android:textSize="18dp" />
-            -->
-        </LinearLayout>
-
-    </LinearLayout>
+        android:layout_height="50dp"
+        android:background="@color/blue_009CFB" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/id_viewpager"
@@ -94,4 +16,4 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-</com.zhy.android.percent.support.PercentLinearLayout>
+</LinearLayout>

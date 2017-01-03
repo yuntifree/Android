@@ -5,6 +5,7 @@ import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
+import wireless.libs.bean.resp.MenuList;
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.StretchVo;
 import wireless.libs.bean.vo.User;
@@ -70,6 +71,16 @@ public class NetWorkWarpper {
      */
     public static void weatherNews(HttpHandler<WeatherNewsList> handler) {
         String path = "get_weather_news";
+        HttpParams httpParams = new HttpParams();
+        HttpUtils.post(path, httpParams, handler);
+    }
+
+    /**
+     * 获取头条顶部分类菜单
+     * @param handler
+     */
+    public static void getMenu(HttpHandler<MenuList> handler) {
+        String path = "get_menu";
         HttpParams httpParams = new HttpParams();
         HttpUtils.post(path, httpParams, handler);
     }

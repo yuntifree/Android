@@ -353,7 +353,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
 
         @Override
         public boolean onLongClick(View v) {
-            //DialogActivity.showDetail(context, accessPoint);
+            DialogActivity.showDetail(context, accessPoint);
             return false;
         }
     }

@@ -31,7 +31,7 @@ import wireless.libs.bean.resp.WeatherNewsList;
 
 public class HeadLineGameFragment extends BaseFragment implements IHeadLineView,SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
-    private final static int HEAD_LINE_TYPE = 3;//0-新闻 1-视频 2-应用 3-游戏 5-东莞新闻
+    //private final static int HEAD_LINE_TYPE = 3;//0-新闻 1-视频 2-应用 3-游戏 4-本地 5-娱乐
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
 
     private RecyclerView mListRv;
@@ -43,40 +43,40 @@ public class HeadLineGameFragment extends BaseFragment implements IHeadLineView,
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_child, container, false);
+        View view = inflater.inflate(R.layout.wifi_closed, container, false);
         initView(view);
         initData();
         return view;
     }
 
     public void initView(View view) {
-        mListRv = findView(view,R.id.list_rv);
-        mListRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mListRv.addItemDecoration(new SpacesItemDecoration(Constants.ITEM_HEIGHT));
-        mSwipeRefreshLay = findView(view, R.id.swipe_refresh_news);
-        mSwipeRefreshLay.setOnRefreshListener(this);
+//        mListRv = findView(view,R.id.list_rv);
+//        mListRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        mListRv.addItemDecoration(new SpacesItemDecoration(Constants.ITEM_HEIGHT));
+//        mSwipeRefreshLay = findView(view, R.id.swipe_refresh_news);
+//        mSwipeRefreshLay.setOnRefreshListener(this);
     }
 
     public void initData() {
         // headLineGameAdapter = new HeadLineGameAdapter(new ArrayList<>());
-        headLineGameAdapter.openLoadMore(Constants.PAGE_SIZE);
-        headLineGameAdapter.setOnLoadMoreListener(this);
-        mListRv.setAdapter(headLineGameAdapter);
+//        headLineGameAdapter.openLoadMore(Constants.PAGE_SIZE);
+//        headLineGameAdapter.setOnLoadMoreListener(this);
+//        mListRv.setAdapter(headLineGameAdapter);
 
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
+        //iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
 
-        mListRv.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
+       // mListRv.addOnItemTouchListener(new OnItemClickListener() {
+//            @Override
+//            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
 //                List<NewsVo.NewsDataVo> dataList = baseQuickAdapter.getData();
 //                NewsVo.NewsDataVo newsVo = dataList.get(i);
 //                Intent intent = new Intent(getActivity(), AboutWebViewActivity.class);
 //                intent.putExtra(Constants.FLAG_WEBVIEW,Constants.FLAG_ADVERTISES_PAGE);
 //                intent.putExtra("url",newsVo.getUrl());
 //                startActivity(intent);
-            }
-        });
+//            }
+//        });
     }
 
     @Override
@@ -108,11 +108,11 @@ public class HeadLineGameFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void onRefresh() {
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
+        //iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
     }
 
     @Override
     public void onLoadMoreRequested() {
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
+        //iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE,HEAD_LINE_SEQ);
     }
 }

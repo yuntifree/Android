@@ -1,11 +1,11 @@
 package com.yunxingzh.wireless.wifi;
 
 public enum WifiSignalLevel {
-    NO_SIGNAL(0, "no signal"),
-    POOR(1, "poor"),
-    FAIR(2, "fair"),
-    GOOD(3, "good"),
-    EXCELLENT(4, "excellent");
+    NO_SIGNAL(0, "无信号"),
+    POOR(1, "信号弱"),
+    FAIR(2, "信号一般"),
+    GOOD(3, "信号好"),
+    EXCELLENT(4, "信号强");
 
     public final int level;
     public final String description;

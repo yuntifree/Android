@@ -218,7 +218,7 @@ public class FWServiceManager {
             // 判断通知栏
             for (AccessPoint ap : aps) {
                 if (ap.ssid.equals(Constants.SSID)) {
-                    checkNotify(ap);
+                   // checkNotify(ap);
                     break;
                 }
             }

@@ -46,7 +46,7 @@ import wireless.libs.bean.vo.HotInfo;
 public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener,
         NetErrorLayout.OnNetErrorClickListener {
 
-    private final static int HEAD_LINE_TYPE = 1;// 0-新闻 1-视频 2-应用 3-游戏 5-东莞新闻
+    private final static int HEAD_LINE_TYPE = 1;// 0-新闻 1-视频 2-应用 3-游戏 4-本地 5-娱乐
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
     private final static int CLICK_COUNT = 0;//0- 视频播放 1-新闻点击 2-广告展示 3-广告点击 4-服务
     private final static int SECONDS = 60 * 1000;

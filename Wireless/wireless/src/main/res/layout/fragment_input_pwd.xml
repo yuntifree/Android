@@ -49,10 +49,8 @@
             android:layout_width="260dp"
             android:layout_height="40dp"
             android:layout_marginTop="30dp"
-            android:background="@drawable/style_wifi_btn"
+            style="@style/Button.Blue.Hollow"
             android:layout_gravity="center"
-            android:textSize="18sp"
-            android:textColor="@color/white"
             android:text="@string/connection" />
 
 </LinearLayout>

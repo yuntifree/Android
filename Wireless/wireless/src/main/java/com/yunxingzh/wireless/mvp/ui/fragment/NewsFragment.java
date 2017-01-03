@@ -31,20 +31,20 @@ import java.util.List;
 
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
+import wireless.libs.bean.resp.MenuList;
 import wireless.libs.bean.resp.WeatherNewsList;
 import wireless.libs.bean.vo.HotInfo;
 
 /**
- * Created by stephon_ on 2016/11/2.
- * 头条-新闻
+ * Created by stephen on 2016/12/30.
  */
 
-public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener,NetErrorLayout.OnNetErrorClickListener {
+public class NewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener,NetErrorLayout.OnNetErrorClickListener {
 
+    private static final String ARG_POSITION = "position";
     private final static int HEAD_LINE_TYPE = 0;// 0-新闻 1-视频 2-应用 3-游戏 4-本地 5-娱乐
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
     private final static int CLICK_COUNT = 1;//上报；0- 视频播放 1-新闻点击 2-广告展示 3-广告点击 4-服务
-
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
@@ -54,8 +54,25 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private LinearLayout mNetErrorLay;
     private boolean isFastClick = true;
     private NetErrorLayout netErrorLayout;
+    private int position;
 
+    public static NewsFragment newInstance(int position) {
+        NewsFragment f = new NewsFragment();
+        Bundle b = new Bundle();
+        b.putInt(ARG_POSITION, position);
+        f.setArguments(b);
+        return f;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        position = getArguments().getInt(ARG_POSITION);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_child_news, container, false);
         initView(view);
         initData();
@@ -132,7 +149,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         iHeadLinePresenter.onDestroy();
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
-
 
     @Override
     public void getHeadLineSuccess(HotInfoList newsVo) {

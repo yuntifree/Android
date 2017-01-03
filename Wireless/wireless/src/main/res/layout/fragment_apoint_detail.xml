@@ -1,10 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    android:orientation="vertical"
-    tools:context=".fragment.APointDetailFragment">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,27 +13,28 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/attr_ssid"/>
+            android:src="@drawable/ico_wifiname"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginLeft="20dp">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/ssid"
-                android:textColor="#888999"
+                android:textColor="@color/gray_a0a0a0"
                 android:textSize="12sp"/>
             <TextView
                 android:id="@+id/tv_ssid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textColor="#444555"
+                android:textColor="@color/gray_323232"
                 android:text="@string/app_name"
-                android:textSize="16sp"/>
+                android:textSize="15sp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -48,7 +47,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/attr_mac"/>
+            android:src="@drawable/ico_macadress"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -59,14 +58,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/mac_address"
-                android:textColor="#888999"
+                android:textColor="@color/gray_a0a0a0"
                 android:textSize="12sp"/>
             <TextView
                 android:id="@+id/tv_mac"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textColor="#444555"
+                android:textColor="@color/gray_323232"
                 android:text="@string/app_name"
                 android:textSize="16sp"/>
         </LinearLayout>
@@ -81,7 +80,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/attr_signal"/>
+            android:src="@drawable/ico_signal"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -92,14 +91,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/signal_strength"
-                android:textColor="#888999"
+                android:textColor="@color/gray_a0a0a0"
                 android:textSize="12sp"/>
             <TextView
                 android:id="@+id/tv_signal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textColor="#444555"
+                android:textColor="@color/gray_323232"
                 android:text="@string/app_name"
                 android:textSize="16sp"/>
         </LinearLayout>
@@ -116,7 +115,8 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             style="@style/Button.Blue.Hollow"
-            android:text="@string/connect"/>
+            android:text="@string/connect_other"/>
+
         <View
             android:layout_width="10dp"
             android:layout_height="match_parent"/>

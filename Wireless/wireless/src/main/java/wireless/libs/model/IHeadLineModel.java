@@ -23,7 +23,7 @@ public interface IHeadLineModel {
 
     /***
      * 获取头条（新闻，视频，应用，游戏）内容
-     * @param type 0-新闻 1-视频 2-应用 3-游戏
+     * @param type 0-新闻 1-视频 2-应用 3-游戏 4-本地 5-娱乐
      * @param seq 序列号，分页拉取用
      * @param listener
      */

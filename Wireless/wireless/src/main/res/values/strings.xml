@@ -79,6 +79,7 @@
     <string name="hot">WiFi地图</string>
     <string name="content">东莞无限 智慧城市第一品牌</string>
     <string name="connect">您已连接东莞无限</string>
+    <string name="connect_other">连接</string>
     <string name="money">为您节省流量费用</string>
     <string name="hot_video">热门视频</string>
     <string name="font_service">同城服务</string>
@@ -118,7 +119,6 @@
     <string name="network_need_login">已连接,点我登录验证</string>
     <string name="faild">连接失败</string>
     <string name="no_wifi">附近没有可以连接的WiFi</string>
-    <string name="please_open_wifi">请先打开WiFi</string>
     <string name="wifi_spirited">WiFi公益</string>
     <string name="content_first">东莞无限是由东莞市政府全力打造的公益项目</string>
     <string name="content_two">旨在帮助东莞市民随时随地，一键免费上网</string>
@@ -153,7 +153,7 @@
     <string name="input_phone">请输入您的QQ号码或者手机号</string>
     <string name="commit_success">感谢您的反馈</string>
     <string name="input_feed_content">请输入要反馈的内容</string>
-
+    <string name="concect_dg_free">请稍候...正在连接东莞无限</string>
 
 
 
@@ -185,7 +185,7 @@
     <string name="input_password">请输入密码</string>
     <string name="password_error">密码错误!</string>
     <string name="state_auth_error">认证失败</string>
-    <string name="ssid">SSID</string>
+    <string name="ssid">WiFi名称</string>
     <string name="mac_address">MAC地址</string>
     <string name="signal_strength">信号强度</string>
     <string name="forget_password">忘记密码</string>

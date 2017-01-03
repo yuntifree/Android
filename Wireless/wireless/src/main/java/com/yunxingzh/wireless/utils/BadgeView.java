@@ -61,7 +61,7 @@ public class BadgeView extends TextView {
                     new LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT,
-                            Gravity.RIGHT | Gravity.TOP);
+                            Gravity.RIGHT);
             setLayoutParams(layoutParams);
         }
 
@@ -72,7 +72,7 @@ public class BadgeView extends TextView {
         setPadding(dip2Px(5), dip2Px(1), dip2Px(5), dip2Px(1));
 
         // set default background
-        setBackground(9, Color.parseColor("#d3321b"));
+        setBackground(9, Color.parseColor("#F6C042"));
 
         setGravity(Gravity.CENTER);
 

@@ -53,8 +53,8 @@
 
     <style name="Button.Blue.Hollow" parent="Button.Blue">
         <item name="android:background">@drawable/btn_blue_hollow</item>
-        <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@drawable/btn_blue_text_style</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
 </resources>
