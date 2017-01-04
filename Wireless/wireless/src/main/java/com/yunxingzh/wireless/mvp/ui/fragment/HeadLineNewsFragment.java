@@ -39,8 +39,9 @@ import wireless.libs.bean.vo.HotInfo;
  * 头条-新闻
  */
 
-public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener,NetErrorLayout.OnNetErrorClickListener {
+public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener, NetErrorLayout.OnNetErrorClickListener {
 
+    private static final String ARG_CTYPE = "ctype";
     private final static int HEAD_LINE_TYPE = 0;// 0-新闻 1-视频 2-应用 3-游戏 4-本地 5-娱乐
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
     private final static int CLICK_COUNT = 1;//上报；0- 视频播放 1-新闻点击 2-广告展示 3-广告点击 4-服务
@@ -54,10 +55,20 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private LinearLayout mNetErrorLay;
     private boolean isFastClick = true;
     private NetErrorLayout netErrorLayout;
+    private int type;
+
+    public static HeadLineNewsFragment getInstance(int type) {
+        HeadLineNewsFragment headLineNewsFragment = new HeadLineNewsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(ARG_CTYPE, type);
+        headLineNewsFragment.setArguments(bundle);
+        return headLineNewsFragment;
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child_news, container, false);
         initView(view);
+        type = getArguments().getInt(ARG_CTYPE);
         initData();
         return view;
     }
@@ -81,7 +92,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                                 if (isFastClick) {
                                     isFastClick = false;
                                     if (data != null && data.infos.size() > 0) {
-                                        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, data.infos.get(data.infos.size() - 1).seq);
+                                        iHeadLinePresenter.getHeadLine(type, data.infos.get(data.infos.size() - 1).seq);
                                         LogUtils.e("lsd", data.infos.get(data.infos.size() - 1).seq + "");
                                     }
                                 }
@@ -106,7 +117,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         //注册EventBus
         EventBus.getDefault().register(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+        iHeadLinePresenter.getHeadLine(type, HEAD_LINE_SEQ);
         swipeRefreshLayout.setRefreshing(true);
         if (!NetUtils.isNetworkAvailable(getActivity())) {
             netErrorLayout = new NetErrorLayout(getActivity());
@@ -168,7 +179,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void onRefresh() {
-        iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+        iHeadLinePresenter.getHeadLine(type, HEAD_LINE_SEQ);
         newsListNext.clear();
     }
 
@@ -180,7 +191,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         } else {
             mNetErrorLay.setVisibility(View.GONE);
             swipeRefreshLayout.setVisibility(View.VISIBLE);
-            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+            iHeadLinePresenter.getHeadLine(type, HEAD_LINE_SEQ);
         }
     }
 

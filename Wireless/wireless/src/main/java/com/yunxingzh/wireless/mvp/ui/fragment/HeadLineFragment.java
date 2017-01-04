@@ -1,14 +1,10 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
-import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -20,11 +16,8 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mview.PagerSlidingTabStrip;
 import com.yunxingzh.wireless.mvp.presenter.impl.GetHeadLineMenuPresenterImpl;
-import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IGetHeadLineMenuView;
-import com.yunxingzh.wireless.utils.LogUtils;
-import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,7 +33,7 @@ import wireless.libs.bean.vo.MenuVo;
  * 头条
  */
 
-public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuView, ViewPager.OnPageChangeListener {
+public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuView {
 
     private final static int SIZE = 15;//初始化字体size
     private final static int FOCUS_SIZE = 18;//获得焦点后字体size
@@ -53,7 +46,6 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     private ViewPager mViewPager;
     private MyPagerAdapter adapter;
     private List<Fragment> fragments = new ArrayList<>();
-    private Resources res;
     private PagerSlidingTabStrip tabStrip;
     private GetHeadLineMenuPresenterImpl getHeadLineMenuPresenter;
     private List<MenuVo> menuInfos;
@@ -64,7 +56,6 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_headline, null);
-        //res = getResources();
         initView(view);
         initData();
         return view;
@@ -75,45 +66,12 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         tabStrip = findView(view, R.id.tabs);
     }
 
-    // 重置颜色
-    private void resetTextView() {
-//        mIdNews.setTextColor(res.getColor(R.color.blue_C0D8F4));
-//        mIdNews.setTextSize(SIZE);
-//        mIdVideo.setTextColor(res.getColor(R.color.blue_C0D8F4));
-//        mIdVideo.setTextSize(SIZE);
-        //  mIdApp.setTextColor(res.getColor(R.color.blue_C0D8F4));
-        // mIdApp.setTextSize(SIZE);
-        // mIdGame.setTextColor(res.getColor(R.color.blue_C0D8F4));
-        //  mIdGame.setTextSize(SIZE);
-    }
-
     public void initData() {
         //注册EventBus
         EventBus.getDefault().register(this);
         getHeadLineMenuPresenter = new GetHeadLineMenuPresenterImpl(this);
         getHeadLineMenuPresenter.getHeadLineMenu();
-//        mIdNews.setOnClickListener(new TabOnClickListener(INDEX_ZERO));
-//        mIdVideo.setOnClickListener(new TabOnClickListener(INDEX_ONE));
-//        mIdApp.setOnClickListener(new TabOnClickListener(INDEX_TWO));
-//        mIdGame.setOnClickListener(new TabOnClickListener(INDEX_THREE));
-//        fragments.add(new HeadLineNewsFragment());
-//        fragments.add(new HeadLineVideoFragment());
-//        fragments.add(new HeadLineAppFragment());
-//        fragments.add(new HeadLineGameFragment());
-        //headLineFragmentAdapter = new HeadLineFragmentPagerAdapter(getActivity().getSupportFragmentManager(), fragments);
-        // mViewPager.setAdapter(headLineFragmentAdapter);
-        //mViewPager.setOnPageChangeListener(this);
     }
-
-//    public class TabOnClickListener implements View.OnClickListener{
-//        private int index = INDEX_ZERO;
-//        public TabOnClickListener(int i){
-//            index=i;
-//        }
-//        public void onClick(View v) {
-//            mViewPager.setCurrentItem(index);//选择某一页
-//        }
-//    }
 
     @Subscribe
     public void onEventMainThread(EventBusType event) {
@@ -154,37 +112,6 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         }
     }
 
-    //当前页面被滑动时调用
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-    //当新的页面被选中时调用
-    @Override
-    public void onPageSelected(int position) {
-        resetTextView();
-        switch (position) {
-//            case INDEX_ZERO:
-//                mIdNews.setTextColor(res.getColor(R.color.white));
-//                mIdNews.setTextSize(FOCUS_SIZE);
-//                setLineSelect(true,false);
-//                break;
-//            case INDEX_ONE:
-//                mIdVideo.setTextColor(res.getColor(R.color.white));
-//                mIdVideo.setTextSize(FOCUS_SIZE);
-//                setLineSelect(false,true);
-//                break;
-//            case INDEX_TWO:
-//                mIdApp.setTextColor(res.getColor(R.color.white));
-//                mIdApp.setTextSize(FOCUS_SIZE);
-//                break;
-//            case INDEX_THREE:
-//                mIdGame.setTextColor(res.getColor(R.color.white));
-//                mIdGame.setTextSize(FOCUS_SIZE);
-//                break;
-        }
-    }
-
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
         private List<String> titleList;
@@ -193,24 +120,6 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
             super(fm);
             this.titleList = titleList;
         }
-
-
-
-
-//        @Override
-//        public Object instantiateItem(ViewGroup container, int position) {
-//            ToastUtil.showMiddle(getActivity(),"ins");
-//            HeadLineNewsFragment headLineNewsFragment = (HeadLineNewsFragment) super.instantiateItem(container, position);
-//
-//            return headLineNewsFragment;
-//        }
-//
-//        @Override
-//        public int getItemPosition(Object object) {
-//            return  PagerAdapter.POSITION_NONE;
-//        }
-
-
 
         @Override
         public CharSequence getPageTitle(int position) {
@@ -227,13 +136,15 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
             int ctype = menuInfos.get(position).ctype;
             switch (ctype){
                 case 0://新闻
-                    return new HeadLineNewsFragment();
+                    return HeadLineNewsFragment.getInstance(menuInfos.get(position).type);
                 case 1://视频
                     return new HeadLineVideoFragment();
                 case 2://网页
                     return argumentsFragment("http://www.baidu.com");
                 case 3://搞笑
                     return new HeadLineAppFragment();
+                default:
+                    break;
             }
             return null;
         }
@@ -247,11 +158,5 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         bundle.putString(Constants.URL, url);
         webViewFragment.setArguments(bundle);
         return webViewFragment;
-    }
-
-    //当滑动状态改变时调用
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
     }
 }

@@ -364,7 +364,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 if (wifiUtils.getWlanState()) {//是否打开
                     checkDGWifi();
                 } else {
-                    startActivity(WifiManagerActivity.class,"","","","");
+                    startActivity(WifiManagerActivity.class, "", "", "", "");
                 }
             }
             //  WifiInterface.wifiLogout(logoOutHandler,MainApplication.sApplication.getUserName(),5000);
@@ -421,6 +421,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 mCircleIv.setVisibility(View.GONE);
                 mWirelessTimesLay.setVisibility(View.GONE);
                 mWirelessCircleIv.setVisibility(View.GONE);
+                mConnectIv.setVisibility(View.VISIBLE);
+                mConnectIv.setImageResource(R.drawable.main_connected);
                 recLen = 5;
                 mWirelessNumTv.setText(recLen + "");
                 updateConnectState(true);
@@ -556,8 +558,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         mDGFreeConnected = false;
         if (currentAp != null) {
             String ssidText;
-            if (currentAp.ssid.equals(Constants.SSID)
-                    && currentAp.detailedState == NetworkInfo.DetailedState.CONNECTED) {
+            if (currentAp.ssid.equals(Constants.SSID)) {
+                mConnectIv.setVisibility(View.VISIBLE);
+                mConnectIv.setImageResource(R.drawable.main_connected);
                 ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
                 mConnectText.setText(ssidText);
                 mDGFreeConnected = true;
@@ -587,7 +590,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         }
     }
 
-    public void lineViewVisible(boolean isVisible){
+    public void lineViewVisible(boolean isVisible) {
         mWirelessCircleSmall.setVisibility(isVisible ? View.VISIBLE : View.GONE);//白线中间的圈
         mWirelessCircleBig.setVisibility(isVisible ? View.VISIBLE : View.GONE);//白线最外部的圈
     }
@@ -601,8 +604,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
     private void stopAnimation() {
         mAnimationTv.setVisibility(View.GONE);
-        mConnectIv.setVisibility(View.VISIBLE);
-        mConnectIv.setImageResource(R.drawable.main_connected);
         mAnimationTv.stop();
     }
 
@@ -776,7 +777,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         if (mBadgeView != null) {
             mBadgeView.setBadgeCount(apList.size());
         }
-        updateConnectState(true);
+        //updateConnectState(true);
         if (bannersVo != null) {
             bannersState();
         }
