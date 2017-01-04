@@ -12,6 +12,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,7 +20,9 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.utils.WebViewUtil;
 
 /**
@@ -31,10 +34,12 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 
     private ImageView mTitleReturnIv, mWebCloseTv;
     private TextView mTitleNameTv;
+    private LinearLayout mNetErrorLayout;
     private WebView myWebView;
     private ProgressBar myProgressBar;
     private String mUrl;
     private String mTitle;
+    private boolean bUsePageTitle = false;
     private String advertFlag;
     private View mWebLine;
 
@@ -56,6 +61,8 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         myWebView = findView(R.id.webView);
         myProgressBar = findView(R.id.progress_bar);
         mWebLine = findView(R.id.web_line);
+        mNetErrorLayout = findView(R.id.net_error_layout);
+        mNetErrorLayout.setOnClickListener(this);
     }
 
     public void initData() {
@@ -66,6 +73,8 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         advertFlag = getIntent().getStringExtra(Constants.ADVERT_FLAG);
         if (!StringUtils.isEmpty(mTitle)) {
             mTitleNameTv.setText(mTitle);
+        } else {
+            bUsePageTitle = true;
         }
         WebViewUtil.initWebView(myWebView, myProgressBar);
         WebSettings settings = myWebView.getSettings();
@@ -112,14 +121,33 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-                if (StringUtils.isEmpty(mTitle) && !StringUtils.isEmpty(title)) {
+                if (bUsePageTitle) {
                     mTitle = title;
                     mTitleNameTv.setText(title);
                 }
             }
         });
 
-        myWebView.loadUrl(mUrl);
+        loadUrl();
+    }
+
+    private void showNetError(boolean bShow) {
+        if (bShow) {
+            myWebView.setVisibility(View.GONE);
+            mNetErrorLayout.setVisibility(View.VISIBLE);
+        } else {
+            mNetErrorLayout.setVisibility(View.GONE);
+            myWebView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void loadUrl() {
+        if (NetUtils.isNetworkAvailable(this)) {
+            showNetError(false);
+            myWebView.loadUrl(mUrl);
+        } else {
+            showNetError(true);
+        }
     }
 
     @Override
@@ -136,6 +164,8 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         } else if (mWebCloseTv == v){//关闭
             startActivity(MainActivity.class);
             finish();
+        } else if (mNetErrorLayout == v) {
+            loadUrl();
         }
     }
 

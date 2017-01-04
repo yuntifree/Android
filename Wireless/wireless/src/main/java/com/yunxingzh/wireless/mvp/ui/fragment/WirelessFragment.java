@@ -336,7 +336,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 if (wifiUtils.getWlanState()) {//是否打开
                     checkDGWifi();
                 } else {
-                    ToastUtil.showMiddle(getActivity(), R.string.please_open_wifi);
+                    startActivity(WifiManagerActivity.class, "", "", "", "");
                 }
             }
             //  WifiInterface.wifiLogout(logoOutHandler,MainApplication.sApplication.getUserName(),5000);
@@ -495,8 +495,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         mDGFreeConnected = false;
         if (currentAp != null) {
             String ssidText;
-            if (currentAp.ssid.equals(Constants.SSID)
-                    && currentAp.detailedState == NetworkInfo.DetailedState.CONNECTED) {
+            if (currentAp.ssid.equals(Constants.SSID)) {
                 ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
                 mConnectText.setText(ssidText);
                 mDGFreeConnected = true;

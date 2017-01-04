@@ -60,7 +60,7 @@ public abstract class HttpHandler<T> implements Callback {
     public final void onFailure(Call call, final IOException e) {
         LogUtils.d(TAG, "onFailure " + e.toString());
         if (e instanceof UnknownHostException || e instanceof SocketException) {
-            onFailureOnUIThread(new ServerTip(ErrorType.E_LOCAL, "请检查网络～"));
+            //onFailureOnUIThread(new ServerTip(ErrorType.E_LOCAL, "请检查网络～"));
         } else {
             onFailureOnUIThread(new ServerTip(ErrorType.E_IO_EXCEPTION, ""));
         }

@@ -28,6 +28,8 @@ import com.yunxingzh.wireless.mvp.ui.fragment.WirelessFragment;
 import com.yunxingzh.wireless.mvp.view.IGetAdvertView;
 import com.yunxingzh.wireless.utils.FileUtil;
 import com.yunxingzh.wireless.utils.LogUtils;
+import com.yunxingzh.wireless.utils.NetUtil;
+import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -135,7 +137,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 showFragment(serviceFragment);//服务
                 break;
             case R.id.stretch_radio:
-                getAdvertPresenter.getStretch();//获取活动模块
+                if (NetUtils.isNetworkAvailable(this)) {
+                    getAdvertPresenter.getStretch();//获取活动模块
+                } else {
+                    ToastUtil.showMiddle(this, R.string.net_error);
+                }
                 break;
         }
     }

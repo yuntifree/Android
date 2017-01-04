@@ -104,28 +104,31 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 // TODO: 临时用final来满足dialog的要求，找更好的方法替代
                 final List<HotInfo> data2 = data;
                 HotInfo item = data.get(i);
+                if (NetUtils.isNetworkAvailable(getActivity())) {
+                    if (!NetUtils.isWifi(getActivity())) {
+                        final AlertDialog.Builder mDialog = new AlertDialog.Builder(getActivity());
+                        mDialog.setTitle(R.string.dialog_notices);
+                        mDialog.setMessage(R.string.dialog_msg);
+                        mDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
 
-                if (!NetUtils.isWifi(getActivity())) {
-                    final AlertDialog.Builder mDialog = new AlertDialog.Builder(getActivity());
-                    mDialog.setTitle(R.string.dialog_notices);
-                    mDialog.setMessage(R.string.dialog_msg);
-                    mDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    mDialog.setPositiveButton(R.string.query, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            HotInfo item = data2.get(i);
-                            videoItemClick(item, i);
-                        }
-                    });
-                    mDialog.show();
+                        mDialog.setPositiveButton(R.string.query, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                HotInfo item = data2.get(i);
+                                videoItemClick(item, i);
+                            }
+                        });
+                        mDialog.show();
+                    } else {
+                        videoItemClick(item, i);
+                    }
                 } else {
-                    videoItemClick(item, i);
+                    ToastUtil.showMiddle(getActivity(), R.string.net_error);
                 }
             }
         });

@@ -1,5 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,11 +20,14 @@ import com.baidu.location.BDLocation;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.StatusBarColor;
+import com.yunxingzh.wireless.mview.loading.ACProgressConstant;
+import com.yunxingzh.wireless.mview.loading.ACProgressFlower;
 import com.yunxingzh.wireless.mvp.presenter.IWifiManagerPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiManagerPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.AccessPointAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
+import com.yunxingzh.wireless.utils.CacheCleanUtil;
 import com.yunxingzh.wireless.utils.LocationUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
@@ -62,6 +66,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     private List<AccessPoint> list;
     private LinearLayout mWifiCloseLay, mWifiListLay;
     private View wifiClosedView;
+    private ACProgressFlower acProgressPie;
 
 
     private List<WifiInfoVo> mWifiInfos;
@@ -151,7 +156,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         if (mTitleReturnIv == v) {
             finish();
         } else if (mOpenWifiBtn == v) {
-            openWifi();
+            mSwitchBtn.setChecked(true);
         }
     }
 
@@ -245,10 +250,24 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     }
 
     public void openWifi() {
-        mSwitchBtn.setChecked(true);
         wifiMa.wifiOpen();
         mWifiCloseLay.setVisibility(View.GONE);
         mWifiListLay.setVisibility(View.VISIBLE);
+        if (acProgressPie == null) {
+            acProgressPie = new ACProgressFlower.Builder(this)
+                    .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                    .themeColor(Color.WHITE)
+                    .text("请稍候...")
+                    .fadeColor(Color.DKGRAY).build();
+            acProgressPie.show();
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    acProgressPie.dismiss();
+                    acProgressPie = null;
+                }
+            }, 2000);
+        }
+
         refreshList(1);
         mWifiRv.swapAdapter(mAdapter, true);//刷新列表
     }

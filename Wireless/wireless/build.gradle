@@ -48,8 +48,8 @@ android {
         applicationId "com.yunxingzh.wireless"
         minSdkVersion 17
         targetSdkVersion 22
-        versionName = "1.0.3"
-        versionCode = 4
+        versionName = "1.0.4"
+        versionCode = 5
         ndk {
             abiFilters "armeabi-v7a" // 例如：abiFilter 'armeabi, x86'
         }

@@ -110,6 +110,7 @@
     <string name="configed_wifi">免费WiFi，点击连接</string>
     <string name="connection">连接</string>
     <string name="open_wifi">打开WiFi</string>
+    <string name="net_retry">网络不给力，点击屏幕重试</string>
     <string name="find_near_wifi">寻找身边免费WiFi</string>
     <string name="turn_on_wifi">开启WiFi</string>
     <string name="connect_success">恭喜您连接成功</string>
