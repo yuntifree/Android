@@ -27,11 +27,8 @@ import wireless.libs.bean.vo.HotInfo;
 
 public class HeadLineVideoAdapter extends BaseQuickAdapter<HotInfo> {
 
-    private Handler handler;
-
-    public HeadLineVideoAdapter(List<HotInfo> data/*,Handler handler*/) {
+    public HeadLineVideoAdapter(List<HotInfo> data) {
         super(R.layout.list_item_videos, data);
-       // this.handler = handler;
     }
 
     @Override
@@ -42,11 +39,4 @@ public class HeadLineVideoAdapter extends BaseQuickAdapter<HotInfo> {
         baseViewHolder.setText(R.id.video_play_count, newsVo.play + "次播放");
     }
 
-    public Handler clickHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-        }
-    };
 }

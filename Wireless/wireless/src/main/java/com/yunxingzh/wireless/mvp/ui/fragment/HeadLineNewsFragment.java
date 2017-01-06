@@ -2,13 +2,15 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
@@ -16,11 +18,12 @@ import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
-import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineNewsAdapter;
+import com.yunxingzh.wireless.mvp.ui.adapter.NewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,68 +50,72 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private final static int CLICK_COUNT = 1;//上报；0- 视频播放 1-新闻点击 2-广告展示 3-广告点击 4-服务
 
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ListView mMainNewsLv;
+    private RecyclerView mMainNewsRv;
     private IHeadLinePresenter iHeadLinePresenter;
-    private HeadLineNewsAdapter headLineNewsAdapter;
+    private NewsAdapter headLineNewsAdapter;
     private List<HotInfo> newsListNext;
     private HotInfoList data;
     private LinearLayout mNetErrorLay;
     private boolean isFastClick = true;
     private NetErrorLayout netErrorLayout;
-    private int type;
+    private int types;
+    private int[] typeArray = new int[10];
+   // private static Bundle bundle = new Bundle();
+    private boolean firstLoad = true;
 
     public static HeadLineNewsFragment getInstance(int type) {
         HeadLineNewsFragment headLineNewsFragment = new HeadLineNewsFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(ARG_CTYPE, type);
-        headLineNewsFragment.setArguments(bundle);
+        headLineNewsFragment.types = type;
+       // bundle.putInt(ARG_CTYPE, type);
+        //headLineNewsFragment.setArguments(bundle);
         return headLineNewsFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+      //  type = getArguments().getInt(ARG_CTYPE);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child_news, container, false);
         initView(view);
-        type = getArguments().getInt(ARG_CTYPE);
         initData();
         return view;
     }
 
     public void initView(View view) {
-        mMainNewsLv = findView(view, R.id.head_line_lv);
+        mMainNewsRv = findView(view, R.id.head_line_rv);
         swipeRefreshLayout = findView(view, R.id.swipe_ly);
+        mMainNewsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mMainNewsRv.setHasFixedSize(true);
+        mMainNewsRv.addItemDecoration(new SpacesItemDecoration(Constants.ITEM_HEIGHT));
         swipeRefreshLayout.setOnRefreshListener(this);
         mNetErrorLay = findView(view, R.id.net_error_news_lay);
-        mMainNewsLv.setOnScrollListener(new AbsListView.OnScrollListener() {
+        // RecyclerView.canScrollVertically(1)的值表示是否能向上滚动，false表示已经滚动到底部
+        // RecyclerView.canScrollVertically(-1)的值表示是否能向下滚动，false表示已经滚动到顶部
+        mMainNewsRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                switch (scrollState) {
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                switch (newState) {
                     // 当不滚动时
-                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
-                        // 判断滚动到底部
-                        if (mMainNewsLv.getLastVisiblePosition() == (mMainNewsLv.getCount() - 1)) {
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        //滑动完成
+                        if (!mMainNewsRv.canScrollVertically(1)) {//false:到底部
+                            ToastUtil.showMiddle(getActivity(), "到底");
                             if (data.hasmore == 0) {
                                 ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
                             } else {
                                 if (isFastClick) {
                                     isFastClick = false;
                                     if (data != null && data.infos.size() > 0) {
-                                        iHeadLinePresenter.getHeadLine(type, data.infos.get(data.infos.size() - 1).seq);
-                                        LogUtils.e("lsd", data.infos.get(data.infos.size() - 1).seq + "");
+                                        iHeadLinePresenter.getHeadLine(types, data.infos.get(data.infos.size() - 1).seq);
                                     }
                                 }
                             }
                         }
-                        // 判断滚动到顶部
-                        if (mMainNewsLv.getFirstVisiblePosition() == 0) {
-                            // ToastUtil.showMiddle(getActivity(), "顶部");
-                        }
                         break;
                 }
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
             }
         });
     }
@@ -117,8 +124,13 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         //注册EventBus
         EventBus.getDefault().register(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
-        iHeadLinePresenter.getHeadLine(type, HEAD_LINE_SEQ);
-        swipeRefreshLayout.setRefreshing(true);
+        if (firstLoad) {
+            iHeadLinePresenter.getHeadLine(this.types, HEAD_LINE_SEQ);
+            LogUtils.i("lsd",this + "");
+            swipeRefreshLayout.setRefreshing(true);
+        }
+
+
         if (!NetUtils.isNetworkAvailable(getActivity())) {
             netErrorLayout = new NetErrorLayout(getActivity());
             netErrorLayout.setOnNetErrorClickListener(this);
@@ -147,6 +159,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void getHeadLineSuccess(HotInfoList newsVo) {
+        firstLoad = false;
         isFastClick = true;
         swipeRefreshLayout.setRefreshing(false);
         if (newsVo != null) {
@@ -154,18 +167,19 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         }
 
         if (newsListNext == null) {
-            newsListNext = new ArrayList<HotInfo>();
+            newsListNext = new ArrayList<>();
         }
 
         if (data.infos != null) {
             newsListNext.addAll(data.infos);
             if (headLineNewsAdapter == null) {
-                headLineNewsAdapter = new HeadLineNewsAdapter(getActivity(), newsListNext);
-                mMainNewsLv.setAdapter(headLineNewsAdapter);
+                headLineNewsAdapter = new NewsAdapter(getActivity(), newsListNext);
+                mMainNewsRv.setAdapter(headLineNewsAdapter);
             }
+            // mMainNewsRv.setAdapter(headLineNewsAdapter);
             headLineNewsAdapter.notifyDataSetChanged();
         } else {
-            ToastUtil.showMiddle(getActivity(), R.string.no_news);
+            ToastUtil.showMiddle(getActivity(), R.string.re_error);
         }
     }
 
@@ -179,10 +193,9 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void onRefresh() {
-        iHeadLinePresenter.getHeadLine(type, HEAD_LINE_SEQ);
         newsListNext.clear();
+        iHeadLinePresenter.getHeadLine(types, HEAD_LINE_SEQ);
     }
-
 
     @Override
     public void netErrorClick() {
@@ -191,7 +204,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         } else {
             mNetErrorLay.setVisibility(View.GONE);
             swipeRefreshLayout.setVisibility(View.VISIBLE);
-            iHeadLinePresenter.getHeadLine(type, HEAD_LINE_SEQ);
+            iHeadLinePresenter.getHeadLine(types, HEAD_LINE_SEQ);
         }
     }
 
@@ -201,4 +214,5 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         intent.putExtra(titleKey, title);
         startActivity(intent);
     }
+
 }

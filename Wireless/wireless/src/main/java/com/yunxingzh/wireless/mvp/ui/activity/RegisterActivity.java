@@ -74,15 +74,18 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
     public void onClick(View view) {
         if (view == mLoRegisterBtn) {
             String code = getCode();
-            if (mCode.equals(code) && !StringUtils.isEmpty(code)) {
-                iLoginPresenter.register(getPhone(), code);
-            } else {
-                ToastUtil.showMiddle(RegisterActivity.this, R.string.final_validate_code);
+            if (StringUtils.validatePhoneNumber(getPhone())) {
+                if (mCode.equals(code) && !StringUtils.isEmpty(code)) {
+                    iLoginPresenter.register(getPhone(), code);
+                } else {
+                    ToastUtil.showMiddle(RegisterActivity.this, R.string.final_validate_code);
+                }
             }
         } else if (view == mGetValidateCodeBtn) {
             if (StringUtils.validatePhoneNumber(getPhone())) {
                 if (NetUtils.isNetworkAvailable(this)) {
                     mGetValidateCodeBtn.setText("正在获取");
+                    mLoPhoneEt.setEnabled(false);
                     WifiInterface.wifiRegister(handler, getPhone(), "", Constants.TIME_OUT);
                 } else {
                     ToastUtil.showMiddle(this, R.string.net_error);
@@ -168,6 +171,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
             //mGetValidateCodeBtn.setBackgroundResource(R.drawable.style_login_btn);
             mGetValidateCodeBtn.setText(R.string.re_get_verification_code);
             mGetValidateCodeBtn.setEnabled(true);
+            mLoPhoneEt.setEnabled(true);
         }
 
         @Override

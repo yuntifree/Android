@@ -7,6 +7,7 @@ import java.util.List;
  */
 
 public class HotInfo {
+
     public int id;//新闻/视频id
     public int seq;//分页用
     public String title; //标题
@@ -17,4 +18,5 @@ public class HotInfo {
     public int stype; // 1-广告
     public int play; //播放次数
     public boolean isClickColor;
+
 }

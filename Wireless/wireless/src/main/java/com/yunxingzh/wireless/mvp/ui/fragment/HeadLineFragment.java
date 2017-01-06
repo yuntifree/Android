@@ -121,6 +121,12 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
             this.titleList = titleList;
         }
 
+        //阻止其销毁已存在的视图
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            //super.destroyItem(container, position, object);
+        }
+
         @Override
         public CharSequence getPageTitle(int position) {
             return titleList.get(position);
