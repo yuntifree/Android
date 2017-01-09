@@ -71,11 +71,12 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     }
 
     public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, List<WifiInfoVo> mWifiInfos, boolean forceRefresh) {
-        if (!forceRefresh && mCurrentState != null && StringUtils.isEmpty( mCurrentAPoint.ssid) && mCurrentState != WifiState.UNKOWN && mCurrentAPoint != null) {
-            if (mCurrentState == state && mCurrentAPoint.ssid.equals(current.ssid) && mAccessPoints.size() == accessPoints.size()) {
+        if (!forceRefresh && mCurrentState != WifiState.UNKOWN && mCurrentAPoint != null && current != null) {
+            if (mCurrentState == state && current.ssid.equals(mCurrentAPoint.ssid) && mAccessPoints.size() == accessPoints.size()){
                 return;
             }
         }
+
         if (mWifiInfos != null) {
             mWifiInfoList = mWifiInfos;
         }
