@@ -154,6 +154,9 @@
     <string name="commit_success">感谢您的反馈</string>
     <string name="input_feed_content">请输入要反馈的内容</string>
     <string name="concect_dg_free">请稍候...正在连接东莞无限</string>
+    <string name="concect_faild">亲,连接东莞无限超时哦,请重试</string>
+
+
 
 
     <string name="wsmpurl">http://120.234.130.196:880/wsmp/interface</string>

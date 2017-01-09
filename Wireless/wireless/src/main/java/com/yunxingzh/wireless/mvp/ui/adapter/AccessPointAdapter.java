@@ -13,6 +13,7 @@ import com.truizlop.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.activity.DialogActivity;
+import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
 
@@ -70,7 +71,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     }
 
     public void setData(WifiState state, AccessPoint current, List<AccessPoint> accessPoints, List<WifiInfoVo> mWifiInfos, boolean forceRefresh) {
-        if (!forceRefresh && mCurrentState != WifiState.UNKOWN && mCurrentAPoint != null) {
+        if (!forceRefresh && mCurrentState != null && StringUtils.isEmpty( mCurrentAPoint.ssid) && mCurrentState != WifiState.UNKOWN && mCurrentAPoint != null) {
             if (mCurrentState == state && mCurrentAPoint.ssid.equals(current.ssid) && mAccessPoints.size() == accessPoints.size()) {
                 return;
             }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -201,18 +202,26 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                 //生成一个TextView用户在地图中显示InfoWindow
                 LinearLayout markerLayout = new LinearLayout(getApplicationContext());
                 markerLayout.setOrientation(LinearLayout.HORIZONTAL);
+                markerLayout.setPadding(20,0,20,0);
                 markerLayout.setGravity(Gravity.CENTER);
                 markerLayout.setBackgroundResource(R.drawable.wifi_info);
 
                 TextView address = new TextView(getApplicationContext());
                 address.setTextColor(getResources().getColor(R.color.gray_b4b4b4));
                 address.setTextSize(10);
+                address.setEllipsize(TextUtils.TruncateAt.END);
+                address.setMaxEms(16);
+                address.setSingleLine();
                 address.setText(info.address);
 
-                TextView distances = new TextView(getApplicationContext());
-                distances.setTextColor(getResources().getColor(R.color.blue_00a6f9));
-                distances.setTextSize(10);
-                distances.setText(new DecimalFormat("#").format(distance) + "m");
+                TextView distancesView = new TextView(getApplicationContext());
+                distancesView.setTextColor(getResources().getColor(R.color.blue_00a6f9));
+                distancesView.setTextSize(10);
+                if (distance >= 1000) {
+                    distancesView.setText(new DecimalFormat("#").format(distance / 1000) + "km");
+                } else {
+                    distancesView.setText(new DecimalFormat("0").format(distance) + "m");
+                }
 
                 ImageView addressImg = new ImageView(getApplicationContext());
                 addressImg.setImageResource(R.drawable.ico_location);
@@ -222,7 +231,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                 markerLayout.addView(addressImg);
                 markerLayout.addView(address);
                 markerLayout.addView(distancesImg);
-                markerLayout.addView(distances);
+                markerLayout.addView(distancesView);
                 //将marker所在的经纬度的信息转化成屏幕上的坐标
                 final LatLng ll = marker.getPosition();
                 Point p = baiduMap.getProjection().toScreenLocation(ll);
