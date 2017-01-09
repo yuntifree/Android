@@ -2,6 +2,8 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
 
@@ -20,18 +22,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import wireless.libs.bean.vo.AutoLoginVo;
+import wireless.libs.network.request.NetWorkWarpper;
 
 /**
  * Created by asus_ on 2016/11/26.
  * 欢迎界面
  */
 
-public class WelcomActivity extends BaseActivity implements IFeedBackView {
+public class WelcomActivity extends BaseActivity {
 
     boolean isFirst;
     private String url;
     private String imgPath;
-    private IFeedBackPresenter iFeedBackPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,19 +41,37 @@ public class WelcomActivity extends BaseActivity implements IFeedBackView {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_welcome);
-        if (!StringUtils.isEmpty(MainApplication.get().getToken()) && !StringUtils.isExpired(MainApplication.get().getExpire())){//如果过期
-            iFeedBackPresenter = new FeedBackPresenterImpl(WelcomActivity.this);
-            iFeedBackPresenter.autoLogin();
+        if (!StringUtils.isEmpty(MainApplication.get().getToken()) &&
+                StringUtils.isExpired(MainApplication.get().getExpire())) {//如果过期
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    AutoLoginVo data = NetWorkWarpper.autoLogin(MainApplication.get().getPrivdata());
+                    if (data != null) {
+                        MainApplication.get().setExpire(data.expiretime);
+                        MainApplication.get().setToken(data.token);
+                        MainApplication.get().setPrivdata(data.privdata);
+                    }
+
+                    Message msg = handler.obtainMessage();
+                    msg.what = 1;
+                    handler.sendMessage(msg);
+                }
+            }).start();
         } else {
             advertJump();
         }
     }
 
-    @Override
-    public void autoLoginSuccess() {
-        advertJump();
-    }
-
+    protected Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                advertJump();
+            }
+        }
+    };
     public void advertJump(){
         //实现欢迎界面的自动跳转
         Timer timer = new Timer();
@@ -83,10 +103,6 @@ public class WelcomActivity extends BaseActivity implements IFeedBackView {
             }
         };
         timer.schedule(task, 1000); //1秒后
-    }
-
-    @Override
-    public void feedBackSuccess() {
     }
 
     public void startActivity(Class activity, String urlKey, String url, String byteKey, String mByte) {

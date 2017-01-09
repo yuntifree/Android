@@ -22,14 +22,4 @@ public class FeedBackModelImpl implements IFeedBackModel {
             }
         });
     }
-
-    @Override
-    public void autoLogin(String privdata, final onAutoLoginListener listener) {
-        NetWorkWarpper.autoLogin(privdata, new HttpHandler<AutoLoginVo>() {
-            @Override
-            public void onSuccess(ServerTip serverTip, AutoLoginVo resquestVo) {
-                listener.onAutoLoginSuccess(resquestVo);
-            }
-        });
-    }
 }

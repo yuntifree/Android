@@ -55,6 +55,9 @@ public class HttpUtils {
      */
     private static final long WRITE_TIMEOUT_MILLIS = 5 * 1000;
 
+    // 同步请求超时
+    private static final long SYNC_TIMEOUT_MILLIS = 1500;
+
     /**
      * tag
      */
@@ -69,6 +72,7 @@ public class HttpUtils {
      * OkHttpClient实例
      */
     private static OkHttpClient client;
+    private static OkHttpClient syncClient;
 
     private static OkHttpClient getClient() {
         if (client == null) {
@@ -78,6 +82,16 @@ public class HttpUtils {
                     .writeTimeout(WRITE_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS).build();
         }
         return client;
+    }
+
+    private static OkHttpClient getSyncClient() {
+        if (syncClient == null) {
+            syncClient = new OkHttpClient.Builder().addInterceptor(new RetryInterceptor())
+                    .connectTimeout(SYNC_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
+                    .readTimeout(SYNC_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
+                    .writeTimeout(SYNC_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS).build();
+        }
+        return syncClient;
     }
 
     /**
@@ -157,7 +171,7 @@ public class HttpUtils {
     public static String postSync(String url, final HttpParams params) {
         Request request = getPostRequest(url, params, null);
         try {
-            Response response = client.newCall(request).execute();
+            Response response = getSyncClient().newCall(request).execute();
             final String result = response.body().string();
             return result;
         } catch (IOException e) {

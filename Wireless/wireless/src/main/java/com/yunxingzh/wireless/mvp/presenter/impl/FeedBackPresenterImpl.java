@@ -13,7 +13,7 @@ import wireless.libs.model.impl.FeedBackModelImpl;
  * Created by stephen on 2016/12/23.
  */
 
-public class FeedBackPresenterImpl implements IFeedBackPresenter, IFeedBackModel.onFeedBackListener, IFeedBackModel.onAutoLoginListener {
+public class FeedBackPresenterImpl implements IFeedBackPresenter, IFeedBackModel.onFeedBackListener {
 
     private IFeedBackModel iFeedBackModel;
     private IFeedBackView iFeedBackView;
@@ -31,13 +31,6 @@ public class FeedBackPresenterImpl implements IFeedBackPresenter, IFeedBackModel
     }
 
     @Override
-    public void autoLogin() {
-        if (iFeedBackView != null){
-            iFeedBackModel.autoLogin(MainApplication.get().getPrivdata(),this);
-        }
-    }
-
-    @Override
     public void onFeedBackSuccess() {
         if (iFeedBackView != null){
             iFeedBackView.feedBackSuccess();
@@ -47,16 +40,6 @@ public class FeedBackPresenterImpl implements IFeedBackPresenter, IFeedBackModel
     @Override
     public void onDestroy() {
         iFeedBackView = null;
-    }
-
-    @Override
-    public void onAutoLoginSuccess(AutoLoginVo autoLoginVo) {
-        MainApplication.get().setPrivdata(autoLoginVo.privdata);
-        MainApplication.get().setToken(autoLoginVo.token);
-        MainApplication.get().setExpire(autoLoginVo.expiretime);
-        if (iFeedBackView != null){
-            iFeedBackView.autoLoginSuccess();
-        }
     }
 
 }

@@ -77,10 +77,6 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
         finish();
     }
 
-    @Override
-    public void autoLoginSuccess() {
-    }
-
     public String getContent() {
         return mFeedContextEt.getText() + "";
     }
