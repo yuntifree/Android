@@ -208,23 +208,19 @@ public class WifiMachine {
 
         //转换为Server里的AP对象
         if(mAccessPoints.containsKey(ap.ssid)){
-            AccessPoint sap = mAccessPoints.get(ap.ssid);
-            if(!TextUtils.isEmpty(ap.password)){
-                sap.password = ap.password;
-            }
-            ap = sap;
+            ap.setConfig(mAccessPoints.get(ap.ssid).config);
         }
 
-//        if (mCurrentWorker != null) {
-//            mPendingPoint = ap;
-//            LogUtils.d(TAG, "last connected need offline: " + mCurrentWorker.getAccessPoint().toString());
-//            setActionState(WifiState.WAITING_DISCONNECT_LAST);
-//            mCurrentWorker.offline()
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(Schedulers.immediate())
-//                    .timeout(1, TimeUnit.SECONDS)
-//                    .subscribe(offlineObserver);
-//        } else {
+        if (mCurrentWorker != null) {
+            mPendingPoint = ap;
+            LogUtils.d(TAG, "last connected need offline: " + mCurrentWorker.getAccessPoint().toString());
+            setActionState(WifiState.WAITING_DISCONNECT_LAST);
+            mCurrentWorker.offline()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.immediate())
+                    .timeout(1, TimeUnit.SECONDS)
+                    .subscribe(offlineObserver);
+        } else {
             mCurrentWorker = createConnectWoker(ap);
             LogUtils.d(TAG, "connect " + ap.toString() + " and waiting cloud confirm");
             setActionState(WifiState.WAITING_SERVER_CONFIRM);
@@ -234,7 +230,7 @@ public class WifiMachine {
                     .timeout(10, TimeUnit.SECONDS)
                     .subscribe(confirmedObserver);
             mPendingPoint = null;
-//        }
+        }
     }
 
     public void disconnect(){
