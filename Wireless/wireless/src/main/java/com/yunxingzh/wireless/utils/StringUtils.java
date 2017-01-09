@@ -61,10 +61,12 @@ public class StringUtils {
         Date nowDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         boolean bRet = true;
-        Date mDate;
+        Date mDate = null;
         try {
-            mDate = sdf.parse(date);
-            bRet = mDate.before(nowDate);
+            if (!isEmpty(date)) {
+                mDate = sdf.parse(date);
+                bRet = mDate.before(nowDate);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

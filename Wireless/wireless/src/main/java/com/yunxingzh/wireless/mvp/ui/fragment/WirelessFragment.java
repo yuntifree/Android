@@ -138,6 +138,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private int recLen = 5;
     private Handler handler = new Handler();
     private BadgeView mBadgeView;
+    private WindowManager wm;
 
     @Nullable
     @Override
@@ -243,7 +244,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
         FWManager.getInstance().addWifiObserver(wifiObserver);
         //获取屏幕宽高
-        WindowManager wm = getActivity().getWindowManager();
+        if (getActivity() != null) {
+            wm = getActivity().getWindowManager();
+        }
         int width = wm.getDefaultDisplay().getWidth();//720,1536
         int height = wm.getDefaultDisplay().getHeight();//1280,2560
         if (width <= 720 && height <= 1280) {

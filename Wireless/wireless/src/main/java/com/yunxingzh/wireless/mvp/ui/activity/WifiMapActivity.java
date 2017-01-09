@@ -218,7 +218,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                 distancesView.setTextColor(getResources().getColor(R.color.blue_00a6f9));
                 distancesView.setTextSize(10);
                 if (distance >= 1000) {
-                    distancesView.setText(new DecimalFormat("#").format(distance / 1000) + "km");
+                    distancesView.setText(new DecimalFormat("0.0").format(distance / 1000) + "km");
                 } else {
                     distancesView.setText(new DecimalFormat("0").format(distance) + "m");
                 }

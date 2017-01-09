@@ -39,6 +39,8 @@ public class MainApplication extends Application {
     private String wifiPwd;
     private String userName;
     private User mUser;
+    private String privdata;
+    private String expire;
 
     public static Handler mHandler;
 
@@ -141,6 +143,32 @@ public class MainApplication extends Application {
     public void setUser(User mUser) {
         this.mUser = mUser;
         SPUtils.putObject(sInst, Constants.SP_KEY_USER, mUser);
+    }
+
+    //过期时间
+    public void setExpire(String expire) {
+        this.expire = expire;
+        SPUtils.put(sInst, Constants.SP_KEY_EXPIRE, expire);
+    }
+
+    public String getExpire() {
+        if (expire == null) {
+            expire = SPUtils.get(sInst, Constants.SP_KEY_EXPIRE, "");
+        }
+        return expire;
+    }
+
+    //用于刷新token
+    public void setPrivdata(String privdata) {
+        this.privdata = privdata;
+        SPUtils.put(sInst, Constants.SP_KEY_PRIVDATA, privdata);
+    }
+
+    public String getPrivdata() {
+        if (privdata == null) {
+            privdata = SPUtils.get(sInst, Constants.SP_KEY_PRIVDATA,"");
+        }
+        return privdata;
     }
 
     public void loginOut() {

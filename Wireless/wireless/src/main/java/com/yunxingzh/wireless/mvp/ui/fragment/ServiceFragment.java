@@ -48,6 +48,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     private IServicePresenter iServicePresenter;
     private IHeadLinePresenter iHeadLinePresenter;
     private NetErrorLayout netErrorLayout;
+    private WindowManager wm;
 
     @Nullable
     @Override
@@ -92,7 +93,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                     }
                 }
             });
-            mServiceParentGroup.addView(netErrorView,getLayoutParams(0,Gravity.CENTER,LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,0,200,0,0));
+            mServiceParentGroup.addView(netErrorView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 200, 0, 0));
         }
     }
 
@@ -134,11 +135,13 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         //获取屏幕宽高
         int width = 0;
         int height = 0;
-        WindowManager wm = getActivity().getWindowManager();
-        if(wm != null) {
-            width = wm.getDefaultDisplay().getWidth();//720,1536
-            height = wm.getDefaultDisplay().getHeight();//1280,2560
+        if (getActivity() != null) {
+            wm = getActivity().getWindowManager();
         }
+
+        width = wm.getDefaultDisplay().getWidth();//720,1536
+        height = wm.getDefaultDisplay().getHeight();//1280,2560
+
         for (int i = 0; i < list.size(); i++) {
             LinearLayout mServiceItem = new LinearLayout(getActivity());//item最外层layout
             mServiceItem.setBackgroundColor(getResources().getColor(R.color.white));
@@ -162,7 +165,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             View line = new View(getActivity());
             line.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
 
-            if (width <= 720 && height <= 1280){
+            if (width <= 720 && height <= 1280) {
                 line.setMinimumHeight(20);
                 mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 45, 45, 16, 20, 0, 20));
                 mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 5, 20, 0, 20));
@@ -201,7 +204,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                             public void onClick(View v) {
                                 Service.ServiceItem dv = (Service.ServiceItem) v.getTag();
                                 if (iHeadLinePresenter != null) {
-                                    iHeadLinePresenter.clickCount(dv.sid,CLICK_COUNT);//上报
+                                    iHeadLinePresenter.clickCount(dv.sid, CLICK_COUNT);//上报
                                 }
                                 startActivity(WebViewActivity.class, Constants.URL, dv.dst, Constants.TITLE, dv.title);
                             }
@@ -210,16 +213,16 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                     }
                 }
 
-                if (width <= 720 && height <= 1280){
-                    getLines(lines,mServiceItem,j,childLay,40,40);
+                if (width <= 720 && height <= 1280) {
+                    getLines(lines, mServiceItem, j, childLay, 40, 40);
                 } else {
-                    getLines(lines,mServiceItem,j,childLay,80,80);
+                    getLines(lines, mServiceItem, j, childLay, 80, 80);
                 }
 
             }
 
             mServiceParentGroup.addView(mServiceItem);
-            if (i == list.size() - 1){
+            if (i == list.size() - 1) {
                 return;
             }
             mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
@@ -241,14 +244,14 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         return lp;
     }
 
-    public void getLines(int lines,LinearLayout serviceItem,int j,LinearLayout childLay,int top,int bottom){
-        if (lines == 1){//只有一行
+    public void getLines(int lines, LinearLayout serviceItem, int j, LinearLayout childLay, int top, int bottom) {
+        if (lines == 1) {//只有一行
             serviceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, top, 0, bottom));
-        } else if(lines == 2 && j == 0) {
+        } else if (lines == 2 && j == 0) {
             serviceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, top, 0, bottom));
-        } else if (lines == 2 && j == 1){
+        } else if (lines == 2 && j == 1) {
             serviceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, bottom));
-        } else if (lines == 3){
+        } else if (lines == 3) {
             serviceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
         }
     }

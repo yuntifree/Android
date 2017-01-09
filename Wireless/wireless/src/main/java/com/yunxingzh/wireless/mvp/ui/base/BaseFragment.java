@@ -42,7 +42,9 @@ public class BaseFragment extends Fragment implements IBaseView, View.OnTouchLis
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(getActivity().getLocalClassName());
+        if (getActivity() != null) {
+            MobclickAgent.onPageEnd(getActivity().getLocalClassName());
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package wireless.libs.model.impl;
 
 import wireless.libs.bean.resp.ServerTip;
 import wireless.libs.bean.vo.AdvertVo;
+import wireless.libs.bean.vo.AutoLoginVo;
 import wireless.libs.model.IFeedBackModel;
 import wireless.libs.network.HttpHandler;
 import wireless.libs.network.request.NetWorkWarpper;
@@ -18,6 +19,16 @@ public class FeedBackModelImpl implements IFeedBackModel {
             @Override
             public void onSuccess(ServerTip serverTip, Object resquestVo) {
                 listener.onFeedBackSuccess();
+            }
+        });
+    }
+
+    @Override
+    public void autoLogin(String privdata, final onAutoLoginListener listener) {
+        NetWorkWarpper.autoLogin(privdata, new HttpHandler<AutoLoginVo>() {
+            @Override
+            public void onSuccess(ServerTip serverTip, AutoLoginVo resquestVo) {
+                listener.onAutoLoginSuccess(resquestVo);
             }
         });
     }

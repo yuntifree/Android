@@ -8,6 +8,9 @@ public class Constants {
     public static final String SP_USER_NAME = "userName";
     public static final String SP_KEY_MACHINE = "MachineId";
     public static final String SP_KEY_USER = "sp_key_user";
+    public static final String SP_KEY_PRIVDATA = "sp_key_privdata";
+    public static final String SP_KEY_EXPIRE = "sp_key_expire";
+
     public static final String SP_KEY_AREA = "sp_key_area";
 
     //webview页面flag

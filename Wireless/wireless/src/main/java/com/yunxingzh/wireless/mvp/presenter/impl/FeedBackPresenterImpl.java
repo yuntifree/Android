@@ -1,8 +1,11 @@
 package com.yunxingzh.wireless.mvp.presenter.impl;
 
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.presenter.IFeedBackPresenter;
 import com.yunxingzh.wireless.mvp.view.IFeedBackView;
+import com.yunxingzh.wireless.utils.SPUtils;
 
+import wireless.libs.bean.vo.AutoLoginVo;
 import wireless.libs.model.IFeedBackModel;
 import wireless.libs.model.impl.FeedBackModelImpl;
 
@@ -10,7 +13,7 @@ import wireless.libs.model.impl.FeedBackModelImpl;
  * Created by stephen on 2016/12/23.
  */
 
-public class FeedBackPresenterImpl implements IFeedBackPresenter, IFeedBackModel.onFeedBackListener {
+public class FeedBackPresenterImpl implements IFeedBackPresenter, IFeedBackModel.onFeedBackListener, IFeedBackModel.onAutoLoginListener {
 
     private IFeedBackModel iFeedBackModel;
     private IFeedBackView iFeedBackView;
@@ -28,6 +31,13 @@ public class FeedBackPresenterImpl implements IFeedBackPresenter, IFeedBackModel
     }
 
     @Override
+    public void autoLogin() {
+        if (iFeedBackView != null){
+            iFeedBackModel.autoLogin(MainApplication.get().getPrivdata(),this);
+        }
+    }
+
+    @Override
     public void onFeedBackSuccess() {
         if (iFeedBackView != null){
             iFeedBackView.feedBackSuccess();
@@ -38,4 +48,15 @@ public class FeedBackPresenterImpl implements IFeedBackPresenter, IFeedBackModel
     public void onDestroy() {
         iFeedBackView = null;
     }
+
+    @Override
+    public void onAutoLoginSuccess(AutoLoginVo autoLoginVo) {
+        MainApplication.get().setPrivdata(autoLoginVo.privdata);
+        MainApplication.get().setToken(autoLoginVo.token);
+        MainApplication.get().setExpire(autoLoginVo.expiretime);
+        if (iFeedBackView != null){
+            iFeedBackView.autoLoginSuccess();
+        }
+    }
+
 }

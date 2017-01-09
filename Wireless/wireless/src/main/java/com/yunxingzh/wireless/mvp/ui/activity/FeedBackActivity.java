@@ -16,6 +16,8 @@ import com.yunxingzh.wireless.mvp.view.IFeedBackView;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
+import wireless.libs.bean.vo.AutoLoginVo;
+
 /**
  * Created by stephen on 2016/12/23.
  */
@@ -73,6 +75,10 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
     public void feedBackSuccess() {
         ToastUtil.showMiddle(this, R.string.commit_success);
         finish();
+    }
+
+    @Override
+    public void autoLoginSuccess() {
     }
 
     public String getContent() {

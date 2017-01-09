@@ -1,13 +1,10 @@
 package wireless.libs.bean.vo;
 
-import java.io.Serializable;
-
 /**
- * Created by hzg on 16/12/6.
+ * Created by stephen on 2017/1/9.
  */
 
-public class User implements Serializable {
-    public int uid;
+public class AutoLoginVo {
     public String token;
     public String privdata;
     public String expiretime;

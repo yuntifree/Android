@@ -6,4 +6,5 @@ package com.yunxingzh.wireless.mvp.view;
 
 public interface IFeedBackView extends IBaseView {
     void feedBackSuccess();
+    void autoLoginSuccess();
 }

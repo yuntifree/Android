@@ -7,6 +7,7 @@ import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.resp.MenuList;
 import wireless.libs.bean.vo.AdvertVo;
+import wireless.libs.bean.vo.AutoLoginVo;
 import wireless.libs.bean.vo.StretchVo;
 import wireless.libs.bean.vo.User;
 import wireless.libs.bean.resp.FontInfoList;
@@ -200,6 +201,17 @@ public class NetWorkWarpper {
         HttpParams httpParams = new HttpParams();
         httpParams.add("content",content);
         httpParams.add("contact",contact);
+        HttpUtils.post(path, httpParams, handler);
+    }
+
+    /**
+     * 用户反馈
+     * @param handler
+     */
+    public static void autoLogin(String privdata, HttpHandler<AutoLoginVo> handler) {
+        String path = "auto_login";
+        HttpParams httpParams = new HttpParams();
+        httpParams.add("privdata",privdata);
         HttpUtils.post(path, httpParams, handler);
     }
 }

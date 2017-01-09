@@ -78,9 +78,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (hotInfos.size() > 0) {
-            source = hotInfos.get(position);
+        if (hotInfos.size() < position) {
+            return;
         }
+        source = hotInfos.get(position);
         switch (getItemViewType(position)) {
             case TYPE_ADVIER:
             case TYPE_NULL:
@@ -195,28 +196,28 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         int type;
-        if (hotInfos.size() > 0) {
-            if (hotInfos.get(position).stype == 1) {//广告
-                type = TYPE_ADVIER;
-                return TYPE_ADVIER;
-            } else {//新闻
-                if (hotInfos.get(position).images == null) {
-                    type = TYPE_NULL;
-                } else {
-                    type = hotInfos.get(position).images.size();//根据图片size确定item布局
-                }
-                switch (type) {
-                    case TYPE_NULL://无图片
-                        return TYPE_NULL;
-                    case TYPE_ONE://一张或二张图片
-                    case TYPE_TWO:
-                        return TYPE_TWO;
-                    case TYPE_THREE://三张图片
-                        return TYPE_THREE;
-                }
-                return -1;
-            }
+        if (hotInfos.size() < position) {
+            return -1;
         }
-        return -1;
+        if (hotInfos.get(position).stype == 1) {//广告
+            type = TYPE_ADVIER;
+            return TYPE_ADVIER;
+        } else {//新闻
+            if (hotInfos.get(position).images == null) {
+                type = TYPE_NULL;
+            } else {
+                type = hotInfos.get(position).images.size();//根据图片size确定item布局
+            }
+            switch (type) {
+                case TYPE_NULL://无图片
+                    return TYPE_NULL;
+                case TYPE_ONE://一张或二张图片
+                case TYPE_TWO:
+                    return TYPE_TWO;
+                case TYPE_THREE://三张图片
+                    return TYPE_THREE;
+            }
+            return -1;
+        }
     }
 }
