@@ -132,10 +132,13 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     public void getServiceListSuccess(ServiceList services) {
         List<Service> list = services.services;
         //获取屏幕宽高
+        int width = 0;
+        int height = 0;
         WindowManager wm = getActivity().getWindowManager();
-        int width = wm.getDefaultDisplay().getWidth();//720,1536
-        int height = wm.getDefaultDisplay().getHeight();//1280,2560
-
+        if(wm != null) {
+            width = wm.getDefaultDisplay().getWidth();//720,1536
+            height = wm.getDefaultDisplay().getHeight();//1280,2560
+        }
         for (int i = 0; i < list.size(); i++) {
             LinearLayout mServiceItem = new LinearLayout(getActivity());//item最外层layout
             mServiceItem.setBackgroundColor(getResources().getColor(R.color.white));

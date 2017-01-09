@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp"
     android:orientation="vertical">
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -12,19 +14,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/head_line_rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-             />
+            android:layout_height="wrap_content"
+            android:background="@color/gray_e6e6e6"
+            />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <LinearLayout
-        android:id="@+id/net_error_news_lay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone">
-
-    </LinearLayout>
 </LinearLayout>

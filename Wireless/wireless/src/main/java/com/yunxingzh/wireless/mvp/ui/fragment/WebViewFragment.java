@@ -18,6 +18,7 @@ import com.yunxingzh.wireless.utils.WebViewUtil;
 
 /**
  * Created by stephen on 2017/1/2.
+ *  头条分类html页
  */
 
 public class WebViewFragment extends BaseFragment {

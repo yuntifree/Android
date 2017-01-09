@@ -2,27 +2,23 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.LinearLayout;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
-import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.NewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
-import com.yunxingzh.wireless.utils.LogUtils;
-import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
@@ -42,7 +38,7 @@ import wireless.libs.bean.vo.HotInfo;
  * 头条-新闻
  */
 
-public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener, NetErrorLayout.OnNetErrorClickListener {
+public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String ARG_CTYPE = "ctype";
     private final static int HEAD_LINE_TYPE = 0;// 0-新闻 1-视频 2-应用 3-游戏 4-本地 5-娱乐
@@ -55,26 +51,16 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private NewsAdapter headLineNewsAdapter;
     private List<HotInfo> newsListNext;
     private HotInfoList data;
-    private LinearLayout mNetErrorLay;
+
     private boolean isFastClick = true;
-    private NetErrorLayout netErrorLayout;
-    private int types;
-    private int[] typeArray = new int[10];
-   // private static Bundle bundle = new Bundle();
+
+    private int newsTypes;
     private boolean firstLoad = true;
 
     public static HeadLineNewsFragment getInstance(int type) {
         HeadLineNewsFragment headLineNewsFragment = new HeadLineNewsFragment();
-        headLineNewsFragment.types = type;
-       // bundle.putInt(ARG_CTYPE, type);
-        //headLineNewsFragment.setArguments(bundle);
+        headLineNewsFragment.newsTypes = type;
         return headLineNewsFragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-      //  type = getArguments().getInt(ARG_CTYPE);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -89,9 +75,8 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         swipeRefreshLayout = findView(view, R.id.swipe_ly);
         mMainNewsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMainNewsRv.setHasFixedSize(true);
-        mMainNewsRv.addItemDecoration(new SpacesItemDecoration(Constants.ITEM_HEIGHT));
+        mMainNewsRv.addItemDecoration(new SpacesItemDecoration(1));
         swipeRefreshLayout.setOnRefreshListener(this);
-        mNetErrorLay = findView(view, R.id.net_error_news_lay);
         // RecyclerView.canScrollVertically(1)的值表示是否能向上滚动，false表示已经滚动到底部
         // RecyclerView.canScrollVertically(-1)的值表示是否能向下滚动，false表示已经滚动到顶部
         mMainNewsRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -102,14 +87,13 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                     case RecyclerView.SCROLL_STATE_IDLE:
                         //滑动完成
                         if (!mMainNewsRv.canScrollVertically(1)) {//false:到底部
-                            ToastUtil.showMiddle(getActivity(), "到底");
                             if (data.hasmore == 0) {
                                 ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
                             } else {
                                 if (isFastClick) {
                                     isFastClick = false;
                                     if (data != null && data.infos.size() > 0) {
-                                        iHeadLinePresenter.getHeadLine(types, data.infos.get(data.infos.size() - 1).seq);
+                                        iHeadLinePresenter.getHeadLine(newsTypes, data.infos.get(data.infos.size() - 1).seq);
                                     }
                                 }
                             }
@@ -125,19 +109,8 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         EventBus.getDefault().register(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         if (firstLoad) {
-            iHeadLinePresenter.getHeadLine(this.types, HEAD_LINE_SEQ);
-            LogUtils.i("lsd",this + "");
+            iHeadLinePresenter.getHeadLine(this.newsTypes, HEAD_LINE_SEQ);
             swipeRefreshLayout.setRefreshing(true);
-        }
-
-
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            netErrorLayout = new NetErrorLayout(getActivity());
-            netErrorLayout.setOnNetErrorClickListener(this);
-            swipeRefreshLayout.setVisibility(View.GONE);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(0);
-            mNetErrorLay.addView(netErrorView);
         }
     }
 
@@ -194,18 +167,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     @Override
     public void onRefresh() {
         newsListNext.clear();
-        iHeadLinePresenter.getHeadLine(types, HEAD_LINE_SEQ);
-    }
-
-    @Override
-    public void netErrorClick() {
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            ToastUtil.showMiddle(getActivity(), R.string.net_set);
-        } else {
-            mNetErrorLay.setVisibility(View.GONE);
-            swipeRefreshLayout.setVisibility(View.VISIBLE);
-            iHeadLinePresenter.getHeadLine(types, HEAD_LINE_SEQ);
-        }
+        iHeadLinePresenter.getHeadLine(newsTypes, HEAD_LINE_SEQ);
     }
 
     public void startActivity(Class activity, String key, String videoUrl, String titleKey, String title) {

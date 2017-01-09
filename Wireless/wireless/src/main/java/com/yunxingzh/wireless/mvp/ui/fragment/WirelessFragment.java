@@ -777,7 +777,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         if (mBadgeView != null) {
             mBadgeView.setBadgeCount(apList.size());
         }
-        //updateConnectState(true);
+        updateConnectState(true);
         if (bannersVo != null) {
             bannersState();
         }

@@ -17,14 +17,4 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
     </android.support.v4.widget.SwipeRefreshLayout>
-
-    <LinearLayout
-        android:id="@+id/net_error_video_lay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone">
-
-    </LinearLayout>
 </LinearLayout>

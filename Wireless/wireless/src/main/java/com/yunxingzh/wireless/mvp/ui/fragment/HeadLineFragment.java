@@ -10,14 +10,18 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mview.PagerSlidingTabStrip;
 import com.yunxingzh.wireless.mvp.presenter.impl.GetHeadLineMenuPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IGetHeadLineMenuView;
+import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,23 +37,23 @@ import wireless.libs.bean.vo.MenuVo;
  * 头条
  */
 
-public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuView {
+public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuView, NetErrorLayout.OnNetErrorClickListener {
 
     private final static int SIZE = 15;//初始化字体size
     private final static int FOCUS_SIZE = 18;//获得焦点后字体size
 
     private final static int INDEX_ZERO = 0;
     private final static int INDEX_ONE = 1;
-//    private final static int INDEX_TWO = 2;
-//    private final static int INDEX_THREE = 3;
+    private final static int INDEX_TWO = 2;
+    private final static int INDEX_THREE = 3;
 
     private ViewPager mViewPager;
     private MyPagerAdapter adapter;
-    private List<Fragment> fragments = new ArrayList<>();
     private PagerSlidingTabStrip tabStrip;
     private GetHeadLineMenuPresenterImpl getHeadLineMenuPresenter;
     private List<MenuVo> menuInfos;
-
+    private NetErrorLayout netErrorLayout;
+    private LinearLayout mNetErrorLay;
     private WebViewFragment webViewFragment;
 
     @Nullable
@@ -64,6 +68,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     public void initView(View view) {
         mViewPager = findView(view, R.id.id_viewpager);
         tabStrip = findView(view, R.id.tabs);
+        mNetErrorLay = findView(view, R.id.net_error_news_lay);
     }
 
     public void initData() {
@@ -71,15 +76,38 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         EventBus.getDefault().register(this);
         getHeadLineMenuPresenter = new GetHeadLineMenuPresenterImpl(this);
         getHeadLineMenuPresenter.getHeadLineMenu();
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            netErrorLayout = new NetErrorLayout(getActivity());
+            netErrorLayout.setOnNetErrorClickListener(this);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+            View netErrorView = netErrorLayout.netErrorLay(0);
+            mNetErrorLay.addView(netErrorView);
+        }
+        tabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Subscribe
     public void onEventMainThread(EventBusType event) {
         if (event.getMsg() == Constants.HEAD_LINE) {//跳转到头条父fragment(头条)
-            mViewPager.setCurrentItem(INDEX_ZERO);
+            mViewPager.setCurrentItem(INDEX_ONE);
         }
         if (event.getMsg() == Constants.HEAD_LINE && event.getChildMsg() == Constants.VIDEO) {
-            mViewPager.setCurrentItem(INDEX_ONE);//跳转视频Fragment
+            mViewPager.setCurrentItem(INDEX_THREE);//跳转视频Fragment
         }
     }
 
@@ -104,11 +132,21 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
                 titleList.add(menuInfos.get(i).title);
             }
             adapter = new MyPagerAdapter(getChildFragmentManager(), titleList);
-            final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
-                    .getDisplayMetrics());
-            mViewPager.setPageMargin(pageMargin);
+//            final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+//                    .getDisplayMetrics());
+//            mViewPager.setPageMargin(pageMargin);
             mViewPager.setAdapter(adapter);
             tabStrip.setViewPager(mViewPager);
+        }
+    }
+
+    @Override
+    public void netErrorClick() {
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            ToastUtil.showMiddle(getActivity(), R.string.net_set);
+        } else {
+            mNetErrorLay.setVisibility(View.GONE);
+            getHeadLineMenuPresenter.getHeadLineMenu();
         }
     }
 

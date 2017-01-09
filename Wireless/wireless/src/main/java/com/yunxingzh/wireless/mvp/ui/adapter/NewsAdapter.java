@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +19,7 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.utils.StringUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,27 +41,15 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int TYPE_THREE = 3;//三张图片
     private final int TYPE_NULL = 0;//没有图片
     private final int TYPE_ADVIER = 5;//广告
+    private HotInfo source;
 
     public NewsAdapter(Context context, List<HotInfo> data) {
         this.context = context;
         this.hotInfos = data;
     }
 
-//        baseViewHolder.setOnClickListener(R.id.type_one_img,new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!hotInfo.isClickColor) {
-//                    hotInfo.isClickColor = true;
-//                    startActivity(WebViewActivity.class, baseViewHolder.getPosition(), hotInfo);
-//                } else {
-//                    startActivity(WebViewActivity.class, baseViewHolder.getPosition(), hotInfo);
-//                }
-//            }
-//        });
-
-
     public void startActivity(Class activity, int position, HotInfo result) {
-        EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE_NEWS_FLAG,position));
+        EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE_NEWS_FLAG, position));
         Intent intent = new Intent(context, activity);
         intent.putExtra(Constants.URL, result.dst);
         intent.putExtra(Constants.TITLE, result.title);
@@ -70,10 +60,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        switch (viewType){
-            case TYPE_ADVIER:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_news_type_advier, parent, false);
-                return new ViewHolderOne(view);
+        switch (viewType) {
             case TYPE_ONE:
             case TYPE_TWO:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_news_type_two_img, parent, false);
@@ -82,6 +69,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_news_type_three_img, parent, false);
                 return new ViewHolderThree(view);
             case TYPE_NULL:
+            case TYPE_ADVIER:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_news_type_advier, parent, false);
                 return new ViewHolderOne(view);
         }
@@ -89,9 +77,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        HotInfo source = hotInfos.get(position);
-        switch (getItemViewType(position)){
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        source = hotInfos.get(position);
+        switch (getItemViewType(position)) {
             case TYPE_ADVIER:
             case TYPE_NULL:
                 ViewHolderOne holderOne = (ViewHolderOne) holder;
@@ -144,11 +132,24 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
                 break;
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HotInfo clickData = hotInfos.get(position);
+                if (!clickData.isClickColor) {
+                    clickData.isClickColor = true;
+                    startActivity(WebViewActivity.class, position, clickData);
+                } else {
+                    startActivity(WebViewActivity.class, position, clickData);
+                }
+            }
+        });
     }
 
     public class ViewHolderOne extends RecyclerView.ViewHolder {
         ImageView mTypeOneImg;
         TextView mTypeOneTitle, mTypeOneTime;
+
         public ViewHolderOne(View itemView) {
             super(itemView);
             mTypeOneImg = (ImageView) itemView.findViewById(R.id.type_one_img);
@@ -160,6 +161,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public class ViewHolderTwo extends RecyclerView.ViewHolder {
         TextView mTypeTwoTime, mTypeTwoTitle;
         ImageView mTypeTwoImg;
+
         public ViewHolderTwo(View itemView) {
             super(itemView);
             mTypeTwoTime = (TextView) itemView.findViewById(R.id.type_two_time);
@@ -171,6 +173,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public class ViewHolderThree extends RecyclerView.ViewHolder {
         TextView mTypeThreeTime, mTypeThreeTitle;
         ImageView mTypeThreeLeftImg, mTypeThreeMiddleImg, mTypeThreeRightImg;
+
         public ViewHolderThree(View itemView) {
             super(itemView);
             mTypeThreeLeftImg = (ImageView) itemView.findViewById(R.id.type_three_left_img);
@@ -205,7 +208,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 case TYPE_ONE://一张或二张图片
                 case TYPE_TWO:
                     return TYPE_TWO;
-                case TYPE_THREE://三章图片
+                case TYPE_THREE://三张图片
                     return TYPE_THREE;
             }
             return -1;
