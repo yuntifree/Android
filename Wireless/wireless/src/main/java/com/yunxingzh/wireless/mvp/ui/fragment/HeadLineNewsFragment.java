@@ -75,7 +75,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         swipeRefreshLayout = findView(view, R.id.swipe_ly);
         mMainNewsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMainNewsRv.setHasFixedSize(true);
-        mMainNewsRv.addItemDecoration(new SpacesItemDecoration(1));
+        mMainNewsRv.addItemDecoration(new SpacesItemDecoration(3));
         swipeRefreshLayout.setOnRefreshListener(this);
         // RecyclerView.canScrollVertically(1)的值表示是否能向上滚动，false表示已经滚动到底部
         // RecyclerView.canScrollVertically(-1)的值表示是否能向下滚动，false表示已经滚动到顶部

@@ -13,8 +13,11 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.mview.alertdialog.AlertView;
+import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.VideoPlayActivity;
@@ -56,6 +59,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private List<HotInfo> newsVo;
     private boolean isFirstRefresh = true;
     private boolean count = false;
+    private AlertView alertView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -93,24 +97,21 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 HotInfo item = data.get(i);
 
                 if (!NetUtils.isWifi(getActivity())) {
-                    final AlertDialog.Builder mDialog = new AlertDialog.Builder(getActivity());
-                    mDialog.setTitle(R.string.dialog_notices);
-                    mDialog.setMessage(R.string.dialog_msg);
-                    mDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    alertView = new AlertView("温馨提示", "亲,您当前处于流量状态下,继续观看需要花费少许流量哦!", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
+                        public void onItemClick(Object o, int position) {
+                            if (position != AlertView.CANCELPOSITION) {
+                                HotInfo item = data2.get(i);
+                                videoItemClick(item, i);
+                            }
+                        }
+                    }).setOnDismissListener(new OnDismissListener() {
+                        @Override
+                        public void onDismiss(Object o) {
+                            alertView.dismiss();
                         }
                     });
-
-                    mDialog.setPositiveButton(R.string.query, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            HotInfo item = data2.get(i);
-                            videoItemClick(item, i);
-                        }
-                    });
-                    mDialog.show();
+                    alertView.show();
                 } else {
                     videoItemClick(item, i);
                 }

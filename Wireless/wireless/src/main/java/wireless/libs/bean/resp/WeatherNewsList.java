@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import wireless.libs.bean.vo.MainNewsVo;
+import wireless.libs.bean.vo.NoticeVo;
 import wireless.libs.bean.vo.WeatherVo;
 
 /**
@@ -13,4 +14,5 @@ import wireless.libs.bean.vo.WeatherVo;
 public class WeatherNewsList implements Serializable{
     public WeatherVo weather;
     public List<MainNewsVo> news;
+    public NoticeVo notice;
 }

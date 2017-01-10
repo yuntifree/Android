@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,9 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +22,8 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.webkit.URLUtil;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dgwx.app.lib.bl.WifiInterface;
@@ -40,8 +35,9 @@ import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mview.MyListview;
 import com.yunxingzh.wireless.mview.MyScrollView;
-import com.yunxingzh.wireless.mview.PublicDialog;
 import com.yunxingzh.wireless.mview.StatusBarColor;
+import com.yunxingzh.wireless.mview.alertdialog.AlertView;
+import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mvp.presenter.IConnectDGCountPresenter;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.ConnectDGCountPresenterImpl;
@@ -83,6 +79,7 @@ import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.resp.WeatherNewsList;
 import wireless.libs.bean.vo.BannerVo;
 import wireless.libs.bean.vo.MainNewsVo;
+import wireless.libs.bean.vo.NoticeVo;
 import wireless.libs.bean.vo.UserConnectVo;
 import wireless.libs.bean.vo.WeatherVo;
 import wireless.libs.convenientbanner.ConvenientBanner;
@@ -95,7 +92,7 @@ import wireless.libs.convenientbanner.listener.OnItemClickListener;
  */
 
 public class WirelessFragment extends BaseFragment implements IHeadLineView, IConnectDGCountView, View.OnClickListener, ScrollViewListener,
-        ActivityCompat.OnRequestPermissionsResultCallback, SwipeRefreshLayout.OnRefreshListener {
+        ActivityCompat.OnRequestPermissionsResultCallback, SwipeRefreshLayout.OnRefreshListener, OnDismissListener {
 
     private final static String TAG = "WirelessFragment";
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
@@ -127,6 +124,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private UserConnectVo userVo;
     private TextView mMainTemperature, mMainWeather, mMachineErrorTv;
     private WeatherVo weatherNewsData;
+    private NoticeVo noticeVo;
     private ConvenientBanner mAdRotationBanner;
 
     private WifiUtils wifiUtils = null;
@@ -139,6 +137,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private Handler handler = new Handler();
     private BadgeView mBadgeView;
     private WindowManager wm;
+
+    private AlertView alertView;
 
     @Nullable
     @Override
@@ -250,7 +250,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         FWManager.getInstance().addWifiObserver(wifiObserver);
         //获取屏幕宽高
         if (getActivity() == null) {
-           return;
+            return;
         }
         wm = getActivity().getWindowManager();
         int width = wm.getDefaultDisplay().getWidth();//720,1536
@@ -268,8 +268,19 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
     @Override
     public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {
+        if (weatherNewsVo == null) {
+            return;
+        }
         weatherNewsData = weatherNewsVo.weather;
         mainNewsVos = weatherNewsVo.news;
+        noticeVo = weatherNewsVo.notice;
+
+        if (noticeVo != null) {
+            mMachineErrorLay.setVisibility(View.VISIBLE);
+            mMachineErrorLay.setAlpha(0.5f);
+            mMachineErrorTv.setText(noticeVo.title);
+        }
+
         String info = weatherNewsData.info;
         int type = weatherNewsData.type;
         mMainTemperature.setText(weatherNewsData.temp + "°C");
@@ -293,11 +304,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 mWeatherImgTop.setImageResource(R.drawable.snow);
                 break;
         }
+
         //新闻
-        if (weatherNewsVo != null) {
-            mainNewsVos = weatherNewsVo.news;
-            mainNewsAdapter = new MainNewsAdapter(getActivity(), mainNewsVos);
-        }
+        mainNewsVos = weatherNewsVo.news;
+        mainNewsAdapter = new MainNewsAdapter(getActivity(), mainNewsVos);
 
         mMainNewsLv.setAdapter(mainNewsAdapter);
         Utility.setListViewHeight(mMainNewsLv);
@@ -417,8 +427,18 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         } else if (mMachineErrorIv == v) {//不可抗力异常关闭
             mMachineErrorLay.setVisibility(View.GONE);
         } else if (mMachineErrorLay == v) {
-           // startActivity
+            if (!StringUtils.isEmpty(noticeVo.content)) {
+                alertView = new AlertView("通知", noticeVo.content, null, new String[]{"我知道了"}, null, getActivity(), AlertView.Style.Alert, null);
+                alertView.show();
+            } else if (!StringUtils.isEmpty(noticeVo.dst)) {
+                startActivity(WebViewActivity.class, Constants.TITLE, noticeVo.title, Constants.URL, noticeVo.dst);
+            }
         }
+    }
+
+    @Override
+    public void onDismiss(Object o) {
+        alertView.dismiss();
     }
 
     public Runnable runnable = new Runnable() {
@@ -650,24 +670,16 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 CheckAndLogon();
             } else if (DGFreeAp != null) {
                 // 2. 已经连上其它WiFi，周围有DG-Free的情况，询问是否连接DG-Free
-                final AlertDialog.Builder mDialog = new AlertDialog.Builder(getActivity());
-                mDialog.setTitle(R.string.dialog_notices);
-                mDialog.setMessage("您已连上" + currentAp.ssid + ",确定要切换吗？");
-                mDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                alertView = new AlertView("温馨提示", "您已连上" + currentAp.ssid + ",确定要切换吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                    public void onItemClick(Object o, int position) {
+                        if (position != AlertView.CANCELPOSITION) {
+                            FWManager.getInstance().connect(DGFreeAp);
+                            //startActivity(WifiManagerActivity.class, "", "", "", "");
+                        }
                     }
-                });
-
-                mDialog.setPositiveButton(R.string.query, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        FWManager.getInstance().connect(DGFreeAp);
-                        //startActivity(WifiManagerActivity.class, "", "", "", "");
-                    }
-                });
-                mDialog.show();
+                }).setOnDismissListener(this);
+                alertView.show();
             } else {
                 //已连上wifi，周围没有DG-free
                 ToastUtil.showMiddle(getActivity(), R.string.notice_toast);

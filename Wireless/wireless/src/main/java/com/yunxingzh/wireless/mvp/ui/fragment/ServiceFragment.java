@@ -217,7 +217,11 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                             }
                         });
 
-                        itemLay.addView(img, getLayoutParams(0,Gravity.CENTER, 80, 80, 0, 0, 0, 0));
+                        if (width <= 720 && height <= 1280) {
+                            itemLay.addView(img, getLayoutParams(0, Gravity.CENTER, 80, 80, 0, 0, 0, 0));
+                        } else {
+                            itemLay.addView(img, getLayoutParams(0, Gravity.CENTER, 120, 120, 0, 0, 0, 0));
+                        }
                         itemLay.addView(views, getLayoutParams(0,Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
 
                         childLay.addView(itemLay, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
