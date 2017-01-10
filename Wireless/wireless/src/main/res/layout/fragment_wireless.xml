@@ -70,24 +70,24 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:visibility="gone"
-                            android:src="@drawable/circle_outside_big" />
+                            android:src="@drawable/circle_outside_big"
+                            android:visibility="gone" />
 
                         <ImageView
                             android:id="@+id/wireless_circle_small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:visibility="gone"
-                            android:src="@drawable/circle_outside_small" />
+                            android:src="@drawable/circle_outside_small"
+                            android:visibility="gone" />
 
                         <ImageView
                             android:id="@+id/circle_iv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:visibility="gone"
-                            android:src="@drawable/circle_around" />
+                            android:src="@drawable/circle_around"
+                            android:visibility="gone" />
 
                         <com.yunxingzh.wireless.mview.CircleWaveView
                             android:id="@+id/animation_tv"
@@ -112,15 +112,15 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:src="@drawable/circle"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <LinearLayout
                             android:id="@+id/wireless_times_lay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:visibility="gone"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/wireless_num_tv"
@@ -149,33 +149,66 @@
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
-                    <LinearLayout
-                        android:id="@+id/weather_lay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_marginLeft="10dp"
-                        android:orientation="horizontal">
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/main_temperature"
+                        <LinearLayout
+                            android:id="@+id/weather_lay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center|left"
-                            android:text="18°C"
-                            android:textColor="@color/gray_98ffffff"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:layout_gravity="left"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/main_weather"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="多云"
-                            android:textColor="@color/gray_98ffffff"
-                            android:textSize="12sp" />
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/main_temperature"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center|left"
+                                android:text="18°C"
+                                android:textColor="@color/gray_98ffffff"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/main_weather"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="多云"
+                                android:textColor="@color/gray_98ffffff"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/machine_error_lay"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:background="#64000000"
+                            android:visibility="gone"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/machine_error_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/gray_4a4a4a"
+                                android:layout_weight="1"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:layout_gravity="center"
+                                android:textSize="14sp"/>
+
+                            <ImageView
+                                android:id="@+id/machine_error_iv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ico_no"/>
+                        </LinearLayout>
+
+                    </FrameLayout>
 
                 </LinearLayout>
 

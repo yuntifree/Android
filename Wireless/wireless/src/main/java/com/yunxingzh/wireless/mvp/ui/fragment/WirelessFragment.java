@@ -107,13 +107,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private final static int SCANNIN_GREQUEST_CODE = 1;
     private static final int DG_SDK_TIME_OUT = 10 * 1000;
 
-    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest,
+    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest, mMachineErrorLay,
             mMainHeadImg, mWeatherLay, mMainSpiritedLay, mTitleLay, mWirelessTimesLay;
     private MyScrollView scrollView;
     private TextView mConnectCountTv, mTitleNameTv, mWirelessNumTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
     private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop, mConnectIv, mTitleMainImg,
-            mTitleReturnIv, mCircleIv, mWirelessCircleIv, mWirelessCircleBig, mWirelessCircleSmall;
+            mTitleReturnIv, mCircleIv, mWirelessCircleIv, mWirelessCircleBig, mWirelessCircleSmall, mMachineErrorIv;
     private MyListview mMainNewsLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private IConnectDGCountPresenter iConnectDGCountPresenter;
@@ -125,7 +125,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
     private List<BannerVo> bannersVo;
     private UserConnectVo userVo;
-    private TextView mMainTemperature, mMainWeather;
+    private TextView mMainTemperature, mMainWeather, mMachineErrorTv;
     private WeatherVo weatherNewsData;
     private ConvenientBanner mAdRotationBanner;
 
@@ -175,6 +175,11 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         mConnectIv.setOnClickListener(this);
         mMainRefreshLay = findView(view, R.id.main_refresh_lay);
         mMainRefreshLay.setOnRefreshListener(this);
+        mMachineErrorTv = findView(view, R.id.machine_error_tv);
+        mMachineErrorIv = findView(view, R.id.machine_error_iv);
+        mMachineErrorIv.setOnClickListener(this);
+        mMachineErrorLay = findView(view, R.id.machine_error_lay);
+        mMachineErrorLay.setOnClickListener(this);
 
         mCircleIv = findView(view, R.id.circle_iv);
         mWirelessCircleBig = findView(view, R.id.wireless_circle_big);
@@ -244,9 +249,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
         FWManager.getInstance().addWifiObserver(wifiObserver);
         //获取屏幕宽高
-        if (getActivity() != null) {
-            wm = getActivity().getWindowManager();
+        if (getActivity() == null) {
+           return;
         }
+        wm = getActivity().getWindowManager();
         int width = wm.getDefaultDisplay().getWidth();//720,1536
         int height = wm.getDefaultDisplay().getHeight();//1280,2560
         if (width <= 720 && height <= 1280) {
@@ -408,6 +414,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
         } else if (mTitleReturnIv == v) {
             startActivity(SetActivity.class, "", "", "", "");
+        } else if (mMachineErrorIv == v) {//不可抗力异常关闭
+            mMachineErrorLay.setVisibility(View.GONE);
+        } else if (mMachineErrorLay == v) {
+           // startActivity
         }
     }
 

@@ -15,5 +15,6 @@ public class Service {
         public int sid; //服务id
         public String title; //标题
         public String dst; //跳转地址
+        public String icon;
     }
 }
