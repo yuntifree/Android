@@ -1,11 +1,15 @@
 package wireless.libs.network.request;
 
 import com.alibaba.fastjson.JSONArray;
+import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.utils.AppUtils;
+import com.yunxingzh.wireless.utils.JsonUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
+import wireless.libs.bean.resp.BaseResult;
 import wireless.libs.bean.resp.MenuList;
+import wireless.libs.bean.resp.ServerTip;
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.AutoLoginVo;
 import wireless.libs.bean.vo.StretchVo;
@@ -16,6 +20,7 @@ import wireless.libs.bean.resp.ServiceList;
 import wireless.libs.bean.resp.WeatherNewsList;
 import wireless.libs.bean.resp.WifiList;
 import wireless.libs.bean.resp.WifiMapList;
+import wireless.libs.network.ErrorType;
 import wireless.libs.network.HttpHandler;
 import wireless.libs.network.HttpParams;
 import wireless.libs.network.HttpUtils;
@@ -206,12 +211,33 @@ public class NetWorkWarpper {
 
     /**
      * 用户反馈
-     * @param handler
      */
-    public static void autoLogin(String privdata, HttpHandler<AutoLoginVo> handler) {
+    public static AutoLoginVo autoLogin(String privdata) {
         String path = "auto_login";
         HttpParams httpParams = new HttpParams();
-        httpParams.add("privdata",privdata);
-        HttpUtils.post(path, httpParams, handler);
+        httpParams.add("privdata", privdata);
+        String respBodyStr = HttpUtils.postSync(path, httpParams);
+        if (respBodyStr != null) {
+            try {
+                BaseResult resp = JsonUtils.parseObject(respBodyStr, BaseResult.class);
+                if (resp != null) {
+                    if (resp.errno() == ErrorType.E_OK) {
+                        //请求成功
+                        //后台没有返回data类型
+                        if (resp.data == null) {
+                            //
+                        } else {
+                            AutoLoginVo data = JsonUtils.parseObject(resp.data, AutoLoginVo.class);
+                            if (data != null) {
+                                return data;
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        return null;
     }
 }

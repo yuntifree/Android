@@ -12,19 +12,9 @@ public interface IFeedBackModel {
         void onFeedBackSuccess();
     }
 
-    interface onAutoLoginListener{
-        void onAutoLoginSuccess(AutoLoginVo autoLoginVo);
-    }
-
     /***
      * 用户反馈
      * @param listener
      */
     void feedBack(String content, String contact, onFeedBackListener listener);
-
-    /***
-     * 自动登录
-     * @param listener
-     */
-    void autoLogin(String privdata, onAutoLoginListener listener);
 }
