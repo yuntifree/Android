@@ -144,7 +144,9 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
         for (int i = 0; i < list.size(); i++) {
             LinearLayout mServiceItem = new LinearLayout(getActivity());//item最外层layout
-            mServiceItem.setBackgroundColor(getResources().getColor(R.color.white));
+            if (isAdded()) {
+                mServiceItem.setBackgroundColor(getResources().getColor(R.color.white));
+            }
             mServiceItem.setOrientation(LinearLayout.VERTICAL);
 
             LinearLayout mItemTop = new LinearLayout(getActivity());//item顶部layout
@@ -154,7 +156,9 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             mServiceImg.setImageResource(R.drawable.img_service);
 
             TextView mServiceTitle = new TextView(getActivity());
-            mServiceTitle.setTextColor(getResources().getColor(R.color.gray_3c3c3c));
+            if (isAdded()) {
+                mServiceTitle.setTextColor(getResources().getColor(R.color.gray_3c3c3c));
+            }
             mServiceTitle.setTextSize(17);
             mServiceTitle.setGravity(Gravity.CENTER);
             mServiceTitle.setText(list.get(i).title);
@@ -204,7 +208,9 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                         views.setText(title);
                         views.setTextSize(14);
                         views.setGravity(Gravity.CENTER);
-                        views.setTextColor(getResources().getColor(R.color.gray_5a5a5a));
+                        if (isAdded()) {
+                            views.setTextColor(getResources().getColor(R.color.gray_5a5a5a));
+                        }
                         itemLay.setTag(childDatas.get(positon));
                         itemLay.setOnClickListener(new View.OnClickListener() {
                             @Override

@@ -11,6 +11,7 @@ import wireless.libs.bean.resp.WeatherNewsList;
 
 public interface IHeadLineView extends IBaseView{
     void getHeadLineSuccess(HotInfoList newsVo);
+    void getHeadLineFaild();
     void weatherNewsSuccess(WeatherNewsList weatherNewsVo);
     void getFontInfoSuccess(FontInfoList fontInfoVo);
 }

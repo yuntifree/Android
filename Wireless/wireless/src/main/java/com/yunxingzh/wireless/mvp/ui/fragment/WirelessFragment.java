@@ -1,8 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -92,7 +90,7 @@ import wireless.libs.convenientbanner.listener.OnItemClickListener;
  */
 
 public class WirelessFragment extends BaseFragment implements IHeadLineView, IConnectDGCountView, View.OnClickListener, ScrollViewListener,
-        ActivityCompat.OnRequestPermissionsResultCallback, SwipeRefreshLayout.OnRefreshListener, OnDismissListener {
+        ActivityCompat.OnRequestPermissionsResultCallback, SwipeRefreshLayout.OnRefreshListener {
 
     private final static String TAG = "WirelessFragment";
     private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
@@ -386,7 +384,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                     startActivity(WifiManagerActivity.class, "", "", "", "");
                 }
             }
-            //  WifiInterface.wifiLogout(logoOutHandler,MainApplication.sApplication.getUserName(),5000);
+            //  WifiInterface.wifiLogout(logoOutHandler,MainApplication.get().getUserName(),5000);
         } else if (mWeatherLay == v) {
             if (weatherNewsData != null) {
                 startActivity(WebViewActivity.class, Constants.URL, weatherNewsData.dst, Constants.TITLE, "东莞天气");
@@ -401,7 +399,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             Intent intent = new Intent();
             intent.setClass(getActivity(), ScanCodeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
+            getActivity().startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
         } else if (mMainSpeedtest == v) { // wifi 测速
             startActivity(SpeedTestActivity.class, "", "", "", "");
         } else if (mMainSpiritedLay == v) {//wifi公益
@@ -428,17 +426,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             mMachineErrorLay.setVisibility(View.GONE);
         } else if (mMachineErrorLay == v) {
             if (!StringUtils.isEmpty(noticeVo.content)) {
-                alertView = new AlertView("通知", noticeVo.content, null, new String[]{"我知道了"}, null, getActivity(), AlertView.Style.Alert, null);
-                alertView.show();
+                AlertView dialog = new AlertView("通知", noticeVo.content, null, new String[]{"我知道了"}, null, getActivity(), AlertView.Style.Alert, null);
+                dialog.show();
             } else if (!StringUtils.isEmpty(noticeVo.dst)) {
                 startActivity(WebViewActivity.class, Constants.TITLE, noticeVo.title, Constants.URL, noticeVo.dst);
             }
         }
-    }
-
-    @Override
-    public void onDismiss(Object o) {
-        alertView.dismiss();
     }
 
     public Runnable runnable = new Runnable() {
@@ -449,11 +442,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 mWirelessNumTv.setText(recLen + "");//倒计时数字
                 handler.postDelayed(this, 1000);
             } else {
-                animation.cancel();
-                mCircleIv.clearAnimation();
-                mCircleIv.setVisibility(View.GONE);
-                mWirelessTimesLay.setVisibility(View.GONE);
-                mWirelessCircleIv.setVisibility(View.GONE);
+                countDown();
                 mConnectIv.setVisibility(View.VISIBLE);
                 mConnectIv.setImageResource(R.drawable.main_connected);
                 recLen = 5;
@@ -462,6 +451,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             }
         }
     };
+
+    public void countDown() {
+        mCircleIv.clearAnimation();
+        mCircleIv.setVisibility(View.GONE);
+        mWirelessTimesLay.setVisibility(View.GONE);
+        mWirelessCircleIv.setVisibility(View.GONE);
+    }
 
     private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
         @Override
@@ -532,10 +528,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                             intent.putExtra(Constants.URL, url);
                             startActivity(intent);
                         } else {
-                            Intent intent = new Intent();
-                            intent.setAction("android.intent.action.VIEW");
-                            intent.setData(Uri.parse(url));
-                            startActivity(intent);
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                            intent.setAction("android.intent.action.VIEW");
+//                            intent.setData();
+                            getActivity().startActivity(intent);
                         }
                     }
                 }
@@ -590,17 +586,21 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
         mDGFreeConnected = false;
         if (currentAp != null) {
-            String ssidText;
+            String ssidText = "";
             if (currentAp.ssid.equals(Constants.SSID)) {
                 mConnectIv.setVisibility(View.VISIBLE);
                 mConnectIv.setImageResource(R.drawable.main_connected);
-                ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
+                if (isAdded()) {
+                    ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
+                }
                 mConnectText.setText(ssidText);
                 mDGFreeConnected = true;
                 lineViewVisible(true);
             } else {
                 lineViewVisible(false);
-                mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
+                if (isAdded()) {
+                    mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
+                }
             }
 
         } else {
@@ -678,7 +678,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                             //startActivity(WifiManagerActivity.class, "", "", "", "");
                         }
                     }
-                }).setOnDismissListener(this);
+                }).setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        alertView.dismiss();
+                    }
+                });
                 alertView.show();
             } else {
                 //已连上wifi，周围没有DG-free
@@ -779,11 +784,15 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         String hour = StringUtils.getTime();
         int h = Integer.parseInt(hour);
         if (h >= 6 && h < 19) {
-            StatusBarColor.compat(getActivity(), getResources().getColor(R.color.blue_009CFB));
+            if (isAdded()) {
+                StatusBarColor.compat(getActivity(), getResources().getColor(R.color.blue_009CFB));
+            }
             mTitleLay.setBackgroundColor(Color.parseColor("#009CFB"));
             mMainHeadImg.setBackgroundResource(R.drawable.main_bg);
         } else {
-            StatusBarColor.compat(getActivity(), getResources().getColor(R.color.blue_236EC5));
+            if (isAdded()) {
+                StatusBarColor.compat(getActivity(), getResources().getColor(R.color.blue_236EC5));
+            }
             mTitleLay.setBackgroundColor(Color.parseColor("#236EC5"));
             mMainHeadImg.setBackgroundResource(R.drawable.main_bg_night);
         }
@@ -825,5 +834,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
     @Override
     public void getHeadLineSuccess(HotInfoList newsVo) {
+    }
+
+    @Override
+    public void getHeadLineFaild() {
     }
 }

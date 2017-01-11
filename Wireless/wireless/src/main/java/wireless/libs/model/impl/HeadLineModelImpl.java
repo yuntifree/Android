@@ -20,6 +20,11 @@ public class HeadLineModelImpl implements IHeadLineModel {
             public void onSuccess(ServerTip serverTip, HotInfoList requestVo) {
                 listener.onGetHeadLineSuccess(requestVo);
             }
+
+            @Override
+            public void onFailure(ServerTip serverTip) {
+                listener.onGetHeadLineFaild();
+            }
         });
     }
 

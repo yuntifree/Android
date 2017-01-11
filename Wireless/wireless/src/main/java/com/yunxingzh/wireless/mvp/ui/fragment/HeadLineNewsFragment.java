@@ -87,18 +87,33 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                     case RecyclerView.SCROLL_STATE_IDLE:
                         //滑动完成
                         if (!mMainNewsRv.canScrollVertically(1)) {//false:到底部
-                            if (data.hasmore == 0) {
-                                ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
-                            } else {
-                                if (isFastClick) {
-                                    isFastClick = false;
-                                    if (data != null && data.infos.size() > 0) {
-                                        iHeadLinePresenter.getHeadLine(newsTypes, data.infos.get(data.infos.size() - 1).seq);
+                            if (data != null) {
+                                if (data.hasmore == 0) {
+                                    ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
+                                } else {
+                                    if (isFastClick) {
+                                        isFastClick = false;
+                                        if (data != null && data.infos.size() > 0) {
+                                            iHeadLinePresenter.getHeadLine(newsTypes, data.infos.get(data.infos.size() - 1).seq);
+                                        }
                                     }
                                 }
                             }
                         }
                         break;
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int topRowVerticalPosition =
+                        (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
+                //swipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
+                if (topRowVerticalPosition >= 0){
+                    if (swipeRefreshLayout.isRefreshing()){
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                 }
             }
         });
@@ -154,6 +169,12 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         } else {
             ToastUtil.showMiddle(getActivity(), R.string.re_error);
         }
+    }
+
+    @Override
+    public void getHeadLineFaild() {
+        isFastClick = true;
+        ToastUtil.showMiddle(getActivity(), R.string.net_error);
     }
 
     @Override

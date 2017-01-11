@@ -152,6 +152,10 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     }
 
     @Override
+    public void getHeadLineFaild() {
+    }
+
+    @Override
     public void onRefresh() {
        // newsVo.clear();
         isFirstRefresh = true;

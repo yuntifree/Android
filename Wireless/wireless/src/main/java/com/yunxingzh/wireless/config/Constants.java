@@ -48,7 +48,7 @@ public class Constants {
     public static final int RAIN = 2;
     public static final int SNOW = 3;
 
-    public static final int TIME_OUT = 15*1000;
+    public static final int TIME_OUT = 10*1000;
     public static final String SSID = "无线东莞DG-FREE";
     public static final String SSIDDEV = "云行智慧2.4";
 

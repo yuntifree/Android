@@ -11,6 +11,7 @@ public interface IHeadLineModel {
 
     interface onGetHeadLineListener{
         void onGetHeadLineSuccess(HotInfoList newsVo);
+        void onGetHeadLineFaild();
     }
 
     interface onClickCountListener{

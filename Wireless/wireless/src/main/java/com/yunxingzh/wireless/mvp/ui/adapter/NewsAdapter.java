@@ -78,7 +78,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (hotInfos.size() < position) {
+        if (hotInfos.size() <= position) {
             return;
         }
         source = hotInfos.get(position);
@@ -196,7 +196,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         int type;
-        if (hotInfos.size() < position) {
+        if (hotInfos.size() <= position) {
             return -1;
         }
         if (hotInfos.get(position).stype == 1) {//广告

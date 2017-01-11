@@ -101,6 +101,10 @@ public class HeadLineGameFragment extends BaseFragment implements IHeadLineView,
     }
 
     @Override
+    public void getHeadLineFaild() {
+    }
+
+    @Override
     public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {}
 
     @Override

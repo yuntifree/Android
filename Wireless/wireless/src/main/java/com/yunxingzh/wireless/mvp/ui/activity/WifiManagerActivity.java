@@ -131,11 +131,13 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
             super.handleMessage(msg);
             if (msg.what == 0) {
                 String[] ssids = null;
-                ssids = new String[list.size()];
-                for (int i = 0; i < list.size(); i++) {
-                    ssids[i] = list.get(i).ssid;
+                if (list.size() > 0) {
+                    ssids = new String[list.size()];
+                    for (int i = 0; i < list.size(); i++) {
+                        ssids[i] = list.get(i).ssid;
+                    }
+                    iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude, ssids);
                 }
-                iWifiManagerPresenter.getWifi(locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude, ssids);
                 // SPUtils.put(WifiManagerActivity.this, "longitude", String.valueOf(locationUtils.getBaseLocation().longitude));
                 // SPUtils.put(WifiManagerActivity.this, "latitude", String.valueOf(locationUtils.getBaseLocation().latitude));
             } else if(msg.what == BDLocation.TypeServerError) {

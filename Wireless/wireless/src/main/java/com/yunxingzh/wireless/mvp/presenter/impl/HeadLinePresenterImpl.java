@@ -83,6 +83,13 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     }
 
     @Override
+    public void onGetHeadLineFaild() {
+        if (iHeadLineView != null){
+            iHeadLineView.getHeadLineFaild();
+        }
+    }
+
+    @Override
     public void onWeatherNewsSuccess(WeatherNewsList weatherNewsVo) {
         if (iHeadLineView != null){
             iHeadLineView.weatherNewsSuccess(weatherNewsVo);
