@@ -108,7 +108,9 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                     }).setOnDismissListener(new OnDismissListener() {
                         @Override
                         public void onDismiss(Object o) {
-                            alertView.dismiss();
+                            if (alertView != null) {
+                                alertView.dismiss();
+                            }
                         }
                     });
                     alertView.show();

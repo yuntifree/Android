@@ -137,6 +137,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private WindowManager wm;
 
     private AlertView alertView;
+    private boolean isCountTime = false;//true打开（start），false关闭（stop）
 
     @Nullable
     @Override
@@ -452,11 +453,26 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         }
     };
 
+    //隐藏倒计时等view
     public void countDown() {
         mCircleIv.clearAnimation();
         mCircleIv.setVisibility(View.GONE);
         mWirelessTimesLay.setVisibility(View.GONE);
         mWirelessCircleIv.setVisibility(View.GONE);
+    }
+
+    //开始倒计时等view
+    public void countTime() {
+        stopAnimation();
+        handler.postDelayed(runnable, 1000);// 倒计时
+        mCircleIv.startAnimation(animation);//旋转的白线
+        mCircleIv.setVisibility(View.VISIBLE);
+        mConnectIv.setVisibility(View.GONE);//一键连接图
+        mConnectText.setText(R.string.concect_dg_free);//底部连接提示
+        mWirelessCircleSmall.setVisibility(View.VISIBLE);//白线中间的圈
+        mWirelessCircleBig.setVisibility(View.VISIBLE);//白线最外部的圈
+        mWirelessCircleIv.setVisibility(View.VISIBLE);//白色中间无文字的图
+        mWirelessTimesLay.setVisibility(View.VISIBLE);//倒计时容器
     }
 
     private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
@@ -465,17 +481,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             if (new_state == WifiState.CONNECTING) { // 连接中
                 currentAp = FWManager.getInstance().getCurrent();
                 if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
-                    stopAnimation();
-                    handler.postDelayed(runnable, 1000);// 倒计时
-                    mCircleIv.startAnimation(animation);//旋转的白线
-                    mCircleIv.setVisibility(View.VISIBLE);
-                    mConnectIv.setVisibility(View.GONE);//一键连接图
-                    mConnectText.setText(R.string.concect_dg_free);//底部连接提示
-                    mWirelessCircleSmall.setVisibility(View.VISIBLE);//白线中间的圈
-                    mWirelessCircleBig.setVisibility(View.VISIBLE);//白线最外部的圈
-                    mWirelessCircleIv.setVisibility(View.VISIBLE);//白色中间无文字的图
-                    mWirelessTimesLay.setVisibility(View.VISIBLE);//倒计时容器
+                    countTime();
                 }
+                isCountTime = false;
             } else if (new_state == WifiState.CONNECTED) {  // 连上网
                 currentAp = FWManager.getInstance().getCurrent();
                 if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
@@ -483,6 +491,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 } else {
                     updateConnectState(true);
                 }
+                isCountTime = true;
             } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
                 // 断开网
                 updateConnectState(false);
@@ -588,8 +597,10 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         if (currentAp != null) {
             String ssidText = "";
             if (currentAp.ssid.equals(Constants.SSID)) {
-                mConnectIv.setVisibility(View.VISIBLE);
-                mConnectIv.setImageResource(R.drawable.main_connected);
+                if (!isCountTime) {
+                    mConnectIv.setVisibility(View.VISIBLE);
+                    mConnectIv.setImageResource(R.drawable.main_connected);
+                }
                 if (isAdded()) {
                     ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
                 }
@@ -629,10 +640,16 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     private void startAnimation() {
-        mAnimationTv.setVisibility(View.VISIBLE);
-        mConnectIv.setVisibility(View.VISIBLE);
-        mConnectIv.setImageResource(R.drawable.need_connect);
-        mAnimationTv.start();
+        if (isCountTime) {
+            mAnimationTv.setVisibility(View.GONE);
+            mAnimationTv.stop();
+            mConnectIv.setVisibility(View.GONE);
+        } else {
+            mAnimationTv.setVisibility(View.VISIBLE);
+            mConnectIv.setVisibility(View.VISIBLE);
+            mConnectIv.setImageResource(R.drawable.need_connect);
+            mAnimationTv.start();
+        }
     }
 
     private void stopAnimation() {
@@ -681,7 +698,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 }).setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(Object o) {
-                        alertView.dismiss();
+                        if (alertView != null) {
+                            alertView.dismiss();
+                        }
                     }
                 });
                 alertView.show();
@@ -807,6 +826,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     @Override
     public void onResume() {
         super.onResume();
+        isCountTime = false;
         List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
         if (mBadgeView != null) {
             mBadgeView.setBadgeCount(apList.size());
