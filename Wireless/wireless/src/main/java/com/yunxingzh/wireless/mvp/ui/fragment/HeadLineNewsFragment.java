@@ -147,16 +147,23 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void getHeadLineSuccess(HotInfoList newsVo) {
+
         firstLoad = false;
         isFastClick = true;
-        swipeRefreshLayout.setRefreshing(false);
+
         if (newsVo != null) {
             data = newsVo;
         }
-
         if (newsListNext == null) {
             newsListNext = new ArrayList<>();
         }
+
+        if (swipeRefreshLayout.isRefreshing()) {//下拉刷新后清空之前的数据
+            if (data.infos != null) {
+                newsListNext.clear();
+            }
+        }
+        swipeRefreshLayout.setRefreshing(false);
 
         if (data.infos != null) {
             newsListNext.addAll(data.infos);
@@ -173,6 +180,9 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void getHeadLineFaild() {
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
         isFastClick = true;
         ToastUtil.showMiddle(getActivity(), R.string.net_error);
     }
@@ -187,7 +197,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void onRefresh() {
-        newsListNext.clear();
         iHeadLinePresenter.getHeadLine(newsTypes, HEAD_LINE_SEQ);
     }
 

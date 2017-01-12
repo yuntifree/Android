@@ -155,6 +155,10 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     @Override
     public void getHeadLineFaild() {
+        if (mSwipeRefreshLay != null) {
+            mSwipeRefreshLay.setRefreshing(false);
+        }
+        ToastUtil.showMiddle(getActivity(), R.string.net_error);
     }
 
     @Override

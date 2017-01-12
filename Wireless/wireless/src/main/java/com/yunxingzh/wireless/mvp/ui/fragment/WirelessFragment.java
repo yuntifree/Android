@@ -358,7 +358,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));//跳转新闻列表
                 iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
             } else {
-                //ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
             }
             // 判断下按钮的状态
             updateConnectState(true);
@@ -439,6 +439,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         @Override
         public void run() {
             if (recLen != 1) {
+                isCountTime = true;
                 recLen--;
                 mWirelessNumTv.setText(recLen + "");//倒计时数字
                 handler.postDelayed(this, 1000);
@@ -448,6 +449,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 mConnectIv.setImageResource(R.drawable.main_connected);
                 recLen = 5;
                 mWirelessNumTv.setText(recLen + "");
+                isCountTime = false;
                 updateConnectState(true);
             }
         }
@@ -483,7 +485,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
                     countTime();
                 }
-                isCountTime = false;
             } else if (new_state == WifiState.CONNECTED) {  // 连上网
                 currentAp = FWManager.getInstance().getCurrent();
                 if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
@@ -491,7 +492,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 } else {
                     updateConnectState(true);
                 }
-                isCountTime = true;
+
             } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
                 // 断开网
                 updateConnectState(false);
@@ -826,7 +827,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     @Override
     public void onResume() {
         super.onResume();
-        isCountTime = false;
         List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
         if (mBadgeView != null) {
             mBadgeView.setBadgeCount(apList.size());

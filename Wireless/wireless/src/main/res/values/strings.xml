@@ -104,7 +104,7 @@
     <string name="speeding">正在测速</string>
     <string name="wait">请稍等片刻...</string>
     <string name="register_faild">注册失败</string>
-    <string name="validate_faild">认证失败</string>
+    <string name="validate_faild">亲，认证失败哦</string>
     <string name="validate_success">认证成功</string>
     <string name="need_pwd">需要密码</string>
     <string name="free_wifi">无密码，可能需要登录</string>
