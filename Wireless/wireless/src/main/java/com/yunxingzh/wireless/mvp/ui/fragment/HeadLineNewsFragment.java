@@ -8,17 +8,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.NewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
@@ -38,7 +41,8 @@ import wireless.libs.bean.vo.HotInfo;
  * 头条-新闻
  */
 
-public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener {
+public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener,
+        NetErrorLayout.OnNetErrorClickListener {
 
     private static final String ARG_CTYPE = "ctype";
     private final static int HEAD_LINE_TYPE = 0;// 0-新闻 1-视频 2-应用 3-游戏 4-本地 5-娱乐
@@ -51,6 +55,8 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private NewsAdapter headLineNewsAdapter;
     private List<HotInfo> newsListNext;
     private HotInfoList data;
+    private LinearLayout mNetErrorLay;
+    private NetErrorLayout netErrorLayout;
 
     private boolean isFastClick = true;
 
@@ -77,6 +83,17 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         mMainNewsRv.setHasFixedSize(true);
         mMainNewsRv.addItemDecoration(new SpacesItemDecoration(3));
         swipeRefreshLayout.setOnRefreshListener(this);
+
+        mNetErrorLay = findView(view, R.id.net_error_lay);
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            swipeRefreshLayout.setVisibility(View.GONE);
+            netErrorLayout = new NetErrorLayout(getActivity());
+            netErrorLayout.setOnNetErrorClickListener(this);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+            View netErrorView = netErrorLayout.netErrorLay(0);
+            mNetErrorLay.addView(netErrorView);
+        }
+
         // RecyclerView.canScrollVertically(1)的值表示是否能向上滚动，false表示已经滚动到底部
         // RecyclerView.canScrollVertically(-1)的值表示是否能向下滚动，false表示已经滚动到顶部
         mMainNewsRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -207,4 +224,14 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         startActivity(intent);
     }
 
+    @Override
+    public void netErrorClick() {
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            ToastUtil.showMiddle(getActivity(), R.string.net_set);
+        } else {
+            mNetErrorLay.setVisibility(View.GONE);
+            swipeRefreshLayout.setVisibility(View.VISIBLE);
+            iHeadLinePresenter.getHeadLine(newsTypes, HEAD_LINE_SEQ);
+        }
+    }
 }

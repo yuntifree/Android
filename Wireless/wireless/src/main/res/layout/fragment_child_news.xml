@@ -19,4 +19,14 @@
             />
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <LinearLayout
+        android:id="@+id/net_error_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+    </LinearLayout>
+
 </LinearLayout>
