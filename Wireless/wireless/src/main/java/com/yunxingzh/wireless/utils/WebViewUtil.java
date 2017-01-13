@@ -24,21 +24,5 @@ public class WebViewUtil {
         webView.getSettings().setLoadWithOverviewMode(true);// 和setUseWideViewPort(true)一起解决网页自适应问题
         webView.getSettings().setAppCacheEnabled(true);// 是否使用缓存
         webView.getSettings().setDomStorageEnabled(true);// DOM Storage
-
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress == DOWN_LOAD_OVER) {
-                    bar.setVisibility(View.INVISIBLE);
-                } else {
-                    if (View.INVISIBLE == bar.getVisibility()) {
-                        bar.setVisibility(View.VISIBLE);
-                    }
-                    bar.setProgress(newProgress);
-                }
-                super.onProgressChanged(view, newProgress);
-            }
-
-        });
     }
 }

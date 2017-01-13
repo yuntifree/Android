@@ -117,6 +117,19 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
                     mTitleNameTv.setText(title);
                 }
             }
+
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (newProgress == 100) {//进度100
+                    myProgressBar.setVisibility(View.INVISIBLE);
+                } else {
+                    if (View.INVISIBLE == myProgressBar.getVisibility()) {
+                        myProgressBar.setVisibility(View.VISIBLE);
+                    }
+                    myProgressBar.setProgress(newProgress);
+                }
+                super.onProgressChanged(view, newProgress);
+            }
         });
 
         myWebView.loadUrl(mUrl);
