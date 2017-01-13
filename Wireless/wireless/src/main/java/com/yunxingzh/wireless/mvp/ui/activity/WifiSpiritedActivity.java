@@ -1,8 +1,10 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +15,8 @@ import com.baidu.location.BDLocation;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.ClearEditText;
 import com.yunxingzh.wireless.mview.StatusBarColor;
+import com.yunxingzh.wireless.mview.alertdialog.AlertView;
+import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mvp.presenter.IWifiSpiritedPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiSpiritedPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
@@ -37,6 +41,7 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
     private IWifiSpiritedPresenter iWifiSpiritedPresenter;
     private LocationUtils locationUtils;
     private String mSSID;
+    private AlertView alertView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,6 +97,23 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
                 iWifiSpiritedPresenter.wifiSpirited(getSsid(), getPwd(), locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude);
             } else if(msg.what == BDLocation.TypeServerError) {
                 ToastUtil.showMiddle(WifiSpiritedActivity.this,R.string.location_error);
+                alertView = new AlertView("温馨提示", "亲,定位失败,请打开定位权限", "取消", new String[]{"去设置"}, null, WifiSpiritedActivity.this, AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        if (position != AlertView.CANCELPOSITION) {
+                            Intent intent =  new Intent(Settings.ACTION_SETTINGS);
+                            startActivity(intent);
+                        }
+                    }
+                }).setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        if (alertView != null) {
+                            alertView.dismiss();
+                        }
+                    }
+                });
+                alertView.show();
             } else {
                 LogUtils.i("lsd","location error:" + msg.what);
             }
@@ -100,8 +122,9 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void wifiSpiritedSuccess() {
-        ToastUtil.showMiddle(this, R.string.spirited_join_success);
-        finish();
+        ToastUtil.wifiSpiritedshow(this, R.string.spirited_join_success);
+        mSpSsidEt.setText("");
+        mSpPwdEt.setText("");
     }
 
     @Override

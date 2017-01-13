@@ -206,8 +206,8 @@ public final class ViewfinderView extends View {
             paint.setColor(Color.WHITE);    
             paint.setTextSize(TEXT_SIZE * density);    
             paint.setAlpha(0x40);    
-            paint.setTypeface(Typeface.create("System", Typeface.BOLD));   
-            String text = getResources().getString(R.string.scan_text);  
+            paint.setTypeface(Typeface.create("System", Typeface.BOLD));
+            String text = getResources().getString(R.string.scan_text);
             float textWidth = paint.measureText(text);  
               
             canvas.drawText(text, (width - textWidth)/2, (float) (frame.bottom + (float)TEXT_PADDING_TOP *density), paint); 

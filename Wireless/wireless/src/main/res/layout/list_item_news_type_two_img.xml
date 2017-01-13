@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:text="东莞虎门一火车"
                 android:maxLines="2"
+                android:ellipsize="end"
                 android:textColor="@color/gray_262626"
                 android:textSize="16sp" />
 

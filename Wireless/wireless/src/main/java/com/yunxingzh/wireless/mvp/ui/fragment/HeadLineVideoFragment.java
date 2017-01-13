@@ -10,12 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
@@ -81,6 +83,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         headLineVideoAdapter = new HeadLineVideoAdapter(new ArrayList<HotInfo>());
         headLineVideoAdapter.openLoadMore(Constants.PAGE_SIZE);
         headLineVideoAdapter.setOnLoadMoreListener(this);
+        headLineVideoAdapter.setEmptyView(emptyView(mListRv));
         mListRv.setAdapter(headLineVideoAdapter);
 
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
@@ -174,6 +177,11 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, newsVo.get(newsVo.size() - 1).seq);
             LogUtils.e("lsd", newsVo.get(newsVo.size() - 1).seq + "");
         }
+    }
+
+    private View emptyView(ViewGroup viewGroup) {
+        View netView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, viewGroup, false);
+        return netView;
     }
 
     @Override

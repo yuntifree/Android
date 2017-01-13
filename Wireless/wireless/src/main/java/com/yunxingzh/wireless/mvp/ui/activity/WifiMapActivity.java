@@ -1,10 +1,12 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -32,6 +34,8 @@ import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.StatusBarColor;
+import com.yunxingzh.wireless.mview.alertdialog.AlertView;
+import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mvp.presenter.IWifiMapPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WifiMapPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
@@ -70,6 +74,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     private boolean flag = true;
     private InfoWindow mInfoWindow;
     private boolean isFirst = true;
+    private AlertView alertView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -174,6 +179,23 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                 initMap();
             } else if (msg.what == BDLocation.TypeServerError) {
                 ToastUtil.showMiddle(WifiMapActivity.this, R.string.location_error);
+                alertView = new AlertView("温馨提示", "亲,定位失败,请打开定位权限", "取消", new String[]{"去设置"}, null, WifiMapActivity.this, AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        if (position != AlertView.CANCELPOSITION) {
+                            Intent intent =  new Intent(Settings.ACTION_SETTINGS);
+                            startActivity(intent);
+                        }
+                    }
+                }).setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        if (alertView != null) {
+                            alertView.dismiss();
+                        }
+                    }
+                });
+                alertView.show();
             } else {
                 LogUtils.i("lsd", "location error:" + msg.what);
             }

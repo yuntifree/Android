@@ -78,7 +78,6 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     public void initData() {
         iHeadLinePresenter = new HeadLinePresenterImpl();
         iServicePresenter = new ServicePresenterImpl(this);
-        iServicePresenter.getService();
         if (!NetUtils.isNetworkAvailable(getActivity())) {
             netErrorLayout = new NetErrorLayout(getActivity());
             final View netErrorView = netErrorLayout.netErrorLay(0);
@@ -95,6 +94,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             });
             mServiceParentGroup.addView(netErrorView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 200, 0, 0));
         }
+        iServicePresenter.getService();
     }
 
     @Override

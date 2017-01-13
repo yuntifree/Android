@@ -34,6 +34,8 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.mview.alertdialog.AlertView;
+import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -76,6 +78,7 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
     private ImageView mTitleReturnIv;
     private TextView mTitleNameTv;
     private View title;
+    private AlertView alertView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -276,7 +279,23 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
         } catch (RuntimeException e) {
             // TODO: 跳转到系统设置页面camara error
             ToastUtil.showMiddle(this,R.string.open_set);
-            startActivity(new Intent(Settings.ACTION_SETTINGS));
+            alertView = new AlertView("温馨提示", "亲,请设置打开相机权限", "取消", new String[]{"去设置"}, null, ScanCodeActivity.this, AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                @Override
+                public void onItemClick(Object o, int position) {
+                    if (position != AlertView.CANCELPOSITION) {
+                        Intent intent =  new Intent(Settings.ACTION_SETTINGS);
+                        startActivity(intent);
+                    }
+                }
+            }).setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onDismiss(Object o) {
+                    if (alertView != null) {
+                        alertView.dismiss();
+                    }
+                }
+            });
+            alertView.show();
             finish();
             return;
         }

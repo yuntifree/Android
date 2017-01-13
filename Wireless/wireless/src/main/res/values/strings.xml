@@ -3,7 +3,7 @@
     DG-FREE
     <string name="loading">加载中...</string>
     <string name="determine">确定</string>
-    <string name="scan_text">将二维码放入框内, 即可自动扫描</string>
+    <string name="scan_text">扫描东莞无限WiFi二维码标识一键免费上网</string>
 
     <string name="http_error_msg">网络傲娇啦~</string>
     <string name="http_error_tips">暂时没有检测到网络信号，请尝试检查你的网络连接是否存在异常，恢复网络后将自动正常加载</string>
@@ -129,12 +129,12 @@
     <string name="input_ssid">请输入无线网络名称</string>
     <string name="spirited_input_pwd">请输入无线网络密码</string>
     <string name="spirited_join">参与公益</string>
-    <string name="spirited_join_success">感谢您的参与</string>
+    <string name="spirited_join_success">感谢您的参与，东莞有你更精彩</string>
     <string name="connect_wifi">已连接</string>
     <string name="connect_dg_success">东莞城市免费WiFi</string>
     <string name="wireless_dg">东莞无限开启智慧生活</string>
     <string name="refresh_net">刷新重试</string>
-    <string name="open_set">请打开应用相应的权限</string>
+    <string name="open_set">亲，请设置打开相机权限</string>
     <string name="dialog_notices">温馨提示</string>
     <string name="dialog_msg">您当前处于流量状态下，继续观看需要花费少许流量哦!</string>
     <string name="jumper">跳过</string>
@@ -147,6 +147,7 @@
     <string name="feed_back">意见反馈</string>
     <string name="about_us">关于我们</string>
     <string name="set">设置</string>
+    <string name="refresh_view">亲,你敢下拉刷新界面吗？</string>
     <string name="app_content">版权所有 ©️ 2016-2017 东莞无限</string>
     <string name="hint">请详细描述您遇到的问题或建议，我们将在收到的第一时间跟进…（120字以内）</string>
     <string name="commit">提交</string>

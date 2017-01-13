@@ -2,6 +2,7 @@ package com.yunxingzh.wireless.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.Gravity;
 import android.widget.Toast;
 
 import com.yunxingzh.wireless.R;
@@ -22,6 +23,16 @@ public class ToastUtil {
         mToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
         mToast.setText(text);
         //mToast.setGravity(Gravity.BOTTOM, 0, 0);
+        mToast.show();
+    }
+
+    public static void wifiSpiritedshow(Context context, int resId) {
+        if (mToast != null) {
+            mToast.cancel();
+        }
+        mToast = Toast.makeText(context, context.getString(resId), Toast.LENGTH_SHORT);
+        mToast.setText(context.getString(resId));
+        mToast.setGravity(Gravity.CENTER, 0, 0);
         mToast.show();
     }
 

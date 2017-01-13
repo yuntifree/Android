@@ -83,16 +83,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         mMainNewsRv.setHasFixedSize(true);
         mMainNewsRv.addItemDecoration(new SpacesItemDecoration(3));
         swipeRefreshLayout.setOnRefreshListener(this);
-
         mNetErrorLay = findView(view, R.id.net_error_lay);
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            swipeRefreshLayout.setVisibility(View.GONE);
-            netErrorLayout = new NetErrorLayout(getActivity());
-            netErrorLayout.setOnNetErrorClickListener(this);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(0);
-            mNetErrorLay.addView(netErrorView);
-        }
 
         // RecyclerView.canScrollVertically(1)的值表示是否能向上滚动，false表示已经滚动到底部
         // RecyclerView.canScrollVertically(-1)的值表示是否能向下滚动，false表示已经滚动到顶部
@@ -143,6 +134,15 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         if (firstLoad) {
             iHeadLinePresenter.getHeadLine(this.newsTypes, HEAD_LINE_SEQ);
             swipeRefreshLayout.setRefreshing(true);
+        }
+
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            swipeRefreshLayout.setVisibility(View.GONE);
+            netErrorLayout = new NetErrorLayout(getActivity());
+            netErrorLayout.setOnNetErrorClickListener(this);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+            View netErrorView = netErrorLayout.netErrorLay(0);
+            mNetErrorLay.addView(netErrorView);
         }
     }
 
