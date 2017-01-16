@@ -16,6 +16,8 @@ import com.yunxingzh.wireless.wifi.AccessPoint;
 public class APointDetailFragment extends Fragment {
 
     private static final String EXTRA_ACCESS_POINT = "extra_access_point";
+    private AccessPoint accessPoint;
+    private DialogActivity dialogActivity;
 
     public static APointDetailFragment newInstance(AccessPoint accessPoint) {
         APointDetailFragment fragment = new APointDetailFragment();
@@ -24,8 +26,6 @@ public class APointDetailFragment extends Fragment {
         fragment.setArguments(bundle);
         return fragment;
     }
-
-    private AccessPoint accessPoint;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +65,7 @@ public class APointDetailFragment extends Fragment {
         });
 
         AccessPoint current = FWManager.getInstance().getCurrent();
+        dialogActivity = new DialogActivity();
         if(current != null && current.ssid.equals(accessPoint.ssid)){
             btn_connect.setText(R.string.disconnect);
             btn_connect.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +83,9 @@ public class APointDetailFragment extends Fragment {
                     if(accessPoint.isFreeWifi()){
                         FWManager.getInstance().connect(accessPoint);
                     } else {
-                        DialogActivity.showInuptPWD(getActivity(), accessPoint,false);
+                        if (dialogActivity != null) {
+                            dialogActivity.showInuptPWD(getActivity(), accessPoint, false);
+                        }
                     }
                 }
             });
@@ -90,6 +93,14 @@ public class APointDetailFragment extends Fragment {
             if(!accessPoint.isConfiged){
                 btn_forget.setVisibility(View.GONE);
             }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (dialogActivity != null) {
+            dialogActivity.destroyDialog();
         }
     }
 }

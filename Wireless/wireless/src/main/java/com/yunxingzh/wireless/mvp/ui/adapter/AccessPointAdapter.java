@@ -46,6 +46,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
     private List<Integer> sections;
     private HashMap<String, AccessData> mAccessDatas;
     private List<WifiInfoVo> mWifiInfoList;//服务器获取的附近wifi列表
+    private DialogActivity dialogActivity;
 
 
     public class AccessPointEx {
@@ -55,6 +56,7 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
         public AccessPointEx(AccessPoint ap, int type) {
             this.ap = ap;
             this.type = type;
+            dialogActivity = new DialogActivity();
         }
     }
 
@@ -349,13 +351,17 @@ public class AccessPointAdapter extends SectionedRecyclerViewAdapter<
             } else if (type == TYPE_FOCUS_AP) {
                 FWManager.getInstance().connect(accessPoint);
             } else if (type == TYPE_NOAUTH_AP) {
-                DialogActivity.showInuptPWD(context, accessPoint, false);
+                if (dialogActivity != null) {
+                    dialogActivity.showInuptPWD(context, accessPoint, false);
+                }
             }
         }
 
         @Override
         public boolean onLongClick(View v) {
-            DialogActivity.showDetail(context, accessPoint);
+            if (dialogActivity != null) {
+                dialogActivity.showDetail(context, accessPoint);
+            }
             return false;
         }
     }

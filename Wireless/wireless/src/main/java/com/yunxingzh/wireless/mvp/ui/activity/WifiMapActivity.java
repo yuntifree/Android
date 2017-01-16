@@ -212,6 +212,9 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     public void onMapStatusChangeStart(MapStatus mapStatus) {
         // 手势操作地图，设置地图状态等操作导致地图状态开始改变。
         //地图状态改变开始时的地图状态
+        if (baiduMap != null) {
+            baiduMap.hideInfoWindow();
+        }
     }
 
     @Override
@@ -227,7 +230,13 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         if (iWifiMapPresenter != null) {
             iWifiMapPresenter.getWifiMap(centerLat.longitude, centerLat.latitude);//获取周围热点lon,lat
         }
+
+        if (baiduMap != null && mMarker != null) {
+            showWindow(mMarker);
+        }
     }
+
+    private Marker mMarker;
 
     @Override
     protected void onDestroy() {
@@ -267,14 +276,20 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        mMarker = marker;
+        showWindow(marker);
+        return true;
+    }
+
+    public void showWindow(Marker marker) {
         //获得marker中的数据
         Bundle bun = marker.getExtraInfo();
         if (bun == null) {
-            return false;
+            return;
         }
         WifiMapVo info = (WifiMapVo) bun.get("info");
         if (info == null) {
-            return false;
+            return;
         }
         //计算p1、p2两点之间的直线距离，单位：米
         LatLng p1LL = new LatLng(lat, lon);
@@ -315,20 +330,12 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         markerLayout.addView(distancesImg);
         markerLayout.addView(distancesView);
         //将marker所在的经纬度的信息转化成屏幕上的坐标
-        final LatLng ll = marker.getPosition();
+        LatLng ll = marker.getPosition();
         Point p = baiduMap.getProjection().toScreenLocation(ll);
         p.y -= 90;
         LatLng llInfo = baiduMap.getProjection().fromScreenLocation(p);
-        //为弹出的InfoWindow添加点击事件
         mInfoWindow = new InfoWindow(markerLayout, llInfo, 0);
-        //if (flag) {
-            //显示InfoWindow
-            baiduMap.showInfoWindow(mInfoWindow);
-           // flag = false;
-      //  } else {
-          //  baiduMap.hideInfoWindow();
-            //flag = true;
-      //  }
-        return true;
+        //显示InfoWindow
+        baiduMap.showInfoWindow(mInfoWindow);
     }
 }

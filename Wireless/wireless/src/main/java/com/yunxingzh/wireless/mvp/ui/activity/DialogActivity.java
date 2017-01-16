@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mvp.ui.fragment.APointDetailFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.IptPasswordFragment;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 
 public class DialogActivity extends AppCompatActivity implements View.OnClickListener {
@@ -39,7 +40,7 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         setContent();
     }
 
-    public static void showDetail(Context context, AccessPoint accessPoint) {
+    public void showDetail(Context context, AccessPoint accessPoint) {
         Intent intent = new Intent();
         intent.setClass(context, DialogActivity.class);
         intent.putExtra(EXTRA_TYPE, TYPE_ACCESS_POINT_DETAIL);
@@ -47,7 +48,8 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         context.startActivity(intent);
     }
 
-    public static void showInuptPWD(Context context, AccessPoint accessPoint, boolean isShowError){
+    public void showInuptPWD(Context context, AccessPoint accessPoint, boolean isShowError){
+        //LogUtils.e("lsd", String.valueOf(DialogActivity.class));
         Intent intent = new Intent();
         intent.setClass(context, DialogActivity.class);
         intent.putExtra(EXTRA_TYPE, TYPE_INPUT_PASSWORD);
@@ -76,5 +78,15 @@ public class DialogActivity extends AppCompatActivity implements View.OnClickLis
         if(v.getId() == R.id.close){
             finish();
         }
+    }
+
+    public void destroyDialog() {
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
     }
 }

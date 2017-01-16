@@ -73,6 +73,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
     private LocationUtils locationUtils;
     private AlertView alertView;
+    private DialogActivity dialogActivity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,7 +110,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     public void initData() {
         StatusBarColor.compat(this,getResources().getColor(R.color.blue_009CFB));
         iWifiManagerPresenter = new WifiManagerPresenterImpl(this);
-
+        dialogActivity = new DialogActivity();
         locationUtils = new LocationUtils(this, WIFI_PAGER);
         locationUtils.startMonitor(locationHandler);
 
@@ -233,7 +234,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
                     refreshList(msg.arg1);
                     break;
                 case MSG_AUTH_ERROR:
-                    DialogActivity.showInuptPWD(WifiManagerActivity.this, (AccessPoint) msg.obj, true);
+                    dialogActivity.showInuptPWD(WifiManagerActivity.this, (AccessPoint) msg.obj, true);
                     break;
             }
         }
@@ -287,6 +288,9 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (dialogActivity != null) {
+            dialogActivity.destroyDialog();
+        }
         locationUtils.stopMonitor();
         FWManager.getInstance().removeWifiObserver(wifiObserver);
     }

@@ -605,13 +605,17 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 if (isAdded()) {
                     ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
                 }
-                mConnectText.setText(ssidText);
+                if (currentAp != null) {
+                    mConnectText.setText(ssidText);
+                }
                 mDGFreeConnected = true;
                 lineViewVisible(true);
             } else {
                 lineViewVisible(false);
                 if (isAdded()) {
-                    mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
+                    if (currentAp != null) {
+                        mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
+                    }
                 }
             }
 
