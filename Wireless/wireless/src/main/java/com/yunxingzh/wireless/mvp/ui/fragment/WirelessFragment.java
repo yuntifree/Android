@@ -446,7 +446,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             } else {
                 countDown();
                 mConnectIv.setVisibility(View.VISIBLE);
-                mConnectIv.setImageResource(R.drawable.main_connected);
+                mConnectIv.setImageResource(R.drawable.main_connect_btn);
                 recLen = 5;
                 mWirelessNumTv.setText(recLen + "");
                 isCountTime = false;
@@ -600,7 +600,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             if (currentAp.ssid.equals(Constants.SSID)) {
                 if (!isCountTime) {
                     mConnectIv.setVisibility(View.VISIBLE);
-                    mConnectIv.setImageResource(R.drawable.main_connected);
+                    mConnectIv.setImageResource(R.drawable.main_connect_btn);
                 }
                 if (isAdded()) {
                     ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
