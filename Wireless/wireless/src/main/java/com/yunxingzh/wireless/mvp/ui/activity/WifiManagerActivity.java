@@ -30,7 +30,6 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.view.IWifiManagerView;
 import com.yunxingzh.wireless.utils.LocationUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
-import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.utils.WifiUtils;
 import com.yunxingzh.wireless.wifi.AccessPoint;
@@ -197,6 +196,14 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         @Override
         public void onStateChanged(WifiState new_state, WifiState old_state) {
             LogUtils.d(TAG, "onStateChanged");
+            AccessPoint point = FWManager.getInstance().getCurrent();
+            if (new_state == WifiState.IDLE && point == null) {
+                new Handler().postDelayed(new Runnable(){
+                    public void run() {
+                        ToastUtil.showMiddle(WifiManagerActivity.this, "亲，连接出问题了，请重试");
+                    }
+                }, 2000);
+            }
             // TODO: checkEnv
             mHandler.removeMessages(MSG_REFRESH_LIST);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
@@ -204,6 +211,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
         @Override
         public void onListChanged(List<AccessPoint> accessPoints) {
+            LogUtils.e("lsd", "onListChanged");
             LogUtils.d(TAG, "onListChanged");
             mHandler.removeMessages(MSG_REFRESH_LIST);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 0));
@@ -211,6 +219,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
         @Override
         public void onRSSIChanged(int rssi) {
+            LogUtils.e("lsd","onRSSIChanged");
             LogUtils.d(TAG, "onRSSIChanged");
             mHandler.removeMessages(MSG_REFRESH_LIST);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
@@ -218,6 +227,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
         @Override
         public void onAuthError(AccessPoint ap) {
+            LogUtils.e("lsd","onAuthError");
             LogUtils.d(TAG, "onAuthError");
             mHandler.removeMessages(MSG_AUTH_ERROR);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_AUTH_ERROR, ap));

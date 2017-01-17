@@ -278,13 +278,13 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
             return;
         } catch (RuntimeException e) {
             // TODO: 跳转到系统设置页面camara error
-            ToastUtil.showMiddle(this,R.string.open_set);
             alertView = new AlertView("温馨提示", "亲,请设置打开相机权限", "取消", new String[]{"去设置"}, null, ScanCodeActivity.this, AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
                 @Override
                 public void onItemClick(Object o, int position) {
                     if (position != AlertView.CANCELPOSITION) {
                         Intent intent =  new Intent(Settings.ACTION_SETTINGS);
                         startActivity(intent);
+                        finish();
                     }
                 }
             }).setOnDismissListener(new OnDismissListener() {
@@ -296,7 +296,7 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
                 }
             });
             alertView.show();
-            finish();
+            ToastUtil.showMiddle(this,R.string.open_set);
             return;
         }
         if (handler == null) {

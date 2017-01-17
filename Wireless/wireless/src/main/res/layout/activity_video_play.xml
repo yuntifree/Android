@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         style="?android:attr/progressBarStyleHorizontal"
         android:background="@drawable/progress_bg"
-        android:layout_height="1.5dp" />
+        android:layout_height="3dp" />
 
     <WebView
         android:id="@+id/webView"
