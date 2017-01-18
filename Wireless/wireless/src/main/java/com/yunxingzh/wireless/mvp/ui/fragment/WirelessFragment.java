@@ -412,7 +412,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         } else if (mFontNewsTv == v) { // 东莞头条
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mFontVideoTv == v) { //热门视频
-            EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE, Constants.VIDEO));
+            EventBus.getDefault().post(new EventBusType(0, Constants.VIDEO));
         } else if (mFontServiceTv == v) { //同城服务
             // EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
         } else if (mFontZhiTv == v) { //智慧服务

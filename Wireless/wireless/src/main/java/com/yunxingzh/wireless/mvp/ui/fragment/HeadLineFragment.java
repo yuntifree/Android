@@ -106,7 +106,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         if (event.getMsg() == Constants.HEAD_LINE) {//跳转到头条父fragment(头条)
             mViewPager.setCurrentItem(INDEX_ONE);
         }
-        if (event.getMsg() == Constants.HEAD_LINE && event.getChildMsg() == Constants.VIDEO) {
+        if (event.getChildMsg() == Constants.VIDEO) {
             mViewPager.setCurrentItem(INDEX_THREE);//跳转视频Fragment
         }
     }

@@ -71,7 +71,6 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         WebSettings settings = myWebView.getSettings();
         settings.setGeolocationEnabled(true);
         settings.setDomStorageEnabled(true);
-        settings.setBuiltInZoomControls(true);// 隐藏缩放按钮
 
         myWebView.setWebViewClient(new WebViewClient() {
             @Override
