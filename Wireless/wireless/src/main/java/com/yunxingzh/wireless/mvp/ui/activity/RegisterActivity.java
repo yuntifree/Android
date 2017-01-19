@@ -80,6 +80,8 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
                 } else {
                     ToastUtil.showMiddle(RegisterActivity.this, R.string.final_validate_code);
                 }
+            } else {
+                ToastUtil.showMiddle(this, R.string.enter_right_phone);
             }
         } else if (view == mGetValidateCodeBtn) {
             if (StringUtils.validatePhoneNumber(getPhone())) {

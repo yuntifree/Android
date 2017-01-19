@@ -13,6 +13,7 @@ import wireless.libs.bean.resp.ServerTip;
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.AutoLoginVo;
 import wireless.libs.bean.vo.StretchVo;
+import wireless.libs.bean.vo.UpdateVo;
 import wireless.libs.bean.vo.User;
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
@@ -240,4 +241,16 @@ public class NetWorkWarpper {
         }
         return null;
     }
+
+    /**
+     * 检查更新
+     * @param handler
+     */
+    public static void checkUpdate(String channel, HttpHandler<UpdateVo> handler) {
+        String path = "check_update";
+        HttpParams httpParams = new HttpParams();
+        httpParams.add("channel",channel);
+        HttpUtils.post(path, httpParams, handler);
+    }
+
 }

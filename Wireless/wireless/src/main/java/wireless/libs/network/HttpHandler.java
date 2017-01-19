@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MainApplication;
+import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
 import com.yunxingzh.wireless.utils.JsonUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
@@ -161,6 +162,8 @@ public abstract class HttpHandler<T> implements Callback {
         LogUtils.e(TAG, "Code:" + serverTip.errno() + "  Msg:" + serverTip.desc());
         if (ErrorType.isNeedTipToUser(serverTip.errno())) {
             Toast.makeText(mAppContext, serverTip.desc() + "", Toast.LENGTH_SHORT).show();
+        } else {
+            //112表明当前应用是最新版本
         }
     }
 

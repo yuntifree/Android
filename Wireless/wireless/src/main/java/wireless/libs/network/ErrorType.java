@@ -36,11 +36,11 @@ public class ErrorType {
 
     /**
      * 需要提示给用户
-     *
+     * errno 112:表示应用版本为最新
      * @param errno
      * @return
      */
     public static boolean isNeedTipToUser(int errno) {
-        return errno != 0 && errno != E_IO_EXCEPTION;
+        return errno != 0 && errno != E_IO_EXCEPTION && errno != 112;
     }
 }

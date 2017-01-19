@@ -7,4 +7,5 @@ package com.yunxingzh.wireless.mvp.presenter;
 public interface IGetAdvertPresenter extends IBasePresenter{
     void getAdvert();
     void getStretch();
+    void checkUpdate();
 }

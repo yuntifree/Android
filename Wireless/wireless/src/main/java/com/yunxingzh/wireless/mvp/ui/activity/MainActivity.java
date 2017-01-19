@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
+import android.view.Window;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -19,7 +20,9 @@ import com.yunxingzh.wireless.config.AppConfig;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MainApplication;
+import com.yunxingzh.wireless.mview.CheckUpdateDialog;
 import com.yunxingzh.wireless.mview.StatusBarColor;
+import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mvp.presenter.impl.GetAdvertPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineFragment;
@@ -41,6 +44,7 @@ import java.net.URL;
 
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.StretchVo;
+import wireless.libs.bean.vo.UpdateVo;
 
 /***
  * 首页底部导航
@@ -66,6 +70,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private String url;
     private Bitmap drawableStream;
     private String path = Environment.getExternalStorageDirectory().toString() + "/advert_img";
+    private CheckUpdateDialog checkUpdateDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +81,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             //听云
             NBSAppAgent.setLicenseKey("87fb7caacc08462a8aecd82cb1c6d4fd").withLocationServiceEnabled(true).start(this.getApplicationContext());
 
-          }
+        }
         if (StringUtils.isEmpty(MainApplication.get().getToken()) || MainApplication.get().needLogin()) {
             startActivity(new Intent(this, RegisterActivity.class));
             finish();
@@ -141,7 +146,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
     }
 
-    public void getStatusOnTimes(){
+    public void getStatusOnTimes() {
         //不同时间段状态栏显示的颜色
         String hour = StringUtils.getTime();
         int h = Integer.parseInt(hour);
@@ -243,10 +248,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             if (!StringUtils.isExpired(advertData.expire)) {
                 SPUtils.put(this, Constants.ADVERT_DATE, advertData.expire);
                 url = SPUtils.get(MainApplication.get(), Constants.ADVERT_URL, "");
-                if (!(advertData.dst.equals(url) && FileUtil.isFileExist(path))) {
-                    SPUtils.put(MainApplication.get(), Constants.ADVERT_URL, advertData.dst);
-                    SPUtils.put(MainApplication.get(), Constants.TITLE, advertData.title);
-                    new DownLoadFile().execute(advertData.img);//下载图片
+                if (advertData.dst != null) {
+                    if (!(advertData.dst.equals(url) && FileUtil.isFileExist(path))) {
+                        SPUtils.put(MainApplication.get(), Constants.ADVERT_URL, advertData.dst);
+                        SPUtils.put(MainApplication.get(), Constants.TITLE, advertData.title);
+                        new DownLoadFile().execute(advertData.img);//下载图片
+                    }
                 }
             } else {
                 // 广告到期
@@ -262,6 +269,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             SPUtils.remove(MainApplication.get(), Constants.ADVERT_IMG);
             SPUtils.remove(MainApplication.get(), Constants.ADVERT_DATE);
         }
+
+        getAdvertPresenter.checkUpdate();//检查版本更新
     }
 
     @Override
@@ -271,6 +280,14 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             intent.putExtra(Constants.TITLE, stretchVo.title);
             intent.putExtra(Constants.URL, stretchVo.dst);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void checkUpdateSuccess(UpdateVo updateVo) {
+        if (updateVo != null) {
+            checkUpdateDialog = new CheckUpdateDialog(this,updateVo);
+            checkUpdateDialog.show();
         }
     }
 

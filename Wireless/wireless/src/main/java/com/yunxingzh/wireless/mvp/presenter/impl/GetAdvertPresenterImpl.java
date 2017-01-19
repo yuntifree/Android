@@ -1,10 +1,13 @@
 package com.yunxingzh.wireless.mvp.presenter.impl;
 
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.presenter.IGetAdvertPresenter;
 import com.yunxingzh.wireless.mvp.view.IGetAdvertView;
+import com.yunxingzh.wireless.utils.AppUtils;
 
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.StretchVo;
+import wireless.libs.bean.vo.UpdateVo;
 import wireless.libs.model.IGetAdvertModel;
 import wireless.libs.model.impl.GetAdvertModelImpl;
 
@@ -12,7 +15,8 @@ import wireless.libs.model.impl.GetAdvertModelImpl;
  * Created by stephen on 2016/12/15.
  */
 
-public class GetAdvertPresenterImpl implements IGetAdvertPresenter,IGetAdvertModel.onGetAdvertListener,IGetAdvertModel.onGetStretchListener {
+public class GetAdvertPresenterImpl implements IGetAdvertPresenter,IGetAdvertModel.onGetAdvertListener,IGetAdvertModel.onGetStretchListener,
+IGetAdvertModel.onCheckUpdateListener {
 
     private IGetAdvertModel iGetAdvertModel;
     private IGetAdvertView iGetAdvertView;
@@ -37,6 +41,13 @@ public class GetAdvertPresenterImpl implements IGetAdvertPresenter,IGetAdvertMod
     }
 
     @Override
+    public void checkUpdate() {
+        if (iGetAdvertView != null) {
+            iGetAdvertModel.checkUpdate(AppUtils.getChannelName(MainApplication.get()), this);
+        }
+    }
+
+    @Override
     public void onGetAdvertSuccess(AdvertVo advertData) {
         if (iGetAdvertView != null) {
             iGetAdvertView.getAdvertSuccess(advertData);
@@ -47,6 +58,13 @@ public class GetAdvertPresenterImpl implements IGetAdvertPresenter,IGetAdvertMod
     public void onGetStretchSuccess(StretchVo stretchVo) {
         if (iGetAdvertView != null) {
             iGetAdvertView.getStretchSuccess(stretchVo);
+        }
+    }
+
+    @Override
+    public void onCheckUpdateSuccess(UpdateVo updateVo) {
+        if (iGetAdvertView != null) {
+            iGetAdvertView.checkUpdateSuccess(updateVo);
         }
     }
 
