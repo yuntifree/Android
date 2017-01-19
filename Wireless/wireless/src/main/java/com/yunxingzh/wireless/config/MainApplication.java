@@ -9,6 +9,7 @@ import android.os.Looper;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.dgwx.app.lib.bl.WifiInterface;
+import com.squareup.leakcanary.LeakCanary;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.service.FWService;
@@ -49,6 +50,15 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sInst = this;
+        if (AppConfig.DEV_MODEL) {//reless包无需监测
+            //监测内存泄漏
+            if (LeakCanary.isInAnalyzerProcess(this)) {
+                // This process is dedicated to LeakCanary for heap analysis.
+                // You should not init your app in this process.
+                return;
+            }
+            LeakCanary.install(this);
+        }
         if (isUIApplication(this)) {
             try {
                 startService(new Intent(this, FWService.class));

@@ -36,7 +36,7 @@ public class CheckUpdateDialog extends Dialog {
         setContentView(R.layout.dialog_check_update);
         mVersionTv = (TextView)findViewById(R.id.version_tv);
         if (updateVo != null) {
-            mVersionTv.setText("V" + updateVo.version);
+            mVersionTv.setText(updateVo.version.toString());
         }
         mUpdateCancelTv = (TextView)findViewById(R.id.update_cancel_tv);
         mUpdateCancelTv.setOnClickListener(buttonDialogListener);
