@@ -6,11 +6,15 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.ui.activity.RegisterActivity;
 import com.yunxingzh.wireless.utils.JsonUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
@@ -144,6 +148,9 @@ public abstract class HttpHandler<T> implements Callback {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);//清空栈
                     mAppContext.startActivity(intent);
                 } else {
+                    if (serverTip.errno == ErrorType.E_IO_EXCEPTION) {
+                        EventBus.getDefault().post(new EventBusType(Constants.NET_ERROR));
+                    }
                     onFailure(serverTip);
                 }
                 onFinish();

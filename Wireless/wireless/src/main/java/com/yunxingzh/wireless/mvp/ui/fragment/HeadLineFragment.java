@@ -37,7 +37,7 @@ import wireless.libs.bean.vo.MenuVo;
  * 头条
  */
 
-public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuView, NetErrorLayout.OnNetErrorClickListener {
+public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuView {
 
     private final static int SIZE = 15;//初始化字体size
     private final static int FOCUS_SIZE = 18;//获得焦点后字体size
@@ -76,11 +76,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         EventBus.getDefault().register(this);
         getHeadLineMenuPresenter = new GetHeadLineMenuPresenterImpl(this);
         if (!NetUtils.isNetworkAvailable(getActivity())) {
-            netErrorLayout = new NetErrorLayout(getActivity());
-            netErrorLayout.setOnNetErrorClickListener(this);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(0);
-            mNetErrorLay.addView(netErrorView);
+            netErrorState();
         }
         getHeadLineMenuPresenter.getHeadLineMenu();
         tabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -109,6 +105,9 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         if (event.getChildMsg() == Constants.VIDEO) {
             mViewPager.setCurrentItem(INDEX_THREE);//跳转视频Fragment
         }
+        if (event.getMsg() == Constants.NET_ERROR) {//网络不可用（无法上网）
+            netErrorState();
+        }
     }
 
 //    private void setLineSelect(boolean leftSelected, boolean rightSelected) {
@@ -120,6 +119,30 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);//反注册EventBus
+    }
+
+    private void netErrorState() {
+        if (netErrorLayout == null) {
+            netErrorLayout = new NetErrorLayout(getActivity());
+            netErrorLayout.setOnNetErrorClickListener(new NetErrorLayout.OnNetErrorClickListener() {
+                @Override
+                public void netErrorClick() {
+                    if (!NetUtils.isNetworkAvailable(getActivity())) {
+                        ToastUtil.showMiddle(getActivity(), R.string.net_set);
+                    } else {
+                        netErrorLayout = null;
+                        if (mNetErrorLay != null) {
+                            mNetErrorLay.removeAllViews();
+                        }
+                        mNetErrorLay.setVisibility(View.GONE);
+                        getHeadLineMenuPresenter.getHeadLineMenu();
+                    }
+                }
+            });
+            mNetErrorLay.setVisibility(View.VISIBLE);
+            View netErrorView = netErrorLayout.netErrorLay(0);
+            mNetErrorLay.addView(netErrorView);
+        }
     }
 
     @Override
@@ -137,16 +160,6 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
 //            mViewPager.setPageMargin(pageMargin);
             mViewPager.setAdapter(adapter);
             tabStrip.setViewPager(mViewPager);
-        }
-    }
-
-    @Override
-    public void netErrorClick() {
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            ToastUtil.showMiddle(getActivity(), R.string.net_set);
-        } else {
-            mNetErrorLay.setVisibility(View.GONE);
-            getHeadLineMenuPresenter.getHeadLineMenu();
         }
     }
 

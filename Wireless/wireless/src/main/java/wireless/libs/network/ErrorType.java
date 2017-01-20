@@ -36,7 +36,7 @@ public class ErrorType {
 
     /**
      * 需要提示给用户
-     * errno 112:表示应用版本为最新
+     * errno 112:表示应用版本为最新; -4:网络不可用（无法上网）
      * @param errno
      * @return
      */

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.IServicePresenter;
@@ -26,6 +27,9 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -76,25 +80,27 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     }
 
     public void initData() {
+        //注册EventBus
+        EventBus.getDefault().register(this);
         iHeadLinePresenter = new HeadLinePresenterImpl();
         iServicePresenter = new ServicePresenterImpl(this);
         if (!NetUtils.isNetworkAvailable(getActivity())) {
-            netErrorLayout = new NetErrorLayout(getActivity());
-            final View netErrorView = netErrorLayout.netErrorLay(0);
-            netErrorLayout.setOnNetErrorClickListener(new NetErrorLayout.OnNetErrorClickListener() {
-                @Override
-                public void netErrorClick() {
-                    if (!NetUtils.isNetworkAvailable(getActivity())) {
-                        ToastUtil.showMiddle(getActivity(), R.string.net_set);
-                    } else {
-                        netErrorView.setVisibility(View.GONE);
-                        iServicePresenter.getService();
-                    }
-                }
-            });
-            mServiceParentGroup.addView(netErrorView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 200, 0, 0));
+            netErrorState();
         }
         iServicePresenter.getService();
+    }
+
+    @Subscribe
+    public void onEventMainThread(EventBusType event) {
+        if (event.getMsg() == Constants.NET_ERROR) {//网络不可用（无法上网）
+            netErrorState();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
     @Override
@@ -136,7 +142,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         int width = 0;
         int height = 0;
         if (getActivity() == null) {
-           return;
+            return;
         }
         wm = getActivity().getWindowManager();
         width = wm.getDefaultDisplay().getWidth();//720,1536
@@ -171,11 +177,11 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 //            line.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
 
             if (width <= 720 && height <= 1280) {
-               // line.setMinimumHeight(20);
+                // line.setMinimumHeight(20);
                 mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 10, 30, 0, 20, 0, 5));
                 mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 20, 20, 0, 5));
             } else {
-               // line.setMinimumHeight(40);
+                // line.setMinimumHeight(40);
                 mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 20, 70, 0, 40, 0, 10));
                 mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 40, 40, 0, 10));
             }
@@ -187,7 +193,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             int lines = size / 3 + num;//得到行数
 
             mServiceItem.addView(mItemTop);
-          //  mServiceItem.addView(lineSmall, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, 1, 0, 0, 0, 0));
+            //  mServiceItem.addView(lineSmall, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, 1, 0, 0, 0, 0));
 
             for (int j = 0; j < lines; j++) {//循环行数
                 LinearLayout childLay = new LinearLayout(getActivity());
@@ -197,7 +203,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                     int positon = j * 3 + k;//得到item当前position
                     if (positon >= size) {//一行不足3个时填充空view
                         TextView nullView = new TextView(getActivity());
-                        itemLay.addView(nullView, getLayoutParams(0,Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                        itemLay.addView(nullView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                         childLay.addView(itemLay, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                     } else {
                         String title = childDatas.get(positon).title;
@@ -228,7 +234,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                         } else {
                             itemLay.addView(img, getLayoutParams(0, Gravity.CENTER, 120, 120, 0, 0, 0, 0));
                         }
-                        itemLay.addView(views, getLayoutParams(0,Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                        itemLay.addView(views, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
 
                         childLay.addView(itemLay, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                     }
@@ -246,7 +252,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 //            if (i == list.size() - 1) {
 //                return;
 //            }
-          //  mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+            //  mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
         }
     }
 
@@ -274,6 +280,29 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             serviceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, bottom));
         } else if (lines == 3) {
             serviceItem.addView(childLay, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+        }
+    }
+
+    private void netErrorState() {
+        if (netErrorLayout == null) {
+            netErrorLayout = new NetErrorLayout(getActivity());
+            final View netErrorView = netErrorLayout.netErrorLay(0);
+            netErrorLayout.setOnNetErrorClickListener(new NetErrorLayout.OnNetErrorClickListener() {
+                @Override
+                public void netErrorClick() {
+                    if (!NetUtils.isNetworkAvailable(getActivity())) {
+                        ToastUtil.showMiddle(getActivity(), R.string.net_set);
+                    } else {
+                        netErrorLayout = null;
+                        if (mServiceParentGroup != null) {
+                            mServiceParentGroup.removeAllViews();
+                        }
+                        netErrorView.setVisibility(View.GONE);
+                        iServicePresenter.getService();
+                    }
+                }
+            });
+            mServiceParentGroup.addView(netErrorView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 200, 0, 0));
         }
     }
 

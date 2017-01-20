@@ -692,23 +692,25 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 CheckAndLogon();
             } else if (DGFreeAp != null) {
                 // 2. 已经连上其它WiFi，周围有DG-Free的情况，询问是否连接DG-Free
-                alertView = new AlertView("温馨提示", "您已连上" + currentAp.ssid + ",确定要切换吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(Object o, int position) {
-                        if (position != AlertView.CANCELPOSITION) {
-                            FWManager.getInstance().connect(DGFreeAp);
-                            //startActivity(WifiManagerActivity.class, "", "", "", "");
+                if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid)) {
+                    alertView = new AlertView("温馨提示", "您已连上" + currentAp.ssid + ",确定要切换吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position != AlertView.CANCELPOSITION) {
+                                FWManager.getInstance().connect(DGFreeAp);
+                                //startActivity(WifiManagerActivity.class, "", "", "", "");
+                            }
                         }
-                    }
-                }).setOnDismissListener(new OnDismissListener() {
-                    @Override
-                    public void onDismiss(Object o) {
-                        if (alertView != null) {
-                            alertView.dismiss();
+                    }).setOnDismissListener(new OnDismissListener() {
+                        @Override
+                        public void onDismiss(Object o) {
+                            if (alertView != null) {
+                                alertView.dismiss();
+                            }
                         }
-                    }
-                });
-                alertView.show();
+                    });
+                    alertView.show();
+                }
             } else {
                 //已连上wifi，周围没有DG-free
                 ToastUtil.showMiddle(getActivity(), R.string.notice_toast);

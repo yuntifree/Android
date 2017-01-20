@@ -184,24 +184,27 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                 lon = locationUtils.getBaseLocation().longitude;
                 initMap();
             } else if (msg.what == BDLocation.TypeServerError) {
-                ToastUtil.showMiddle(WifiMapActivity.this, R.string.location_error);
-                alertView = new AlertView("温馨提示", "亲,定位失败,请打开定位权限", "取消", new String[]{"去设置"}, null, WifiMapActivity.this, AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(Object o, int position) {
-                        if (position != AlertView.CANCELPOSITION) {
-                            Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                            startActivity(intent);
+                if (isFirst) {
+                    isFirst = false;
+                    ToastUtil.showMiddle(WifiMapActivity.this, R.string.location_error);
+                    alertView = new AlertView("温馨提示", "亲,定位失败,请打开定位权限", "取消", new String[]{"去设置"}, null, WifiMapActivity.this, AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position != AlertView.CANCELPOSITION) {
+                                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                                startActivity(intent);
+                            }
                         }
-                    }
-                }).setOnDismissListener(new OnDismissListener() {
-                    @Override
-                    public void onDismiss(Object o) {
-                        if (alertView != null) {
-                            alertView.dismiss();
+                    }).setOnDismissListener(new OnDismissListener() {
+                        @Override
+                        public void onDismiss(Object o) {
+                            if (alertView != null) {
+                                alertView.dismiss();
+                            }
                         }
-                    }
-                });
-                alertView.show();
+                    });
+                    alertView.show();
+                }
             } else {
                 LogUtils.i("lsd", "location error:" + msg.what);
             }
@@ -277,7 +280,9 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     @Override
     public boolean onMarkerClick(Marker marker) {
         mMarker = marker;
-        showWindow(marker);
+        if (baiduMap != null && mMarker != null) {
+            showWindow(marker);
+        }
         return true;
     }
 
