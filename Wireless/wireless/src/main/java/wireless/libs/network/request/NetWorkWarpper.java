@@ -253,4 +253,13 @@ public class NetWorkWarpper {
         HttpUtils.post(path, httpParams, handler);
     }
 
+    /**
+     * 东莞wifi--checkEnv:检查网络状况
+     */
+    public static void checkEnv() {
+        // http://www.apple.com/cn/
+        String path = "http://120.76.236.185/portal";
+        HttpUtils.getReq(path);
+    }
+
 }

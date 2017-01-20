@@ -181,6 +181,14 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     private View emptyView(ViewGroup viewGroup) {
         View netView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, viewGroup, false);
+        TextView netErrorBtn = (TextView) netView.findViewById(R.id.video_net_error_btn);
+        netErrorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isFirstRefresh = true;
+                iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+            }
+        });
         return netView;
     }
 

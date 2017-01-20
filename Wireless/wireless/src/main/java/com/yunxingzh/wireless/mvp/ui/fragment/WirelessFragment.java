@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dgwx.app.lib.bl.WifiInterface;
+import com.dgwx.app.lib.common.util.SettingUtility;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
@@ -83,6 +84,7 @@ import wireless.libs.bean.vo.WeatherVo;
 import wireless.libs.convenientbanner.ConvenientBanner;
 import wireless.libs.convenientbanner.holder.CBViewHolderCreator;
 import wireless.libs.convenientbanner.listener.OnItemClickListener;
+import wireless.libs.network.request.NetWorkWarpper;
 
 /**
  * Created by stephon_ on 2016/11/1.
@@ -263,6 +265,13 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             mAnimationTv.setMaxWidth(2000);
             mAnimationTv.setDiffuseWidth(30);
         }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                NetWorkWarpper.checkEnv();
+            }
+        }).start();
     }
 
     @Override
@@ -556,6 +565,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         protected Boolean doInBackground(Void... params) {
             try {
                 mCheckRet = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
+               // SettingUtility.getWlanuserip()
             } catch (Exception e) {
                 return false;
             }

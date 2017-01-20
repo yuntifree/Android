@@ -27,7 +27,7 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
 
     private TextView mAdvertInfoTv, mAdvertTimeTv;
     private ImageView mAdvertBgIv;
-    private LinearLayout mAdvertJumpLay;
+    private LinearLayout mAdvertJumpLay, mAdvertClickLay;
     private int recLen = 2;
     private Handler handler = new Handler();
 
@@ -53,15 +53,20 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
         mAdvertTimeTv = findView(R.id.advert_time_tv);
         mAdvertBgIv = findView(R.id.advert_bg_iv);
         mAdvertBgIv.setOnClickListener(this);
+        mAdvertClickLay = findView(R.id.advert_click_lay);
     }
 
     public void initData() {
         imgPath = getIntent().getStringExtra(Constants.ADVERT_IMG);
         url = getIntent().getStringExtra(Constants.ADVERT_URL);
         title = SPUtils.get(this,Constants.TITLE,"");
-        if (!StringUtils.isEmpty(imgPath) && !StringUtils.isEmpty(url)) {
+        if (!StringUtils.isEmpty(imgPath)) {
             Bitmap img = BitmapFactory.decodeFile(imgPath);
             mAdvertBgIv.setImageBitmap(img);
+        }
+        if (StringUtils.isEmpty(url)) {
+            mAdvertBgIv.setEnabled(false);
+            mAdvertClickLay.setVisibility(View.GONE);
         }
         handler.postDelayed(runnable, 1000);
     }

@@ -2,14 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
+    android:gravity="center"
+    android:background="@color/white"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="14sp"
-        android:textColor="@color/gray_969696"
-        android:text="@string/refresh_view"/>
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/wifi_closed"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@color/gray_b4b4b4"
+        android:text="网络跑路啦"/>
+
+
+    <TextView
+        android:id="@+id/video_net_error_btn"
+        android:layout_width="135dp"
+        android:layout_height="40dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/style_login_btn"
+        android:text="刷新重试"/>
 </LinearLayout>

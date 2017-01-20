@@ -1,5 +1,6 @@
 package wireless.libs.network;
 
+import android.location.Location;
 import android.util.Log;
 
 import com.yunxingzh.wireless.config.AppConfig;
@@ -14,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
@@ -230,6 +232,36 @@ public class HttpUtils {
                 .addHeader("WS_URL_TYPE", String.valueOf(type))
                 .build();
         getClient().newCall(request).enqueue(handler != null ? handler : nullHttpHandler);
+    }
+
+    public static void getReq(String url) {
+        URL httpUrl = null;
+        try {
+            httpUrl = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection) httpUrl.openConnection();
+            conn.setConnectTimeout(2 * 1000);
+            conn.setReadTimeout(2 * 1000);
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setRequestMethod("GET");
+            conn.setInstanceFollowRedirects(false);
+            conn.connect();
+            LogUtils.e("lsd", conn.getResponseMessage()+"");
+            int code = conn.getResponseCode();
+            if ( code >= 300 && code < 400) {//重定向
+                String agr = conn.getHeaderField("Location");
+                System.out.print(agr);
+            } else {
+                System.out.print("");
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
