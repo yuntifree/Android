@@ -242,13 +242,13 @@ public class AlertView {
                 //取消按钮的样式
                 if (data == cancel){
                     tvAlert.setTypeface(Typeface.DEFAULT_BOLD);
-                    tvAlert.setTextColor(context.getResources().getColor(R.color.black));
+                    tvAlert.setTextColor(context.getResources().getColor(R.color.textColor_alert_button_cancel));
                     tvAlert.setOnClickListener(new OnTextClickListener(CANCELPOSITION));
                     position = position - 1;
                 }
                 //高亮按钮的样式
                 else if (mDestructive!= null && mDestructive.contains(data)){
-                    tvAlert.setTextColor(context.getResources().getColor(R.color.black));
+                    tvAlert.setTextColor(context.getResources().getColor(R.color.textColor_alert_button_destructive));
                 }
 
                 tvAlert.setOnClickListener(new OnTextClickListener(position));

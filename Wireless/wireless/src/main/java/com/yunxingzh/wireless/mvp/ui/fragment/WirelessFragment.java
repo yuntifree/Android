@@ -138,6 +138,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private WindowManager wm;
     private WifiState wifiState;
 
+    private AlertView switchAlert;
+
     private boolean isCountTime = false;//true打开（start），false关闭（stop）
 
     @Nullable
@@ -265,6 +267,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             mAnimationTv.setDiffuseWidth(30);
         }
 
+        timeChanged();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -318,8 +322,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
 
         mMainNewsLv.setAdapter(mainNewsAdapter);
         Utility.setListViewHeight(mMainNewsLv);
-
-        timeChanged();
 
         iHeadLinePresenter.getFontInfo();
     }
@@ -706,11 +708,12 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             } else if (DGFreeAp != null) {
                 // 2. 已经连上其它WiFi，周围有DG-Free的情况，询问是否连接DG-Free
                 if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid)) {
-                    new AlertView("温馨提示", "您已连上" + currentAp.ssid + ",确定要切换吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                   switchAlert = new AlertView("温馨提示", "您已连上" + currentAp.ssid + ",确定要切换吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
                         @Override
                         public void onItemClick(Object o, int position) {
                             if (position != AlertView.CANCELPOSITION) {
                                 FWManager.getInstance().connect(DGFreeAp);
+                                switchAlert.dismiss();
                                 //startActivity(WifiManagerActivity.class, "", "", "", "");
                             }
                         }
@@ -718,7 +721,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                         @Override
                         public void onDismiss(Object o) {
                         }
-                    }).show();
+                    });
+                    switchAlert.show();
                 }
             } else {
                 //已连上wifi，周围没有DG-free
