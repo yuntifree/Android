@@ -195,15 +195,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
         @Override
         public void onStateChanged(WifiState new_state, WifiState old_state) {
-            LogUtils.d(TAG, "onStateChanged");
-            AccessPoint point = FWManager.getInstance().getCurrent();
-            if (new_state == WifiState.IDLE && point == null) {
-                new Handler().postDelayed(new Runnable(){
-                    public void run() {
-                        ToastUtil.showMiddle(WifiManagerActivity.this, "亲，连接出问题了，请重试");
-                    }
-                }, 2000);
-            }
+            LogUtils.d("lsd", "onStateChanged");
             // TODO: checkEnv
             mHandler.removeMessages(MSG_REFRESH_LIST);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
@@ -211,24 +203,21 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
         @Override
         public void onListChanged(List<AccessPoint> accessPoints) {
-            LogUtils.e("lsd", "onListChanged");
-            LogUtils.d(TAG, "onListChanged");
+            LogUtils.d("lsd", "onListChanged");
             mHandler.removeMessages(MSG_REFRESH_LIST);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 0));
         }
 
         @Override
         public void onRSSIChanged(int rssi) {
-            LogUtils.e("lsd","onRSSIChanged");
-            LogUtils.d(TAG, "onRSSIChanged");
+            LogUtils.d("lsd", "onRSSIChanged");
             mHandler.removeMessages(MSG_REFRESH_LIST);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_REFRESH_LIST, 1));
         }
 
         @Override
         public void onAuthError(AccessPoint ap) {
-            LogUtils.e("lsd","onAuthError");
-            LogUtils.d(TAG, "onAuthError");
+            LogUtils.d("lsd", "onAuthError");
             mHandler.removeMessages(MSG_AUTH_ERROR);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_AUTH_ERROR, ap));
         }

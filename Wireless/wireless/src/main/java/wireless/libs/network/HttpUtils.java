@@ -1,6 +1,9 @@
 package wireless.libs.network;
 
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 import android.location.Location;
+import android.os.IBinder;
 import android.util.Log;
 
 import com.yunxingzh.wireless.config.AppConfig;
@@ -234,7 +237,7 @@ public class HttpUtils {
         getClient().newCall(request).enqueue(handler != null ? handler : nullHttpHandler);
     }
 
-    public static void getReq(String url) {
+    public static void getReqForDGWifi(String url) {
         URL httpUrl = null;
         try {
             httpUrl = new URL(url);
@@ -248,13 +251,13 @@ public class HttpUtils {
             conn.connect();
             LogUtils.e("lsd", conn.getResponseMessage()+"");
             int code = conn.getResponseCode();
-            if ( code >= 300 && code < 400) {//重定向
-                String agr = conn.getHeaderField("Location");
-                System.out.print(agr);
-            } else {
+            if ( code >= 300 && code < 400) {
+                String agr = conn.getHeaderField("Location");//获取重定向后的地址
                 System.out.print("");
+            } else {
+                LogUtils.e("lsd", code+"");
+                System.out.print(""+code);
             }
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (ProtocolException e) {

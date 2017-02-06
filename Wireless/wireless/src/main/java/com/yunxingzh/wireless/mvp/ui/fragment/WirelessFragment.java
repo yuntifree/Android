@@ -25,12 +25,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dgwx.app.lib.bl.WifiInterface;
-import com.dgwx.app.lib.common.util.SettingUtility;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MainApplication;
+import com.yunxingzh.wireless.mview.BadgeView;
 import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mview.MyListview;
 import com.yunxingzh.wireless.mview.MyScrollView;
@@ -54,7 +54,6 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IConnectDGCountView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
-import com.yunxingzh.wireless.utils.BadgeView;
 import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
@@ -137,8 +136,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     private Handler handler = new Handler();
     private BadgeView mBadgeView;
     private WindowManager wm;
+    private WifiState wifiState;
 
-    private AlertView alertView;
     private boolean isCountTime = false;//true打开（start），false关闭（stop）
 
     @Nullable
@@ -460,6 +459,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                 mWirelessNumTv.setText(recLen + "");
                 isCountTime = false;
                 updateConnectState(true);
+                if (wifiState == WifiState.CONNECTING) {
+                    ToastUtil.showMiddle(getActivity(), R.string.connect_time_out);
+                }
             }
         }
     };
@@ -565,7 +567,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         protected Boolean doInBackground(Void... params) {
             try {
                 mCheckRet = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
-               // SettingUtility.getWlanuserip()
+                // SettingUtility.getWlanuserip()
             } catch (Exception e) {
                 return false;
             }
@@ -604,8 +606,9 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     //连接后改变状态
     public void updateConnectState(boolean updateNews) {
         currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
+        wifiState = FWManager.getInstance().getState();
         mDGFreeConnected = false;
-        if (currentAp != null) {
+        if (currentAp != null && wifiState == WifiState.CONNECTED) {
             String ssidText = "";
             if (currentAp.ssid.equals(Constants.SSID)) {
                 if (!isCountTime) {
@@ -703,7 +706,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             } else if (DGFreeAp != null) {
                 // 2. 已经连上其它WiFi，周围有DG-Free的情况，询问是否连接DG-Free
                 if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid)) {
-                    alertView = new AlertView("温馨提示", "您已连上" + currentAp.ssid + ",确定要切换吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                    new AlertView("温馨提示", "您已连上" + currentAp.ssid + ",确定要切换吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
                         @Override
                         public void onItemClick(Object o, int position) {
                             if (position != AlertView.CANCELPOSITION) {
@@ -714,12 +717,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                     }).setOnDismissListener(new OnDismissListener() {
                         @Override
                         public void onDismiss(Object o) {
-                            if (alertView != null) {
-                                alertView.dismiss();
-                            }
                         }
-                    });
-                    alertView.show();
+                    }).show();
                 }
             } else {
                 //已连上wifi，周围没有DG-free
@@ -777,8 +776,8 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
+        super.onDestroy();
         iHeadLinePresenter.onDestroy();
         FWManager.getInstance().removeWifiObserver(wifiObserver);
         EventBus.getDefault().unregister(this);//反注册EventBus

@@ -248,6 +248,17 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             if (!StringUtils.isExpired(advertData.expire)) {
                 SPUtils.put(this, Constants.ADVERT_DATE, advertData.expire);
                 url = SPUtils.get(MainApplication.get(), Constants.ADVERT_URL, "");
+
+                SPUtils.put(MainApplication.get(), Constants.ADVERT_IMG_URL, advertData.img);
+                String mPath = SPUtils.get(MainApplication.get(), Constants.ADVERT_IMG_URL, "");
+
+                //因为dst字段有可能不存在，所以不能放到下面进行判断
+                if (!advertData.img.equals(mPath)) {
+                    SPUtils.put(MainApplication.get(), Constants.ADVERT_URL, advertData.dst);
+                    SPUtils.put(MainApplication.get(), Constants.TITLE, advertData.title);
+                    new DownLoadFile().execute(advertData.img);//下载图片
+                }
+
                 if (advertData.dst != null) {
                     if (!(advertData.dst.equals(url) && FileUtil.isFileExist(path))) {
                         SPUtils.put(MainApplication.get(), Constants.ADVERT_URL, advertData.dst);
