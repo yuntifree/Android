@@ -43,7 +43,6 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
     private TextView mGetValidateCodeBtn,mAgreeContent;
     private IRegisterPresenter iLoginPresenter;
     private TimeCount mTimeCount;
-    private String mCode = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +74,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
         if (view == mLoRegisterBtn) {
             String code = getCode();
             if (StringUtils.validatePhoneNumber(getPhone())) {
-                if (mCode.equals(code) && !StringUtils.isEmpty(code)) {
+                if (code.length() > 0 && !StringUtils.isEmpty(code)) {
                     iLoginPresenter.register(getPhone(), code);
                 } else {
                     ToastUtil.showMiddle(RegisterActivity.this, R.string.final_validate_code);
@@ -88,7 +87,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
                 if (NetUtils.isNetworkAvailable(this)) {
                     mGetValidateCodeBtn.setText("正在获取");
                     mLoPhoneEt.setEnabled(false);
-                    WifiInterface.wifiRegister(handler, getPhone(), "", Constants.TIME_OUT);
+                    iLoginPresenter.getValidateCode(getPhone());
                 } else {
                     ToastUtil.showMiddle(this, R.string.net_error);
                 }
@@ -100,40 +99,12 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
         }
     }
 
-    final Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-        String obj = (String) msg.obj;
-        int what = msg.what;
-        String reason = " ";
-        try {
-            JSONObject resp = new JSONObject(obj);
-            reason = resp.getJSONObject("head").getString("reason");
-            mCode = resp.getJSONObject("body").getString("pwd");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        switch (what) {
-            case 0:
-                mTimeCount = new TimeCount(TIME, MILLISECOND);
-                mTimeCount.start();
-                mGetValidateCodeBtn.setText(SECOND + getString(R.string.second));
-                ToastUtil.showMiddle(RegisterActivity.this, R.string.get_validate_code_success);
-                break;
-            default:
-                ToastUtil.showMiddle(RegisterActivity.this, reason);
-                break;
-        }
-        super.handleMessage(msg);
-        }
-    };
-
     @Override
     public void getValidateCodeSuccess() {
-//        mTimeCount = new TimeCount(TIME, MILLISECOND);
-//        mTimeCount.start();
-//        mGetValidateCodeBtn.setText(SECOND + getString(R.string.second));
-//        ToastUtil.showMiddle(this, R.string.get_validate_code_success);
+        mTimeCount = new TimeCount(TIME, MILLISECOND);
+        mTimeCount.start();
+        mGetValidateCodeBtn.setText(SECOND + getString(R.string.second));
+        ToastUtil.showMiddle(this, R.string.get_validate_code_success);
     }
 
     @Override

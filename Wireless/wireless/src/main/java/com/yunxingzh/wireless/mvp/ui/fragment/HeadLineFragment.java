@@ -154,7 +154,10 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
             for (int i = 0; i < size; i++) {
                 titleList.add(menuInfos.get(i).title);
             }
-            adapter = new MyPagerAdapter(getChildFragmentManager(), titleList);
+            //titleList.add("zhibo");
+            if (titleList.contains("热点") && titleList.contains("东莞") && titleList.contains("娱乐") && titleList.contains("视频")) {
+                adapter = new MyPagerAdapter(getChildFragmentManager(), titleList);
+            }
 //            final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
 //                    .getDisplayMetrics());
 //            mViewPager.setPageMargin(pageMargin);

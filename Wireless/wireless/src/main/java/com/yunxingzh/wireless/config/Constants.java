@@ -41,8 +41,14 @@ public class Constants {
     public static final String FRAGMENT_FLAG = "fragment_flag";//fragment flag
 
     //0、网络正常，可以发起调用认证、下线等接口。1、已经认证成功。
-    public static final int NET_OK = 0;
-    public static final int VALIDATE_SUCCESS = 1;
+
+
+    // -1:未知异常，0：无网络，1：无须认证的网络（可以上网），2：须要认证的网络
+    public static final int UNKNOW_ERROR = -1;
+    public static final int NET_DISCONNECT = 0;
+    public static final int NET_OK = 1;
+    public static final int NEED_VALIDATE = 2;
+
 
     //类型 0-晴 1-阴 2-雨 3-雪
     public static final int SUNNY = 0;

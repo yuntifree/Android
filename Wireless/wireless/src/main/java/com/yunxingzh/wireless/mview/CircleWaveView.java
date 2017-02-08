@@ -103,14 +103,14 @@ public class CircleWaveView extends View {
         }
 
         // 绘制中心圆及图片
-        mPaint.setAlpha(100);
-        mPaint.setColor(mCoreColor);
-        canvas.drawCircle(getWidth() / 2, getHeight() / 2, mCoreRadius, mPaint);
+       // mPaint.setAlpha(100);
+       // mPaint.setColor(mCoreColor);
+        //canvas.drawCircle(getWidth() / 2, getHeight() / 2, mCoreRadius, mPaint);
 
-        if(mBitmap != null){
-            canvas.drawBitmap(mBitmap, getWidth() / 2 - mBitmap.getWidth() / 2
-                    , getHeight() / 2 - mBitmap.getHeight() / 2, mPaint);
-        }
+//        if(mBitmap != null){
+//            canvas.drawBitmap(mBitmap, getWidth() / 2 - mBitmap.getWidth() / 2
+//                    , getHeight() / 2 - mBitmap.getHeight() / 2, mPaint);
+//        }
 
         if(mIsDiffuse){
             invalidate();

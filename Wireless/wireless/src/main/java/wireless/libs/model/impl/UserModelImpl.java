@@ -12,8 +12,8 @@ import wireless.libs.network.request.NetWorkWarpper;
 public class UserModelImpl implements IUserModel {
 
     @Override
-    public void getValidateCode(int type, String phone, final onValidateCodeListener listener) {
-        NetWorkWarpper.validateCode(type,phone,new HttpHandler<Object>() {
+    public void getValidateCode(String phone, final onValidateCodeListener listener) {
+        NetWorkWarpper.validateCode(phone,new HttpHandler<Object>() {
             @Override
             public void onSuccess(ServerTip serverTip, Object o) {
                 listener.onValidateCodeSuccess();

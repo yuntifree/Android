@@ -3,6 +3,8 @@ package com.yunxingzh.wireless.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.yunxingzh.wireless.config.MainApplication;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -151,6 +153,20 @@ public class SPUtils {
             editor.putFloat(key, (Float) object);
         } else if (object instanceof Long) {
             editor.putLong(key, (Long) object);
+        } else {
+            editor.putString(key, object.toString());
+        }
+
+        SharedPreferencesCompat.apply(editor);
+    }
+
+    public static void putForAgr(String key, Object object) {
+        MainApplication appContext = MainApplication.get();
+        SharedPreferences sp = appContext.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        if (object instanceof String) {
+            editor.putString(key, (String) object);
         } else {
             editor.putString(key, object.toString());
         }

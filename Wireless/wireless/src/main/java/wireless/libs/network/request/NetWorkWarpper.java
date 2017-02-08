@@ -1,6 +1,7 @@
 package wireless.libs.network.request;
 
 import com.alibaba.fastjson.JSONArray;
+import com.dgwx.app.lib.bl.WifiInterface;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.utils.AppUtils;
@@ -38,17 +39,6 @@ import wireless.libs.network.HttpUtils;
 public class NetWorkWarpper {
 
     /***
-     * 获取验证码
-     */
-    public static void validateCode(int type, String phone, HttpHandler<Object> httpHandler) {
-        String path = "get_phone_code";
-        HttpParams httpParams = new HttpParams();
-        httpParams.add("type", type);
-        httpParams.add("phone", phone);
-        HttpUtils.post(path, httpParams, httpHandler);
-    }
-
-    /***
      * 获取应用首页广告
      */
     public static void getAdvert(HttpHandler<AdvertVo> handler) {
@@ -69,6 +59,7 @@ public class NetWorkWarpper {
         httpParams.add("model", AppUtils.getPhoneModel());
         httpParams.add("channel", AppUtils.getChannelName(MainApplication.get()));
         httpParams.add("udid", MainApplication.get().getMark());
+        httpParams.add("code", code);
         HttpUtils.post(path, httpParams, httpHandler);
     }
 
@@ -256,10 +247,21 @@ public class NetWorkWarpper {
     /**
      * 东莞wifi--checkEnv:检查网络状况
      */
-    public static void checkEnv() {
-        String path = "http://captive.apple.com/hotspot-detect.html";
-      //  String path = "http://120.76.236.185/portal?wlanacname=100&wlanuserip=lisi&ssid=100&wlanacip=100";
-        HttpUtils.getReqForDGWifi(path);
+    public static int checkEnv() {
+        //String path = "http://captive.apple.com/hotspot-detect.html";
+        String path = "http://120.76.236.185/portal?wlanacname=100&wlanuserip=lisi&ssid=100&wlanacip=100";
+        return HttpUtils.getReqForDGWifi(path);
     }
+
+    /***
+     * 东莞wifi--获取验证码
+     */
+    public static void validateCode(String phone, HttpHandler<Object> httpHandler) {
+        String path = "get_check_code";
+        HttpParams httpParams = new HttpParams();
+        httpParams.add("phone", phone);
+        HttpUtils.post(path, httpParams, httpHandler);
+    }
+
 
 }

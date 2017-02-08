@@ -10,6 +10,8 @@ import com.yunxingzh.wireless.config.AppConfig;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.SPUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
 import java.io.BufferedReader;
@@ -20,6 +22,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Callback;
@@ -237,11 +241,17 @@ public class HttpUtils {
         getClient().newCall(request).enqueue(handler != null ? handler : nullHttpHandler);
     }
 
-    public static void getReqForDGWifi(String url) {
+    /**
+     * -1:未知异常，0：无网络，1：无须认证的网络（可以上网），2：须要认证的网络
+     * @param url
+     * @return
+     */
+    public static int getReqForDGWifi(String url) {
         URL httpUrl = null;
+        HttpURLConnection conn = null;
         try {
             httpUrl = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection) httpUrl.openConnection();
+            conn = (HttpURLConnection) httpUrl.openConnection();
             conn.setConnectTimeout(2 * 1000);
             conn.setReadTimeout(2 * 1000);
             conn.setDoInput(true);
@@ -251,12 +261,18 @@ public class HttpUtils {
             conn.connect();
             LogUtils.e("lsd", conn.getResponseMessage()+"");
             int code = conn.getResponseCode();
-            if ( code >= 300 && code < 400) {
+            if (code >= 300 && code < 400) {//发生重定向
                 String agr = conn.getHeaderField("Location");//获取重定向后的地址
-                System.out.print("");
+                if (!StringUtils.isEmpty(agr) && agr.contains("wlanacname") && agr.contains("ssid") && agr.contains("wlanuserip")) {//是DGFree，需要认证
+                    parseUrl(agr);
+                    return 2;
+                } else {
+                    return -1;
+                }
+            } else if (code == 200) {//可以上网，无须认证
+                    return 1;
             } else {
-                LogUtils.e("lsd", code+"");
-                System.out.print(""+code);
+                return -1;
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -264,6 +280,35 @@ public class HttpUtils {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            return 0;
+        } finally {
+            if(conn != null) {
+                conn.disconnect();
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 解析出url参数并保存
+     * @param url
+     */
+    public static void parseUrl(String url){
+        String[] agrArray = url.trim().split("\\?");
+        String[] mAgr = agrArray[1].split("&");
+
+        for(String strSplit : mAgr) {
+            String[] arrSplit;
+            arrSplit = strSplit.split("=");
+            //解析出键值
+            if (arrSplit.length > 1) {
+                //正确解析
+                SPUtils.putForAgr(arrSplit[0], arrSplit[1]);
+            } else {
+                if (arrSplit[0] != "") {
+                    //只有参数没有值，不加入
+                }
+            }
         }
     }
 

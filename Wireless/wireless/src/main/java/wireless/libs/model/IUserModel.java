@@ -19,7 +19,7 @@ public interface IUserModel {
      * 获取短信验证码
      * @param listener
      */
-    void getValidateCode(int type,String phone, onValidateCodeListener listener);
+    void getValidateCode(String phone, onValidateCodeListener listener);
 
     /***
      * 注册

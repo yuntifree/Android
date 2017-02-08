@@ -5,6 +5,6 @@ package com.yunxingzh.wireless.mvp.presenter;
  */
 public interface IRegisterPresenter extends IBasePresenter{
     boolean inputValidate();
-    void getValidateCode(int type);
+    void getValidateCode(String phone);
     void register(String username,String password);
 }

@@ -268,13 +268,6 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         }
 
         timeChanged();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                NetWorkWarpper.checkEnv();
-            }
-        }).start();
     }
 
     @Override
@@ -568,7 +561,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                mCheckRet = WifiInterface.checkEnv(DG_SDK_TIME_OUT);
+                mCheckRet = NetWorkWarpper.checkEnv();
                 // SettingUtility.getWlanuserip()
             } catch (Exception e) {
                 return false;
@@ -585,7 +578,7 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
                         WifiInterface.wifiLogon(validateHandler, MainApplication.get().getUserName(),
                                 MainApplication.get().getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
                         break;
-                    case Constants.VALIDATE_SUCCESS://1、已经认证成功。
+                    case Constants.SERVICE://1、已经认证成功。
                         iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
                         // 判断下按钮的状态
                         updateConnectState(true);
