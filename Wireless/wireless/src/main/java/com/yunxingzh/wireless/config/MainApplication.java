@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Process;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.dgwx.app.lib.bl.WifiInterface;
 import com.squareup.leakcanary.LeakCanary;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.service.FWService;
@@ -17,6 +19,8 @@ import com.yunxingzh.wireless.utils.DeviceUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
+
+import java.util.List;
 
 import wireless.libs.bean.vo.User;
 
@@ -45,10 +49,23 @@ public class MainApplication extends Application {
 
     public static Handler mHandler;
 
+    //小米推送
+    private static final String APP_ID = "2882303761517531135";
+    private static final String APP_KEY = "5191753131135";
+
+
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (shouldInit()) {
+            //注册推送服务
+            //注册成功后会向DemoMessageReceiver发送广播
+            // 可以从DemoMessageReceiver的onCommandResult方法中MiPushCommandMessage对象参数中获取注册信息
+            MiPushClient.registerPush(this, APP_ID, APP_KEY);
+        }
+
         sInst = this;
         if (AppConfig.DEV_MODEL) {//reless包无需监测
             //监测内存泄漏
@@ -192,6 +209,27 @@ public class MainApplication extends Application {
 
     public static boolean isServiceApplication(Context context) {
         return SERVICE_PROCESS_NAME.equals(getCurrentProcessName(context));
+    }
+
+    //通过判断手机里的所有进程是否有这个App的进程
+    //从而判断该App是否有打开
+    private boolean shouldInit() {
+        //通过ActivityManager我们可以获得系统里正在运行的activities
+        //包括进程(Process)等、应用程序/包、服务(Service)、任务(Task)信息。
+        ActivityManager am = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE));
+        List<ActivityManager.RunningAppProcessInfo> processInfos = am.getRunningAppProcesses();
+        String mainProcessName = getPackageName();
+
+        //获取本App的唯一标识
+        int myPid = Process.myPid();
+        //利用一个增强for循环取出手机里的所有进程
+        for (ActivityManager.RunningAppProcessInfo info : processInfos) {
+            //通过比较进程的唯一标识和包名判断进程里是否存在该App
+            if (info.pid == myPid && mainProcessName.equals(info.processName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void startService() {

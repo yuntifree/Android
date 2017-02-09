@@ -9,12 +9,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
-import android.view.Window;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.AppConfig;
 import com.yunxingzh.wireless.config.Constants;
@@ -22,7 +22,6 @@ import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.CheckUpdateDialog;
 import com.yunxingzh.wireless.mview.StatusBarColor;
-import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mvp.presenter.impl.GetAdvertPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineFragment;
@@ -87,8 +86,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             finish();
             return;
         }
+
         initView();
         initData();
+
+        //小米推送服务
+        //设置标签
+        //MiPushClient.subscribe(MainApplication.get(), 400+"", null);
+        //int s = MainApplication.get().getUser().uid;
+        //设置别名
+      //  MiPushClient.setAlias(MainApplication.get(), s + "", null);
     }
 
     public void initView() {
