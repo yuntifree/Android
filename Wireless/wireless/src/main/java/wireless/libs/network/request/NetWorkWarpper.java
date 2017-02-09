@@ -156,17 +156,6 @@ public class NetWorkWarpper {
     }
 
     /**
-     * 上报连接东莞wifi次数
-     * @param handler
-     */
-    public static void connectDGCount(String apmac,HttpHandler<Object> handler) {
-        String path = "report_apmac";
-        HttpParams httpParams = new HttpParams();
-        httpParams.add("apmac",apmac);
-        HttpUtils.post(path, httpParams, handler);
-    }
-
-    /**
      * wifi公益
      * @param handler
      */
@@ -249,6 +238,7 @@ public class NetWorkWarpper {
      * 东莞wifi--checkEnv:检查网络状况
      */
     public static int checkEnv() {
+        //String path = "http://www.apple.com/cn/";
         //String path = "http://captive.apple.com/hotspot-detect.html";
         String path = "http://120.76.236.185/portal?wlanacname=100&wlanuserip=lisi&ssid=100&wlanacip=100";
         return HttpUtils.getReqForDGWifi(path);
@@ -261,6 +251,20 @@ public class NetWorkWarpper {
         String path = "get_check_code";
         HttpParams httpParams = new HttpParams();
         httpParams.add("phone", phone);
+        HttpUtils.post(path, httpParams, httpHandler);
+    }
+
+    /***
+     * 东莞wifi--连接认证
+     */
+    public static void wifiConnect(String wlanacname, String wlanuserip, String wlanacip, String wlanusermac, String apmac, HttpHandler<Object> httpHandler) {
+        String path = "connect_wifi";
+        HttpParams httpParams = new HttpParams();
+        httpParams.add("wlanacname", wlanacname);
+        httpParams.add("wlanuserip", wlanuserip);
+        httpParams.add("wlanacip", wlanacip);
+        httpParams.add("wlanusermac", wlanusermac);
+        httpParams.add("apmac", apmac);
         HttpUtils.post(path, httpParams, httpHandler);
     }
 

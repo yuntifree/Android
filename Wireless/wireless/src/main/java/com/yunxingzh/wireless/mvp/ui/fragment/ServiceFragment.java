@@ -17,9 +17,9 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
-import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.IServicePresenter;
-import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
+import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
+import com.yunxingzh.wireless.mvp.presenter.impl.IWirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.presenter.impl.ServicePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.SearchActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
@@ -50,7 +50,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     private TextView mServiceMoreTv, mHouseKeepingTv, mHousingTv, mSecondHandsTv, mCooperationTv;
     private LinearLayout mServiceParentGroup;
     private IServicePresenter iServicePresenter;
-    private IHeadLinePresenter iHeadLinePresenter;
+    private IWirelessPresenter iWirelessPresenter;
     private NetErrorLayout netErrorLayout;
     private WindowManager wm;
 
@@ -82,7 +82,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     public void initData() {
         //注册EventBus
         EventBus.getDefault().register(this);
-        iHeadLinePresenter = new HeadLinePresenterImpl();
+        iWirelessPresenter = new IWirelessPresenterImpl(this);
         iServicePresenter = new ServicePresenterImpl(this);
         if (!NetUtils.isNetworkAvailable(getActivity())) {
             netErrorState();
@@ -106,28 +106,28 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     @Override
     public void onClick(View v) {
         if (mCooperationTv == v) {//招聘
-            if (iHeadLinePresenter != null) {
-                iHeadLinePresenter.clickCount(1, CLICK_COUNT);//上报
+            if (iWirelessPresenter != null) {
+                iWirelessPresenter.clickCount(1, CLICK_COUNT);//上报
             }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zk", Constants.TITLE, mCooperationTv.getText() + "");
         } else if (mSecondHandsTv == v) {//二手
-            if (iHeadLinePresenter != null) {
-                iHeadLinePresenter.clickCount(2, CLICK_COUNT);
+            if (iWirelessPresenter != null) {
+                iWirelessPresenter.clickCount(2, CLICK_COUNT);
             }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zl", Constants.TITLE, mSecondHandsTv.getText() + "");
         } else if (mHousingTv == v) {//租房
-            if (iHeadLinePresenter != null) {
-                iHeadLinePresenter.clickCount(3, CLICK_COUNT);
+            if (iWirelessPresenter != null) {
+                iWirelessPresenter.clickCount(3, CLICK_COUNT);
             }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zj", Constants.TITLE, mHousingTv.getText() + "");
         } else if (mHouseKeepingTv == v) {//家政
-            if (iHeadLinePresenter != null) {
-                iHeadLinePresenter.clickCount(4, CLICK_COUNT);
+            if (iWirelessPresenter != null) {
+                iWirelessPresenter.clickCount(4, CLICK_COUNT);
             }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zm", Constants.TITLE, mHouseKeepingTv.getText() + "");
         } else if (mServiceMoreTv == v) {//更多
-            if (iHeadLinePresenter != null) {
-                iHeadLinePresenter.clickCount(5, CLICK_COUNT);
+            if (iWirelessPresenter != null) {
+                iWirelessPresenter.clickCount(5, CLICK_COUNT);
             }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zn", Constants.TITLE, mServiceMoreTv.getText() + "");
         } else if (mSearchTv == v) {//搜索
@@ -222,8 +222,8 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                             @Override
                             public void onClick(View v) {
                                 Service.ServiceItem dv = (Service.ServiceItem) v.getTag();
-                                if (iHeadLinePresenter != null) {
-                                    iHeadLinePresenter.clickCount(dv.sid, CLICK_COUNT);//上报
+                                if (iWirelessPresenter != null) {
+                                    iWirelessPresenter.clickCount(dv.sid, CLICK_COUNT);//上报
                                 }
                                 startActivity(WebViewActivity.class, Constants.URL, dv.dst, Constants.TITLE, dv.title);
                             }

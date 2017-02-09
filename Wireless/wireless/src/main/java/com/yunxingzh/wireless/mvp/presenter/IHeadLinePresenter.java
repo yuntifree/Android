@@ -6,9 +6,6 @@ package com.yunxingzh.wireless.mvp.presenter;
 
 public interface IHeadLinePresenter extends IBasePresenter{
     void getHeadLine(int type, int seq);
-    void clickCount(int id,int type);
-    void weatherNews();
-    void getFontInfo();
     void onDestroy();
     void getLiveList(int offset);
 }

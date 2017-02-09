@@ -1,7 +1,5 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,14 +12,14 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
-import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
+import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
+import com.yunxingzh.wireless.mvp.presenter.impl.IWirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.VideoPlayActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineVideoAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
@@ -36,9 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
-import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
-import wireless.libs.bean.resp.WeatherNewsList;
 import wireless.libs.bean.vo.HotInfo;
 
 /**
@@ -55,6 +51,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     private RecyclerView mListRv;
     private IHeadLinePresenter iHeadLinePresenter;
+    private IWirelessPresenter iWirelessPresenter;
     private HeadLineVideoAdapter headLineVideoAdapter;
     //下拉刷新
     private SwipeRefreshLayout mSwipeRefreshLay;
@@ -87,6 +84,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         mListRv.setAdapter(headLineVideoAdapter);
 
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
+        iWirelessPresenter = new IWirelessPresenterImpl(this);
         if (NetUtils.isNetworkAvailable(getActivity())) {
             iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         }
@@ -130,7 +128,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             item.play++;
         }
         headLineVideoAdapter.notifyItemChanged(position);
-        iHeadLinePresenter.clickCount(item.id, CLICK_COUNT);//上报
+        iWirelessPresenter.clickCount(item.id, CLICK_COUNT);//上报
         startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, item.dst);
     }
 
@@ -199,12 +197,6 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             EventBus.getDefault().unregister(getActivity());
         }
     }
-
-    @Override
-    public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {}
-
-    @Override
-    public void getFontInfoSuccess(FontInfoList fontInfoVo) {}
 
     public void startActivity(Class activity,String key,String videoUrl) {
         Intent intent = new Intent(getActivity(), activity);

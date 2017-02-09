@@ -1,6 +1,5 @@
 package wireless.libs.model;
 
-import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.resp.LiveList;
 
@@ -20,14 +19,6 @@ public interface IHeadLineModel {
         void onGetLiveListFaild();
     }
 
-    interface onClickCountListener{
-        void onClickCountSuccess();
-    }
-
-    interface onGetFontInfoListener{
-        void onGetFontInfoSuccess(FontInfoList fontInfoVo);
-    }
-
     /***
      * 获取头条（新闻，视频，应用，游戏）内容
      * @param type 0-新闻 1-视频 2-应用 3-游戏 4-本地 5-娱乐
@@ -35,18 +26,6 @@ public interface IHeadLineModel {
      * @param listener
      */
     void getHeadLine(int type, int seq, onGetHeadLineListener listener);
-
-    /***
-     * 记录点击次数
-     * @param listener
-     */
-    void clickCount(int id, int type, onClickCountListener listener);
-
-    /***
-     * 拉下半页的信息
-     * @param listener
-     */
-    void getFontInfo(onGetFontInfoListener listener);
 
     /***
      * 获取直播列表

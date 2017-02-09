@@ -10,14 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
+import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
+import com.yunxingzh.wireless.mvp.presenter.impl.IWirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.NewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
@@ -31,9 +31,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
-import wireless.libs.bean.resp.WeatherNewsList;
 import wireless.libs.bean.vo.HotInfo;
 
 /**
@@ -52,6 +50,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView mMainNewsRv;
     private IHeadLinePresenter iHeadLinePresenter;
+    private IWirelessPresenter iWirelessPresenter;
     private NewsAdapter headLineNewsAdapter;
     private List<HotInfo> newsListNext;
     private HotInfoList data;
@@ -131,6 +130,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         //注册EventBus
         EventBus.getDefault().register(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
+        iWirelessPresenter = new IWirelessPresenterImpl(this);
         if (firstLoad) {
             iHeadLinePresenter.getHeadLine(this.newsTypes, HEAD_LINE_SEQ);
             swipeRefreshLayout.setRefreshing(true);
@@ -150,7 +150,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     public void onEventMainThread(EventBusType event) {
         int index = event.getChildMsg();
         if (event.getMsg() == Constants.HEAD_LINE_NEWS_FLAG && index != -1) {//上报
-            iHeadLinePresenter.clickCount(data.infos.get(index).id, CLICK_COUNT);
+            iWirelessPresenter.clickCount(data.infos.get(index).id, CLICK_COUNT);
         }
     }
 
@@ -202,14 +202,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         }
         isFastClick = true;
         ToastUtil.showMiddle(getActivity(), R.string.net_error);
-    }
-
-    @Override
-    public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {
-    }
-
-    @Override
-    public void getFontInfoSuccess(FontInfoList fontInfoVo) {
     }
 
     @Override

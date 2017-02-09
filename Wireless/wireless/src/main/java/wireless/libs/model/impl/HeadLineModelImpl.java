@@ -1,6 +1,5 @@
 package wireless.libs.model.impl;
 
-import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.resp.LiveList;
 import wireless.libs.bean.resp.ServerTip;
@@ -25,26 +24,6 @@ public class HeadLineModelImpl implements IHeadLineModel {
             @Override
             public void onFailure(ServerTip serverTip) {
                 listener.onGetHeadLineFaild();
-            }
-        });
-    }
-
-    @Override
-    public void clickCount(int id, int type, final onClickCountListener listener) {
-        NetWorkWarpper.clickCount(id,type,new HttpHandler<Object>() {
-            @Override
-            public void onSuccess(ServerTip serverTip, Object o) {
-                listener.onClickCountSuccess();
-            }
-        });
-    }
-
-    @Override
-    public void getFontInfo(final onGetFontInfoListener listener) {
-        NetWorkWarpper.getFontInfo(new HttpHandler<FontInfoList>() {
-            @Override
-            public void onSuccess(ServerTip serverTip, FontInfoList requestVo) {
-                listener.onGetFontInfoSuccess(requestVo);
             }
         });
     }

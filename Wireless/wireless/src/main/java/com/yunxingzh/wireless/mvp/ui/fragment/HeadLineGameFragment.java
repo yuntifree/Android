@@ -2,27 +2,21 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineGameAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
-import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
-import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
-import wireless.libs.bean.resp.WeatherNewsList;
 
 /**
  * Created by stephon_ on 2016/11/2.
@@ -103,12 +97,6 @@ public class HeadLineGameFragment extends BaseFragment implements IHeadLineView,
     @Override
     public void getHeadLineFaild() {
     }
-
-    @Override
-    public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {}
-
-    @Override
-    public void getFontInfoSuccess(FontInfoList fontInfoVo) {}
 
     @Override
     public void onRefresh() {
