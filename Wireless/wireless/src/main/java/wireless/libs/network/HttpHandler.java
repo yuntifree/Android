@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.SocketException;
+import java.net.URL;
 import java.net.UnknownHostException;
 
 import okhttp3.Call;
@@ -27,6 +28,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import wireless.libs.bean.resp.BaseResult;
 import wireless.libs.bean.resp.ServerTip;
+import wireless.libs.network.request.NetWorkWarpper;
 
 
 /**
@@ -75,10 +77,14 @@ public abstract class HttpHandler<T> implements Callback {
     public final void onResponse(Call call, Response response) throws IOException {
         if (response != null) {
             if (response.code() == 200) {
+                String isLiveUrl = response.request().url().url().getPath();
                 //请求码成功
                 String respBodyStr = response.body().string();
+                if (isLiveUrl.contains("huajiao")) {//找出huajiao直播的url
+                    respBodyStr = respBodyStr.substring(2, respBodyStr.length() - 1);
+                }
                 final String httpUrl = response.request().url().toString();
-                LogUtils.d(TAG, "respBodyStr    " + httpUrl + "\r\n :" + respBodyStr);
+                LogUtils.d("url", "respBodyStr    " + httpUrl + "\r\n :" + respBodyStr);
 
                 if (!TextUtils.isEmpty(respBodyStr)) {
                     parseResult(respBodyStr);

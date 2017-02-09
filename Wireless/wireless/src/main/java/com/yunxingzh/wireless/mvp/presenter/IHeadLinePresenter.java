@@ -10,4 +10,5 @@ public interface IHeadLinePresenter extends IBasePresenter{
     void weatherNews();
     void getFontInfo();
     void onDestroy();
+    void getLiveList(int offset);
 }

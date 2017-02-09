@@ -148,16 +148,22 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     @Override
     public void getHeadLineMenuSuccess(MenuList menuList) {
         if (menuList != null) {
-            int size = menuList.infos.size();
             menuInfos = menuList.infos;
             List<String> titleList = new ArrayList<String>();
+            MenuVo menuVo = new MenuVo();
+            menuVo.ctype = 4;
+            menuVo.title = "直播";
+            menuInfos.add(menuVo);
+            int size = menuList.infos.size();
             for (int i = 0; i < size; i++) {
-                titleList.add(menuInfos.get(i).title);
+                int ctype = menuInfos.get(i).ctype;
+                if (ctype == Constants.CTYPE_NEWS || ctype == Constants.CTYPE_VIDEO
+                        || ctype == Constants.CTYPE_WEBVIEW || ctype == Constants.CTYPE_JOKE
+                        || ctype == Constants.CTYPE_LIVE) {
+                    titleList.add(menuInfos.get(i).title);
+                }
             }
-            //titleList.add("zhibo");
-            if (titleList.contains("热点") && titleList.contains("东莞") && titleList.contains("娱乐") && titleList.contains("视频")) {
-                adapter = new MyPagerAdapter(getChildFragmentManager(), titleList);
-            }
+            adapter = new MyPagerAdapter(getChildFragmentManager(), titleList);
 //            final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
 //                    .getDisplayMetrics());
 //            mViewPager.setPageMargin(pageMargin);
@@ -195,14 +201,16 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         public Fragment getItem(int position) {
             int ctype = menuInfos.get(position).ctype;
             switch (ctype){
-                case 0://新闻
+                case Constants.CTYPE_NEWS://新闻
                     return HeadLineNewsFragment.getInstance(menuInfos.get(position).type);
-                case 1://视频
+                case Constants.CTYPE_VIDEO://视频
                     return new HeadLineVideoFragment();
-                case 2://网页
+                case Constants.CTYPE_WEBVIEW://网页
                     return argumentsFragment("http://www.baidu.com");
-                case 3://搞笑
+                case Constants.CTYPE_JOKE://搞笑
                     return new HeadLineAppFragment();
+                case Constants.CTYPE_LIVE://直播
+                    return new HeadLineLiveFragment();
                 default:
                     break;
             }

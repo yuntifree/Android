@@ -9,6 +9,7 @@ import com.yunxingzh.wireless.utils.JsonUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.resp.BaseResult;
+import wireless.libs.bean.resp.LiveList;
 import wireless.libs.bean.resp.MenuList;
 import wireless.libs.bean.resp.ServerTip;
 import wireless.libs.bean.vo.AdvertVo;
@@ -263,5 +264,13 @@ public class NetWorkWarpper {
         HttpUtils.post(path, httpParams, httpHandler);
     }
 
-
+    /***
+     * 获取直播列表
+     */
+    public static void getLiveList(int offset, HttpHandler<LiveList> httpHandler) {
+        String path = "http://web.free.wifi.360.cn/internet/huajiao";
+        HttpParams httpParams = new HttpParams();
+        httpParams.add("offset", offset);
+        HttpUtils.post(path, httpParams, httpHandler);
+    }
 }

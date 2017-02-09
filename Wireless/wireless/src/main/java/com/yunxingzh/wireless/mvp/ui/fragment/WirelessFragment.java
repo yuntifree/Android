@@ -574,14 +574,20 @@ public class WirelessFragment extends BaseFragment implements IHeadLineView, ICo
             mCheckTask = null;
             if (success) {
                 switch (mCheckRet) {
-                    case Constants.NET_OK://0、网络正常，可以发起调用认证、下线等接口
+                    case Constants.UNKNOW_ERROR://-1:未知异常
                         WifiInterface.wifiLogon(validateHandler, MainApplication.get().getUserName(),
                                 MainApplication.get().getWifiPwd(), DG_SDK_TIME_OUT);//wifi认证
                         break;
-                    case Constants.SERVICE://1、已经认证成功。
+                    case Constants.NET_DISCONNECT://0：无网络
                         iConnectDGCountPresenter.connectDGCount(getCurrentWifiMacAddress());//上报
                         // 判断下按钮的状态
                         updateConnectState(true);
+                        break;
+                    case Constants.NET_OK://1：无须认证的网络（可以上网）
+
+                        break;
+                    case Constants.NEED_VALIDATE://2：须要认证的网络
+
                         break;
                     default:
                         LogUtils.d("scan error:", mCheckRet + "");

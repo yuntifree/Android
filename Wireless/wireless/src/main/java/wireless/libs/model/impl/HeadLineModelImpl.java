@@ -2,6 +2,7 @@ package wireless.libs.model.impl;
 
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
+import wireless.libs.bean.resp.LiveList;
 import wireless.libs.bean.resp.ServerTip;
 import wireless.libs.model.IHeadLineModel;
 import wireless.libs.network.HttpHandler;
@@ -44,6 +45,21 @@ public class HeadLineModelImpl implements IHeadLineModel {
             @Override
             public void onSuccess(ServerTip serverTip, FontInfoList requestVo) {
                 listener.onGetFontInfoSuccess(requestVo);
+            }
+        });
+    }
+
+    @Override
+    public void getLiveList(int offset, final onGetLiveListListener listener) {
+        NetWorkWarpper.getLiveList(offset, new HttpHandler<LiveList>() {
+            @Override
+            public void onSuccess(ServerTip serverTip, LiveList requestVo) {
+                listener.onGetLiveListSuccess(requestVo);
+            }
+
+            @Override
+            public void onFailure(ServerTip serverTip) {
+                listener.onGetLiveListFaild();
             }
         });
     }

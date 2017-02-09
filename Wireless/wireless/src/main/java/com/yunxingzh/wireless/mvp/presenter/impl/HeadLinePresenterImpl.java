@@ -1,11 +1,13 @@
 package com.yunxingzh.wireless.mvp.presenter.impl;
 
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
+import com.yunxingzh.wireless.mvp.view.IGetLiveListView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
 
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
+import wireless.libs.bean.resp.LiveList;
 import wireless.libs.bean.resp.WeatherNewsList;
 import wireless.libs.model.IHeadLineModel;
 import wireless.libs.model.IWeatherNewsModel;
@@ -17,14 +19,23 @@ import wireless.libs.model.impl.WeatherNewsModelImpl;
  */
 
 public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.onGetHeadLineListener,IHeadLineModel.onClickCountListener,
-        IWeatherNewsModel.onWeatherNewsListener,IHeadLineModel.onGetFontInfoListener {
+        IWeatherNewsModel.onWeatherNewsListener,IHeadLineModel.onGetFontInfoListener, IHeadLineModel.onGetLiveListListener {
 
     private IWeatherNewsModel iWeatherNewsModel = null;
     private IHeadLineView iHeadLineView = null;
+    private IGetLiveListView iGetLiveListView = null;
     private IHeadLineModel iHeadLineModel = null;
 
     public HeadLinePresenterImpl(IHeadLineView view) {
         iHeadLineView = view;
+        iGetLiveListView = null;
+        iHeadLineModel = new HeadLineModelImpl();
+        iWeatherNewsModel = new WeatherNewsModelImpl();
+    }
+
+    public HeadLinePresenterImpl(IGetLiveListView view) {
+        iHeadLineView = null;
+        iGetLiveListView = view;
         iHeadLineModel = new HeadLineModelImpl();
         iWeatherNewsModel = new WeatherNewsModelImpl();
     }
@@ -67,6 +78,14 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
         // iWeatherNewsModel = null;
         iHeadLineView = null;
        // iHeadLineModel = null;
+        iGetLiveListView = null;
+    }
+
+    @Override
+    public void getLiveList(int offset) {
+        if (iGetLiveListView != null){
+            iHeadLineModel.getLiveList(offset,this);
+        }
     }
 
     @Override
@@ -100,6 +119,20 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     public void onGetFontInfoSuccess(FontInfoList fontInfoVo) {
         if (iHeadLineView != null){
             iHeadLineView.getFontInfoSuccess(fontInfoVo);
+        }
+    }
+
+    @Override
+    public void onGetLiveListSuccess(LiveList liveList) {
+        if (iGetLiveListView != null){
+            iGetLiveListView.getLiveListSuccess(liveList);
+        }
+    }
+
+    @Override
+    public void onGetLiveListFaild() {
+        if (iGetLiveListView != null){
+            iGetLiveListView.getLiveListFaild();
         }
     }
 }

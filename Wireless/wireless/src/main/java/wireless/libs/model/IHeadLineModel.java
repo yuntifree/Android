@@ -2,6 +2,7 @@ package wireless.libs.model;
 
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
+import wireless.libs.bean.resp.LiveList;
 
 /**
  * Created by stephon on 2016/11/3.
@@ -12,6 +13,11 @@ public interface IHeadLineModel {
     interface onGetHeadLineListener{
         void onGetHeadLineSuccess(HotInfoList newsVo);
         void onGetHeadLineFaild();
+    }
+
+    interface onGetLiveListListener{
+        void onGetLiveListSuccess(LiveList liveList);
+        void onGetLiveListFaild();
     }
 
     interface onClickCountListener{
@@ -41,5 +47,11 @@ public interface IHeadLineModel {
      * @param listener
      */
     void getFontInfo(onGetFontInfoListener listener);
+
+    /***
+     * 获取直播列表
+     * @param listener
+     */
+    void getLiveList(int offset, onGetLiveListListener listener);
 
 }
