@@ -69,6 +69,8 @@ public class Constants {
     // url
     public static final String URL_AGREEMENT = "http://www.yunxingzh.com/app/agreement.html";//用户协议
     public static final String ABOUT_US = "http://yunxingzh.com/app/about.html";//关于我们
+    public static final String LIVE_NUM = "http://h.huajiao.com/l/index?liveid=";//直播间
+
 
     // fragment flag
     public static int FRAGMENT = 0;

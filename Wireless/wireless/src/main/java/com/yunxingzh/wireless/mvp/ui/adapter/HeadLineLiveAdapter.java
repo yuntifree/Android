@@ -1,5 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.adapter;
 
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -17,15 +18,31 @@ import wireless.libs.bean.vo.LiveVo;
 
 public class HeadLineLiveAdapter extends BaseQuickAdapter<LiveVo> {
 
+    private onLiveItemClickListener onLiveItemClickListener;
+
     public HeadLineLiveAdapter(List<LiveVo> data) {
         super(R.layout.list_item_live, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder baseViewHolder, LiveVo newsVo) {
-//        Glide.with(mContext).load(newsVo.images.get(0)).placeholder(R.drawable.img_default).into((ImageView) baseViewHolder.getView(R.id.video_img));
-//        baseViewHolder.setText(R.id.video_title, newsVo.title);
-//        baseViewHolder.setText(R.id.video_time, newsVo.source + "    " + StringUtils.formatDate(newsVo.ctime));
-//        baseViewHolder.setText(R.id.video_play_count, newsVo.play + "次播放");
+    protected void convert(final BaseViewHolder baseViewHolder, final LiveVo liveVo) {
+        Glide.with(mContext).load(liveVo.img).placeholder(R.drawable.img_default).into((ImageView) baseViewHolder.getView(R.id.live_bg_iv));
+        baseViewHolder.setText(R.id.live_nick_name_tv, liveVo.nickname + "");
+        baseViewHolder.setText(R.id.live_watchs_tv, liveVo.watches + "人");
+        baseViewHolder.setText(R.id.live_location_tv, liveVo.location+"");
+        baseViewHolder.setOnClickListener(R.id.live_item_lay, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLiveItemClickListener.onItemClick(liveVo);
+            }
+        });
+    }
+
+    public interface onLiveItemClickListener{
+        void onItemClick(LiveVo liveVo);
+    }
+
+    public void setOnLiveItemClickListener(onLiveItemClickListener onLiveItemClickListener) {
+        this.onLiveItemClickListener = onLiveItemClickListener;
     }
 }

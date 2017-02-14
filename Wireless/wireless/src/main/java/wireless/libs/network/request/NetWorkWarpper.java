@@ -238,9 +238,9 @@ public class NetWorkWarpper {
      * 东莞wifi--checkEnv:检查网络状况
      */
     public static int checkEnv() {
-        //String path = "http://www.apple.com/cn/";
+        String path = "http://xw.qq.com/index.html";
         //String path = "http://captive.apple.com/hotspot-detect.html";
-        String path = "http://120.76.236.185/portal?wlanacname=100&wlanuserip=lisi&ssid=100&wlanacip=100";
+        //String path = "http://120.76.236.185/portal?wlanacname=100&wlanuserip=lisi&ssid=100&wlanacip=100";
         return HttpUtils.getReqForDGWifi(path);
     }
 
@@ -272,9 +272,9 @@ public class NetWorkWarpper {
      * 获取直播列表
      */
     public static void getLiveList(int offset, HttpHandler<LiveList> httpHandler) {
-        String path = "http://web.free.wifi.360.cn/internet/huajiao";
+        String path = "http://web.free.wifi.360.cn/internet/huajiao?offset="+offset;
         HttpParams httpParams = new HttpParams();
-        httpParams.add("offset", offset);
+       // httpParams.add("offset", offset);
         HttpUtils.post(path, httpParams, httpHandler);
     }
 }

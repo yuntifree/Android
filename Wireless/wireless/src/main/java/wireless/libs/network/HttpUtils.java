@@ -249,6 +249,7 @@ public class HttpUtils {
     public static int getReqForDGWifi(String url) {
         URL httpUrl = null;
         HttpURLConnection conn = null;
+        int result = -1;
         try {
             httpUrl = new URL(url);
             conn = (HttpURLConnection) httpUrl.openConnection();
@@ -265,14 +266,10 @@ public class HttpUtils {
                 String agr = conn.getHeaderField("Location");//获取重定向后的地址
                 if (!StringUtils.isEmpty(agr) && agr.contains("wlanacname") && agr.contains("ssid") && agr.contains("wlanuserip")) {//是DGFree，需要认证
                     parseUrl(agr);
-                    return 2;
-                } else {
-                    return -1;
+                    result= 2;
                 }
-            } else if (code == 200) {//可以上网，无须认证
-                    return 1;
-            } else {
-                return -1;
+            } else if (code >= 200 && code < 300) {//可以上网，无须认证
+                result = 1;
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -280,13 +277,13 @@ public class HttpUtils {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-            return 0;
+            result = 0;
         } finally {
             if(conn != null) {
                 conn.disconnect();
             }
         }
-        return -1;
+        return result;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -73,13 +74,16 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         settings.setDomStorageEnabled(true);
 
         myWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return false;
-            }
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//                return false;
+//            }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if( url.startsWith("huajiao") ) {
+                    return true;
+                }
                 return false;
             }
 
@@ -147,6 +151,9 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             }
         } else if (mWebCloseTv == v){//关闭
             startActivity(MainActivity.class);
+            if (myWebView != null) {
+                myWebView.destroy();
+            }
             finish();
         }
     }

@@ -106,7 +106,9 @@ public class VideoPlayActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        webView.destroy();
+        if (webView != null) {
+            webView.destroy();
+        }
         super.onDestroy();
     }
 

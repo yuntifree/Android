@@ -64,4 +64,12 @@ public class WebViewFragment extends BaseFragment {
             mFragmentWebView.loadUrl(url);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        if (mFragmentWebView != null) {
+            mFragmentWebView.destroy();
+        }
+        super.onDestroy();
+    }
 }

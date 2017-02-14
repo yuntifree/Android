@@ -24,10 +24,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dgwx.app.lib.bl.WifiInterface;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.BadgeView;
 import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mview.MyListview;
@@ -132,6 +134,8 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     private WifiState wifiState;
 
     private AlertView switchAlert;
+
+    private boolean isValidate = false;//东莞wifi是否认证通过
 
     private boolean isCountTime = false;//true打开（start），false关闭（stop）
 
@@ -348,6 +352,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         if (mCheckTask != null) {
             return;
         }
+        isValidate = false;
         mCheckTask = new CheckEnvTask();
         mCheckTask.execute((Void) null);
     }
@@ -364,7 +369,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                     startActivity(WifiManagerActivity.class, "", "", "", "");
                 }
             }
-            //  WifiInterface.wifiLogout(logoOutHandler,MainApplication.get().getUserName(),5000);
+             // WifiInterface.wifiLogout(logoOutHandler, MainApplication.get().getUserName(),5000);
         } else if (mWeatherLay == v) {// 天气
             if (weatherNewsData != null) {
                 startActivity(WebViewActivity.class, Constants.URL, weatherNewsData.dst, Constants.TITLE, "东莞天气");
@@ -537,6 +542,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
+                Thread.sleep(1000);//防止出现500错误
                 mCheckRet = NetWorkWarpper.checkEnv();
             } catch (Exception e) {
                 return false;
@@ -553,9 +559,10 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                         ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
                         break;
                     case Constants.NET_DISCONNECT://0：无网络
-                        ToastUtil.showMiddle(getActivity(), R.string.internet_error);
+                       // ToastUtil.showMiddle(getActivity(), R.string.internet_error);
                         break;
                     case Constants.NET_OK://1：无须认证的网络（可以上网）
+                        isValidate = true;
                         // 判断下按钮的状态
                         updateConnectState(true);
                         break;
@@ -585,7 +592,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
     @Override
     public void wifiConnectSuccess() {
-        EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));//跳转新闻列表
+        isValidate = true;
         // 判断下按钮的状态
         updateConnectState(false);
     }
@@ -604,7 +611,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         mDGFreeConnected = false;
         if (currentAp != null && wifiState == WifiState.CONNECTED) {
             String ssidText = "";
-            if (currentAp.ssid.equals(Constants.SSID)) {
+            if (currentAp.ssid.equals(Constants.SSID) && isValidate) {
                 if (!isCountTime) {
                     mConnectIv.setVisibility(View.VISIBLE);
                     mConnectIv.setImageResource(R.drawable.main_connect_btn);
@@ -842,7 +849,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         if (mBadgeView != null) {
             mBadgeView.setBadgeCount(apList.size());
         }
-        updateConnectState(true);
+        updateConnectState(false);
         if (bannersVo != null) {
             bannersState();
         }
