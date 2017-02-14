@@ -163,7 +163,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
                     titleList.add(menuInfos.get(i).title);
                 }
             }
-            adapter = new MyPagerAdapter(getChildFragmentManager(), titleList);
+            adapter = new MyPagerAdapter(getChildFragmentManager(), menuInfos);
 //            final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
 //                    .getDisplayMetrics());
 //            mViewPager.setPageMargin(pageMargin);
@@ -174,11 +174,11 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
-        private List<String> titleList;
+        private List<MenuVo> menuVos;
 
-        public MyPagerAdapter(FragmentManager fm, List<String> titleList) {
+        public MyPagerAdapter(FragmentManager fm, List<MenuVo> menuVos) {
             super(fm);
-            this.titleList = titleList;
+            this.menuVos = menuVos;
         }
 
         //阻止其销毁已存在的视图
@@ -189,17 +189,17 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return titleList.get(position);
+            return menuVos.get(position).title;
         }
 
         @Override
         public int getCount() {
-            return titleList.size();
+            return menuVos.size();
         }
 
         @Override
         public Fragment getItem(int position) {
-            int ctype = menuInfos.get(position).ctype;
+            int ctype = menuVos.get(position).ctype;
             switch (ctype){
                 case Constants.CTYPE_NEWS://新闻
                     return HeadLineNewsFragment.getInstance(menuInfos.get(position).type);

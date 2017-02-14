@@ -38,6 +38,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!--小米推送权限-->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
     <!--注意这里.permission.MIPUSH_RECEIVE是自身app的包名-->
     <permission android:name="com.yunxingzh.wireless.permission.MIPUSH_RECEIVE" android:protectionLevel="signature" />
     <!--注意这里.permission.MIPUSH_RECEIVE是自身app的包名-->
@@ -140,6 +141,11 @@
 
         <activity
             android:name=".mvp.ui.activity.FeedBackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemes"/>
+
+        <activity
+            android:name=".mvp.ui.activity.LiveWebViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemes"/>
 

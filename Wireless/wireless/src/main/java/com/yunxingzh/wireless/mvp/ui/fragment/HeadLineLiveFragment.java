@@ -11,16 +11,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
-import com.yunxingzh.wireless.mvp.ui.activity.VideoPlayActivity;
-import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.LiveWebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineLiveAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IGetLiveListView;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
@@ -44,6 +43,7 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
     private boolean isFirstRefresh = true;
     private List<LiveVo> liveVos;
     private int offset;
+    private int loadCount = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
@@ -74,7 +74,7 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
             @Override
             public void onItemClick(LiveVo liveVo) {
                 if (liveVo != null) {
-                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                    Intent intent = new Intent(getActivity(), LiveWebViewActivity.class);
                     intent.putExtra(Constants.URL, Constants.LIVE_NUM + liveVo.live_id + "");
                     startActivity(intent);
                 }
@@ -87,19 +87,33 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
         mSwipeRefreshLay.setRefreshing(false);
         if (liveList != null) {
             liveVos = liveList.list;
-            if (liveList.more == 1) {
-                offset = liveList.offset;
-                if (isFirstRefresh){
-                    isFirstRefresh = false;
-                    headLineLiveAdapter.setNewData(liveVos);
+           // if (liveVos != null && liveVos.size() > 0) {
+                loadCount = 0;
+                if (liveList.more == 1) {
+                    offset = liveList.offset;
+                    if (isFirstRefresh) {
+                        isFirstRefresh = false;
+                        headLineLiveAdapter.setNewData(liveVos);
+                    } else {
+                        headLineLiveAdapter.addData(liveVos);
+                    }
                 } else {
-                    headLineLiveAdapter.addData(liveVos);
+                    // 数据全部加载完毕就调用 loadComplete
+                    headLineLiveAdapter.loadComplete();
+                    ToastUtil.showMiddle(getActivity(), R.string.no_resource);
                 }
-            } else {
-                // 数据全部加载完毕就调用 loadComplete
-                headLineLiveAdapter.loadComplete();
-                ToastUtil.showMiddle(getActivity(), R.string.no_resource);
-            }
+           // } else {
+             //   if (iHeadLinePresenter != null && loadCount < 3) {
+                  //  loadCount++;
+//                    if (isFirstRefresh) {
+//                        iHeadLinePresenter.getLiveList(0);
+//                    } else {
+                  //      iHeadLinePresenter.getLiveList(offset);
+         //           }
+             //   } else {
+               //     ToastUtil.showMiddle(getActivity(), R.string.no_resource);
+              //  }
+        //    }
         } else {
             ToastUtil.showMiddle(getActivity(), R.string.re_error);
         }

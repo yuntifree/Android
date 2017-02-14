@@ -1,14 +1,11 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -21,14 +18,12 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.StringUtils;
-import com.yunxingzh.wireless.utils.WebViewUtil;
 
 /**
- * Created by stephon on 2016/11/10.
- * 新闻详情
+ * Created by stephen on 2017/2/14.
  */
 
-public class WebViewActivity extends BaseActivity implements View.OnClickListener {
+public class LiveWebViewActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView mTitleReturnIv, mWebCloseTv;
     private TextView mTitleNameTv;
@@ -36,7 +31,6 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     private ProgressBar myProgressBar;
     private String mUrl;
     private String mTitle;
-    private String advertFlag;
     private View mWebLine;
 
     @Override
@@ -49,8 +43,8 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 
     public void initView() {
         mWebCloseTv = findView(R.id.web_close_tv);
-        mWebCloseTv.setOnClickListener(this);
         mTitleNameTv = findView(R.id.web_name_tv);
+        mWebCloseTv.setOnClickListener(this);
         mTitleNameTv.setVisibility(View.VISIBLE);
         mTitleReturnIv = findView(R.id.web_return_iv);
         mTitleReturnIv.setOnClickListener(this);
@@ -61,33 +55,29 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 
     public void initData() {
         StatusBarColor.compat(this, getResources().getColor(R.color.blue_009CFB));
-
         mUrl = getIntent().getStringExtra(Constants.URL);
         mTitle = getIntent().getStringExtra(Constants.TITLE);
-        advertFlag = getIntent().getStringExtra(Constants.ADVERT_FLAG);
         if (!StringUtils.isEmpty(mTitle)) {
             mTitleNameTv.setText(mTitle);
         }
-        WebViewUtil.initWebView(myWebView, myProgressBar);
-        WebSettings settings = myWebView.getSettings();
-        settings.setGeolocationEnabled(true);
-        settings.setDomStorageEnabled(true);
-
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);// 设置js可以直接打开窗口，如window.open()，默认为false
+        webSettings.setJavaScriptEnabled(true);// 是否允许执行js，默认为false。设置true时，会提醒可能造成XSS漏洞
+        webSettings.setAppCacheEnabled(true);// 是否使用缓存
+        webSettings.setDomStorageEnabled(true);// DOM Storage
         myWebView.setWebViewClient(new WebViewClient() {
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-//                return false;
-//            }
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.startsWith("huajiao")) {
+                    return true;
+                }
                 return false;
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 myProgressBar.setVisibility(View.GONE);
-                if (mWebCloseTv.getVisibility() == View.INVISIBLE){
+                if (mWebCloseTv.getVisibility() == View.INVISIBLE) {
                     if (myWebView.canGoBack()) {
                         mWebCloseTv.setVisibility(View.VISIBLE);
                         mWebLine.setVisibility(View.VISIBLE);
@@ -102,13 +92,6 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         });
 
         myWebView.setWebChromeClient(new WebChromeClient() {
-            //配置权限（同样在WebChromeClient中实现）
-            @Override
-            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-                callback.invoke(origin, true, false);
-                super.onGeolocationPermissionsShowPrompt(origin, callback);
-            }
-
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
@@ -131,7 +114,6 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
                 super.onProgressChanged(view, newProgress);
             }
         });
-
         myWebView.loadUrl(mUrl);
     }
 
@@ -141,9 +123,6 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             if (myWebView.canGoBack()) {
                 myWebView.goBack();
             } else {
-                if (!StringUtils.isEmpty(advertFlag)){
-                    startActivity(MainActivity.class);
-                }
                 finish();
             }
         } else if (mWebCloseTv == v){//关闭
@@ -162,14 +141,16 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             if (keyCode == KeyEvent.KEYCODE_BACK && myWebView.canGoBack()) {
                 myWebView.goBack(); // goBack()表示返回WebView的上一页面
             } else {
-                if (!StringUtils.isEmpty(advertFlag)) {
-                    startActivity(MainActivity.class);
-                }
                 finish();
             }
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public void startActivity(Class activity) {
+        Intent intent = new Intent(this, activity);
+        startActivity(intent);
     }
 
     @Override
@@ -180,8 +161,4 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         super.onDestroy();
     }
 
-    public void startActivity(Class activity) {
-        Intent intent = new Intent(this, activity);
-        startActivity(intent);
-    }
 }
