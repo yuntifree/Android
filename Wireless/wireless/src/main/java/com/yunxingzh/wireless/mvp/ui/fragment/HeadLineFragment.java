@@ -20,6 +20,7 @@ import com.yunxingzh.wireless.mview.PagerSlidingTabStrip;
 import com.yunxingzh.wireless.mvp.presenter.impl.GetHeadLineMenuPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IGetHeadLineMenuView;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
@@ -148,19 +149,14 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     @Override
     public void getHeadLineMenuSuccess(MenuList menuList) {
         if (menuList != null) {
-            menuInfos = menuList.infos;
-            List<String> titleList = new ArrayList<String>();
-            MenuVo menuVo = new MenuVo();
-            menuVo.ctype = 4;
-            menuVo.title = "直播";
-            menuInfos.add(menuVo);
             int size = menuList.infos.size();
+            menuInfos = new ArrayList<MenuVo>();
             for (int i = 0; i < size; i++) {
-                int ctype = menuInfos.get(i).ctype;
+                int ctype = menuList.infos.get(i).ctype;
                 if (ctype == Constants.CTYPE_NEWS || ctype == Constants.CTYPE_VIDEO
                         || ctype == Constants.CTYPE_WEBVIEW || ctype == Constants.CTYPE_JOKE
                         || ctype == Constants.CTYPE_LIVE) {
-                    titleList.add(menuInfos.get(i).title);
+                    menuInfos.add(menuList.infos.get(i));
                 }
             }
             adapter = new MyPagerAdapter(getChildFragmentManager(), menuInfos);
@@ -189,6 +185,10 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
 
         @Override
         public CharSequence getPageTitle(int position) {
+            if (menuVos.size() <= position) {
+                LogUtils.e("headlinefragment","out of index");
+                return "";
+            }
             return menuVos.get(position).title;
         }
 
@@ -199,21 +199,25 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
 
         @Override
         public Fragment getItem(int position) {
-            int ctype = menuVos.get(position).ctype;
-            switch (ctype){
-                case Constants.CTYPE_NEWS://新闻
-                    return HeadLineNewsFragment.getInstance(menuInfos.get(position).type);
-                case Constants.CTYPE_VIDEO://视频
-                    return new HeadLineVideoFragment();
-                case Constants.CTYPE_WEBVIEW://网页
-                    return argumentsFragment("http://www.baidu.com");
-                case Constants.CTYPE_JOKE://搞笑
-                    return new HeadLineAppFragment();
-                case Constants.CTYPE_LIVE://直播
-                    return new HeadLineLiveFragment();
-                default:
-                    break;
+            if (menuVos.size() <= position) {
+                LogUtils.e("headlinefragment","out of index");
+                return null;
             }
+                int ctype = menuVos.get(position).ctype;
+                switch (ctype) {
+                    case Constants.CTYPE_NEWS://新闻
+                        return HeadLineNewsFragment.getInstance(menuInfos.get(position).type);
+                    case Constants.CTYPE_VIDEO://视频
+                        return new HeadLineVideoFragment();
+                    case Constants.CTYPE_WEBVIEW://网页
+                        return argumentsFragment("http://www.baidu.com");
+                    case Constants.CTYPE_JOKE://搞笑
+                        return new HeadLineAppFragment();
+                    case Constants.CTYPE_LIVE://直播
+                        return new HeadLineLiveFragment();
+                    default:
+                        break;
+                }
             return null;
         }
     }

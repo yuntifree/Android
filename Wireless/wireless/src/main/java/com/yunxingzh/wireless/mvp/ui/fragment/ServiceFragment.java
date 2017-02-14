@@ -163,7 +163,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
             TextView mServiceTitle = new TextView(getActivity());
             if (isAdded()) {
-                mServiceTitle.setTextColor(getResources().getColor(R.color.gray_3c3c3c));
+                mServiceTitle.setTextColor(getResources().getColor(R.color.gray_5a5a5a));
             }
             mServiceTitle.setTextSize(17);
             mServiceTitle.setGravity(Gravity.CENTER);
@@ -178,29 +178,29 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
             if (width <= 720 && height <= 1280) {
                 // line.setMinimumHeight(20);
-                mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 10, 30, 0, 20, 0, 5));
-                mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 20, 20, 0, 5));
+                mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 10, 30, 20, 20, 0, 5));
+                mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 10, 20, 0, 5));
             } else {
                 // line.setMinimumHeight(40);
-                mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 20, 70, 0, 40, 0, 10));
-                mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 40, 40, 0, 10));
+                mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 20, 70, 40, 40, 0, 10));
+                mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 20, 40, 0, 10));
             }
 
             int size = list.get(i).items.size();
             List<Service.ServiceItem> childDatas = list.get(i).items;
 
-            int num = ((size % 3) > 0) ? 1 : 0;
-            int lines = size / 3 + num;//得到行数
+            int num = ((size % 4) > 0) ? 1 : 0;
+            int lines = size / 4 + num;//得到行数
 
             mServiceItem.addView(mItemTop);
             //  mServiceItem.addView(lineSmall, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, 1, 0, 0, 0, 0));
 
             for (int j = 0; j < lines; j++) {//循环行数
                 LinearLayout childLay = new LinearLayout(getActivity());
-                for (int k = 0; k < 3; k++) {//循环子item
+                for (int k = 0; k < 4; k++) {//循环子item
                     LinearLayout itemLay = new LinearLayout(getActivity());
                     itemLay.setOrientation(LinearLayout.VERTICAL);
-                    int positon = j * 3 + k;//得到item当前position
+                    int positon = j * 4 + k;//得到item当前position
                     if (positon >= size) {//一行不足3个时填充空view
                         TextView nullView = new TextView(getActivity());
                         itemLay.addView(nullView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
@@ -212,7 +212,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                         Glide.with(getActivity()).load(imgUrl).into(img);
                         TextView views = new TextView(getActivity());
                         views.setText(title);
-                        views.setTextSize(14);
+                        views.setTextSize(12);
                         views.setGravity(Gravity.CENTER);
                         if (isAdded()) {
                             views.setTextColor(getResources().getColor(R.color.gray_5a5a5a));

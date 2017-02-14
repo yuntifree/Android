@@ -75,7 +75,7 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onPageFinished(WebView view, String url) {
+            public void onPageFinished(final WebView view, String url) {
                 myProgressBar.setVisibility(View.GONE);
                 if (mWebCloseTv.getVisibility() == View.INVISIBLE) {
                     if (myWebView.canGoBack()) {
@@ -88,6 +88,14 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
                         mWebLine.setVisibility(View.INVISIBLE);
                     }
                 }
+                view.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.loadUrl("javascript:(function() {" +
+                                "$('.js_hj_download,.recommendArea,.qrcode,.open_huajiao,.tool-bar').hide();$('.popup-dialog').remove();" +
+                                "})()");
+                    }
+                },1500);
             }
         });
 
