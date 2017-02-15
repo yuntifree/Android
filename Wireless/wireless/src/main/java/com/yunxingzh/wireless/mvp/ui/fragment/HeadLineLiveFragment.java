@@ -43,7 +43,6 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
     private boolean isFirstRefresh = true;
     private List<LiveVo> liveVos;
     private int offset;
-    private int loadCount = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
@@ -87,33 +86,18 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
         mSwipeRefreshLay.setRefreshing(false);
         if (liveList != null) {
             liveVos = liveList.list;
-           // if (liveVos != null && liveVos.size() > 0) {
-                loadCount = 0;
-                if (liveList.more == 1) {
-                    offset = liveList.offset;
-                    if (isFirstRefresh) {
-                        isFirstRefresh = false;
-                        headLineLiveAdapter.setNewData(liveVos);
-                    } else {
-                        headLineLiveAdapter.addData(liveVos);
-                    }
+            if (liveVos != null && liveList.hasmore == 1) {
+                if (isFirstRefresh) {
+                    isFirstRefresh = false;
+                    headLineLiveAdapter.setNewData(liveVos);
                 } else {
-                    // 数据全部加载完毕就调用 loadComplete
-                    headLineLiveAdapter.loadComplete();
-                    ToastUtil.showMiddle(getActivity(), R.string.no_resource);
+                    headLineLiveAdapter.addData(liveVos);
                 }
-           // } else {
-             //   if (iHeadLinePresenter != null && loadCount < 3) {
-                  //  loadCount++;
-//                    if (isFirstRefresh) {
-//                        iHeadLinePresenter.getLiveList(0);
-//                    } else {
-                  //      iHeadLinePresenter.getLiveList(offset);
-         //           }
-             //   } else {
-               //     ToastUtil.showMiddle(getActivity(), R.string.no_resource);
-              //  }
-        //    }
+            } else {
+                // 数据全部加载完毕就调用 loadComplete
+                headLineLiveAdapter.loadComplete();
+                ToastUtil.showMiddle(getActivity(), R.string.no_resource);
+            }
         } else {
             ToastUtil.showMiddle(getActivity(), R.string.re_error);
         }

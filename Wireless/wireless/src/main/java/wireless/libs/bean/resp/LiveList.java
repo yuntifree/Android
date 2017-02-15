@@ -10,7 +10,6 @@ import wireless.libs.bean.vo.LiveVo;
  */
 
 public class LiveList implements Serializable {
-    public int offset;
-    public int more;
+    public int hasmore;
     public List<LiveVo> list;
 }

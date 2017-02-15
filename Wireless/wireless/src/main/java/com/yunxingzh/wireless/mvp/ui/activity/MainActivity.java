@@ -93,9 +93,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         //小米推送服务
         //设置标签
         //MiPushClient.subscribe(MainApplication.get(), 400+"", null);
-        //int s = MainApplication.get().getUser().uid;
+        int s = MainApplication.get().getUser().uid;
         //设置别名
-      //  MiPushClient.setAlias(MainApplication.get(), s + "", null);
+        MiPushClient.setAlias(MainApplication.get(), s + "", null);
     }
 
     public void initView() {

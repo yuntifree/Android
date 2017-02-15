@@ -31,6 +31,6 @@ public interface IHeadLineModel {
      * 获取直播列表
      * @param listener
      */
-    void getLiveList(int offset, onGetLiveListListener listener);
+    void getLiveList(int seq, onGetLiveListListener listener);
 
 }

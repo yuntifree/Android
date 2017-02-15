@@ -36,7 +36,7 @@ public class Constants {
     public static final int WIRELESS = 1;//无线
     public static final int HEAD_LINE = 2;//头条
     public static final int SERVICE = 3;//服务
-    public static final int VIDEO = 4;//视频
+    public static final int VIDEO = -1;//视频
     public static final int NET_ERROR = 5;//网络不可用（无法上网）
     public static final String FRAGMENT_FLAG = "fragment_flag";//fragment flag
 

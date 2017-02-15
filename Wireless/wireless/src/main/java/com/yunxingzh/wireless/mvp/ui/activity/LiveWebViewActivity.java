@@ -88,14 +88,18 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
                         mWebLine.setVisibility(View.INVISIBLE);
                     }
                 }
+
                 view.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        view.loadUrl("javascript:(function() {" +
-                                "$('.js_hj_download,.recommendArea,.qrcode,.open_huajiao,.tool-bar').hide();$('.popup-dialog').remove();" +
-                                "})()");
+                        if (view.canGoBack()) {
+                            view.loadUrl("javascript:(function() {" +
+                                    "$('.js_hj_download,.recommendArea,.qrcode,.open_huajiao,.tool-bar').hide();" +
+                                    "$('.popup-dialog').remove();" +
+                                    "})()");
+                        }
                     }
-                },1500);
+                }, 1500);
             }
         });
 
@@ -133,7 +137,7 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
             } else {
                 finish();
             }
-        } else if (mWebCloseTv == v){//关闭
+        } else if (mWebCloseTv == v) {//关闭
             startActivity(MainActivity.class);
             if (myWebView != null) {
                 myWebView.destroy();

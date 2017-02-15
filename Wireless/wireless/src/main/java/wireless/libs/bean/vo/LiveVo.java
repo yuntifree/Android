@@ -14,4 +14,5 @@ public class LiveVo {
     public String location;
     public int watches;
     public int live;
+    public int seq;
 }
