@@ -51,9 +51,9 @@ public class HeadLinePresenterImpl implements IHeadLinePresenter,IHeadLineModel.
     }
 
     @Override
-    public void getLiveList(int offset) {
+    public void getLiveList(int seq) {
         if (iGetLiveListView != null){
-            iHeadLineModel.getLiveList(offset,this);
+            iHeadLineModel.getLiveList(seq,this);
         }
     }
 

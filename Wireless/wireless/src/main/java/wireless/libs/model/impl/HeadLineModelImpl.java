@@ -29,8 +29,8 @@ public class HeadLineModelImpl implements IHeadLineModel {
     }
 
     @Override
-    public void getLiveList(int offset, final onGetLiveListListener listener) {
-        NetWorkWarpper.getLiveList(offset, new HttpHandler<LiveList>() {
+    public void getLiveList(int seq, final onGetLiveListListener listener) {
+        NetWorkWarpper.getLiveList(seq, new HttpHandler<LiveList>() {
             @Override
             public void onSuccess(ServerTip serverTip, LiveList requestVo) {
                 listener.onGetLiveListSuccess(requestVo);

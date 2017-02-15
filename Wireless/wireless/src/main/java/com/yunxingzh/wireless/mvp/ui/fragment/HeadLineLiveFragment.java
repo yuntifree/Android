@@ -19,7 +19,6 @@ import com.yunxingzh.wireless.mvp.ui.activity.LiveWebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineLiveAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IGetLiveListView;
-import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
@@ -42,7 +41,6 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
     private HeadLineLiveAdapter headLineLiveAdapter;
     private boolean isFirstRefresh = true;
     private List<LiveVo> liveVos;
-    private int offset;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
@@ -119,8 +117,8 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
 
     @Override
     public void onLoadMoreRequested() {
-        if (iHeadLinePresenter != null) {
-            iHeadLinePresenter.getLiveList(offset);
+        if (iHeadLinePresenter != null && liveVos != null) {
+            iHeadLinePresenter.getLiveList(liveVos.get(liveVos.size() - 1).seq);
         }
     }
 

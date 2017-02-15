@@ -21,6 +21,7 @@ import com.yunxingzh.wireless.utils.StringUtils;
 
 /**
  * Created by stephen on 2017/2/14.
+ * 直播webview
  */
 
 public class LiveWebViewActivity extends BaseActivity implements View.OnClickListener {

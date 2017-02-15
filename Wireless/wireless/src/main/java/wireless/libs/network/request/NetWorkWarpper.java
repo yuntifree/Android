@@ -271,10 +271,10 @@ public class NetWorkWarpper {
     /***
      * 获取直播列表
      */
-    public static void getLiveList(int offset, HttpHandler<LiveList> httpHandler) {
-        String path = "http://web.free.wifi.360.cn/internet/huajiao?offset="+offset;
+    public static void getLiveList(int seq, HttpHandler<LiveList> httpHandler) {
+        String path = "get_live_info";
         HttpParams httpParams = new HttpParams();
-       // httpParams.add("offset", offset);
+        httpParams.add("seq", seq);
         HttpUtils.post(path, httpParams, httpHandler);
     }
 }

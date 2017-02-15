@@ -171,9 +171,8 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     @Override
     public void onLoadMoreRequested() {
-        if (newsVo != null) {
+        if (iHeadLinePresenter != null && newsVo != null) {
             iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, newsVo.get(newsVo.size() - 1).seq);
-            LogUtils.e("lsd", newsVo.get(newsVo.size() - 1).seq + "");
         }
     }
 
