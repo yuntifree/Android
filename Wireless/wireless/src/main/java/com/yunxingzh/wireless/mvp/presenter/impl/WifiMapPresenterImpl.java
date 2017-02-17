@@ -22,9 +22,9 @@ public class WifiMapPresenterImpl implements IWifiMapPresenter,IWifiMapModel.onG
     }
 
     @Override
-    public void getWifiMap(double longitude, double latitude) {
+    public void getWifiMap() {
         if (iWifiMapView != null){
-            iWifiMapModel.getWifiMap(longitude,latitude,this);
+            iWifiMapModel.getWifiMap(this);
         }
     }
 

@@ -5,5 +5,5 @@ package com.yunxingzh.wireless.mvp.presenter;
  */
 
 public interface IWifiMapPresenter extends IBasePresenter{
-    void getWifiMap(double longitude,double latitude);
+    void getWifiMap();
 }

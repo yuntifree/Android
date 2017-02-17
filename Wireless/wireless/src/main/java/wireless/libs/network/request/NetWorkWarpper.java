@@ -134,14 +134,12 @@ public class NetWorkWarpper {
     }
 
     /***
-     * 根据经纬度获取地图附近热点列表
+     * 获取地图所有热点列表
      * @param
      */
-    public static void getWifiMap(double longitude, double latitude, HttpHandler<WifiMapList> handler) {
-        String path = "get_nearby_aps";
+    public static void getWifiMap(HttpHandler<WifiMapList> handler) {
+        String path = "get_all_aps";
         HttpParams httpParams = new HttpParams();
-        httpParams.add("longitude", longitude);
-        httpParams.add("latitude", latitude);
         HttpUtils.post(path, httpParams, handler);
     }
 

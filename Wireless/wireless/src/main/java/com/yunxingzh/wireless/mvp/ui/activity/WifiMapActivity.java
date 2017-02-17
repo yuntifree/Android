@@ -140,7 +140,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             MyLocationConfiguration config = new MyLocationConfiguration(
                     MyLocationConfiguration.LocationMode.NORMAL, true, bitmap);
             baiduMap.setMyLocationConfigeration(config);
-            iWifiMapPresenter.getWifiMap(lon, lat);//获取周围热点lon,lat
+            iWifiMapPresenter.getWifiMap();//获取周围热点lon,lat
         }
     }
 
@@ -228,11 +228,11 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     @Override
     public void onMapStatusChangeFinish(MapStatus mapStatus) {
         //地图状态改变结束
-        Point centerPoint = mapStatus.targetScreen;//获取屏幕中心点坐标
-        LatLng centerLat = baiduMap.getProjection().fromScreenLocation(centerPoint);
-        if (iWifiMapPresenter != null) {
-            iWifiMapPresenter.getWifiMap(centerLat.longitude, centerLat.latitude);//获取周围热点lon,lat
-        }
+//        Point centerPoint = mapStatus.targetScreen;//获取屏幕中心点坐标
+//        LatLng centerLat = baiduMap.getProjection().fromScreenLocation(centerPoint);
+//        if (iWifiMapPresenter != null) {
+//            iWifiMapPresenter.getWifiMap(centerLat.longitude, centerLat.latitude);//获取周围热点lon,lat
+//        }
 
         if (baiduMap != null && mMarker != null) {
             showWindow(mMarker);
@@ -337,7 +337,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         //将marker所在的经纬度的信息转化成屏幕上的坐标
         LatLng ll = marker.getPosition();
         Point p = baiduMap.getProjection().toScreenLocation(ll);
-        p.y -= 90;
+        p.y -= 70;
         LatLng llInfo = baiduMap.getProjection().fromScreenLocation(p);
         mInfoWindow = new InfoWindow(markerLayout, llInfo, 0);
         //显示InfoWindow

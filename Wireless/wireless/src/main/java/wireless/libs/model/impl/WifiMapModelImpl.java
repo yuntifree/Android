@@ -13,8 +13,8 @@ import wireless.libs.network.request.NetWorkWarpper;
 public class WifiMapModelImpl implements IWifiMapModel {
 
     @Override
-    public void getWifiMap(double longitude, double latitude,final onGetWifiMapListener listener) {
-        NetWorkWarpper.getWifiMap(longitude,latitude,new HttpHandler<WifiMapList>() {
+    public void getWifiMap(final onGetWifiMapListener listener) {
+        NetWorkWarpper.getWifiMap(new HttpHandler<WifiMapList>() {
             @Override
             public void onSuccess(ServerTip serverTip, WifiMapList resquestVo) {
                 listener.onGetWifiMapSuccess(resquestVo);

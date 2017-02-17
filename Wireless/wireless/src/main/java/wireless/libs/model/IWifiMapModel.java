@@ -17,5 +17,5 @@ public interface IWifiMapModel {
      * @param
      * @param
      */
-    void getWifiMap(double longitude, double latitude, onGetWifiMapListener listener);
+    void getWifiMap(onGetWifiMapListener listener);
 }

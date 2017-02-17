@@ -150,7 +150,9 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     public void onEventMainThread(EventBusType event) {
         int index = event.getChildMsg();
         if (event.getMsg() == Constants.HEAD_LINE_NEWS_FLAG && index != -1) {//上报
-            iWirelessPresenter.clickCount(data.infos.get(index).id, CLICK_COUNT);
+            if (iWirelessPresenter != null && data != null) {
+                iWirelessPresenter.clickCount(data.infos.get(index).id, CLICK_COUNT);
+            }
         }
     }
 
