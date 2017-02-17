@@ -151,7 +151,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         int index = event.getChildMsg();
         if (event.getMsg() == Constants.HEAD_LINE_NEWS_FLAG && index != -1) {//上报
             if (iWirelessPresenter != null && data != null) {
-                iWirelessPresenter.clickCount(data.infos.get(index).id, CLICK_COUNT);
+                iWirelessPresenter.clickCount(data.infos.get(index).id, CLICK_COUNT,"");
             }
         }
     }

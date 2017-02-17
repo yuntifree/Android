@@ -107,27 +107,27 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     public void onClick(View v) {
         if (mCooperationTv == v) {//招聘
             if (iWirelessPresenter != null) {
-                iWirelessPresenter.clickCount(1, CLICK_COUNT);//上报
+                iWirelessPresenter.clickCount(1, CLICK_COUNT, "");//上报
             }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zk", Constants.TITLE, mCooperationTv.getText() + "");
         } else if (mSecondHandsTv == v) {//二手
             if (iWirelessPresenter != null) {
-                iWirelessPresenter.clickCount(2, CLICK_COUNT);
+                iWirelessPresenter.clickCount(2, CLICK_COUNT, "");
             }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zl", Constants.TITLE, mSecondHandsTv.getText() + "");
         } else if (mHousingTv == v) {//租房
             if (iWirelessPresenter != null) {
-                iWirelessPresenter.clickCount(3, CLICK_COUNT);
+                iWirelessPresenter.clickCount(3, CLICK_COUNT, "");
             }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zj", Constants.TITLE, mHousingTv.getText() + "");
         } else if (mHouseKeepingTv == v) {//家政
             if (iWirelessPresenter != null) {
-                iWirelessPresenter.clickCount(4, CLICK_COUNT);
+                iWirelessPresenter.clickCount(4, CLICK_COUNT, "");
             }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zm", Constants.TITLE, mHouseKeepingTv.getText() + "");
         } else if (mServiceMoreTv == v) {//更多
             if (iWirelessPresenter != null) {
-                iWirelessPresenter.clickCount(5, CLICK_COUNT);
+                iWirelessPresenter.clickCount(5, CLICK_COUNT, "");
             }
             startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zn", Constants.TITLE, mServiceMoreTv.getText() + "");
         } else if (mSearchTv == v) {//搜索
@@ -223,7 +223,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                             public void onClick(View v) {
                                 Service.ServiceItem dv = (Service.ServiceItem) v.getTag();
                                 if (iWirelessPresenter != null) {
-                                    iWirelessPresenter.clickCount(dv.sid, CLICK_COUNT);//上报
+                                    iWirelessPresenter.clickCount(dv.sid, CLICK_COUNT, "");//上报
                                 }
                                 startActivity(WebViewActivity.class, Constants.URL, dv.dst, Constants.TITLE, dv.title);
                             }

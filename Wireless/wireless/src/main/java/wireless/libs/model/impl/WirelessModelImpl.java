@@ -13,8 +13,8 @@ import wireless.libs.network.request.NetWorkWarpper;
 public class WirelessModelImpl implements IWirelessModel {
 
     @Override
-    public void clickCount(int id, int type, final onClickCountListener listener) {
-        NetWorkWarpper.clickCount(id,type,new HttpHandler<Object>() {
+    public void clickCount(int id, int type, String name, final onClickCountListener listener) {
+        NetWorkWarpper.clickCount(id, type, name, new HttpHandler<Object>() {
             @Override
             public void onSuccess(ServerTip serverTip, Object o) {
                 listener.onClickCountSuccess();

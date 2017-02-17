@@ -108,11 +108,12 @@ public class NetWorkWarpper {
     /***
      * 记录点击次数
      */
-    public static void clickCount(int id, int type, HttpHandler<Object> handler) {
+    public static void clickCount(int id, int type, String name, HttpHandler<Object> handler) {
         String path = "report_click";
         HttpParams httpParams = new HttpParams();
         httpParams.add("id", id);
         httpParams.add("type", type);
+        httpParams.add("name", name);
         HttpUtils.post(path, httpParams, handler);
     }
 

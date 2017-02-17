@@ -774,7 +774,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     public void onEventMainThread(EventBusType event) {
         int index = event.getChildMsg();
         if (event.getMsg() == Constants.MAIN_NEWS_FLAG && index != -1) {//上报
-            iWirelessPresenter.clickCount(mainNewsVos.get(index).id, NEWS);
+            iWirelessPresenter.clickCount(mainNewsVos.get(index).id, NEWS, "");
         }
     }
 

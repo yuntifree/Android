@@ -140,9 +140,7 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
             }
         } else if (mWebCloseTv == v) {//关闭
             startActivity(MainActivity.class);
-            if (myWebView != null) {
-                myWebView.destroy();
-            }
+            destroyWebView();
             finish();
         }
     }
@@ -168,12 +166,16 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onDestroy() {
+        destroyWebView();
+        super.onDestroy();
+    }
+
+    public void destroyWebView(){
         if (myWebView != null) {
             myWebView.removeAllViews();
             myWebView.destroy();
             myWebView = null;
         }
-        super.onDestroy();
     }
 
 }

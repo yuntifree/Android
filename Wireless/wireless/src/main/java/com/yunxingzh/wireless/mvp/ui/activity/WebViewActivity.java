@@ -148,9 +148,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             }
         } else if (mWebCloseTv == v){//关闭
             startActivity(MainActivity.class);
-            if (myWebView != null) {
-                myWebView.destroy();
-            }
+            destroyWebView();
             finish();
         }
     }
@@ -174,12 +172,16 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void onDestroy() {
+        destroyWebView();
+        super.onDestroy();
+    }
+
+    public void destroyWebView(){
         if (myWebView != null) {
             myWebView.removeAllViews();
             myWebView.destroy();
             myWebView = null;
         }
-        super.onDestroy();
     }
 
     public void startActivity(Class activity) {

@@ -14,7 +14,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
+import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
+import com.yunxingzh.wireless.mvp.presenter.impl.IWirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.LiveWebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineLiveAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
@@ -35,9 +37,12 @@ import wireless.libs.bean.vo.LiveVo;
 
 public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
+    private final static int LIVE_TYPE = 7;
+
     private RecyclerView mListRv;
     private SwipeRefreshLayout mSwipeRefreshLay;
     private IHeadLinePresenter iHeadLinePresenter;
+    private IWirelessPresenter iWirelessPresenter;
     private HeadLineLiveAdapter headLineLiveAdapter;
     private boolean isFirstRefresh = true;
     private List<LiveVo> liveVos;
@@ -65,11 +70,15 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
         headLineLiveAdapter.setEmptyView(emptyView(mListRv));
         mListRv.setAdapter(headLineLiveAdapter);
 
+        iWirelessPresenter = new IWirelessPresenterImpl(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iHeadLinePresenter.getLiveList(0);
         headLineLiveAdapter.setOnLiveItemClickListener(new HeadLineLiveAdapter.onLiveItemClickListener() {
             @Override
             public void onItemClick(LiveVo liveVo) {
+                if (iWirelessPresenter != null) {
+                    iWirelessPresenter.clickCount(0, LIVE_TYPE, "livedetail");
+                }
                 if (liveVo != null) {
                     Intent intent = new Intent(getActivity(), LiveWebViewActivity.class);
                     intent.putExtra(Constants.URL, Constants.LIVE_NUM + liveVo.live_id + "");

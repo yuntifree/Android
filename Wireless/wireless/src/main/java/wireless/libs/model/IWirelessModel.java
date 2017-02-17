@@ -24,7 +24,7 @@ public interface IWirelessModel {
      * 记录点击次数
      * @param listener
      */
-    void clickCount(int id, int type, onClickCountListener listener);
+    void clickCount(int id, int type, String name, onClickCountListener listener);
 
     /***
      * 拉下半页的信息

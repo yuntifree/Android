@@ -1,6 +1,7 @@
 package com.yunxingzh.wireless.mvp.presenter.impl;
 
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
+import com.yunxingzh.wireless.mvp.view.IGetLiveListView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
 import com.yunxingzh.wireless.mvp.view.IWirelessView;
@@ -24,11 +25,13 @@ public class IWirelessPresenterImpl implements IWirelessPresenter, IWirelessMode
     private IWirelessView iWirelessView;
     private IHeadLineView iHeadLineView;
     private IServiceView iServiceView;
+    private IGetLiveListView iGetLiveListView;
 
     public IWirelessPresenterImpl(IWirelessView view) {
         iWirelessView = view;
         iHeadLineView = null;
         iServiceView = null;
+        iGetLiveListView = null;
         iWirelessModel = new WirelessModelImpl();
         iWeatherNewsModel = new WeatherNewsModelImpl();
     }
@@ -36,6 +39,7 @@ public class IWirelessPresenterImpl implements IWirelessPresenter, IWirelessMode
     public IWirelessPresenterImpl(IHeadLineView view) {
         iWirelessView = null;
         iServiceView = null;
+        iGetLiveListView = null;
         iHeadLineView = view;
         iWirelessModel = new WirelessModelImpl();
     }
@@ -43,14 +47,23 @@ public class IWirelessPresenterImpl implements IWirelessPresenter, IWirelessMode
     public IWirelessPresenterImpl(IServiceView view) {
         iWirelessView = null;
         iHeadLineView = null;
+        iGetLiveListView = null;
         iServiceView = view;
         iWirelessModel = new WirelessModelImpl();
     }
 
+    public IWirelessPresenterImpl(IGetLiveListView view) {
+        iWirelessView = null;
+        iHeadLineView = null;
+        iServiceView = null;
+        iGetLiveListView = view;
+        iWirelessModel = new WirelessModelImpl();
+    }
+
     @Override
-    public void clickCount(int id,int type) {
+    public void clickCount(int id,int type, String name) {
         if (iWirelessView != null){
-            iWirelessModel.clickCount(id,type,this);
+            iWirelessModel.clickCount(id,type,name,this);
         }
     }
 
@@ -112,5 +125,8 @@ public class IWirelessPresenterImpl implements IWirelessPresenter, IWirelessMode
     @Override
     public void onDestroy() {
         iWirelessView = null;
+        iHeadLineView = null;
+        iGetLiveListView = null;
+        iServiceView = null;
     }
 }

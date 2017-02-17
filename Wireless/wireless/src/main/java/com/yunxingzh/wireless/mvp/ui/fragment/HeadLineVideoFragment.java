@@ -128,7 +128,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             item.play++;
         }
         headLineVideoAdapter.notifyItemChanged(position);
-        iWirelessPresenter.clickCount(item.id, CLICK_COUNT);//上报
+        iWirelessPresenter.clickCount(item.id, CLICK_COUNT, "");//上报
         startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, item.dst);
     }
 
