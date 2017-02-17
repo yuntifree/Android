@@ -174,11 +174,12 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (myWebView != null) {
+            myWebView.removeAllViews();
             myWebView.destroy();
             myWebView = null;
         }
+        super.onDestroy();
     }
 
     public void startActivity(Class activity) {

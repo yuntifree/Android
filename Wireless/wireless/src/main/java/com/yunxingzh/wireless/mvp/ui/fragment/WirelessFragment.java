@@ -145,9 +145,10 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         View view = inflater.inflate(R.layout.fragment_wireless, null);
         initView(view);
         initData();
-        // 进入主页判断下网络
-        CheckAndLogon();
-        //checkDGWifi();
+        currentAp = FWManager.getInstance().getCurrent();
+        if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid) && currentAp.ssid.equals(Constants.SSID)) {
+            CheckAndLogon();
+        }
         return view;
     }
 
@@ -364,7 +365,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             if (mDGFreeConnected) {
                 EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
             } else {
-                boolean s = wifiUtils.getWlanState();
                 if (wifiUtils.getWlanState()) {//是否打开
                     checkDGWifi();
                 } else {
@@ -702,7 +702,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             //已连上wifi
             currentAp = FWManager.getInstance().getCurrent();
             // 3. 已经连上DG-Free的情况
-            if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
+            if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid) && currentAp.ssid.equals(Constants.SSID)) {
                 CheckAndLogon();
             } else if (DGFreeAp != null) {
                 // 2. 已经连上其它WiFi，周围有DG-Free的情况，询问是否连接DG-Free
