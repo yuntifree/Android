@@ -147,6 +147,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         initData();
         // 进入主页判断下网络
         CheckAndLogon();
+        //checkDGWifi();
         return view;
     }
 
@@ -363,6 +364,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             if (mDGFreeConnected) {
                 EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
             } else {
+                boolean s = wifiUtils.getWlanState();
                 if (wifiUtils.getWlanState()) {//是否打开
                     checkDGWifi();
                 } else {
@@ -384,7 +386,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             Intent intent = new Intent();
             intent.setClass(getActivity(), ScanCodeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            getActivity().startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
+            startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
         } else if (mMainSpeedtest == v) { // wifi 测速
             startActivity(SpeedTestActivity.class, "", "", "", "");
         } else if (mMainSpiritedLay == v) {//wifi公益
@@ -524,12 +526,10 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                             Intent intent = new Intent(getActivity(), WebViewActivity.class);
                             intent.putExtra(Constants.URL, url);
                             startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//                            intent.setAction("android.intent.action.VIEW");
-//                            intent.setData();
+                        } /*else {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://"+url));
                             getActivity().startActivity(intent);
-                        }
+                        }*/
                     }
                 }
                 break;

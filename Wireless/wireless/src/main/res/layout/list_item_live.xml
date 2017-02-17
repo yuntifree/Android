@@ -63,6 +63,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.5"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:gravity="right"
             android:text="100人"
             android:textColor="@color/gray_969696"

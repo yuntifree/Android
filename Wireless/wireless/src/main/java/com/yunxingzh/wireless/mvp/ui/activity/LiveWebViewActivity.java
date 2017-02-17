@@ -170,6 +170,7 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
     protected void onDestroy() {
         if (myWebView != null) {
             myWebView.destroy();
+            myWebView = null;
         }
         super.onDestroy();
     }
