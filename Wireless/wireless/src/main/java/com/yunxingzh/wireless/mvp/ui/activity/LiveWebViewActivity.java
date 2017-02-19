@@ -137,7 +137,6 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         if (mWebCloseTv == v || mTitleReturnIv == v) {//关闭
             finish();
-            //startActivity(MainActivity.class);
         }
     }
 

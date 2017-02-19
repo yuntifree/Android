@@ -144,14 +144,15 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             if (myWebView.canGoBack()) {
                 myWebView.goBack();
             } else {
-//                if (!StringUtils.isEmpty(advertFlag)){
-//                    startActivity(MainActivity.class);
-//                }
+                if (!StringUtils.isEmpty(advertFlag)){
+                    startActivity(MainActivity.class);
+                }
                 finish();
             }
         } else if (mWebCloseTv == v){//关闭
-//            startActivity(MainActivity.class);
-//            destroyWebView();
+            if (!StringUtils.isEmpty(advertFlag)) {
+                startActivity(MainActivity.class);
+            }
             finish();
         }
     }
@@ -163,9 +164,9 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             if (keyCode == KeyEvent.KEYCODE_BACK && myWebView.canGoBack()) {
                 myWebView.goBack(); // goBack()表示返回WebView的上一页面
             } else {
-//                if (!StringUtils.isEmpty(advertFlag)) {
-//                    startActivity(MainActivity.class);
-//                }
+                if (!StringUtils.isEmpty(advertFlag)) {
+                    startActivity(MainActivity.class);
+                }
                 finish();
             }
             return true;
@@ -229,8 +230,8 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-//    public void startActivity(Class activity) {
-//        Intent intent = new Intent(this, activity);
-//        startActivity(intent);
-//    }
+    public void startActivity(Class activity) {
+        Intent intent = new Intent(this, activity);
+        startActivity(intent);
+    }
 }
