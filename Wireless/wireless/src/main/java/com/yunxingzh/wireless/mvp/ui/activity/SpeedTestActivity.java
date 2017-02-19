@@ -182,7 +182,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         * */
 
         initTimer();
-        String down_url = "http://download.weather.com.cn/3g/current/ChinaWeather_Android.apk";
+        String down_url = "http://down.360safe.com/360mse/f/360fmse_js010001.apk";
         if (!TextUtils.isEmpty(down_url)) {
             mApkUrl = down_url;
             mExecutorService.execute(new apkDownloadRunnable());
@@ -434,9 +434,9 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
 
         @Override
         public void run() {
-            if (++mRunnableCount > 10) {
-                return;
-            }
+//            if (++mRunnableCount > 10) {
+//                return;
+//            }
             if (!TextUtils.isEmpty(mUrl) && !mShutDown && NetUtil.isConnectedWifi(MainApplication.get())) {
                 InputStream is = null;
                 try {
@@ -450,12 +450,12 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
                     int count = 0;
                     byte buf[] = new byte[4096];
                     while (!mShutDown && (is.read(buf) > 0)) {
-                        if (count++ > 25) {
-                            count = 0;
-                            if (!NetUtil.isConnectedWifi(MainApplication.get())) {
-                                break;
-                            }
-                        }
+//                        if (count++ > 50) {
+//                            count = 0;
+//                            if (!NetUtil.isConnectedWifi(MainApplication.get())) {
+//                                break;
+//                            }
+//                        }
                     }
                     if (!mShutDown && NetUtil.isConnectedWifi(MainApplication.get())) {
                         new DefaultRunnable(mApkUrl).run();
