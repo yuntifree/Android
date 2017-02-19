@@ -13,11 +13,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.yunxingzh.wireless.BuildConfig;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.StringUtils;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by stephen on 2017/2/14.
@@ -132,16 +135,9 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if (mTitleReturnIv == v) {//返回
-            if (myWebView.canGoBack()) {
-                myWebView.goBack();
-            } else {
-                finish();
-            }
-        } else if (mWebCloseTv == v) {//关闭
-            startActivity(MainActivity.class);
-            destroyWebView();
+        if (mWebCloseTv == v || mTitleReturnIv == v) {//关闭
             finish();
+            //startActivity(MainActivity.class);
         }
     }
 
@@ -149,33 +145,91 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
-            if (keyCode == KeyEvent.KEYCODE_BACK && myWebView.canGoBack()) {
-                myWebView.goBack(); // goBack()表示返回WebView的上一页面
-            } else {
-                finish();
-            }
+            // 直接关闭播放器
+            finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    public void startActivity(Class activity) {
-        Intent intent = new Intent(this, activity);
-        startActivity(intent);
-    }
+//    public void startActivity(Class activity) {
+//        Intent intent = new Intent(this, activity);
+//        startActivity(intent);
+//    }
 
     @Override
     protected void onDestroy() {
-        destroyWebView();
         super.onDestroy();
+        destroyWebView();
+    }
+
+    @Override
+    protected void onResume() {
+        if (null != myWebView) {
+            myWebView.onResume();
+            WebSettings webSettings = myWebView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        if (null != myWebView) {
+            myWebView.onPause();
+            WebSettings webSettings = myWebView.getSettings();
+            webSettings.setJavaScriptEnabled(false);
+        }
+        super.onPause();
     }
 
     public void destroyWebView(){
         if (myWebView != null) {
+            myWebView.setVisibility(View.GONE);
+            releaseAllWebViewCallback();
             myWebView.removeAllViews();
             myWebView.destroy();
             myWebView = null;
         }
     }
 
+    public void releaseAllWebViewCallback() {
+        if (android.os.Build.VERSION.SDK_INT < 16) {
+            try {
+                Field field = WebView.class.getDeclaredField("mWebViewCore");
+                field = field.getType().getDeclaredField("mBrowserFrame");
+                field = field.getType().getDeclaredField("sConfigCallback");
+                field.setAccessible(true);
+                field.set(null, null);
+            } catch (NoSuchFieldException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            } catch (IllegalAccessException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            try {
+                Field sConfigCallback = Class.forName("android.webkit.BrowserFrame").getDeclaredField("sConfigCallback");
+                if (sConfigCallback != null) {
+                    sConfigCallback.setAccessible(true);
+                    sConfigCallback.set(null, null);
+                }
+            } catch (NoSuchFieldException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            } catch (ClassNotFoundException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            } catch (IllegalAccessException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

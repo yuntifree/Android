@@ -12,10 +12,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.yunxingzh.wireless.BuildConfig;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.WebViewUtil;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by stephon on 2016/11/8.
@@ -100,18 +103,72 @@ public class VideoPlayActivity extends BaseActivity {
     protected void onPause() {
         if(null != webView) {
             webView.onPause();
+            WebSettings webSettings = webView.getSettings();
+            webSettings.setJavaScriptEnabled(false);
         }
         super.onPause();
     }
 
     @Override
+    protected void onResume() {
+        if(null != webView) {
+            webView.onResume();
+            WebSettings webSettings = webView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+        }
+        super.onResume();
+    }
+
+    @Override
     protected void onDestroy() {
         if (webView != null) {
+            webView.setVisibility(View.GONE);
+            releaseAllWebViewCallback();
             webView.removeAllViews();
             webView.destroy();
             webView = null;
         }
         super.onDestroy();
+    }
+
+    public void releaseAllWebViewCallback() {
+        if (android.os.Build.VERSION.SDK_INT < 16) {
+            try {
+                Field field = WebView.class.getDeclaredField("mWebViewCore");
+                field = field.getType().getDeclaredField("mBrowserFrame");
+                field = field.getType().getDeclaredField("sConfigCallback");
+                field.setAccessible(true);
+                field.set(null, null);
+            } catch (NoSuchFieldException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            } catch (IllegalAccessException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            try {
+                Field sConfigCallback = Class.forName("android.webkit.BrowserFrame").getDeclaredField("sConfigCallback");
+                if (sConfigCallback != null) {
+                    sConfigCallback.setAccessible(true);
+                    sConfigCallback.set(null, null);
+                }
+            } catch (NoSuchFieldException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            } catch (ClassNotFoundException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            } catch (IllegalAccessException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private class JSClass extends Object {

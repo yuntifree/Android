@@ -16,12 +16,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.yunxingzh.wireless.BuildConfig;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.WebViewUtil;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by stephon on 2016/11/10.
@@ -79,10 +82,10 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 //                return false;
 //            }
 
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return false;
-            }
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                return false;
+//            }
 
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -141,14 +144,14 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             if (myWebView.canGoBack()) {
                 myWebView.goBack();
             } else {
-                if (!StringUtils.isEmpty(advertFlag)){
-                    startActivity(MainActivity.class);
-                }
+//                if (!StringUtils.isEmpty(advertFlag)){
+//                    startActivity(MainActivity.class);
+//                }
                 finish();
             }
         } else if (mWebCloseTv == v){//关闭
-            startActivity(MainActivity.class);
-            destroyWebView();
+//            startActivity(MainActivity.class);
+//            destroyWebView();
             finish();
         }
     }
@@ -160,9 +163,9 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             if (keyCode == KeyEvent.KEYCODE_BACK && myWebView.canGoBack()) {
                 myWebView.goBack(); // goBack()表示返回WebView的上一页面
             } else {
-                if (!StringUtils.isEmpty(advertFlag)) {
-                    startActivity(MainActivity.class);
-                }
+//                if (!StringUtils.isEmpty(advertFlag)) {
+//                    startActivity(MainActivity.class);
+//                }
                 finish();
             }
             return true;
@@ -176,16 +179,58 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         super.onDestroy();
     }
 
+    public void releaseAllWebViewCallback() {
+        if (android.os.Build.VERSION.SDK_INT < 16) {
+            try {
+                Field field = WebView.class.getDeclaredField("mWebViewCore");
+                field = field.getType().getDeclaredField("mBrowserFrame");
+                field = field.getType().getDeclaredField("sConfigCallback");
+                field.setAccessible(true);
+                field.set(null, null);
+            } catch (NoSuchFieldException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            } catch (IllegalAccessException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            try {
+                Field sConfigCallback = Class.forName("android.webkit.BrowserFrame").getDeclaredField("sConfigCallback");
+                if (sConfigCallback != null) {
+                    sConfigCallback.setAccessible(true);
+                    sConfigCallback.set(null, null);
+                }
+            } catch (NoSuchFieldException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            } catch (ClassNotFoundException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            } catch (IllegalAccessException e) {
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public void destroyWebView(){
         if (myWebView != null) {
+            myWebView.setVisibility(View.GONE);
+            releaseAllWebViewCallback();
             myWebView.removeAllViews();
             myWebView.destroy();
             myWebView = null;
         }
     }
 
-    public void startActivity(Class activity) {
-        Intent intent = new Intent(this, activity);
-        startActivity(intent);
-    }
+//    public void startActivity(Class activity) {
+//        Intent intent = new Intent(this, activity);
+//        startActivity(intent);
+//    }
 }

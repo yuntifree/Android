@@ -371,7 +371,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                     startActivity(WifiManagerActivity.class, "", "", "", "");
                 }
             }
-             // WifiInterface.wifiLogout(logoOutHandler, MainApplication.get().getUserName(),5000);
         } else if (mWeatherLay == v) {// 天气
             if (weatherNewsData != null) {
                 startActivity(WebViewActivity.class, Constants.URL, weatherNewsData.dst, Constants.TITLE, "东莞天气");
