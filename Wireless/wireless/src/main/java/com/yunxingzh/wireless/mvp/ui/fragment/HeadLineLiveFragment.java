@@ -8,11 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
@@ -21,8 +24,12 @@ import com.yunxingzh.wireless.mvp.ui.activity.LiveWebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineLiveAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IGetLiveListView;
+import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +42,8 @@ import wireless.libs.bean.vo.LiveVo;
  * 头条-直播
  */
 
-public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener,
+        NetErrorLayout.OnNetErrorClickListener {
 
     private final static int LIVE_TYPE = 7;
 
@@ -46,6 +54,8 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
     private HeadLineLiveAdapter headLineLiveAdapter;
     private boolean isFirstRefresh = true;
     private List<LiveVo> liveVos;
+    private LinearLayout mNetErrorLay;
+    private NetErrorLayout netErrorLayout;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
@@ -61,18 +71,27 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
         mListRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mListRv.setHasFixedSize(true);
         mListRv.addItemDecoration(new SpacesItemDecoration(4));
+        mNetErrorLay = findView(view, R.id.net_error_lay);
     }
 
     public void initData() {
         headLineLiveAdapter = new HeadLineLiveAdapter(new ArrayList<LiveVo>());
         headLineLiveAdapter.openLoadMore(Constants.PAGE_SIZE);
         headLineLiveAdapter.setOnLoadMoreListener(this);
-        headLineLiveAdapter.setEmptyView(emptyView(mListRv));
+       // headLineLiveAdapter.setEmptyView(emptyView(mListRv));
         mListRv.setAdapter(headLineLiveAdapter);
 
         iWirelessPresenter = new IWirelessPresenterImpl(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iHeadLinePresenter.getLiveList(0);
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            mSwipeRefreshLay.setVisibility(View.GONE);
+            netErrorLayout = new NetErrorLayout(getActivity());
+            netErrorLayout.setOnNetErrorClickListener(this);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+            View netErrorView = netErrorLayout.netErrorLay(0);
+            mNetErrorLay.addView(netErrorView);
+        }
         headLineLiveAdapter.setOnLiveItemClickListener(new HeadLineLiveAdapter.onLiveItemClickListener() {
             @Override
             public void onItemClick(LiveVo liveVo) {
@@ -129,6 +148,31 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
         if (iHeadLinePresenter != null && liveVos != null) {
             iHeadLinePresenter.getLiveList(liveVos.get(liveVos.size() - 1).seq);
         }
+    }
+
+    @Subscribe
+    public void onEventMainThread(EventBusType event) {
+        if (event.getMsg() == Constants.NET_ERROR) {//网络不可用（无法上网）
+            netErrorClick();
+        }
+    }
+
+    @Override
+    public void netErrorClick() {
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            ToastUtil.showMiddle(getActivity(), R.string.net_set);
+        } else {
+            mNetErrorLay.setVisibility(View.GONE);
+            mSwipeRefreshLay.setVisibility(View.VISIBLE);
+            isFirstRefresh = true;
+            iHeadLinePresenter.getLiveList(0);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
     private View emptyView(ViewGroup viewGroup) {

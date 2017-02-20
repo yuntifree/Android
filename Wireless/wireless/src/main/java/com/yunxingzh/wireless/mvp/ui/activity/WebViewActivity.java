@@ -223,7 +223,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     public void destroyWebView(){
         if (myWebView != null) {
             myWebView.setVisibility(View.GONE);
-            releaseAllWebViewCallback();
+            //releaseAllWebViewCallback();
             myWebView.removeAllViews();
             myWebView.destroy();
             myWebView = null;
