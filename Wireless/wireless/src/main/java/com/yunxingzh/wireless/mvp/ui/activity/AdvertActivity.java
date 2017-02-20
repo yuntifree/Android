@@ -34,6 +34,7 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
     private String url;
     private String imgPath;
     private String title;
+    private Bitmap img;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
         url = getIntent().getStringExtra(Constants.ADVERT_URL);
         title = SPUtils.get(this,Constants.TITLE,"");
         if (!StringUtils.isEmpty(imgPath)) {
-            Bitmap img = BitmapFactory.decodeFile(imgPath);
+            img = BitmapFactory.decodeFile(imgPath);
             mAdvertBgIv.setImageBitmap(img);
         }
         if (StringUtils.isEmpty(url)) {
@@ -103,6 +104,10 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(img != null && !img.isRecycled()){
+            img.recycle();
+            img = null;
+        }
         handler.removeCallbacks(runnable);
     }
 

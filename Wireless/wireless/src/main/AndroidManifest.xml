@@ -53,10 +53,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--autoLayout(自动适配)-->
-        <meta-data android:name="design_width" android:value="720"/>
-        <meta-data android:name="design_height" android:value="1280"/>
-
         <!--百度地图-->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

@@ -245,6 +245,10 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
     @Override
     protected void onDestroy() {
         inactivityTimer.shutdown();
+        if(scanBitmap != null && !scanBitmap.isRecycled()){
+            scanBitmap.recycle();
+            scanBitmap = null;
+        }
         super.onDestroy();
     }
 

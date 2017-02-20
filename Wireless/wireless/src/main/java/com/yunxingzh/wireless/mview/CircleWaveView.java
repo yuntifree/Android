@@ -139,6 +139,13 @@ public class CircleWaveView extends View {
         return mIsDiffuse;
     }
 
+    public void destroyBitMap() {
+        if(mBitmap != null && !mBitmap.isRecycled()){
+            mBitmap.recycle();
+            mBitmap = null;
+        }
+    }
+
     /**
      * 设置扩散圆颜色
      */

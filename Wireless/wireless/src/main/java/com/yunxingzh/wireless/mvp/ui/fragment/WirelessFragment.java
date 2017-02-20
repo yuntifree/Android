@@ -781,6 +781,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     public void onDestroy() {
         super.onDestroy();
         iWirelessPresenter.onDestroy();
+        mAnimationTv.destroyBitMap();
         FWManager.getInstance().removeWifiObserver(wifiObserver);
         EventBus.getDefault().unregister(this);//反注册EventBus
     }

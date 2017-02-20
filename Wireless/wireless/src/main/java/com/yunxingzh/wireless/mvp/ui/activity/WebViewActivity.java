@@ -180,6 +180,18 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         super.onDestroy();
     }
 
+    @Override
+    protected void onPause() {
+        myWebView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        myWebView.onResume();
+        super.onResume();
+    }
+
     public void releaseAllWebViewCallback() {
         if (android.os.Build.VERSION.SDK_INT < 16) {
             try {
@@ -223,7 +235,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     public void destroyWebView(){
         if (myWebView != null) {
             myWebView.setVisibility(View.GONE);
-            //releaseAllWebViewCallback();
+            releaseAllWebViewCallback();
             myWebView.removeAllViews();
             myWebView.destroy();
             myWebView = null;
