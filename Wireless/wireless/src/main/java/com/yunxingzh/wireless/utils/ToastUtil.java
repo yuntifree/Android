@@ -20,6 +20,9 @@ public class ToastUtil {
         if (mToast != null) {
             mToast.cancel();
         }
+        if (context == null) {
+            context = MainApplication.get().getApplicationContext();
+        }
         mToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
         mToast.setText(text);
         //mToast.setGravity(Gravity.BOTTOM, 0, 0);

@@ -41,7 +41,7 @@ public class FWManager {
         private Context mContext;
 
         public RestartServiceRunnable(Context context) {
-            mContext = context;
+            mContext = context.getApplicationContext();
         }
 
         @Override

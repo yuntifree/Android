@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
@@ -224,8 +226,24 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        Glide.get(MainApplication.get()).clearMemory();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Glide.get(MainApplication.get()).clearMemory();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
+        iHeadLinePresenter.onDestroy();
+        if (newsVo != null) {
+            newsVo.clear();
+        }
         if (EventBus.getDefault().isRegistered(getActivity())){
             EventBus.getDefault().unregister(getActivity());
         }

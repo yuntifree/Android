@@ -20,6 +20,7 @@ import com.yunxingzh.wireless.mview.PagerSlidingTabStrip;
 import com.yunxingzh.wireless.mvp.presenter.impl.GetHeadLineMenuPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IGetHeadLineMenuView;
+import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -151,11 +152,19 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         if (menuList != null) {
             int size = menuList.infos.size();
             menuInfos = new ArrayList<MenuVo>();
+            String channelName = AppUtils.getPhoneModel();
+
             for (int i = 0; i < size; i++) {
                 int ctype = menuList.infos.get(i).ctype;
                 if (ctype == Constants.CTYPE_NEWS || ctype == Constants.CTYPE_VIDEO
                         || ctype == Constants.CTYPE_WEBVIEW || ctype == Constants.CTYPE_JOKE
                         || ctype == Constants.CTYPE_LIVE) {
+                    //屏蔽小米3手机
+                    if (channelName.equals("MI 3W")) {
+                        if (ctype == Constants.CTYPE_LIVE) {
+                            continue;
+                        }
+                    }
                     menuInfos.add(menuList.infos.get(i));
                 }
             }
