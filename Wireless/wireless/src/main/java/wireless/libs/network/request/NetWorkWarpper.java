@@ -1,8 +1,6 @@
 package wireless.libs.network.request;
 
 import com.alibaba.fastjson.JSONArray;
-import com.dgwx.app.lib.bl.WifiInterface;
-import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.JsonUtils;
@@ -11,10 +9,8 @@ import com.yunxingzh.wireless.utils.StringUtils;
 import wireless.libs.bean.resp.BaseResult;
 import wireless.libs.bean.resp.LiveList;
 import wireless.libs.bean.resp.MenuList;
-import wireless.libs.bean.resp.ServerTip;
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.AutoLoginVo;
-import wireless.libs.bean.vo.StretchVo;
 import wireless.libs.bean.vo.UpdateVo;
 import wireless.libs.bean.vo.User;
 import wireless.libs.bean.resp.FontInfoList;
@@ -165,16 +161,6 @@ public class NetWorkWarpper {
         httpParams.add("password",password);
         httpParams.add("longitude",longitude);
         httpParams.add("latitude",latitude);
-        HttpUtils.post(path, httpParams, handler);
-    }
-
-    /**
-     * 获取首页活动信息
-     * @param handler
-     */
-    public static void getStretch(HttpHandler<StretchVo> handler) {
-        String path = "get_activity";
-        HttpParams httpParams = new HttpParams();
         HttpUtils.post(path, httpParams, handler);
     }
 

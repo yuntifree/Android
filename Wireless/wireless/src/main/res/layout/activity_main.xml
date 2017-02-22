@@ -57,7 +57,7 @@
             android:button="@null"
             android:drawableTop="@drawable/main_class_img_radio3_selector"
             android:gravity="center"
-            android:text="@string/service"
+            android:text="@string/find"
             android:textColor="@drawable/main_class_text_selector"
             android:textSize="12sp" />
 
@@ -70,7 +70,7 @@
              android:drawableTop="@drawable/main_class_img_radio4_selector"
              android:gravity="center"
              android:textSize="12sp"
-             android:text="@string/stretch"
+             android:text="@string/self"
              android:textColor="@drawable/main_class_text_selector" />
     </com.yunxingzh.wireless.mview.PercentRadioGroup>
 </com.zhy.android.percent.support.PercentLinearLayout>

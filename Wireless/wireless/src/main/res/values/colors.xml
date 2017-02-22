@@ -120,6 +120,8 @@
     <color name="gray_9b9b9b">#9b9b9b</color>
     <color name="gray_bebebe">#bebebe</color>
     <color name="gray_c8c8c8">#c8c8c8</color>
+    <color name="gray_aaaaaa">#aaaaaa</color>
+
 
     <color name="radio_button_selected_color">#ff33b5e5</color>
     <color name="radio_button_unselected_color">#e0e0e0</color>
@@ -183,6 +185,8 @@
     <color name="blue_4492f2">#4492f2</color>
     <color name="blue_236EC5">#236EC5</color>
     <color name="blue_68CDFF">#68CDFF</color>
+    <color name="blue_2d527c">#2d527c</color>
+
 
 
 

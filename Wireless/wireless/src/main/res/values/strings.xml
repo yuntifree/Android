@@ -16,9 +16,9 @@
 
     <string name="wireless">无线</string>
     <string name="first_news">头条</string>
-    <string name="service">服务</string>
+    <string name="find">发现</string>
     <string name="buy">抢购</string>
-    <string name="stretch">活动</string>
+    <string name="self">我</string>
     <string name="validate_code">请输入验证码</string>
     <string name="final_validate_code">请输入正确的验证码</string>
     <string name="login">开启智慧城市之旅</string>

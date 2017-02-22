@@ -2,7 +2,6 @@ package wireless.libs.model.impl;
 
 import wireless.libs.bean.resp.ServerTip;
 import wireless.libs.bean.vo.AdvertVo;
-import wireless.libs.bean.vo.StretchVo;
 import wireless.libs.bean.vo.UpdateVo;
 import wireless.libs.model.IGetAdvertModel;
 import wireless.libs.network.HttpHandler;
@@ -19,16 +18,6 @@ public class GetAdvertModelImpl implements IGetAdvertModel {
             @Override
             public void onSuccess(ServerTip serverTip, AdvertVo resquestVo) {
                 listener.onGetAdvertSuccess(resquestVo);
-            }
-        });
-    }
-
-    @Override
-    public void getStretch(final onGetStretchListener listener) {
-        NetWorkWarpper.getStretch(new HttpHandler<StretchVo>() {
-            @Override
-            public void onSuccess(ServerTip serverTip, StretchVo resquestVo) {
-                listener.onGetStretchSuccess(resquestVo);
             }
         });
     }

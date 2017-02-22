@@ -164,7 +164,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
                 TextView current = getCurrentTab(position);
                 current.setTextColor(getResources().getColor(R.color.white));
 
-                pager.setCurrentItem(position);
+                pager.setCurrentItem(position, false);//参数false为viewpager切换过程中不显示中间的界面
             }
         });
 

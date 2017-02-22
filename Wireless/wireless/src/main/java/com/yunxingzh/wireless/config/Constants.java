@@ -77,4 +77,5 @@ public class Constants {
     public static final int WIRELESS_FLAG = 1;//首页
     public static final int HEADLINE_FLAG = 2;//头条
     public static final int SERVICE_FLAG = 3;//服务
+    public static final int MINE_FLAG = 4;//我
 }

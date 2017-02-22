@@ -14,7 +14,6 @@ import android.widget.RadioGroup;
 
 import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
-import com.xiaomi.mipush.sdk.MiPushClient;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.AppConfig;
 import com.yunxingzh.wireless.config.Constants;
@@ -25,6 +24,7 @@ import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.presenter.impl.GetAdvertPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineFragment;
+import com.yunxingzh.wireless.mvp.ui.fragment.MineFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.ServiceFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.WirelessFragment;
 import com.yunxingzh.wireless.mvp.view.IGetAdvertView;
@@ -42,7 +42,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import wireless.libs.bean.vo.AdvertVo;
-import wireless.libs.bean.vo.StretchVo;
 import wireless.libs.bean.vo.UpdateVo;
 
 /***
@@ -59,12 +58,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private HeadLineFragment headlineFragment;
     private ServiceFragment serviceFragment;
     private WirelessFragment wirelessFragment;
+    private MineFragment mineFragment;
     private Fragment currentFragment;
     private FragmentManager fragmentManager;
     private long exitTime = 0;
-    private RadioButton mHeadLineRadio, mWirelessRadio, mServiceRadio, mStretchRadio;
+    private RadioButton mHeadLineRadio, mWirelessRadio, mServiceRadio, mMineRadio;
     private GetAdvertPresenterImpl getAdvertPresenter;
-    private StretchVo mStretch;
 
     private String url;
     private Bitmap drawableStream;
@@ -104,7 +103,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mHeadLineRadio = findView(R.id.head_line_radio);
         mWirelessRadio = findView(R.id.wireless_radio);
         mServiceRadio = findView(R.id.service_radio);
-        mStretchRadio = findView(R.id.stretch_radio);
+        mMineRadio = findView(R.id.stretch_radio);
     }
 
     public void initData() {
@@ -148,7 +147,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 showFragment(serviceFragment);//服务
                 break;
             case R.id.stretch_radio:
-                getAdvertPresenter.getStretch();//获取活动模块
+                if (mineFragment == null) {
+                    mineFragment = new MineFragment();
+                }
+                getStatusBarColor(R.color.blue_009CFB);
+                Constants.FRAGMENT = Constants.MINE_FLAG;
+                showFragment(mineFragment);//我
                 break;
         }
     }
@@ -209,6 +213,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 break;
             case Constants.SERVICE_FLAG:
                 mServiceRadio.setChecked(true);
+                break;
+            case Constants.MINE_FLAG:
+                mMineRadio.setChecked(true);
                 break;
             default:
                 mWirelessRadio.setChecked(true);
@@ -289,16 +296,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
 
         getAdvertPresenter.checkUpdate();//检查版本更新
-    }
-
-    @Override
-    public void getStretchSuccess(StretchVo stretchVo) {
-        if (stretchVo != null) {
-            Intent intent = new Intent(this, WebViewActivity.class);
-            intent.putExtra(Constants.TITLE, stretchVo.title);
-            intent.putExtra(Constants.URL, stretchVo.dst);
-            startActivity(intent);
-        }
     }
 
     @Override
