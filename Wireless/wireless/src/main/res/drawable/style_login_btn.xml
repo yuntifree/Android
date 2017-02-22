@@ -4,21 +4,21 @@
     <item android:state_focused="true">
         <shape>
             <solid android:color="@color/blue_0187ee" />
-            <corners android:radius="30dp" />
+            <corners android:radius="7dp" />
         </shape>
     </item>
     <!--按下时-->
     <item android:state_pressed="true">
         <shape>
             <solid android:color="@color/blue_0187ee" />
-            <corners android:radius="30dp" />
+            <corners android:radius="7dp" />
         </shape>
     </item>
     <!--默认-->
     <item>
         <shape>
             <solid android:color="@color/blue_00A0FB" />
-            <corners android:radius="30dp" />
+            <corners android:radius="7dp" />
         </shape>
     </item>
 </selector>

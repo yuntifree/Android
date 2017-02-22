@@ -472,4 +472,10 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             }
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        shutdownAll();
+    }
 }

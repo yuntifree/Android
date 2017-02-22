@@ -78,6 +78,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     private InfoWindow mInfoWindow;
     private boolean isFirst = true;
     private AlertView alertView;
+    private Marker mMarker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -239,13 +240,14 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         }
     }
 
-    private Marker mMarker;
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         baiduMap.setMyLocationEnabled(false);//关闭定位图层
-        // 在activity执行onDestroy时执行mMapView.onDestroy()
+        if (wifiMapInfo != null) {
+            wifiMapInfo.clear();
+            wifiMapInfo = null;
+        }
         mapView.onDestroy();
         mapView = null;
         locationUtils.stopMonitor();

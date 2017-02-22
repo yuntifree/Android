@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -144,6 +145,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
             //mGetValidateCodeBtn.setBackgroundResource(R.drawable.style_login_btn);
             mGetValidateCodeBtn.setText(R.string.re_get_verification_code);
             mGetValidateCodeBtn.setEnabled(true);
+            mGetValidateCodeBtn.setPadding(0,0,0,0);
             mLoPhoneEt.setEnabled(true);
         }
 
@@ -151,6 +153,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
         public void onTick(long millisUntilFinished) {//计时过程显示
             mGetValidateCodeBtn.setEnabled(false);
           //  mGetValidateCodeBtn.setBackgroundResource(R.drawable.validate_code_style);
+            mGetValidateCodeBtn.setPadding(40,0,0,0);
             mGetValidateCodeBtn.setText(millisUntilFinished / MILLISECOND + getString(R.string.second));
         }
     }
