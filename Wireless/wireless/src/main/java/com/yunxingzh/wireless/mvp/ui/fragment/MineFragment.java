@@ -16,7 +16,7 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 public class MineFragment extends BaseFragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.wifi_closed, container, false);
+        View view = inflater.inflate(R.layout.fragment_mine, container, false);
         initView(view);
         initData();
         return view;

@@ -54,7 +54,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private final static int STATUS = 0;//0 正常结束程序;1 异常关闭程序
 
     private RadioGroup main_class_group;
-    //private BuyingFragment buyingFragment;
     private HeadLineFragment headlineFragment;
     private ServiceFragment serviceFragment;
     private WirelessFragment wirelessFragment;
@@ -115,8 +114,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         currentFragment = wirelessFragment;
         fragmentManager.beginTransaction().replace(R.id.main_fragment_parent, currentFragment).commit();
         getStatusOnTimes();
-        // 拉取广告
-        getAdvertPresenter.getAdvert();
+
+        getAdvertPresenter.getAdvert();// 拉取广告
+        getAdvertPresenter.checkUpdate();//检查版本更新
     }
 
     @Override
@@ -294,8 +294,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             SPUtils.remove(MainApplication.get(), Constants.ADVERT_IMG);
             SPUtils.remove(MainApplication.get(), Constants.ADVERT_DATE);
         }
-
-        getAdvertPresenter.checkUpdate();//检查版本更新
     }
 
     @Override

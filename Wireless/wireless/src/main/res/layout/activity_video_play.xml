@@ -6,22 +6,28 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-   <include
+    <include
         android:id="@+id/title"
         layout="@layout/title_for_webview"
         android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+        android:layout_height="50dp" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
-        android:layout_width="match_parent"
         style="?android:attr/progressBarStyleHorizontal"
-        android:background="@drawable/progress_bg"
-        android:layout_height="3dp" />
-
-    <WebView
-        android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="3dp"
+        android:background="@drawable/progress_bg" />
 
+    <FrameLayout
+        android:id="@+id/over_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
 </LinearLayout>

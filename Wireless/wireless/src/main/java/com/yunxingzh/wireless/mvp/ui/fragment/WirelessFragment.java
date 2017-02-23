@@ -153,9 +153,9 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     }
 
     public void initView(View view) {
-        mTitleReturnIv = findView(view, R.id.title_return_iv);
-        mTitleReturnIv.setOnClickListener(this);
-        mTitleReturnIv.setImageResource(R.drawable.wireless_ico_setting);
+//        mTitleReturnIv = findView(view, R.id.title_return_iv);
+//        mTitleReturnIv.setOnClickListener(this);
+//        mTitleReturnIv.setImageResource(R.drawable.wireless_ico_setting);
         mTitleNameTv = findView(view, R.id.title_name_tv);
         mTitleNameTv.setVisibility(View.GONE);
         mTitleMainImg = findView(view, R.id.title_main_img);

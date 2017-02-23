@@ -37,6 +37,6 @@
         android:textSize="18sp"
         android:gravity="center"
         android:layout_marginTop="10dp"
-        android:background="@drawable/style_login_btn"
+        android:background="@drawable/wifi_closed_btn_style"
         android:text="@string/turn_on_wifi"/>
 </LinearLayout>

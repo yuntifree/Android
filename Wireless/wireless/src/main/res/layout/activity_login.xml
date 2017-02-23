@@ -45,6 +45,7 @@
         <View style="@style/divide_line_horizontal"
             android:background="@color/gray_c8c8c8"
             android:layout_width="236dp"
+            android:layout_height="0.5dp"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"/>
 
@@ -89,6 +90,7 @@
         <View style="@style/divide_line_horizontal"
             android:background="@color/gray_c8c8c8"
             android:layout_width="236dp"
+            android:layout_height="0.5dp"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"/>
 

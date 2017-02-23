@@ -156,7 +156,7 @@
     <string name="input_feed_content">请输入要反馈的内容</string>
     <string name="concect_dg_free">请稍候...正在连接东莞无限</string>
     <string name="concect_faild">亲,连接东莞无限超时哦,请重试</string>
-
+    <string name="problem">反馈问题</string>
 
 
 

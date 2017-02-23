@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="black_mask">#2b000000</color>
+    <color name="black_mask_30">#4c000000</color>
     <color name="black_mask_70">#b2000000</color>
     <color name="black_mask_80">#cc000000</color>
 

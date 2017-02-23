@@ -1,15 +1,22 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,6 +26,7 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.StringUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
 
 import java.lang.reflect.Field;
 
@@ -36,6 +44,14 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
     private String mUrl;
     private String mTitle;
     private View mWebLine;
+
+    private FrameLayout mOverFrameLay;
+    private View mLiveOverView;
+    private LinearLayout mLiveOverLay;
+    private TextView mLiveNumTv;
+    private int recLen = 3;
+    private Handler handler = new Handler();
+    private Animation animation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +71,11 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
         myWebView = findView(R.id.webView);
         myProgressBar = findView(R.id.progress_bar);
         mWebLine = findView(R.id.web_line);
+        //直播倒计时遮罩
+        mOverFrameLay = findView(R.id.over_lay);
+        mLiveOverView = LayoutInflater.from(this).inflate(R.layout.live_over_layout, null);
+        mLiveOverLay = (LinearLayout) mLiveOverView.findViewById(R.id.live_over_lay);
+        mLiveNumTv = (TextView) mLiveOverView.findViewById(R.id.live_num_tv);
     }
 
     public void initData() {
@@ -69,7 +90,11 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
         webSettings.setJavaScriptEnabled(true);// 是否允许执行js，默认为false。设置true时，会提醒可能造成XSS漏洞
         webSettings.setAppCacheEnabled(true);// 是否使用缓存
         webSettings.setDomStorageEnabled(true);// DOM Storage
+
+        animation = AnimationUtils.loadAnimation(LiveWebViewActivity.this, R.anim.live_count);
+
         myWebView.setWebViewClient(new WebViewClient() {
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith("huajiao")) {
@@ -79,7 +104,7 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
             }
 
             @Override
-            public void onPageFinished(final WebView view, String url) {
+            public void onPageFinished(WebView view, String url) {
                 myProgressBar.setVisibility(View.GONE);
                 if (mWebCloseTv.getVisibility() == View.INVISIBLE) {
                     if (myWebView.canGoBack()) {
@@ -93,17 +118,12 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
                     }
                 }
 
-                view.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (view.canGoBack()) {
-                            view.loadUrl("javascript:(function() {" +
-                                    "$('.js_hj_download,.recommendArea,.qrcode,.open_huajiao,.tool-bar').hide();" +
-                                    "$('.popup-dialog').remove();" +
-                                    "})()");
-                        }
-                    }
-                }, 1500);
+                if (view.canGoBack()) {//进入了第二个界面
+                    mLiveOverLay.setVisibility(View.VISIBLE);
+                    mLiveNumTv.startAnimation(animation);
+                    mOverFrameLay.addView(mLiveOverLay);
+                    handler.postDelayed(runnable, 1000);
+                }
             }
         });
 
@@ -119,6 +139,10 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
+                myWebView.loadUrl("javascript:(function() {" +
+                        "$('.js_hj_download,.recommendArea,.qrcode,.open_huajiao,.tool-bar').hide();" +
+                        "$('.popup-dialog').remove();" +
+                        "})()");
                 if (newProgress == 100) {//进度100
                     myProgressBar.setVisibility(View.INVISIBLE);
                 } else {
@@ -132,6 +156,20 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
         });
         myWebView.loadUrl(mUrl);
     }
+
+    public Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (recLen != 1) {
+                recLen--;
+                mLiveNumTv.startAnimation(animation);
+                mLiveNumTv.setText(recLen + "");
+                handler.postDelayed(this, 1000);
+            } else {
+                mLiveOverLay.setVisibility(View.GONE);
+            }
+        }
+    };
 
     @Override
     public void onClick(View v) {
@@ -159,6 +197,8 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mOverFrameLay.removeView(mLiveOverView);
+        mLiveNumTv.clearAnimation();
         destroyWebView();
     }
 
@@ -182,7 +222,7 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
         super.onPause();
     }
 
-    public void destroyWebView(){
+    public void destroyWebView() {
         if (myWebView != null) {
             myWebView.setVisibility(View.GONE);
             releaseAllWebViewCallback();
