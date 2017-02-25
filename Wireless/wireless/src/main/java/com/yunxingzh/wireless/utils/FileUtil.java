@@ -1,9 +1,13 @@
 package com.yunxingzh.wireless.utils;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -232,6 +236,62 @@ public class FileUtil {
 			e.printStackTrace();
 		}
 		return flag;
+    }
+
+    /**
+     * 将得到的一个Bitmap保存到SD卡上，得到一个绝对路径
+     */
+    public static String getPath(Bitmap bm) {
+        //在SD卡上创建目录
+        File tmpDir = new File(Environment.getExternalStorageDirectory() + "/wirelessHeadImg");
+        if (!tmpDir.exists()) {
+            tmpDir.mkdir();
+        }
+
+        File img = new File(tmpDir.getAbsolutePath() + "/head.png");
+        try {
+            FileOutputStream fos = new FileOutputStream(img);
+            bm.compress(Bitmap.CompressFormat.PNG, 85, fos);
+            fos.flush();
+            fos.close();
+            return img.getCanonicalPath();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /***
+     * Uri转图片路径
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static String getRealFilePath( final Context context, final Uri uri ) {
+        if ( null == uri ) return null;
+        final String scheme = uri.getScheme();
+        String data = null;
+        if ( scheme == null )
+            data = uri.getPath();
+        else if ( ContentResolver.SCHEME_FILE.equals( scheme ) ) {
+            data = uri.getPath();
+        } else if ( ContentResolver.SCHEME_CONTENT.equals( scheme ) ) {
+            Cursor cursor = context.getContentResolver().query( uri, new String[] { MediaStore.Images.ImageColumns.DATA }, null, null, null );
+            if ( null != cursor ) {
+                if ( cursor.moveToFirst() ) {
+                    int index = cursor.getColumnIndex( MediaStore.Images.ImageColumns.DATA );
+                    if ( index > -1 ) {
+                        data = cursor.getString( index );
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
     }
 
     /**

@@ -11,6 +11,8 @@ import wireless.libs.bean.resp.LiveList;
 import wireless.libs.bean.resp.MenuList;
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.AutoLoginVo;
+import wireless.libs.bean.vo.ImageTokenVo;
+import wireless.libs.bean.vo.ImageUploadVo;
 import wireless.libs.bean.vo.UpdateVo;
 import wireless.libs.bean.vo.User;
 import wireless.libs.bean.resp.FontInfoList;
@@ -260,6 +262,50 @@ public class NetWorkWarpper {
         String path = "get_live_info";
         HttpParams httpParams = new HttpParams();
         httpParams.add("seq", seq);
+        HttpUtils.post(path, httpParams, httpHandler);
+    }
+
+    /***
+     * 获取头像（图片）上传的token
+     */
+    public static ImageTokenVo getImageToken() {
+        String path = "get_image_token";
+        HttpParams httpParams = new HttpParams();
+        String respBodyStr = HttpUtils.postSync(path, httpParams);
+        if (respBodyStr != null) {
+            try {
+                BaseResult resp = JsonUtils.parseObject(respBodyStr, BaseResult.class);
+                if (resp != null) {
+                    if (resp.errno() == ErrorType.E_OK) {
+                        //请求成功
+                        //后台没有返回data类型
+                        if (resp.data == null) {
+                            //
+                        } else {
+                            ImageTokenVo data = JsonUtils.parseObject(resp.data, ImageTokenVo.class);
+                            if (data != null) {
+                                return data;
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        return null;
+    }
+
+    /***
+     * 申请上传头像（图片）
+     *  "size":xxxx,  //图片大小
+        "format":"xxx" //图片格式(png,jpg,gif之类)
+     * */
+    public static void applyImageUpload(int size, String format, HttpHandler<ImageUploadVo> httpHandler) {
+        String path = "apply_image_upload";
+        HttpParams httpParams = new HttpParams();
+        httpParams.add("size", size);
+        httpParams.add("format", format);
         HttpUtils.post(path, httpParams, httpHandler);
     }
 }

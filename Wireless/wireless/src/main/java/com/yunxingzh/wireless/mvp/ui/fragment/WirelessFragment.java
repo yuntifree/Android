@@ -153,7 +153,8 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     }
 
     public void initView(View view) {
-//        mTitleReturnIv = findView(view, R.id.title_return_iv);
+        mTitleReturnIv = findView(view, R.id.title_return_iv);
+        mTitleReturnIv.setVisibility(View.INVISIBLE);
 //        mTitleReturnIv.setOnClickListener(this);
 //        mTitleReturnIv.setImageResource(R.drawable.wireless_ico_setting);
         mTitleNameTv = findView(view, R.id.title_name_tv);
@@ -566,7 +567,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                         updateConnectState(true);
                         break;
                     case Constants.NEED_VALIDATE://2：须要认证的网络
-                        if (iWirelessPresenter != null) {
+                        if (iWirelessPresenter != null && isAdded()) {
                             String wlanacname = SPUtils.get(getActivity(), "wlanacname", "");
                             String wlanuserip = SPUtils.get(getActivity(), "wlanuserip", "");
                             String wlanacip = SPUtils.get(getActivity(), "wlanacip", "");

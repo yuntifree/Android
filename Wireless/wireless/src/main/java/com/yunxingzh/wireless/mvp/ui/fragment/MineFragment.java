@@ -1,19 +1,76 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
+import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.alibaba.sdk.android.oss.ClientConfiguration;
+import com.alibaba.sdk.android.oss.ClientException;
+import com.alibaba.sdk.android.oss.OSS;
+import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
+import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
+import com.alibaba.sdk.android.oss.common.OSSLog;
+import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSFederationCredentialProvider;
+import com.alibaba.sdk.android.oss.common.auth.OSSFederationToken;
+import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
+import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.MainApplication;
+import com.yunxingzh.wireless.mview.alertdialog.AlertView;
+import com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener;
+import com.yunxingzh.wireless.mvp.presenter.IMinePresenter;
+import com.yunxingzh.wireless.mvp.presenter.impl.MinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
+import com.yunxingzh.wireless.mvp.view.IMineView;
+import com.yunxingzh.wireless.utils.BitmapUtils;
+import com.yunxingzh.wireless.utils.FileUtil;
+import com.yunxingzh.wireless.utils.StringUtils;
+import com.yunxingzh.wireless.utils.ToastUtil;
+
+import java.io.File;
+import java.io.IOException;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import wireless.libs.bean.vo.ImageTokenVo;
+import wireless.libs.bean.vo.ImageUploadVo;
+import wireless.libs.network.request.NetWorkWarpper;
 
 /**
  * Created by stephen on 2017/2/22.
  * 我
  */
 
-public class MineFragment extends BaseFragment {
+public class MineFragment extends BaseFragment implements IMineView, View.OnClickListener, OnItemClickListener {
+
+    private static final String endpoint = "http://oss-cn-shenzhen.aliyuncs.com";
+
+    private static final int SELECT_IMG = 0;//相册
+    private static final int CUT_IMG = 1;//裁剪
+
+    private ImageView mTitleReturnIv;
+    private TextView mTitleNameTv;
+    private CircleImageView mMineHeadIv;
+    private IMinePresenter iMinePresenter;
+
+    private String filePath;//相册选择的图片路径
+    private ImageTokenVo imageTokenVo;
+    private OSS oss;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
@@ -23,10 +80,138 @@ public class MineFragment extends BaseFragment {
     }
 
     public void initView(View view) {
-
+        mTitleReturnIv = findView(view, R.id.title_return_iv);
+        mTitleReturnIv.setVisibility(View.INVISIBLE);
+        mTitleNameTv = findView(view, R.id.title_name_tv);
+        mTitleNameTv.setText("我");
+        mMineHeadIv = findView(view, R.id.mine_head_iv);
+        mMineHeadIv.setOnClickListener(this);
     }
 
     public void initData() {
+        iMinePresenter = new MinePresenterImpl(this);
+    }
 
+    private synchronized OSS getOSSInstance() {
+        if (oss == null) {
+            OSSCredentialProvider credentialProvider = new OSSFederationCredentialProvider() {
+                @Override
+                public OSSFederationToken getFederationToken() {
+                    imageTokenVo = NetWorkWarpper.getImageToken();
+                    if (imageTokenVo != null) {
+                        OSSFederationToken ossFederationToken = new OSSFederationToken();
+                        ossFederationToken.setTempAk(imageTokenVo.accesskeyid);
+                        ossFederationToken.setTempSk(imageTokenVo.accesskeysecret);
+                        ossFederationToken.setSecurityToken(imageTokenVo.securitytoken);
+                        ossFederationToken.setExpirationInGMTFormat(imageTokenVo.expiration);
+                        return ossFederationToken;
+                    }
+                    return null;
+                }
+            };
+            ClientConfiguration conf = new ClientConfiguration();
+            conf.setConnectionTimeout(15 * 1000); // 连接超时，默认15秒
+            conf.setSocketTimeout(15 * 1000); // socket超时，默认15秒
+            conf.setMaxConcurrentRequest(5); // 最大并发请求书，默认5个
+            conf.setMaxErrorRetry(2); // 失败后最大重试次数，默认2次
+            OSSLog.enableLog();
+            oss = new OSSClient(MainApplication.get().getApplicationContext(), endpoint, credentialProvider, conf);
+        }
+        return oss;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mMineHeadIv == v) {
+            new AlertView("上传头像", null, "取消", null,
+                    new String[]{"从相册中选择"},
+                    getActivity(), AlertView.Style.ActionSheet, this).show();
+        }
+    }
+
+    @Override
+    public void onItemClick(Object o, int position) {
+        if (position != AlertView.CANCELPOSITION) {
+            //打开相册
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, SELECT_IMG);
+            return;
+        }
+    }
+
+    @Override
+    public void applyImageUploadSuccess(ImageUploadVo imageUploadVo) {
+
+        OSS mOss = getOSSInstance();//初始化OSSClient
+
+        if (imageUploadVo != null && !StringUtils.isEmpty(filePath)) {
+            // 构造上传请求
+            PutObjectRequest put = new PutObjectRequest(imageUploadVo.bucket, imageUploadVo.name, filePath);
+
+            OSSAsyncTask task = mOss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+                @Override
+                public void onSuccess(PutObjectRequest request, PutObjectResult result) {
+                    Log.d("PutObject", "UploadSuccess");
+                    Log.d("ETag", result.getETag());
+                    Log.d("RequestId", result.getRequestId());
+                }
+
+                @Override
+                public void onFailure(PutObjectRequest request, ClientException clientExcepion, ServiceException serviceException) {
+                    // 请求异常
+                    if (clientExcepion != null) {
+                        // 本地异常如网络异常等
+                        clientExcepion.printStackTrace();
+                    }
+                    if (serviceException != null) {
+                        // 服务异常
+                        Log.e("ErrorCode", serviceException.getErrorCode());
+                        Log.e("RequestId", serviceException.getRequestId());
+                        Log.e("HostId", serviceException.getHostId());
+                        Log.e("RawMessage", serviceException.getRawMessage());
+                        ToastUtil.showMiddle(getActivity(), "上传失败");
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            Bitmap bmap = null;
+            switch (requestCode) {
+                case SELECT_IMG://相册选择图片
+                    Uri originalUri = data.getData();
+                    cropImg(originalUri);
+                    break;
+                case CUT_IMG://裁剪
+                    // 拿到剪切数据
+                    bmap = data.getParcelableExtra("data");
+                    filePath = FileUtil.getPath(bmap);//保存裁剪后的图片并得到绝对路径
+
+                    Bitmap compBitmap = BitmapUtils.small(bmap);//压缩图片
+
+                    String lastName = BitmapUtils.getImgLastName(filePath);//获取图片后缀名
+                    int size = compBitmap.getRowBytes() * compBitmap.getHeight();
+
+                    iMinePresenter.applyImageUpload(size, lastName);
+                    break;
+            }
+        }
+    }
+
+    public void cropImg(Uri originalUri) {
+        Intent intent = new Intent();
+        intent.setAction("com.android.camera.action.CROP");
+        intent.setDataAndType(originalUri, "image/*");// mUri是已经选择的图片Uri
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);// 裁剪框比例
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 150);// 输出图片大小
+        intent.putExtra("outputY", 150);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, CUT_IMG);
     }
 }

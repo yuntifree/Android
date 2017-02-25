@@ -83,6 +83,22 @@ public class BitmapUtils {
         return resizeBmp;
     }
 
+    /**
+     * 获取图片后缀名
+     */
+    public static String getImgLastName(String path) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+        String type = options.outMimeType;
+        if (TextUtils.isEmpty(type)) {
+            type = ".png";
+        } else {
+            type = type.substring(6, type.length());
+        }
+        return type;
+    }
+
 
     /**
      * 对图片进行镜像处理
