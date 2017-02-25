@@ -3,7 +3,6 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,8 +14,6 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.view.IFeedBackView;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
-
-import wireless.libs.bean.vo.AutoLoginVo;
 
 /**
  * Created by stephen on 2016/12/23.

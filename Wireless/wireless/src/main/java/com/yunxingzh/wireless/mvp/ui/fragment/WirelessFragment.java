@@ -408,7 +408,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         } else if (mFontBuyingTv == v) { //抢购
 
         } else if (mTitleReturnIv == v) {
-            startActivity(SetActivity.class, "", "", "", "");
+           // startActivity(SetActivity.class, "", "", "", "");
         } else if (mMachineErrorIv == v) {//不可抗力异常关闭
             mMachineErrorLay.setVisibility(View.GONE);
         } else if (mMachineErrorLay == v) {

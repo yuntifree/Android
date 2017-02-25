@@ -30,7 +30,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView mTitleReturnIv;
     private TextView mTitleNameTv, mSetCacheSizeTv, mSetUseTv, mSetVersionTv;
-    private LinearLayout mSetCleanLay, mSetIdeaLay, mSetAboutLay;
+    private LinearLayout mSetCleanLay, mSetAboutLay;
     private ACProgressFlower acProgressPie;
 
     @Override
@@ -50,8 +50,6 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
         mSetCacheSizeTv = findView(R.id.set_cache_size_tv);
         mSetCleanLay = findView(R.id.set_clean_lay);
         mSetCleanLay.setOnClickListener(this);
-        mSetIdeaLay = findView(R.id.set_idea_lay);
-        mSetIdeaLay.setOnClickListener(this);
         mSetAboutLay = findView(R.id.set_about_lay);
         mSetAboutLay.setOnClickListener(this);
         mSetUseTv = findView(R.id.set_use_tv);
@@ -95,8 +93,6 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
                     }
                 }).start();
             }
-        } else if (mSetIdeaLay == v) {//意见反馈
-            startActivity(FeedBackActivity.class, "", "");
         } else if (mSetAboutLay == v) {//关于我们
             startActivity(WebViewActivity.class, "关于我们", Constants.ABOUT_US);
         } else if (mSetUseTv == v) {//用户协议

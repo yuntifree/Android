@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.sdk.android.oss.ClientConfiguration;
@@ -30,12 +31,16 @@ import com.alibaba.sdk.android.oss.common.auth.OSSFederationToken;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
+import com.bumptech.glide.Glide;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener;
 import com.yunxingzh.wireless.mvp.presenter.IMinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.MinePresenterImpl;
+import com.yunxingzh.wireless.mvp.ui.activity.FeedBackActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.NickNameActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.SetActivity;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IMineView;
 import com.yunxingzh.wireless.utils.BitmapUtils;
@@ -49,6 +54,7 @@ import java.io.IOException;
 import de.hdodenhof.circleimageview.CircleImageView;
 import wireless.libs.bean.vo.ImageTokenVo;
 import wireless.libs.bean.vo.ImageUploadVo;
+import wireless.libs.bean.vo.UserInfoVo;
 import wireless.libs.network.request.NetWorkWarpper;
 
 /**
@@ -64,9 +70,10 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     private static final int CUT_IMG = 1;//裁剪
 
     private ImageView mTitleReturnIv;
-    private TextView mTitleNameTv;
+    private TextView mTitleNameTv,mMineNameTv,mMineCountTv,mMineMoneyTv;
     private CircleImageView mMineHeadIv;
     private IMinePresenter iMinePresenter;
+    private LinearLayout mMineFeedBackLay,mMineSetLay;
 
     private String filePath;//相册选择的图片路径
     private ImageTokenVo imageTokenVo;
@@ -86,10 +93,19 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
         mTitleNameTv.setText("我");
         mMineHeadIv = findView(view, R.id.mine_head_iv);
         mMineHeadIv.setOnClickListener(this);
+        mMineFeedBackLay = findView(view, R.id.mine_feed_back_lay);
+        mMineFeedBackLay.setOnClickListener(this);
+        mMineSetLay = findView(view, R.id.mine_set_lay);
+        mMineSetLay.setOnClickListener(this);
+        mMineNameTv = findView(view, R.id.mine_name_tv);
+        mMineNameTv.setOnClickListener(this);
+        mMineCountTv = findView(view, R.id.mine_count_tv);
+        mMineMoneyTv = findView(view, R.id.mine_money_tv);
     }
 
     public void initData() {
         iMinePresenter = new MinePresenterImpl(this);
+        iMinePresenter.getUserInfo();
     }
 
     private synchronized OSS getOSSInstance() {
@@ -126,6 +142,22 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
             new AlertView("上传头像", null, "取消", null,
                     new String[]{"从相册中选择"},
                     getActivity(), AlertView.Style.ActionSheet, this).show();
+        } else if (mMineFeedBackLay == v) {//反馈问题
+            startActivity(FeedBackActivity.class);
+        } else if (mMineSetLay == v) {//设置
+            startActivity(SetActivity.class);
+        } else if (mMineNameTv == v) {//修改昵称
+            startActivity(NickNameActivity.class);
+        }
+    }
+
+    @Override
+    public void getUserInfoSuccess(UserInfoVo userInfoVo) {
+        if (userInfoVo != null) {
+            mMineNameTv.setText(userInfoVo.nickname);
+            Glide.with(getActivity()).load(userInfoVo.headurl).placeholder(R.drawable.my_ico_pic).into(mMineHeadIv);
+            mMineCountTv.setText(mMineCountTv.getText().toString() + userInfoVo.total + "次，");
+            mMineMoneyTv.setText(mMineMoneyTv.getText().toString() + userInfoVo.save + "元");
         }
     }
 
@@ -213,5 +245,10 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
         intent.putExtra("outputY", 150);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, CUT_IMG);
+    }
+
+    public void startActivity(Class activity) {
+        Intent intent = new Intent(getActivity(), activity);
+        startActivity(intent);
     }
 }

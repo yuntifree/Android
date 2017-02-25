@@ -1,50 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_f0f0f0"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:background="@color/gray_f0f0f0">
 
-    <include
-        layout="@layout/title_public"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
+    <include layout="@layout/title_public"/>
 
-    <EditText
-        android:id="@+id/feed_context_et"
-        android:layout_width="match_parent"
-        android:layout_height="168dp"
-        android:layout_gravity="center|top"
-        android:layout_marginLeft="15dp"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/refresh"
+        android:gravity="center"
+        android:layout_gravity="right"
+        android:drawablePadding="10dp"
+        android:textSize="14sp"
+        android:textColor="@color/blue_009CFB"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/border_feed_phone"
-        android:gravity="top"
-        android:hint="@string/hint"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray_b4b4b4"
-        android:textSize="14sp" />
+        android:text="换一个试试"
+        android:id="@+id/textView2" />
 
-    <EditText
-        android:id="@+id/feed_phone_et"
+    <com.yunxingzh.wireless.mview.ClearEditText
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_gravity="center"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/border_feed_phone"
-        android:hint="@string/input_phone"
-        android:inputType="number"
+        android:hint="我我我"
         android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:textColor="@color/black"
         android:textColorHint="@color/gray_b4b4b4"
         android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/feed_commit_tv"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
@@ -53,7 +46,7 @@
         android:gravity="center"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:text="@string/commit"
+        android:text="@string/query"
         android:textColor="@color/white" />
 
 </LinearLayout>

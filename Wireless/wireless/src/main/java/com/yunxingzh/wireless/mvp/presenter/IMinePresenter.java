@@ -6,4 +6,5 @@ package com.yunxingzh.wireless.mvp.presenter;
 
 public interface IMinePresenter extends IBasePresenter {
     void applyImageUpload(int size, String format);
+    void getUserInfo();
 }

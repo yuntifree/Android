@@ -23,22 +23,23 @@
                 android:id="@+id/mine_head_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/my_ico_pic_xh" />
+                android:src="@drawable/my_ico_pic" />
 
             <TextView
                 android:id="@+id/mine_name_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="37dp"
                 android:layout_marginTop="5dp"
-                android:drawableBottom="@drawable/ico_write_xh"
+                android:drawableBottom="@drawable/ico_write"
                 android:drawablePadding="5dp"
+                android:maxLines="1"
                 android:text="发发发"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
+                android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
                 android:background="@color/black_mask_30"
                 android:gravity="center|bottom"
@@ -86,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/my_ico_problem_xh"
+                android:drawableLeft="@drawable/my_ico_problem"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
@@ -119,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/my_ico_set_xh"
+                android:drawableLeft="@drawable/my_ico_set"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"

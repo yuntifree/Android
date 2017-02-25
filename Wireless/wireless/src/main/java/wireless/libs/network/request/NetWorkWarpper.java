@@ -21,6 +21,7 @@ import wireless.libs.bean.resp.ServiceList;
 import wireless.libs.bean.resp.WeatherNewsList;
 import wireless.libs.bean.resp.WifiList;
 import wireless.libs.bean.resp.WifiMapList;
+import wireless.libs.bean.vo.UserInfoVo;
 import wireless.libs.network.ErrorType;
 import wireless.libs.network.HttpHandler;
 import wireless.libs.network.HttpParams;
@@ -306,6 +307,17 @@ public class NetWorkWarpper {
         HttpParams httpParams = new HttpParams();
         httpParams.add("size", size);
         httpParams.add("format", format);
+        HttpUtils.post(path, httpParams, httpHandler);
+    }
+
+    /***
+     * 获取我（个人中心）用户信息
+     *
+     * */
+    public static void getUserInfo(int tuid, HttpHandler<UserInfoVo> httpHandler) {
+        String path = "get_user_info";
+        HttpParams httpParams = new HttpParams();
+        httpParams.add("tuid", tuid);
         HttpUtils.post(path, httpParams, httpHandler);
     }
 }

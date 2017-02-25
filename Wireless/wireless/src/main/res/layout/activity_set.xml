@@ -79,31 +79,6 @@
             android:background="@color/gray_e7e7e7"/>
 
         <LinearLayout
-            android:id="@+id/set_idea_lay"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/feed_back"
-                android:textColor="@color/gray_282828"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/set_ico_next" />
-
-        </LinearLayout>
-
-        <View style="@style/divide_line_horizontal"
-            android:background="@color/gray_e7e7e7"/>
-
-        <LinearLayout
             android:id="@+id/set_about_lay"
             android:layout_width="match_parent"
             android:layout_height="55dp"
