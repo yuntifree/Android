@@ -38,6 +38,7 @@ import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener;
 import com.yunxingzh.wireless.mvp.presenter.IMinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.MinePresenterImpl;
+import com.yunxingzh.wireless.mvp.ui.activity.DefaultHeadImgActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.FeedBackActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.NickNameActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.SetActivity;
@@ -68,12 +69,13 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
 
     private static final int SELECT_IMG = 0;//相册
     private static final int CUT_IMG = 1;//裁剪
+    private static final int HEAD_IMG_URL = 10;//选择默认头像requestCode
 
     private ImageView mTitleReturnIv;
-    private TextView mTitleNameTv,mMineNameTv,mMineCountTv,mMineMoneyTv;
+    private TextView mTitleNameTv, mMineNameTv, mMineCountTv, mMineMoneyTv;
     private CircleImageView mMineHeadIv;
     private IMinePresenter iMinePresenter;
-    private LinearLayout mMineFeedBackLay,mMineSetLay;
+    private LinearLayout mMineFeedBackLay, mMineSetLay;
 
     private String filePath;//相册选择的图片路径
     private ImageTokenVo imageTokenVo;
@@ -140,7 +142,7 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     public void onClick(View v) {
         if (mMineHeadIv == v) {
             new AlertView("上传头像", null, "取消", null,
-                    new String[]{"从相册中选择"},
+                    new String[]{"从相册中选择", "选择默认头像"},
                     getActivity(), AlertView.Style.ActionSheet, this).show();
         } else if (mMineFeedBackLay == v) {//反馈问题
             startActivity(FeedBackActivity.class);
@@ -163,11 +165,16 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
 
     @Override
     public void onItemClick(Object o, int position) {
-        if (position != AlertView.CANCELPOSITION) {
-            //打开相册
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, SELECT_IMG);
-            return;
+        switch (position) {
+            case SELECT_IMG://从相册选择
+                //打开相册
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, SELECT_IMG);
+                break;
+            case CUT_IMG://选择默认头像
+                Intent headIntent = new Intent(getActivity(), DefaultHeadImgActivity.class);
+                startActivityForResult(headIntent, HEAD_IMG_URL);
+                break;
         }
     }
 
@@ -229,6 +236,12 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
                     int size = compBitmap.getRowBytes() * compBitmap.getHeight();
 
                     iMinePresenter.applyImageUpload(size, lastName);
+                    break;
+                case HEAD_IMG_URL://选择默认头像
+                    String headUrl = data.getExtras().getString("headUrl");
+                    if (!StringUtils.isEmpty(headUrl)) {
+                        Glide.with(getActivity()).load(headUrl).into(mMineHeadIv);
+                    }
                     break;
             }
         }

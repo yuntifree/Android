@@ -158,7 +158,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
                 int ctype = menuList.infos.get(i).ctype;
                 if (ctype == Constants.CTYPE_NEWS || ctype == Constants.CTYPE_VIDEO
                         || ctype == Constants.CTYPE_WEBVIEW || ctype == Constants.CTYPE_JOKE
-                        || ctype == Constants.CTYPE_LIVE) {
+                        || ctype == Constants.CTYPE_LIVE || ctype == Constants.CTYPE_EPISODE) {
                     //屏蔽小米3手机
                     if (channelName.equals("MI 3W")) {
                         if (ctype == Constants.CTYPE_LIVE) {
@@ -224,6 +224,8 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
                         return new HeadLineAppFragment();
                     case Constants.CTYPE_LIVE://直播
                         return new HeadLineLiveFragment();
+                    case Constants.CTYPE_EPISODE://段子
+                        return new EpisodeFrament();
                     default:
                         break;
                 }

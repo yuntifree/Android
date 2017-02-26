@@ -21,17 +21,17 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/mine_head_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
                 android:src="@drawable/my_ico_pic" />
 
             <TextView
                 android:id="@+id/mine_name_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="37dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="5dp"
                 android:drawableBottom="@drawable/ico_write"
-                android:drawablePadding="5dp"
+                android:drawablePadding="3dp"
                 android:maxLines="1"
                 android:text="发发发"
                 android:textColor="@color/white"

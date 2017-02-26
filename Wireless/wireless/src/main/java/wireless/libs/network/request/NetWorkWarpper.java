@@ -7,6 +7,7 @@ import com.yunxingzh.wireless.utils.JsonUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.resp.BaseResult;
+import wireless.libs.bean.resp.DefHeadList;
 import wireless.libs.bean.resp.LiveList;
 import wireless.libs.bean.resp.MenuList;
 import wireless.libs.bean.vo.AdvertVo;
@@ -307,6 +308,16 @@ public class NetWorkWarpper {
         HttpParams httpParams = new HttpParams();
         httpParams.add("size", size);
         httpParams.add("format", format);
+        HttpUtils.post(path, httpParams, httpHandler);
+    }
+
+    /***
+     * 获取用户默认头像
+     *
+     * */
+    public static void getDefHead(HttpHandler<DefHeadList> httpHandler) {
+        String path = "get_def_head";
+        HttpParams httpParams = new HttpParams();
         HttpUtils.post(path, httpParams, httpHandler);
     }
 

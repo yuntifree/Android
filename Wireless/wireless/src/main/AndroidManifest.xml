@@ -150,6 +150,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemes"/>
 
+        <activity
+            android:name=".mvp.ui.activity.DefaultHeadImgActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemes"/>
+
 
 
         <!--定位所需服务-->
