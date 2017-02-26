@@ -6,4 +6,5 @@ package com.yunxingzh.wireless.mvp.presenter;
 
 public interface IServicePresenter extends IBasePresenter{
     void getService();
+    void getFind();
 }

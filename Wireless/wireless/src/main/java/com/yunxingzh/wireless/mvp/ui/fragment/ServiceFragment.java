@@ -33,6 +33,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
+import wireless.libs.bean.resp.FindList;
 import wireless.libs.bean.resp.ServiceList;
 import wireless.libs.bean.vo.Service;
 
@@ -88,6 +89,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             netErrorState();
         }
         iServicePresenter.getService();
+       //iServicePresenter.getFind();
     }
 
     @Subscribe
@@ -258,6 +260,11 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 //            }
             //  mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
         }
+    }
+
+    @Override
+    public void getFindSuccess(FindList findList) {
+
     }
 
     public void startActivity(Class activity, String key, String value, String titleKey, String titleValue) {

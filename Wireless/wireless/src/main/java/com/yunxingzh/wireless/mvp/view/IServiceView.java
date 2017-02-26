@@ -1,5 +1,6 @@
 package com.yunxingzh.wireless.mvp.view;
 
+import wireless.libs.bean.resp.FindList;
 import wireless.libs.bean.resp.ServiceList;
 
 /**
@@ -8,4 +9,5 @@ import wireless.libs.bean.resp.ServiceList;
 
 public interface IServiceView extends IBaseView{
     void getServiceListSuccess(ServiceList services);
+    void getFindSuccess(FindList findList);
 }

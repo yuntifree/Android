@@ -1,5 +1,6 @@
 package wireless.libs.model.impl;
 
+import wireless.libs.bean.resp.FindList;
 import wireless.libs.bean.resp.ServerTip;
 import wireless.libs.bean.resp.ServiceList;
 import wireless.libs.model.IServiceModel;
@@ -18,6 +19,16 @@ public class ServiceModelImpl implements IServiceModel{
             @Override
             public void onSuccess(ServerTip serverTip, ServiceList serviceList) {
                 listListener.onGetServiceListSuccess(serviceList);
+            }
+        });
+    }
+
+    @Override
+    public void getFind(final onGetFindListener listListener) {
+        NetWorkWarpper.getFind(new HttpHandler<FindList>() {
+            @Override
+            public void onSuccess(ServerTip serverTip, FindList findList) {
+                listListener.onGetFindSuccess(findList);
             }
         });
     }

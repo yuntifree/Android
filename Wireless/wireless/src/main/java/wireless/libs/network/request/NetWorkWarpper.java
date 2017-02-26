@@ -8,6 +8,7 @@ import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.resp.BaseResult;
 import wireless.libs.bean.resp.DefHeadList;
+import wireless.libs.bean.resp.FindList;
 import wireless.libs.bean.resp.JokeList;
 import wireless.libs.bean.resp.LiveList;
 import wireless.libs.bean.resp.MenuList;
@@ -338,6 +339,15 @@ public class NetWorkWarpper {
         String path = "get_jokes";
         HttpParams httpParams = new HttpParams();
         httpParams.add("seq", seq);
+        HttpUtils.post(path, httpParams, httpHandler);
+    }
+
+    /***
+     * 发现
+     * */
+    public static void getFind(HttpHandler<FindList> httpHandler) {
+        String path = "get_discovery";
+        HttpParams httpParams = new HttpParams();
         HttpUtils.post(path, httpParams, httpHandler);
     }
 

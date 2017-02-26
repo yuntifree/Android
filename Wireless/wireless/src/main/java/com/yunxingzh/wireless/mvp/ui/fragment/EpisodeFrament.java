@@ -53,7 +53,7 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
         mSwipeRefreshLay.setOnRefreshListener(this);
         mListRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         mListRv.setHasFixedSize(true);
-        mListRv.addItemDecoration(new SpacesItemDecoration(20));
+        mListRv.addItemDecoration(new SpacesItemDecoration(30));
     }
 
     public void initData() {

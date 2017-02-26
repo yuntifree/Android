@@ -19,6 +19,8 @@ import wireless.libs.bean.resp.JokeList;
 
 public class EpisodeAdapter extends BaseQuickAdapter<JokeList.JokeVo> {
 
+    private boolean isClick = true;
+
     public EpisodeAdapter(List<JokeList.JokeVo> data) {
         super(R.layout.list_item_episode, data);
     }
@@ -31,18 +33,42 @@ public class EpisodeAdapter extends BaseQuickAdapter<JokeList.JokeVo> {
         baseViewHolder.setOnClickListener(R.id.joke_unlike_lay, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                baseViewHolder.setText(R.id.joke_unlike_tv, jokeVo.bad + 1 + "人");
-                baseViewHolder.setTextColor(R.id.joke_unlike_tv, Color.parseColor("#ff7a2f"));
-                Glide.with(mContext).load(R.drawable.ico_unlike_yellow).into((ImageView) baseViewHolder.getView(R.id.joke_unlike_iv));
+                if (isClick) {//踩
+                    isClick = false;
+                    baseViewHolder.setText(R.id.joke_unlike_tv, jokeVo.bad + 1 + "人");
+                    baseViewHolder.setTextColor(R.id.joke_unlike_tv, Color.parseColor("#ff7a2f"));
+                    Glide.with(mContext).load(R.drawable.ico_unlike_yellow).into((ImageView) baseViewHolder.getView(R.id.joke_unlike_iv));
+                } else {//取消踩
+                    isClick = true;
+                    if (jokeVo.bad > 0) {
+                        baseViewHolder.setText(R.id.joke_unlike_tv, jokeVo.bad - 1 + "人");
+                    } else {
+                        baseViewHolder.setText(R.id.joke_unlike_tv, jokeVo.bad + "人");
+                    }
+                    baseViewHolder.setTextColor(R.id.joke_unlike_tv, Color.parseColor("#969696"));
+                    Glide.with(mContext).load(R.drawable.ico_unlike).into((ImageView) baseViewHolder.getView(R.id.joke_unlike_iv));
+                }
             }
         });
 
         baseViewHolder.setOnClickListener(R.id.joke_like_lay, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                baseViewHolder.setText(R.id.joke_like_tv, jokeVo.heart + 1 + "人");
-                baseViewHolder.setTextColor(R.id.joke_like_tv, Color.parseColor("#ff7a2f"));
-                Glide.with(mContext).load(R.drawable.ico_like_yellow).into((ImageView) baseViewHolder.getView(R.id.joke_like_iv));
+                if (isClick) {//点赞
+                    isClick = false;
+                    baseViewHolder.setText(R.id.joke_like_tv, jokeVo.heart + 1 + "人");
+                    baseViewHolder.setTextColor(R.id.joke_like_tv, Color.parseColor("#ff7a2f"));
+                    Glide.with(mContext).load(R.drawable.ico_like_yellow).into((ImageView) baseViewHolder.getView(R.id.joke_like_iv));
+                } else {//取消赞
+                    isClick = true;
+                    if (jokeVo.heart > 0) {
+                        baseViewHolder.setText(R.id.joke_like_tv, jokeVo.heart - 1 + "人");
+                    } else {
+                        baseViewHolder.setText(R.id.joke_like_tv, jokeVo.heart + "人");
+                    }
+                    baseViewHolder.setTextColor(R.id.joke_like_tv, Color.parseColor("#969696"));
+                    Glide.with(mContext).load(R.drawable.ico_like_gray).into((ImageView) baseViewHolder.getView(R.id.joke_like_iv));
+                }
             }
         });
     }
