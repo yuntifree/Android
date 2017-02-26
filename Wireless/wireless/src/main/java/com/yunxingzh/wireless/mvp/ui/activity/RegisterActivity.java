@@ -115,7 +115,15 @@ public class RegisterActivity extends BaseActivity implements IRegisterView, Vie
         finish();
     }
 
-    public void startActivity(Class activity,String title,String url) {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (iLoginPresenter != null) {
+            iLoginPresenter.onDestroy();
+        }
+    }
+
+    public void startActivity(Class activity, String title, String url) {
         Intent intent = new Intent(this, activity);
         intent.putExtra(Constants.TITLE,title);
         intent.putExtra(Constants.URL,url);

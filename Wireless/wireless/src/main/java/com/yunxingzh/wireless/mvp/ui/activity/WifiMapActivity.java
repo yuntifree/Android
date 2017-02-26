@@ -1,17 +1,12 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -247,6 +242,9 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         if (wifiMapInfo != null) {
             wifiMapInfo.clear();
             wifiMapInfo = null;
+        }
+        if (iWifiMapPresenter != null) {
+            iWifiMapPresenter.onDestroy();
         }
         mapView.onDestroy();
         mapView = null;

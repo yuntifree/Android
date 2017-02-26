@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,7 +18,6 @@ import com.yunxingzh.wireless.mvp.presenter.IDefHeadPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.DefHeadPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.view.IDefHeadView;
-import com.yunxingzh.wireless.utils.ToastUtil;
 
 import java.util.List;
 
@@ -35,7 +35,8 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
     private ImageView mTitleReturnIv;
     private TextView mTitleNameTv;
     private IDefHeadPresenter iDefHeadPresenter;
-    private LinearLayout mHeadMaleParentLay,mHeadFemaleParentLay;
+    private LinearLayout mHeadMaleParentLay, mHeadFemaleParentLay;
+    private WindowManager wm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +74,10 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
             List<DefHeadMaleVo> maleVos = defHeadList.male;
             List<DefHeadFemaleVo> femaleVos = defHeadList.female;
 
+            wm = getWindowManager();
+            int width = wm.getDefaultDisplay().getWidth();//720,1536
+            int height = wm.getDefaultDisplay().getHeight();//1280,2560
+
             for (int i = 0; i < maleVos.size(); i++) {
                 LinearLayout maleItems = new LinearLayout(this);
                 maleItems.setOrientation(LinearLayout.VERTICAL);
@@ -90,7 +95,11 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                 age.setTextSize(10);
                 age.setText(maleVos.get(i).age);
 
-                maleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 130, 130, 0, 0, 0, 0));
+                if (width <= 720 && height <= 1280) {
+                    maleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 130, 130, 0, 0, 0, 0));
+                } else {
+                    maleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 250, 250, 0, 0, 0, 0));
+                }
                 maleItems.addView(name, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
                 maleItems.addView(age, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
 
@@ -143,6 +152,14 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                 mHeadFemaleParentLay.addView(femaleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
             }
 
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (iDefHeadPresenter != null) {
+            iDefHeadPresenter.onDestroy();
         }
     }
 

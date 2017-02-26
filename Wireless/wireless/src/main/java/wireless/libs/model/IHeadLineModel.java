@@ -1,6 +1,7 @@
 package wireless.libs.model;
 
 import wireless.libs.bean.resp.HotInfoList;
+import wireless.libs.bean.resp.JokeList;
 import wireless.libs.bean.resp.LiveList;
 
 /**
@@ -19,6 +20,11 @@ public interface IHeadLineModel {
         void onGetLiveListFaild();
     }
 
+    interface onGetJokesListener{
+        void onGetJokesSuccess(JokeList jokeList);
+        void onGetJokesFaild();
+    }
+
     /***
      * 获取头条（新闻，视频，应用，游戏）内容
      * @param type 0-新闻 1-视频 2-应用 3-游戏 4-本地 5-娱乐
@@ -32,5 +38,11 @@ public interface IHeadLineModel {
      * @param listener
      */
     void getLiveList(int seq, onGetLiveListListener listener);
+
+    /***
+     * 获取段子
+     * @param listener
+     */
+    void getJokes(int seq, onGetJokesListener listener);
 
 }

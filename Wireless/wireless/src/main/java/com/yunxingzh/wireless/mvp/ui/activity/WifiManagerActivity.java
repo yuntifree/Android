@@ -290,6 +290,9 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
         if (dialogActivity != null) {
             dialogActivity.destroyDialog();
         }
+        if (iWifiManagerPresenter != null) {
+            iWifiManagerPresenter.onDestroy();
+        }
         locationUtils.stopMonitor();
         FWManager.getInstance().removeWifiObserver(wifiObserver);
     }

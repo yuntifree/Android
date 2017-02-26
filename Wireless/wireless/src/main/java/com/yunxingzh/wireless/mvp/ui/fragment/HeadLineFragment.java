@@ -120,6 +120,9 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (getHeadLineMenuPresenter != null) {
+            getHeadLineMenuPresenter.onDestroy();
+        }
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 

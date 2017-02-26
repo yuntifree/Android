@@ -187,7 +187,10 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        iHeadLinePresenter.onDestroy();
+        if (iWirelessPresenter != null && iHeadLinePresenter != null) {
+            iWirelessPresenter.onDestroy();
+            iHeadLinePresenter.onDestroy();
+        }
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 

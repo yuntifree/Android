@@ -198,6 +198,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             drawableStream.recycle();
             drawableStream = null;
         }
+        if (getAdvertPresenter != null) {
+            getAdvertPresenter.onDestroy();
+        }
     }
 
     @Override

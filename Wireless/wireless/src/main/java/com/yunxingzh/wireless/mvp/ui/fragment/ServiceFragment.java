@@ -100,6 +100,10 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (iServicePresenter != null && iWirelessPresenter != null) {
+            iServicePresenter.onDestroy();
+            iWirelessPresenter.onDestroy();
+        }
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 

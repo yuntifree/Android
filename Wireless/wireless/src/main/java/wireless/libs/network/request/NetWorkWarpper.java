@@ -8,6 +8,7 @@ import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.resp.BaseResult;
 import wireless.libs.bean.resp.DefHeadList;
+import wireless.libs.bean.resp.JokeList;
 import wireless.libs.bean.resp.LiveList;
 import wireless.libs.bean.resp.MenuList;
 import wireless.libs.bean.vo.AdvertVo;
@@ -313,7 +314,6 @@ public class NetWorkWarpper {
 
     /***
      * 获取用户默认头像
-     *
      * */
     public static void getDefHead(HttpHandler<DefHeadList> httpHandler) {
         String path = "get_def_head";
@@ -323,7 +323,6 @@ public class NetWorkWarpper {
 
     /***
      * 获取我（个人中心）用户信息
-     *
      * */
     public static void getUserInfo(int tuid, HttpHandler<UserInfoVo> httpHandler) {
         String path = "get_user_info";
@@ -331,4 +330,15 @@ public class NetWorkWarpper {
         httpParams.add("tuid", tuid);
         HttpUtils.post(path, httpParams, httpHandler);
     }
+
+    /***
+     * 获取段子
+     * */
+    public static void getJokes(int seq, HttpHandler<JokeList> httpHandler) {
+        String path = "get_jokes";
+        HttpParams httpParams = new HttpParams();
+        httpParams.add("seq", seq);
+        HttpUtils.post(path, httpParams, httpHandler);
+    }
+
 }

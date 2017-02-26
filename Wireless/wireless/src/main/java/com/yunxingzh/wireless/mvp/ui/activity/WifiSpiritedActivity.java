@@ -131,6 +131,9 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
     protected void onDestroy() {
         super.onDestroy();
         locationUtils.stopMonitor();
+        if (iWifiSpiritedPresenter != null) {
+            iWifiSpiritedPresenter.onDestroy();
+        }
     }
 
     public String getSsid() {

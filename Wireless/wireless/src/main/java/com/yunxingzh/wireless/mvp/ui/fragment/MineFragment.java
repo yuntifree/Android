@@ -264,4 +264,12 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
         Intent intent = new Intent(getActivity(), activity);
         startActivity(intent);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (iMinePresenter != null) {
+            iMinePresenter.onDestroy();
+        }
+    }
 }

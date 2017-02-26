@@ -74,6 +74,14 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
         finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (feedBackPresenter != null) {
+            feedBackPresenter.onDestroy();
+        }
+    }
+
     public String getContent() {
         return mFeedContextEt.getText() + "";
     }

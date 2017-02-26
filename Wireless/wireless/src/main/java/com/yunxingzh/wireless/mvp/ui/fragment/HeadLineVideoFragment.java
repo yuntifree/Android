@@ -240,7 +240,10 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        iHeadLinePresenter.onDestroy();
+        if (iHeadLinePresenter != null && iWirelessPresenter != null) {
+            iHeadLinePresenter.onDestroy();
+            iWirelessPresenter.onDestroy();
+        }
         if (newsVo != null) {
             newsVo.clear();
         }

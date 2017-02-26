@@ -8,4 +8,5 @@ public interface IHeadLinePresenter extends IBasePresenter{
     void getHeadLine(int type, int seq);
     void onDestroy();
     void getLiveList(int seq);
+    void getJokes(int seq);
 }

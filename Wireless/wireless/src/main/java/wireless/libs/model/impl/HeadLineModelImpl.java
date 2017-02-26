@@ -1,6 +1,7 @@
 package wireless.libs.model.impl;
 
 import wireless.libs.bean.resp.HotInfoList;
+import wireless.libs.bean.resp.JokeList;
 import wireless.libs.bean.resp.LiveList;
 import wireless.libs.bean.resp.ServerTip;
 import wireless.libs.model.IHeadLineModel;
@@ -39,6 +40,21 @@ public class HeadLineModelImpl implements IHeadLineModel {
             @Override
             public void onFailure(ServerTip serverTip) {
                 listener.onGetLiveListFaild();
+            }
+        });
+    }
+
+    @Override
+    public void getJokes(int seq, final onGetJokesListener listener) {
+        NetWorkWarpper.getJokes(seq, new HttpHandler<JokeList>() {
+            @Override
+            public void onSuccess(ServerTip serverTip, JokeList requestVo) {
+                listener.onGetJokesSuccess(requestVo);
+            }
+
+            @Override
+            public void onFailure(ServerTip serverTip) {
+                listener.onGetJokesFaild();
             }
         });
     }
