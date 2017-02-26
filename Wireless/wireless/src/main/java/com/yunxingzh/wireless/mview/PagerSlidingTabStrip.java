@@ -53,7 +53,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private boolean shouldExpand = false;
     private boolean textAllCaps = true;
     private int scrollOffset = 52;
-    private int tabPadding = 18;
+    private int tabPadding = 16;
     private int tabTextSize = 17;
     private int tabTextColor = 0;
     private int lastScrollX = 0;
@@ -76,7 +76,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
         tabsContainer = new LinearLayout(context);
         tabsContainer.setOrientation(LinearLayout.HORIZONTAL);
-        tabsContainer.setGravity(Gravity.CENTER);
+        //tabsContainer.setGravity(Gravity.CENTER);
         tabsContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         addView(tabsContainer);
         DisplayMetrics dm = getResources().getDisplayMetrics();

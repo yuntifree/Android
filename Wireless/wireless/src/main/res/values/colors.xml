@@ -54,6 +54,7 @@
     <color name="red_f17370">#FFF17370</color>
     <color name="orange">#FF9900</color>
 
+
     <color name="gray_bfbfbf">#FFBFBFBF</color>
     <color name="gray_f9f8f8">#FFF9F8F8</color>
     <color name="gray_efeff4">#FFEFEFF4</color>
@@ -89,7 +90,6 @@
     <color name="gray_9affffff">#9affffff</color>
     <color name="gray_98ffffff">#98ffffff</color>
     <color name="gray_b4b4b4">#b4b4b4</color>
-    <color name="gray_323232">#323232</color>
     <color name="gray_646464">#646464</color>
     <color name="gray_dcdcdc">#dcdcdc</color>
     <color name="gray_262626">#262626</color>
@@ -122,6 +122,7 @@
     <color name="gray_bebebe">#bebebe</color>
     <color name="gray_c8c8c8">#c8c8c8</color>
     <color name="gray_aaaaaa">#aaaaaa</color>
+    <color name="gray_323232">#323232</color>
 
 
     <color name="radio_button_selected_color">#ff33b5e5</color>
