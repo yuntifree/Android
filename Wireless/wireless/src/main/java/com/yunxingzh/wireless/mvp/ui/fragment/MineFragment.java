@@ -66,6 +66,7 @@ import wireless.libs.network.request.NetWorkWarpper;
 public class MineFragment extends BaseFragment implements IMineView, View.OnClickListener, OnItemClickListener {
 
     private static final String endpoint = "http://oss-cn-shenzhen.aliyuncs.com";
+    private static final String downLoadUrl = "http://img.yunxingzh.com";
 
     private static final int SELECT_IMG = 0;//相册
     private static final int CUT_IMG = 1;//裁剪
@@ -80,6 +81,8 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     private String filePath;//相册选择的图片路径
     private ImageTokenVo imageTokenVo;
     private OSS oss;
+    private ImageUploadVo uploadVo;
+    private int headImgFrom = 0;//=1表示从相册选择上传
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
@@ -157,10 +160,19 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     public void getUserInfoSuccess(UserInfoVo userInfoVo) {
         if (userInfoVo != null) {
             mMineNameTv.setText(userInfoVo.nickname);
-            Glide.with(getActivity()).load(userInfoVo.headurl).placeholder(R.drawable.my_ico_pic).into(mMineHeadIv);
+            Glide.with(getActivity()).load(userInfoVo.headurl).into(mMineHeadIv);
             mMineCountTv.setText(mMineCountTv.getText().toString() + userInfoVo.total + "次，");
             mMineMoneyTv.setText(mMineMoneyTv.getText().toString() + userInfoVo.save + "元");
         }
+    }
+
+    @Override
+    public void updateUserInfoSuccess() {
+        if (uploadVo != null && headImgFrom == 1) {//=1表示从相册选择上传
+            Glide.with(getActivity()).load(downLoadUrl + "/" + uploadVo.name).into(mMineHeadIv);
+            headImgFrom = 0;
+        }
+        ToastUtil.showMiddle(getActivity(), "恭喜，更换头像成功");
     }
 
     @Override
@@ -179,10 +191,12 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     }
 
     @Override
-    public void applyImageUploadSuccess(ImageUploadVo imageUploadVo) {
+    public void applyImageUploadSuccess(final ImageUploadVo imageUploadVo) {
 
         OSS mOss = getOSSInstance();//初始化OSSClient
-
+        if (imageUploadVo != null) {
+            uploadVo = imageUploadVo;
+        }
         if (imageUploadVo != null && !StringUtils.isEmpty(filePath)) {
             // 构造上传请求
             PutObjectRequest put = new PutObjectRequest(imageUploadVo.bucket, imageUploadVo.name, filePath);
@@ -193,6 +207,10 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
                     Log.d("PutObject", "UploadSuccess");
                     Log.d("ETag", result.getETag());
                     Log.d("RequestId", result.getRequestId());
+                    if (iMinePresenter != null) {
+                        headImgFrom = 1;
+                        iMinePresenter.updateUserInfo(downLoadUrl + "/" + imageUploadVo.name, "");
+                    }
                 }
 
                 @Override
@@ -208,8 +226,8 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
                         Log.e("RequestId", serviceException.getRequestId());
                         Log.e("HostId", serviceException.getHostId());
                         Log.e("RawMessage", serviceException.getRawMessage());
-                        ToastUtil.showMiddle(getActivity(), "上传失败");
                     }
+                    ToastUtil.showMiddle(getActivity(), "上传失败");
                 }
             });
         }
@@ -239,8 +257,9 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
                     break;
                 case HEAD_IMG_URL://选择默认头像
                     String headUrl = data.getExtras().getString("headUrl");
-                    if (!StringUtils.isEmpty(headUrl)) {
+                    if (!StringUtils.isEmpty(headUrl) && iMinePresenter != null) {
                         Glide.with(getActivity()).load(headUrl).into(mMineHeadIv);
+                        iMinePresenter.updateUserInfo(headUrl, "");
                     }
                     break;
             }

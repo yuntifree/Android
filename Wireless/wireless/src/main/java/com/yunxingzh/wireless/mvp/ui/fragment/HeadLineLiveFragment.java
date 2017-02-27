@@ -1,6 +1,5 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,7 +21,7 @@ import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
-import com.yunxingzh.wireless.mvp.presenter.impl.IWirelessPresenterImpl;
+import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.LiveWebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineLiveAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
@@ -84,7 +83,7 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
        // headLineLiveAdapter.setEmptyView(emptyView(mListRv));
         mListRv.setAdapter(headLineLiveAdapter);
 
-        iWirelessPresenter = new IWirelessPresenterImpl(this);
+        iWirelessPresenter = new WirelessPresenterImpl(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iHeadLinePresenter.getLiveList(0);
         if (!NetUtils.isNetworkAvailable(getActivity())) {

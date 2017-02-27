@@ -3,7 +3,6 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,12 +23,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dgwx.app.lib.bl.WifiInterface;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
-import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.BadgeView;
 import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mview.MyListview;
@@ -38,9 +35,8 @@ import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
-import com.yunxingzh.wireless.mvp.presenter.impl.IWirelessPresenterImpl;
+import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
-import com.yunxingzh.wireless.mvp.ui.activity.SetActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.SpeedTestActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
@@ -244,7 +240,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         mBadgeView.setBadgeMargin(0, 35, 10, 0);
         mBadgeView.setTargetView(mMainWifiManager);
         // mBadgeView.set
-        iWirelessPresenter = new IWirelessPresenterImpl(this);
+        iWirelessPresenter = new WirelessPresenterImpl(this);
         mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
         iWirelessPresenter.weatherNews();
 

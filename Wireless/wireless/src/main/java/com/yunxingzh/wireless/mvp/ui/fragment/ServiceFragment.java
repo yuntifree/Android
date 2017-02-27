@@ -19,7 +19,7 @@ import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IServicePresenter;
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
-import com.yunxingzh.wireless.mvp.presenter.impl.IWirelessPresenterImpl;
+import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.presenter.impl.ServicePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.SearchActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
@@ -83,7 +83,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     public void initData() {
         //注册EventBus
         EventBus.getDefault().register(this);
-        iWirelessPresenter = new IWirelessPresenterImpl(this);
+        iWirelessPresenter = new WirelessPresenterImpl(this);
         iServicePresenter = new ServicePresenterImpl(this);
         if (!NetUtils.isNetworkAvailable(getActivity())) {
             netErrorState();

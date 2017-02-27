@@ -17,7 +17,7 @@ import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
-import com.yunxingzh.wireless.mvp.presenter.impl.IWirelessPresenterImpl;
+import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.NewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
@@ -130,7 +130,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         //注册EventBus
         EventBus.getDefault().register(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
-        iWirelessPresenter = new IWirelessPresenterImpl(this);
+        iWirelessPresenter = new WirelessPresenterImpl(this);
         if (firstLoad) {
             iHeadLinePresenter.getHeadLine(this.newsTypes, HEAD_LINE_SEQ);
             swipeRefreshLayout.setRefreshing(true);

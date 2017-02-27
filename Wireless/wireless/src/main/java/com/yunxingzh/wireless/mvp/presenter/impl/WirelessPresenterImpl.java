@@ -17,7 +17,7 @@ import wireless.libs.model.impl.WirelessModelImpl;
  * Created by stephen on 2017/2/9.
  */
 
-public class IWirelessPresenterImpl implements IWirelessPresenter, IWirelessModel.onClickCountListener,
+public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel.onClickCountListener,
         IWeatherNewsModel.onWeatherNewsListener, IWirelessModel.onGetFontInfoListener, IWirelessModel.onWifiConnectListener {
 
     private IWeatherNewsModel iWeatherNewsModel;
@@ -27,7 +27,7 @@ public class IWirelessPresenterImpl implements IWirelessPresenter, IWirelessMode
     private IServiceView iServiceView;
     private IGetLiveListView iGetLiveListView;
 
-    public IWirelessPresenterImpl(IWirelessView view) {
+    public WirelessPresenterImpl(IWirelessView view) {
         iWirelessView = view;
         iHeadLineView = null;
         iServiceView = null;
@@ -36,7 +36,7 @@ public class IWirelessPresenterImpl implements IWirelessPresenter, IWirelessMode
         iWeatherNewsModel = new WeatherNewsModelImpl();
     }
 
-    public IWirelessPresenterImpl(IHeadLineView view) {
+    public WirelessPresenterImpl(IHeadLineView view) {
         iWirelessView = null;
         iServiceView = null;
         iGetLiveListView = null;
@@ -44,7 +44,7 @@ public class IWirelessPresenterImpl implements IWirelessPresenter, IWirelessMode
         iWirelessModel = new WirelessModelImpl();
     }
 
-    public IWirelessPresenterImpl(IServiceView view) {
+    public WirelessPresenterImpl(IServiceView view) {
         iWirelessView = null;
         iHeadLineView = null;
         iGetLiveListView = null;
@@ -52,7 +52,7 @@ public class IWirelessPresenterImpl implements IWirelessPresenter, IWirelessMode
         iWirelessModel = new WirelessModelImpl();
     }
 
-    public IWirelessPresenterImpl(IGetLiveListView view) {
+    public WirelessPresenterImpl(IGetLiveListView view) {
         iWirelessView = null;
         iHeadLineView = null;
         iServiceView = null;

@@ -351,4 +351,15 @@ public class NetWorkWarpper {
         HttpUtils.post(path, httpParams, httpHandler);
     }
 
+    /***
+     * 修改用户信息
+     * */
+    public static void updateUserInfo(String headurl, String nickname, HttpHandler<Object> httpHandler) {
+        String path = "mod_user_info";
+        HttpParams httpParams = new HttpParams();
+        httpParams.add("headurl", headurl);
+        httpParams.add("nickname", nickname);
+        HttpUtils.post(path, httpParams, httpHandler);
+    }
+
 }

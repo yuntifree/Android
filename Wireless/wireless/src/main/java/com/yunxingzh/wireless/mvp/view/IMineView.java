@@ -10,4 +10,5 @@ import wireless.libs.bean.vo.UserInfoVo;
 public interface IMineView extends IBaseView {
     void applyImageUploadSuccess(ImageUploadVo imageUploadVo);
     void getUserInfoSuccess(UserInfoVo userInfoVo);
+    void updateUserInfoSuccess();
 }

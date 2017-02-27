@@ -33,4 +33,14 @@ public class MineModelImpl implements IMineModel {
             }
         });
     }
+
+    @Override
+    public void updateUserInfo(String headurl, String nickname, final onUpdateUserInfoListener listener) {
+        NetWorkWarpper.updateUserInfo(headurl, nickname, new HttpHandler<Object>() {
+            @Override
+            public void onSuccess(ServerTip serverTip, Object o) {
+                listener.onUpdateUserInfoSuccess();
+            }
+        });
+    }
 }

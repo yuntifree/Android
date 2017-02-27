@@ -13,7 +13,8 @@ import wireless.libs.model.impl.MineModelImpl;
  * Created by stephen on 2017/2/24.
  */
 
-public class MinePresenterImpl implements IMinePresenter, IMineModel.onImageUploadListener, IMineModel.onGetUserInfoListener {
+public class MinePresenterImpl implements IMinePresenter, IMineModel.onImageUploadListener, IMineModel.onGetUserInfoListener,
+IMineModel.onUpdateUserInfoListener {
 
     private IMineModel iMineModel;
     private IMineView iMineView;
@@ -38,6 +39,13 @@ public class MinePresenterImpl implements IMinePresenter, IMineModel.onImageUplo
     }
 
     @Override
+    public void updateUserInfo(String headurl, String nickname) {
+        if (iMineView != null) {
+            iMineModel.updateUserInfo(headurl, nickname, this);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         iMineView = null;
     }
@@ -53,6 +61,13 @@ public class MinePresenterImpl implements IMinePresenter, IMineModel.onImageUplo
     public void onGetUserInfoSuccess(UserInfoVo userInfoVo) {
         if (iMineView != null) {
             iMineView.getUserInfoSuccess(userInfoVo);
+        }
+    }
+
+    @Override
+    public void onUpdateUserInfoSuccess() {
+        if (iMineView != null) {
+            iMineView.updateUserInfoSuccess();
         }
     }
 }

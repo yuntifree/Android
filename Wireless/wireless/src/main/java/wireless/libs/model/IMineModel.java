@@ -18,6 +18,10 @@ public interface IMineModel {
         void onGetUserInfoSuccess(UserInfoVo userInfoVo);
     }
 
+    interface onUpdateUserInfoListener{
+        void onUpdateUserInfoSuccess();
+    }
+
     /***
      * 申请上传头像（图片）
      * @param listener
@@ -29,4 +33,10 @@ public interface IMineModel {
      * @param listener
      */
     void getUserInfo(int tuid, onGetUserInfoListener listener);
+
+    /***
+     * 修改用户信息
+     * @param listener
+     */
+    void updateUserInfo(String headurl, String nickname, onUpdateUserInfoListener listener);
 }
