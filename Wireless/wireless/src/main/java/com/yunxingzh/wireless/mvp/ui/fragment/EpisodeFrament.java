@@ -74,8 +74,8 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
         episodeAdapter.setOnLoadMoreListener(this);
         episodeAdapter.setEmptyView(emptyView(mListRv));
         mListRv.setAdapter(episodeAdapter);
-        iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iWirelessPresenter = new WirelessPresenterImpl(this);
+        iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iHeadLinePresenter.getJokes(0);
     }
 
@@ -84,7 +84,7 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
         mSwipeRefreshLay.setRefreshing(false);
         if (jokeList != null) {
             jokeVos = jokeList.infos;
-            if (jokeVos != null) {
+            if (jokeVos != null && jokeList.hasmore == 1) {
                 if (isFirstRefresh) {
                     isFirstRefresh = false;
                     episodeAdapter.setNewData(jokeVos);

@@ -10,4 +10,5 @@ import wireless.libs.bean.resp.NickNameList;
 public interface IDefHeadView extends IBaseView {
     void getDefHeadSuccess(DefHeadList defHeadList);
     void getRandNickSuccess(NickNameList nickNameList);
+    void updateUserInfoSuccess();
 }

@@ -184,8 +184,11 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
 
     @Subscribe
     public void onEventMainThread(MineHeadImg event) {
-        if (event.getmFlag() == Constants.HEAD_IMG_FLAG) {
+        if (event.getmFlag() == Constants.HEAD_IMG_FLAG) {//更换头像
             Glide.with(getActivity()).load(event.getmMsg()).into(mMineHeadIv);
+        }
+        if (event.getmFlag() == Constants.NICK_NAME_FLAG) {//更换昵称
+            mMineNameTv.setText(event.getmMsg());
         }
     }
 

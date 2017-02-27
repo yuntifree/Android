@@ -82,5 +82,7 @@ public class Constants {
     public static final int SERVICE_FLAG = 3;//服务
     public static final int MINE_FLAG = 4;//我
 
+    //我flag
     public static final int HEAD_IMG_FLAG = 1;//更换头像flag
+    public static final int NICK_NAME_FLAG = 2;//更改昵称flag
 }

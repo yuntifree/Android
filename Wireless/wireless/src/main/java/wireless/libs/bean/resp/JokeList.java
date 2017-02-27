@@ -9,6 +9,7 @@ import java.util.List;
 
 public class JokeList implements Serializable {
     public List<JokeVo> infos;
+    public int hasmore;
 
     public class JokeVo {
         public int id;

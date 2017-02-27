@@ -2,6 +2,7 @@ package com.yunxingzh.wireless.mvp.presenter.impl;
 
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.presenter.IMinePresenter;
+import com.yunxingzh.wireless.mvp.view.IDefHeadView;
 import com.yunxingzh.wireless.mvp.view.IMineView;
 
 import wireless.libs.bean.vo.ImageUploadVo;
@@ -18,9 +19,17 @@ IMineModel.onUpdateUserInfoListener {
 
     private IMineModel iMineModel;
     private IMineView iMineView;
+    private IDefHeadView iDefHeadView;
 
     public MinePresenterImpl(IMineView view) {
+        iDefHeadView = null;
         iMineView = view;
+        iMineModel = new MineModelImpl();
+    }
+
+    public MinePresenterImpl(IDefHeadView view) {
+        iMineView = null;
+        iDefHeadView = view;
         iMineModel = new MineModelImpl();
     }
 
@@ -40,7 +49,7 @@ IMineModel.onUpdateUserInfoListener {
 
     @Override
     public void updateUserInfo(String headurl, String nickname) {
-        if (iMineView != null) {
+        if (iMineView != null || iDefHeadView != null) {
             iMineModel.updateUserInfo(headurl, nickname, this);
         }
     }
@@ -48,6 +57,7 @@ IMineModel.onUpdateUserInfoListener {
     @Override
     public void onDestroy() {
         iMineView = null;
+        iDefHeadView = null;
     }
 
     @Override
@@ -68,6 +78,9 @@ IMineModel.onUpdateUserInfoListener {
     public void onUpdateUserInfoSuccess() {
         if (iMineView != null) {
             iMineView.updateUserInfoSuccess();
+        }
+        if (iDefHeadView != null) {
+            iDefHeadView.updateUserInfoSuccess();
         }
     }
 }

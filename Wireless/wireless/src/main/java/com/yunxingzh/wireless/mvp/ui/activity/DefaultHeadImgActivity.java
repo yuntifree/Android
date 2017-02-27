@@ -160,6 +160,9 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
     public void getRandNickSuccess(NickNameList nickNameList) {}
 
     @Override
+    public void updateUserInfoSuccess() {}
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (iDefHeadPresenter != null) {

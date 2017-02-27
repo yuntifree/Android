@@ -77,7 +77,8 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
 
     @Override
     public void clickCount(int id,int type, String name) {
-        if (iWirelessView != null){
+        if (iWirelessView != null || iHeadLineView != null || iServiceView != null
+                || iGetLiveListView != null || iGetJokesView != null){
             iWirelessModel.clickCount(id,type,name,this);
         }
     }
@@ -105,8 +106,7 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
 
     @Override
     public void onClickCountSuccess() {
-        if (iWirelessView != null){
-        }
+        //上报无需返回
     }
 
     @Override

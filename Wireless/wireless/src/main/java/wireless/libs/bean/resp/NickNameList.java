@@ -1,7 +1,7 @@
 package wireless.libs.bean.resp;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by stephen on 2017/2/27.
@@ -9,5 +9,5 @@ import java.util.List;
 
 public class NickNameList implements Serializable {
 
-    public List<String> nicknames;
+    public Set<String> nicknames;
 }

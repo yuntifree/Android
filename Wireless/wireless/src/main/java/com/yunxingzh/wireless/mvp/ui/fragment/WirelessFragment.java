@@ -777,12 +777,15 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     }
 
 
-    @Subscribe
-    public void onEventMainThread(MineHeadImg event) {
-        if (event.getmFlag() == Constants.HEAD_IMG_FLAG) {
-            //Glide.with(getActivity()).load(event.getmMsg()).into(mMineHeadIv);
-        }
-    }
+//    @Subscribe
+//    public void onEventMainThread(MineHeadImg event) {
+//        if (event.getmFlag() == Constants.HEAD_IMG_FLAG) {
+//            //Glide.with(getActivity()).load(event.getmMsg()).into(mMineHeadIv);
+//        }
+//        if (event.getmFlag() == Constants.NICK_NAME_FLAG) {//更换昵称
+//           // mMineNameTv.setText(event.getmMsg());
+//        }
+//    }
 
     @Override
     public void onDestroy() {
