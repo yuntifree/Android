@@ -3,12 +3,9 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Message;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +20,6 @@ import com.alibaba.sdk.android.oss.OSS;
 import com.alibaba.sdk.android.oss.OSSClient;
 import com.alibaba.sdk.android.oss.ServiceException;
 import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
-import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
 import com.alibaba.sdk.android.oss.common.OSSLog;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSFederationCredentialProvider;
@@ -33,7 +29,9 @@ import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bumptech.glide.Glide;
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.MainApplication;
+import com.yunxingzh.wireless.config.MineHeadImg;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener;
 import com.yunxingzh.wireless.mvp.presenter.IMinePresenter;
@@ -49,8 +47,8 @@ import com.yunxingzh.wireless.utils.FileUtil;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
-import java.io.File;
-import java.io.IOException;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import wireless.libs.bean.vo.ImageTokenVo;
@@ -83,6 +81,7 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     private OSS oss;
     private ImageUploadVo uploadVo;
     private int headImgFrom = 0;//=1表示从相册选择上传
+    private String mHeadUrl;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
@@ -109,6 +108,8 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     }
 
     public void initData() {
+        //注册EventBus
+        EventBus.getDefault().register(this);
         iMinePresenter = new MinePresenterImpl(this);
         iMinePresenter.getUserInfo();
     }
@@ -169,10 +170,23 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     @Override
     public void updateUserInfoSuccess() {
         if (uploadVo != null && headImgFrom == 1) {//=1表示从相册选择上传
-            Glide.with(getActivity()).load(downLoadUrl + "/" + uploadVo.name).into(mMineHeadIv);
+            mHeadUrl = downLoadUrl + "/" + uploadVo.name;
             headImgFrom = 0;
         }
-        ToastUtil.showMiddle(getActivity(), "恭喜，更换头像成功");
+        if (!StringUtils.isEmpty(mHeadUrl)) {
+            EventBus.getDefault().post(new MineHeadImg(Constants.HEAD_IMG_FLAG, mHeadUrl));
+            ToastUtil.showMiddle(getActivity(), "恭喜，更换头像成功");
+        } else {
+            Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mMineHeadIv);
+            ToastUtil.showMiddle(getActivity(), "抱歉，请稍后重试");
+        }
+    }
+
+    @Subscribe
+    public void onEventMainThread(MineHeadImg event) {
+        if (event.getmFlag() == Constants.HEAD_IMG_FLAG) {
+            Glide.with(getActivity()).load(event.getmMsg()).into(mMineHeadIv);
+        }
     }
 
     @Override
@@ -258,7 +272,7 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
                 case HEAD_IMG_URL://选择默认头像
                     String headUrl = data.getExtras().getString("headUrl");
                     if (!StringUtils.isEmpty(headUrl) && iMinePresenter != null) {
-                        Glide.with(getActivity()).load(headUrl).into(mMineHeadIv);
+                        mHeadUrl = headUrl;
                         iMinePresenter.updateUserInfo(headUrl, "");
                     }
                     break;
@@ -290,5 +304,6 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
         if (iMinePresenter != null) {
             iMinePresenter.onDestroy();
         }
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 }

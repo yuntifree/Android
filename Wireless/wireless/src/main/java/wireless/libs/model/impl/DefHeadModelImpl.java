@@ -1,6 +1,7 @@
 package wireless.libs.model.impl;
 
 import wireless.libs.bean.resp.DefHeadList;
+import wireless.libs.bean.resp.NickNameList;
 import wireless.libs.bean.resp.ServerTip;
 import wireless.libs.model.IDefHeadModel;
 import wireless.libs.network.HttpHandler;
@@ -14,11 +15,21 @@ public class DefHeadModelImpl implements IDefHeadModel {
 
     @Override
     public void getDefHead(final onGetDefHeadListener listener) {
-            NetWorkWarpper.getDefHead(new HttpHandler<DefHeadList>() {
-                @Override
-                public void onSuccess(ServerTip serverTip, DefHeadList o) {
-                    listener.onGetDefHeadSuccess(o);
-                }
+        NetWorkWarpper.getDefHead(new HttpHandler<DefHeadList>() {
+            @Override
+            public void onSuccess(ServerTip serverTip, DefHeadList o) {
+                listener.onGetDefHeadSuccess(o);
+            }
+        });
+    }
+
+    @Override
+    public void getRandNick(final onGetRandNickListener listener) {
+        NetWorkWarpper.getRandNick(new HttpHandler<NickNameList>() {
+            @Override
+            public void onSuccess(ServerTip serverTip, NickNameList o) {
+                listener.onGetRandNickSuccess(o);
+            }
         });
     }
 }

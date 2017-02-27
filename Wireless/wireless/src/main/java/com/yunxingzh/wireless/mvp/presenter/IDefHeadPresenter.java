@@ -6,4 +6,5 @@ package com.yunxingzh.wireless.mvp.presenter;
 
 public interface IDefHeadPresenter extends IBasePresenter {
     void getDefHead();
+    void getRandNick();
 }

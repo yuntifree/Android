@@ -23,10 +23,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.config.MineHeadImg;
 import com.yunxingzh.wireless.mview.BadgeView;
 import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mview.MyListview;
@@ -771,6 +773,14 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         int index = event.getChildMsg();
         if (event.getMsg() == Constants.MAIN_NEWS_FLAG && index != -1) {//上报
             iWirelessPresenter.clickCount(mainNewsVos.get(index).id, NEWS, "");
+        }
+    }
+
+
+    @Subscribe
+    public void onEventMainThread(MineHeadImg event) {
+        if (event.getmFlag() == Constants.HEAD_IMG_FLAG) {
+            //Glide.with(getActivity()).load(event.getmMsg()).into(mMineHeadIv);
         }
     }
 

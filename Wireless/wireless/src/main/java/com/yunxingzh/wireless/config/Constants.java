@@ -39,6 +39,8 @@ public class Constants {
     public static final int VIDEO = -1;//视频
     public static final int NET_ERROR = 5;//网络不可用（无法上网）
     public static final String FRAGMENT_FLAG = "fragment_flag";//fragment flag
+    public static final int JOKE_ZAN_FLAG = 102;//段子点赞
+    public static final int JOKE_CAI_FLAG = 103;//段子点踩
 
     //0、网络正常，可以发起调用认证、下线等接口。1、已经认证成功。
 
@@ -79,4 +81,6 @@ public class Constants {
     public static final int HEADLINE_FLAG = 2;//头条
     public static final int SERVICE_FLAG = 3;//服务
     public static final int MINE_FLAG = 4;//我
+
+    public static final int HEAD_IMG_FLAG = 1;//更换头像flag
 }

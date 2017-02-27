@@ -22,6 +22,7 @@ import com.yunxingzh.wireless.mvp.view.IDefHeadView;
 import java.util.List;
 
 import wireless.libs.bean.resp.DefHeadList;
+import wireless.libs.bean.resp.NickNameList;
 import wireless.libs.bean.vo.DefHeadFemaleVo;
 import wireless.libs.bean.vo.DefHeadMaleVo;
 
@@ -154,6 +155,9 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
 
         }
     }
+
+    @Override
+    public void getRandNickSuccess(NickNameList nickNameList) {}
 
     @Override
     protected void onDestroy() {

@@ -12,6 +12,7 @@ import wireless.libs.bean.resp.FindList;
 import wireless.libs.bean.resp.JokeList;
 import wireless.libs.bean.resp.LiveList;
 import wireless.libs.bean.resp.MenuList;
+import wireless.libs.bean.resp.NickNameList;
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.AutoLoginVo;
 import wireless.libs.bean.vo.ImageTokenVo;
@@ -359,6 +360,15 @@ public class NetWorkWarpper {
         HttpParams httpParams = new HttpParams();
         httpParams.add("headurl", headurl);
         httpParams.add("nickname", nickname);
+        HttpUtils.post(path, httpParams, httpHandler);
+    }
+
+    /***
+     * 获取随机昵称
+     * */
+    public static void getRandNick(HttpHandler<NickNameList> httpHandler) {
+        String path = "get_rand_nick";
+        HttpParams httpParams = new HttpParams();
         HttpUtils.post(path, httpParams, httpHandler);
     }
 

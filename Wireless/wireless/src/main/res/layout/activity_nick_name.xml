@@ -20,9 +20,10 @@
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
         android:text="换一个试试"
-        android:id="@+id/textView2" />
+        android:id="@+id/nick_refresh_tv" />
 
     <com.yunxingzh.wireless.mview.ClearEditText
+        android:id="@+id/nick_input_et"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_gravity="center"
@@ -38,6 +39,7 @@
         android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/nick_query_tv"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"

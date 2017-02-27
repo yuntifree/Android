@@ -13,13 +13,19 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
+import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
+import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.EpisodeAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IGetJokesView;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +39,13 @@ import wireless.libs.bean.resp.JokeList;
 
 public class EpisodeFrament extends BaseFragment implements IGetJokesView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
+    private static final int ZAN_TYPE = 5;//点赞
+    private static final int CAI_TYPE = 9;//点赞
+
     private RecyclerView mListRv;
     private SwipeRefreshLayout mSwipeRefreshLay;
     private IHeadLinePresenter iHeadLinePresenter;
+    private IWirelessPresenter iWirelessPresenter;
     private boolean isFirstRefresh = true;
     private EpisodeAdapter episodeAdapter;
     private List<JokeList.JokeVo> jokeVos;
@@ -57,12 +67,15 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
     }
 
     public void initData() {
+        //注册EventBus
+        EventBus.getDefault().register(this);
         episodeAdapter = new EpisodeAdapter(new ArrayList<JokeList.JokeVo>());
         episodeAdapter.openLoadMore(Constants.PAGE_SIZE);
         episodeAdapter.setOnLoadMoreListener(this);
         episodeAdapter.setEmptyView(emptyView(mListRv));
         mListRv.setAdapter(episodeAdapter);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
+        iWirelessPresenter = new WirelessPresenterImpl(this);
         iHeadLinePresenter.getJokes(0);
     }
 
@@ -109,6 +122,21 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
         }
     }
 
+    @Subscribe
+    public void onEventMainThread(EventBusType event) {
+        int position = event.getChildMsg();
+        if (event.getMsg() == Constants.JOKE_ZAN_FLAG && position != -1) {//点赞上报
+            if (iWirelessPresenter != null && jokeVos != null) {
+                iWirelessPresenter.clickCount(jokeVos.get(position).id, ZAN_TYPE, "");
+            }
+        }
+        if (event.getMsg() == Constants.JOKE_CAI_FLAG && position != -1) {//点踩上报
+            if (iWirelessPresenter != null && jokeVos != null) {
+                iWirelessPresenter.clickCount(jokeVos.get(position).id, CAI_TYPE, "");
+            }
+        }
+    }
+
     private View emptyView(ViewGroup viewGroup) {
         View netView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, viewGroup, false);
         TextView netErrorBtn = (TextView) netView.findViewById(R.id.video_net_error_btn);
@@ -125,8 +153,10 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (iHeadLinePresenter != null) {
+        if (iHeadLinePresenter != null && iWirelessPresenter != null) {
             iHeadLinePresenter.onDestroy();
+            iWirelessPresenter.onDestroy();
         }
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 }

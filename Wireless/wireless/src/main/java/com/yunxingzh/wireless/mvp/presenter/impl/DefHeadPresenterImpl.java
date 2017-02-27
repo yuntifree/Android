@@ -4,6 +4,7 @@ import com.yunxingzh.wireless.mvp.presenter.IDefHeadPresenter;
 import com.yunxingzh.wireless.mvp.view.IDefHeadView;
 
 import wireless.libs.bean.resp.DefHeadList;
+import wireless.libs.bean.resp.NickNameList;
 import wireless.libs.model.IDefHeadModel;
 import wireless.libs.model.impl.DefHeadModelImpl;
 
@@ -11,7 +12,7 @@ import wireless.libs.model.impl.DefHeadModelImpl;
  * Created by stephen on 2017/2/25.
  */
 
-public class DefHeadPresenterImpl implements IDefHeadPresenter, IDefHeadModel.onGetDefHeadListener {
+public class DefHeadPresenterImpl implements IDefHeadPresenter, IDefHeadModel.onGetDefHeadListener, IDefHeadModel.onGetRandNickListener {
 
     private IDefHeadModel iDefHeadModel;
     private IDefHeadView iDefHeadView;
@@ -29,6 +30,13 @@ public class DefHeadPresenterImpl implements IDefHeadPresenter, IDefHeadModel.on
     }
 
     @Override
+    public void getRandNick() {
+        if (iDefHeadView != null) {
+            iDefHeadModel.getRandNick(this);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         iDefHeadView = null;
     }
@@ -37,6 +45,13 @@ public class DefHeadPresenterImpl implements IDefHeadPresenter, IDefHeadModel.on
     public void onGetDefHeadSuccess(DefHeadList defHeadList) {
         if (iDefHeadView != null) {
             iDefHeadView.getDefHeadSuccess(defHeadList);
+        }
+    }
+
+    @Override
+    public void onGetRandNickSuccess(NickNameList nickNameList) {
+        if (iDefHeadView != null) {
+            iDefHeadView.getRandNickSuccess(nickNameList);
         }
     }
 }

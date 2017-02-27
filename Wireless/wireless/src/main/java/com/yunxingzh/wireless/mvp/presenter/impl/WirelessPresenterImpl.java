@@ -1,6 +1,7 @@
 package com.yunxingzh.wireless.mvp.presenter.impl;
 
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
+import com.yunxingzh.wireless.mvp.view.IGetJokesView;
 import com.yunxingzh.wireless.mvp.view.IGetLiveListView;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
@@ -26,12 +27,14 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
     private IHeadLineView iHeadLineView;
     private IServiceView iServiceView;
     private IGetLiveListView iGetLiveListView;
+    private IGetJokesView iGetJokesView;
 
     public WirelessPresenterImpl(IWirelessView view) {
         iWirelessView = view;
         iHeadLineView = null;
         iServiceView = null;
         iGetLiveListView = null;
+        iGetJokesView = null;
         iWirelessModel = new WirelessModelImpl();
         iWeatherNewsModel = new WeatherNewsModelImpl();
     }
@@ -40,6 +43,7 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
         iWirelessView = null;
         iServiceView = null;
         iGetLiveListView = null;
+        iGetJokesView = null;
         iHeadLineView = view;
         iWirelessModel = new WirelessModelImpl();
     }
@@ -48,6 +52,7 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
         iWirelessView = null;
         iHeadLineView = null;
         iGetLiveListView = null;
+        iGetJokesView = null;
         iServiceView = view;
         iWirelessModel = new WirelessModelImpl();
     }
@@ -56,7 +61,17 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
         iWirelessView = null;
         iHeadLineView = null;
         iServiceView = null;
+        iGetJokesView = null;
         iGetLiveListView = view;
+        iWirelessModel = new WirelessModelImpl();
+    }
+
+    public WirelessPresenterImpl(IGetJokesView view) {
+        iWirelessView = null;
+        iHeadLineView = null;
+        iServiceView = null;
+        iGetLiveListView = null;
+        iGetJokesView = view;
         iWirelessModel = new WirelessModelImpl();
     }
 
@@ -128,5 +143,6 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
         iHeadLineView = null;
         iGetLiveListView = null;
         iServiceView = null;
+        iGetJokesView = null;
     }
 }
