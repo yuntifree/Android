@@ -38,6 +38,7 @@ public class Constants {
     public static final int SERVICE = 3;//服务
     public static final int VIDEO = -1;//视频
     public static final int NET_ERROR = 5;//网络不可用（无法上网）
+    public static final int MINE = 6;//我
     public static final String FRAGMENT_FLAG = "fragment_flag";//fragment flag
     public static final int JOKE_ZAN_FLAG = 102;//段子点赞
     public static final int JOKE_CAI_FLAG = 103;//段子点踩

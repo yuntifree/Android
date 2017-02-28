@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/title_lay"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:id="@+id/title_lay"
     android:background="@color/blue_009CFB"
     android:orientation="vertical">
 
@@ -13,6 +12,45 @@
         android:layout_gravity="center"
         android:focusable="true"
         android:focusableInTouchMode="true">
+
+        <LinearLayout
+            android:id="@+id/title_for_wireless_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="95dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/wireless_nick_tv"
+                    android:layout_width="80dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    android:maxLines="1"
+                    android:paddingLeft="18dp"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="center|left"
+                    android:ellipsize="end"
+                    android:background="@drawable/wireless_head_style"
+                    android:text="斯士大夫撒旦发射撒旦法" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/wireless_head_img_iv"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center|left"
+                    android:src="@drawable/wireless" />
+
+            </FrameLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/title_left_lay"
@@ -27,7 +65,7 @@
                 android:id="@+id/title_return_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/return_img"/>
+                android:src="@drawable/return_img" />
 
         </LinearLayout>
 
@@ -38,10 +76,10 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/dg_wifi"
             android:singleLine="true"
+            android:text="@string/dg_wifi"
             android:textColor="@color/white"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/title_main_img"
@@ -49,8 +87,8 @@
             android:layout_height="20dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:visibility="gone"
-            android:src="@drawable/title_text" />
+            android:src="@drawable/title_text"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/title_right_lay"
@@ -66,18 +104,18 @@
                 android:id="@+id/switch_btn"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/wifi_state_selector"
                 android:layout_gravity="right"
-                android:visibility="gone"
+                android:background="@drawable/wifi_state_selector"
                 android:textOff=""
-                android:textOn="" />
+                android:textOn=""
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/title_right_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:src="@drawable/zxing"/>
+                android:src="@drawable/zxing"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 

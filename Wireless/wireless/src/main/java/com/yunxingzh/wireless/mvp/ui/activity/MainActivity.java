@@ -188,6 +188,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (event.getMsg() == Constants.SERVICE) {
             mServiceRadio.setChecked(true);
         }
+
+        //跳转我
+        if (event.getMsg() == Constants.MINE) {
+            mMineRadio.setChecked(true);
+        }
     }
 
     @Override

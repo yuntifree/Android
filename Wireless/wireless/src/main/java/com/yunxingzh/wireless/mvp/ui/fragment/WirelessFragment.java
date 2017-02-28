@@ -67,6 +67,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.WeatherNewsList;
 import wireless.libs.bean.vo.BannerVo;
@@ -98,16 +99,16 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     private static final int DG_SDK_TIME_OUT = 10 * 1000;
 
     private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest, mMachineErrorLay,
-            mMainHeadImg, mWeatherLay, mMainSpiritedLay, mTitleLay, mWirelessTimesLay;
+            mMainHeadImg, mWeatherLay, mMainSpiritedLay, mTitleLay, mWirelessTimesLay, mTitleLeftLay, mTitleForWirelessLay;
     private MyScrollView scrollView;
     private TextView mConnectCountTv, mTitleNameTv, mWirelessNumTv,
             mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
     private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop, mConnectIv, mTitleMainImg,
-            mTitleReturnIv, mCircleIv, mWirelessCircleIv, mWirelessCircleBig, mWirelessCircleSmall, mMachineErrorIv;
+            mCircleIv, mWirelessCircleIv, mWirelessCircleBig, mWirelessCircleSmall, mMachineErrorIv;
     private MyListview mMainNewsLv;
     private IWirelessPresenter iWirelessPresenter;
     private CircleWaveView mAnimationTv;
-    private TextView footView, mConnectText;
+    private TextView footView, mConnectText, mWirelessNickTv;
     private List<MainNewsVo> mainNewsVos;
     private MainNewsAdapter mainNewsAdapter;
     private SwipeRefreshLayout mMainRefreshLay;
@@ -130,6 +131,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     private BadgeView mBadgeView;
     private WindowManager wm;
     private WifiState wifiState;
+    private CircleImageView mWirelessHeadImgIv;
 
     private AlertView switchAlert;
 
@@ -151,10 +153,15 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     }
 
     public void initView(View view) {
-        mTitleReturnIv = findView(view, R.id.title_return_iv);
-        mTitleReturnIv.setVisibility(View.INVISIBLE);
-//        mTitleReturnIv.setOnClickListener(this);
-//        mTitleReturnIv.setImageResource(R.drawable.wireless_ico_setting);
+        mTitleLeftLay = findView(view, R.id.title_left_lay);
+        mTitleLeftLay.setVisibility(View.GONE);
+        //头像
+        mTitleForWirelessLay = findView(view, R.id.title_for_wireless_lay);
+        mTitleForWirelessLay.setVisibility(View.VISIBLE);
+        mTitleForWirelessLay.setOnClickListener(this);
+        mWirelessNickTv = findView(view, R.id.wireless_nick_tv);
+        mWirelessHeadImgIv = findView(view, R.id.wireless_head_img_iv);
+
         mTitleNameTv = findView(view, R.id.title_name_tv);
         mTitleNameTv.setVisibility(View.GONE);
         mTitleMainImg = findView(view, R.id.title_main_img);
@@ -405,8 +412,8 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
         } else if (mFontBuyingTv == v) { //抢购
 
-        } else if (mTitleReturnIv == v) {
-           // startActivity(SetActivity.class, "", "", "", "");
+        } else if (mTitleForWirelessLay == v) {
+            EventBus.getDefault().post(new EventBusType(Constants.MINE));
         } else if (mMachineErrorIv == v) {//不可抗力异常关闭
             mMachineErrorLay.setVisibility(View.GONE);
         } else if (mMachineErrorLay == v) {
@@ -776,16 +783,15 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         }
     }
 
-
-//    @Subscribe
-//    public void onEventMainThread(MineHeadImg event) {
-//        if (event.getmFlag() == Constants.HEAD_IMG_FLAG) {
-//            //Glide.with(getActivity()).load(event.getmMsg()).into(mMineHeadIv);
-//        }
-//        if (event.getmFlag() == Constants.NICK_NAME_FLAG) {//更换昵称
-//           // mMineNameTv.setText(event.getmMsg());
-//        }
-//    }
+    @Subscribe
+    public void onEventMainThread(MineHeadImg event) {
+        if (event.getmFlag() == Constants.HEAD_IMG_FLAG) {
+            Glide.with(getActivity()).load(event.getmMsg()).into(mWirelessHeadImgIv);
+        }
+        if (event.getmFlag() == Constants.NICK_NAME_FLAG) {//更换昵称
+            mWirelessNickTv.setText(event.getmMsg());
+        }
+    }
 
     @Override
     public void onDestroy() {

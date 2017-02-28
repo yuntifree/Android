@@ -45,7 +45,7 @@
             android:button="@null"
             android:drawableTop="@drawable/main_class_img_radio2_selector"
             android:gravity="center"
-            android:text="@string/first_news"
+            android:text="@string/entertainment"
             android:textColor="@drawable/main_class_text_selector"
             android:textSize="12sp" />
 
@@ -57,7 +57,7 @@
             android:button="@null"
             android:drawableTop="@drawable/main_class_img_radio3_selector"
             android:gravity="center"
-            android:text="@string/find"
+            android:text="@string/life"
             android:textColor="@drawable/main_class_text_selector"
             android:textSize="12sp" />
 
