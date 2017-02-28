@@ -46,6 +46,8 @@ public class MainApplication extends Application {
     private User mUser;
     private String privdata;
     private String expire;
+    private String nick;
+    private String headUrl;
 
     public static Handler mHandler;
 
@@ -150,7 +152,7 @@ public class MainApplication extends Application {
 
     public void setUserName(String userName) {
         this.userName = userName;
-        SPUtils.put(sInst, Constants.SP_TIME_OUT, userName);
+        SPUtils.put(sInst, Constants.SP_USER_NAME, userName);
     }
 
     public String getUserName() {
@@ -159,6 +161,31 @@ public class MainApplication extends Application {
         }
         return userName;
     }
+
+    public void setNick(String nick) {
+        this.nick = nick;
+        SPUtils.put(sInst, Constants.SP_NICK, nick);
+    }
+
+    public String getNick() {
+        if (nick == null) {
+            nick = SPUtils.get(sInst, Constants.SP_NICK,"");
+        }
+        return nick;
+    }
+
+    public void setHeadUrl(String headUrl) {
+        this.headUrl = headUrl;
+        SPUtils.put(sInst, Constants.SP_HEAD_URL, headUrl);
+    }
+
+    public String getHeadUrl() {
+        if (headUrl == null) {
+            headUrl = SPUtils.get(sInst, Constants.SP_HEAD_URL,"");
+        }
+        return headUrl;
+    }
+
 
     public User getUser() {
         if (mUser == null) {

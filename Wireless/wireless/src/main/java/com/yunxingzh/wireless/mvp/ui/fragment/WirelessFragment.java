@@ -28,6 +28,7 @@ import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.config.MineHeadImg;
 import com.yunxingzh.wireless.mview.BadgeView;
 import com.yunxingzh.wireless.mview.CircleWaveView;
@@ -272,6 +273,8 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         }
 
         timeChanged();
+        mWirelessNickTv.setText(MainApplication.get().getNick());
+        Glide.with(getActivity()).load(MainApplication.get().getHeadUrl()).into(mWirelessHeadImgIv);
     }
 
     @Override

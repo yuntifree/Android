@@ -40,14 +40,14 @@
                     android:gravity="center|left"
                     android:ellipsize="end"
                     android:background="@drawable/wireless_head_style"
-                    android:text="斯士大夫撒旦发射撒旦法" />
+                    android:text="东莞无限" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/wireless_head_img_iv"
                     android:layout_width="26dp"
                     android:layout_height="26dp"
                     android:layout_gravity="center|left"
-                    android:src="@drawable/wireless" />
+                    android:src="@drawable/my_ico_pic" />
 
             </FrameLayout>
         </LinearLayout>

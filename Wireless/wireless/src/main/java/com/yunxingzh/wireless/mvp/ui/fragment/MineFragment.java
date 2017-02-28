@@ -174,6 +174,7 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
             headImgFrom = 0;
         }
         if (!StringUtils.isEmpty(mHeadUrl)) {
+            MainApplication.get().setHeadUrl(mHeadUrl);
             EventBus.getDefault().post(new MineHeadImg(Constants.HEAD_IMG_FLAG, mHeadUrl));
             ToastUtil.showMiddle(getActivity(), "恭喜，更换头像成功");
         } else {

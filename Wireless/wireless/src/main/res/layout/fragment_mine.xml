@@ -32,7 +32,7 @@
                 android:drawableBottom="@drawable/ico_write"
                 android:drawablePadding="3dp"
                 android:maxLines="1"
-                android:text="发发发"
+                android:text="东莞无限"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
 

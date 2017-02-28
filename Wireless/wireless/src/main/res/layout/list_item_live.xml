@@ -1,85 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/live_item_lay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="1dp"
+    android:layout_marginRight="1dp"
     android:background="@color/white"
     android:orientation="vertical"
-    android:layout_marginRight="1dp"
-    android:layout_marginLeft="1dp"
-    android:paddingBottom="9dp"
-    android:id="@+id/live_item_lay">
+    android:paddingBottom="6dp">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="210dp">
 
         <ImageView
             android:id="@+id/live_bg_iv"
             android:layout_width="match_parent"
-            android:layout_height="190dp"
+            android:layout_height="185dp"
             android:scaleType="fitXY" />
 
-        <TextView
-            android:layout_width="37dp"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/border_live_style"
-            android:gravity="center"
-            android:padding="3dp"
-            android:text="直播"
-            android:textColor="@color/white"
-            android:textSize="11sp" />
+            android:src="@drawable/ico_playing"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center|bottom"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/live_img_small_iv"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/wireless" />
+
+            <TextView
+                android:id="@+id/live_nick_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="直播"
+                android:textColor="@color/gray_969696"
+                android:textSize="14sp" />
+
+        </LinearLayout>
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_margin="9dp"
-        android:gravity="center"
+        android:layout_marginRight="5dp"
         android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/live_location_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:text="广东    广州"
+            android:textColor="@color/gray_969696"
+            android:textSize="12sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/rectangle" />
-
-        <TextView
-            android:id="@+id/live_nick_name_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="9dp"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="直播"
-            android:textColor="@color/gray_434343"
-            android:textSize="14sp" />
+            android:src="@drawable/viewers" />
 
         <TextView
             android:id="@+id/live_watchs_tv"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
+            android:layout_marginLeft="2dp"
             android:ellipsize="end"
-            android:maxLines="1"
             android:gravity="right"
-            android:text="100人"
+            android:maxLines="1"
+            android:text="100"
+            android:textColor="@color/blue_009CFB"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="人"
             android:textColor="@color/gray_969696"
-            android:textSize="12sp" />
-
+            android:textSize="13sp" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/live_location_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:text="广东    广州"
-        android:maxLines="1"
-        android:textColor="@color/gray_969696"
-        android:textSize="12sp" />
 
 </LinearLayout>

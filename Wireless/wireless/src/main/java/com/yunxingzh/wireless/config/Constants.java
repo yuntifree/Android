@@ -6,6 +6,8 @@ public class Constants {
     public static final String SP_WIFI_PWD = "wifiPwd";
     public static final String SP_TIME_OUT = "timeout";
     public static final String SP_USER_NAME = "userName";
+    public static final String SP_NICK = "nick";
+    public static final String SP_HEAD_URL = "headUrl";
     public static final String SP_KEY_MACHINE = "MachineId";
     public static final String SP_KEY_USER = "sp_key_user";
     public static final String SP_KEY_PRIVDATA = "sp_key_privdata";

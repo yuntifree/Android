@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.config.MineHeadImg;
 import com.yunxingzh.wireless.mview.ClearEditText;
 import com.yunxingzh.wireless.mview.StatusBarColor;
@@ -118,6 +119,7 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
         } else if (!StringUtils.isEmpty(mNickInputEt.getHint().toString())) {
             nickName = mNickInputEt.getHint().toString();
         }
+        MainApplication.get().setNick(nickName);
         EventBus.getDefault().post(new MineHeadImg(Constants.NICK_NAME_FLAG, nickName));
         finish();
     }
