@@ -119,7 +119,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     private TextView mMainTemperature, mMainWeather, mMachineErrorTv;
     private WeatherVo weatherNewsData;
     private NoticeVo noticeVo;
-    private ConvenientBanner mAdRotationBanner;
 
     private WifiUtils wifiUtils = null;
     private CheckEnvTask mCheckTask = null;
@@ -209,7 +208,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         mMainWifiManager.setOnClickListener(this);
         mMainMapLay = findView(view, R.id.main_map_lay);
         mMainMapLay.setOnClickListener(this);
-        mAdRotationBanner = findView(view, R.id.banner_img);
         mConnectCountTv = findView(view, R.id.connect_count_tv);
         mEconomizeTv = findView(view, R.id.economize_tv);
         mMainSpeedtest = findView(view, R.id.main_speedtest_lay);
@@ -251,7 +249,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         mBadgeView.setTargetView(mMainWifiManager);
         // mBadgeView.set
         iWirelessPresenter = new WirelessPresenterImpl(this);
-        mAdRotationBanner.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
         iWirelessPresenter.weatherNews();
 
         FWManager.getInstance().addWifiObserver(wifiObserver);
@@ -332,31 +329,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         userVo = fontInfoVo.user;
         mConnectCountTv.setText(userVo.total + "");
         mEconomizeTv.setText(userVo.save + "");
-
-        if (bannersVo != null) {
-            List<String> imageList = new ArrayList<String>(bannersVo.size());
-            for (BannerVo bannersList : bannersVo) {
-                imageList.add(bannersList.img);
-            }
-            mAdRotationBanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
-                @Override
-                public NetworkImageHolderView createHolder() {
-                    return new NetworkImageHolderView();
-                }
-            }, imageList);
-
-            bannersState();
-        }
-        //banner图跳转
-        mAdRotationBanner.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                String url = bannersVo.get(position).dst;
-                if (!StringUtils.isEmpty(url)) {
-                    startActivity(WebViewActivity.class, Constants.URL, url, "", "");
-                }
-            }
-        });
     }
 
     private void CheckAndLogon() {
@@ -858,12 +830,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mAdRotationBanner.stopTurning();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
@@ -871,19 +837,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             mBadgeView.setBadgeCount(apList.size());
         }
         updateConnectState(false);
-        if (bannersVo != null) {
-            bannersState();
-        }
     }
 
-    public void bannersState() {
-        if (bannersVo.size() > 1) {
-            mAdRotationBanner.setCanLoop(true);
-            mAdRotationBanner.setPointViewVisible(true);
-            mAdRotationBanner.startTurning(2000);
-        } else {
-            mAdRotationBanner.setCanLoop(false);
-            mAdRotationBanner.setPointViewVisible(false);
-        }
-    }
 }

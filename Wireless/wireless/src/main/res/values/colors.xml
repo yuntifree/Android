@@ -5,7 +5,7 @@
     <color name="black_mask_30">#4c000000</color>
     <color name="black_mask_70">#b2000000</color>
     <color name="black_mask_80">#cc000000</color>
-
+    <color name="black_mask_10">#16000000</color>
     <color name="red">#FFFF0000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>

@@ -15,17 +15,20 @@ public class FindList implements Serializable {
     public List<RecommendVo> recommends;//精品推荐
     public List<Service> services;//服务
     public class FindBannerVo implements Serializable {
+        public int id;//report_click使用 type=10
         public String img;
         public String dst;
     }
 
     public class CityServiceVo implements Serializable {
+        public int id;
         public String img;
         public String title;
         public String dst;
     }
 
     public class RecommendVo implements Serializable {
+        public int id;
         public String img;
         public String dst;
     }

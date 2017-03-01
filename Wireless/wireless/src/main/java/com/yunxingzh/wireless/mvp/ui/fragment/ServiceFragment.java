@@ -1,6 +1,7 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
@@ -23,19 +24,25 @@ import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.presenter.impl.ServicePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.SearchActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
+import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
 import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import wireless.libs.bean.resp.FindList;
-import wireless.libs.bean.resp.ServiceList;
+import wireless.libs.bean.vo.BannerVo;
 import wireless.libs.bean.vo.Service;
+import wireless.libs.convenientbanner.ConvenientBanner;
+import wireless.libs.convenientbanner.holder.CBViewHolderCreator;
+import wireless.libs.convenientbanner.listener.OnItemClickListener;
 
 /**
  * Created by stephon_ on 2016/11/1.
@@ -48,12 +55,15 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     private final static int CLICK_COUNT = 4;//0- 视频播放 1-新闻点击 2-广告展示 3-广告点击 4-服务
 
     private TextView mSearchTv;
-    private TextView mServiceMoreTv, mHouseKeepingTv, mHousingTv, mSecondHandsTv, mCooperationTv;
-    private LinearLayout mServiceParentGroup;
+    private LinearLayout mServiceParentGroup, mServiceCityLay, mServiceCityItem;
     private IServicePresenter iServicePresenter;
     private IWirelessPresenter iWirelessPresenter;
     private NetErrorLayout netErrorLayout;
     private WindowManager wm;
+    private ImageView mServiceRecommendIv, mServiceCityIv;
+    private ConvenientBanner mBannerAdvert, mBannerRecommend;
+    private List<FindList.FindBannerVo> advertBannerVo;
+    private List<FindList.RecommendVo> recommendsBannerVo;
 
     @Nullable
     @Override
@@ -66,30 +76,28 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
     public void initView(View view) {
         mServiceParentGroup = findView(view, R.id.service_parent_group);
-        mServiceMoreTv = findView(view, R.id.service_more_tv);
-        mServiceMoreTv.setOnClickListener(this);
-        mHouseKeepingTv = findView(view, R.id.housekeeping_tv);
-        mHouseKeepingTv.setOnClickListener(this);
-        mHousingTv = findView(view, R.id.housing_tv);
-        mHousingTv.setOnClickListener(this);
-        mSecondHandsTv = findView(view, R.id.second_hands_tv);
-        mSecondHandsTv.setOnClickListener(this);
-        mCooperationTv = findView(view, R.id.cooperation_tv);
-        mCooperationTv.setOnClickListener(this);
         mSearchTv = findView(view, R.id.search_tv);
         mSearchTv.setOnClickListener(this);
+        mServiceCityLay = findView(view, R.id.service_city_lay);
+        mServiceRecommendIv = findView(view, R.id.service_recommend_iv);
+        mServiceCityIv = findView(view, R.id.service_city_iv);
+        mBannerAdvert = findView(view, R.id.banner_advert);
+        mBannerRecommend = findView(view, R.id.banner_recommend);
+        mServiceCityItem = findView(view, R.id.service_city_item);
     }
 
     public void initData() {
         //注册EventBus
         EventBus.getDefault().register(this);
+        mBannerAdvert.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
+        mBannerRecommend.setPageIndicator(new int[]{R.drawable.ic_page_indicator, R.drawable.ic_page_indicator_focused});
+
         iWirelessPresenter = new WirelessPresenterImpl(this);
         iServicePresenter = new ServicePresenterImpl(this);
         if (!NetUtils.isNetworkAvailable(getActivity())) {
             netErrorState();
         }
-        iServicePresenter.getService();
-       //iServicePresenter.getFind();
+        iServicePresenter.getFind();
     }
 
     @Subscribe
@@ -100,60 +108,126 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (iServicePresenter != null && iWirelessPresenter != null) {
-            iServicePresenter.onDestroy();
-            iWirelessPresenter.onDestroy();
-        }
-        EventBus.getDefault().unregister(this);//反注册EventBus
-    }
-
-    @Override
     public void onClick(View v) {
-        if (mCooperationTv == v) {//招聘
-            if (iWirelessPresenter != null) {
-                iWirelessPresenter.clickCount(1, CLICK_COUNT, "");//上报
-            }
-            startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zk", Constants.TITLE, mCooperationTv.getText() + "");
-        } else if (mSecondHandsTv == v) {//二手
-            if (iWirelessPresenter != null) {
-                iWirelessPresenter.clickCount(2, CLICK_COUNT, "");
-            }
-            startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zl", Constants.TITLE, mSecondHandsTv.getText() + "");
-        } else if (mHousingTv == v) {//租房
-            if (iWirelessPresenter != null) {
-                iWirelessPresenter.clickCount(3, CLICK_COUNT, "");
-            }
-            startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zj", Constants.TITLE, mHousingTv.getText() + "");
-        } else if (mHouseKeepingTv == v) {//家政
-            if (iWirelessPresenter != null) {
-                iWirelessPresenter.clickCount(4, CLICK_COUNT, "");
-            }
-            startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zm", Constants.TITLE, mHouseKeepingTv.getText() + "");
-        } else if (mServiceMoreTv == v) {//更多
-            if (iWirelessPresenter != null) {
-                iWirelessPresenter.clickCount(5, CLICK_COUNT, "");
-            }
-            startActivity(WebViewActivity.class, Constants.URL, "http://jump.luna.58.com/i/29Zn", Constants.TITLE, mServiceMoreTv.getText() + "");
-        } else if (mSearchTv == v) {//搜索
+        if (mSearchTv == v) {//搜索
             startActivity(SearchActivity.class, "", "", "", "");
         }
     }
 
     @Override
-    public void getServiceListSuccess(ServiceList services) {
-        List<Service> list = services.services;
+    public void getFindSuccess(FindList findList) {
         //获取屏幕宽高
         int width = 0;
         int height = 0;
-        if (getActivity() == null) {
+        if (getActivity() == null || findList == null) {
             return;
         }
+        /***
+         * 顶部广告
+         */
+        advertBannerVo = findList.banners;
+        int advertSize = advertBannerVo.size();
+        bannersState(advertSize, mBannerAdvert);
+        List<String> imageList = new ArrayList<String>(advertSize);
+        for (FindList.FindBannerVo bannersList : advertBannerVo) {
+            imageList.add(bannersList.img);
+        }
+        setBannerPages(mBannerAdvert, imageList);
+        //banner图跳转
+        mBannerAdvert.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                if (iWirelessPresenter != null) {
+                    iWirelessPresenter.clickCount(advertBannerVo.get(position).id, 10, "");//上报
+                }
+                String url = advertBannerVo.get(position).dst;
+                if (!StringUtils.isEmpty(url)) {
+                    startActivity(WebViewActivity.class, Constants.URL, url, "", "");
+                }
+            }
+        });
+
+        /***
+         * 精品推荐
+         */
+        recommendsBannerVo = findList.recommends;
+        int recomSize = recommendsBannerVo.size();
+        bannersState(recomSize, mBannerRecommend);
+        List<String> recomList = new ArrayList<String>(recomSize);
+        for (FindList.RecommendVo bannersList : recommendsBannerVo) {
+            recomList.add(bannersList.img);
+        }
+        setBannerPages(mBannerRecommend, recomList);
+        //banner图跳转
+        mBannerRecommend.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                if (iWirelessPresenter != null) {
+                    iWirelessPresenter.clickCount(recommendsBannerVo.get(position).id, 11, "");//上报
+                }
+                String url = recommendsBannerVo.get(position).dst;
+                if (!StringUtils.isEmpty(url)) {
+                    startActivity(WebViewActivity.class, Constants.URL, url, "", "");
+                }
+            }
+        });
+
         wm = getActivity().getWindowManager();
         width = wm.getDefaultDisplay().getWidth();//720,1536
         height = wm.getDefaultDisplay().getHeight();//1280,2560
 
+        /***
+         * 城市服务
+         */
+        if (findList.urbanservices != null && findList.urbanservices.size() > 0) {
+            List<FindList.CityServiceVo> cityServiceVos = findList.urbanservices;
+            for (int i = 0; i < cityServiceVos.size(); i++) {
+
+                LinearLayout cityLay = new LinearLayout(getActivity());
+                cityLay.setOrientation(LinearLayout.VERTICAL);
+
+                ImageView cityIv = new ImageView(getActivity());
+                Glide.with(getActivity()).load(cityServiceVos.get(i).img).into(cityIv);
+
+                TextView cityView = new TextView(getActivity());
+                cityView.setGravity(Gravity.CENTER);
+                cityView.setText(cityServiceVos.get(i).title);
+                cityView.setTextColor(Color.parseColor("#3c3c3c"));
+                cityView.setTextSize(14);
+
+                if (width <= 720 && height <= 1280) {
+                    mServiceCityIv.setLayoutParams(getLayoutParams(0, Gravity.CENTER, 10, 30, 20, 7, 0, 5));
+                    mServiceRecommendIv.setLayoutParams(getLayoutParams(0, Gravity.CENTER, 10, 30, 20, 7, 0, 5));
+                    cityLay.addView(cityIv, getLayoutParams(0, Gravity.CENTER, 88, 88, 0, 0, 0, 20));
+                } else {
+                    mServiceCityIv.setLayoutParams(getLayoutParams(0, Gravity.CENTER, 20, 60, 40, 14, 0, 10));
+                    mServiceRecommendIv.setLayoutParams(getLayoutParams(0, Gravity.CENTER, 20, 60, 40, 14, 0, 10));
+                    cityLay.addView(cityIv, getLayoutParams(0, Gravity.CENTER, 160, 160, 0, 0, 0, 40));
+                }
+                cityLay.addView(cityView);
+
+                cityLay.setTag(cityServiceVos.get(i));
+                cityLay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FindList.CityServiceVo cityServiceVo = (FindList.CityServiceVo) v.getTag();
+                        if (iWirelessPresenter != null) {
+                            iWirelessPresenter.clickCount(cityServiceVo.id, 12, "");//上报
+                        }
+                        startActivity(WebViewActivity.class, Constants.URL, cityServiceVo.dst, Constants.TITLE, cityServiceVo.title);
+                    }
+                });
+                mServiceCityLay.addView(cityLay, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+            }
+        } else {
+            mServiceCityItem.setVisibility(View.GONE);
+            mServiceCityLay.setVisibility(View.GONE);
+        }
+
+        /***
+         * 服务项
+         */
+        List<Service> list = findList.services;
         for (int i = 0; i < list.size(); i++) {
             LinearLayout mServiceItem = new LinearLayout(getActivity());//item最外层layout
             if (isAdded()) {
@@ -188,7 +262,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 10, 20, 0, 5));
             } else {
                 // line.setMinimumHeight(40);
-                mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 20, 70, 40, 40, 0, 10));
+                mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 20, 60, 40, 40, 0, 10));
                 mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 20, 40, 0, 10));
             }
 
@@ -251,20 +325,57 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 } else {
                     getLines(lines, mServiceItem, j, childLay, 80, 90);
                 }
-
             }
-
             mServiceParentGroup.addView(mServiceItem);
-//            if (i == list.size() - 1) {
-//                return;
-//            }
-            //  mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+        }
+    }
+
+    public void bannersState(int size, ConvenientBanner banner) {
+        if (size > 1) {
+            banner.setCanLoop(true);
+            banner.setPointViewVisible(true);
+            banner.startTurning(2000);
+        } else {
+            banner.setCanLoop(false);
+            banner.setPointViewVisible(false);
+        }
+    }
+
+    public void setBannerPages(ConvenientBanner banner, List<String> imgList) {
+        banner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
+            @Override
+            public NetworkImageHolderView createHolder() {
+                return new NetworkImageHolderView();
+            }
+        }, imgList);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mBannerAdvert.stopTurning();
+        mBannerRecommend.stopTurning();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (recommendsBannerVo != null && recommendsBannerVo.size() > 0) {
+            bannersState(recommendsBannerVo.size(), mBannerRecommend);
+        }
+        if (advertBannerVo != null && advertBannerVo.size() > 0) {
+            bannersState(advertBannerVo.size(), mBannerAdvert);
         }
     }
 
     @Override
-    public void getFindSuccess(FindList findList) {
-
+    public void onDestroy() {
+        super.onDestroy();
+        if (iServicePresenter != null && iWirelessPresenter != null) {
+            iServicePresenter.onDestroy();
+            iWirelessPresenter.onDestroy();
+        }
+        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
     public void startActivity(Class activity, String key, String value, String titleKey, String titleValue) {
@@ -309,7 +420,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                             mServiceParentGroup.removeAllViews();
                         }
                         netErrorView.setVisibility(View.GONE);
-                        iServicePresenter.getService();
+                        iServicePresenter.getFind();
                     }
                 }
             });

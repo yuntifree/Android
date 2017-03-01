@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -19,77 +20,102 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <wireless.libs.convenientbanner.ConvenientBanner
+                android:id="@+id/banner_advert"
                 android:layout_width="match_parent"
-                android:layout_height="105dp"
-                android:background="@color/white"
+                android:layout_height="67dp"
+                app:canLoop="true" />
+
+            <LinearLayout
+                android:id="@+id/service_city_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/service_city_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/img_service"
+                    android:layout_marginLeft="12dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="城市服务"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/gray_5a5a5a"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/service_city_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/cooperation_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/cooperation"
-                    android:drawablePadding="5dp"
-                    android:gravity="center"
-                    android:text="@string/cooperation"
-                    android:textColor="@color/gray_3c3c3c"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/second_hands_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/second_hand"
-                    android:gravity="center"
-                    android:drawablePadding="5dp"
-                    android:text="@string/second_hands"
-                    android:textColor="@color/gray_3c3c3c"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/housing_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/housing"
-                    android:gravity="center"
-                    android:drawablePadding="5dp"
-                    android:text="@string/housing"
-                    android:textColor="@color/gray_3c3c3c"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/housekeeping_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/housekeeping"
-                    android:gravity="center"
-                    android:drawablePadding="5dp"
-                    android:text="@string/house_keeping"
-                    android:textColor="@color/gray_3c3c3c"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/service_more_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/service_more"
-                    android:gravity="center"
-                    android:drawablePadding="5dp"
-                    android:text="@string/service_more"
-                    android:textColor="@color/gray_3c3c3c"
-                    android:textSize="14sp" />
             </LinearLayout>
 
-            <View android:layout_width="match_parent"
-                android:layout_height="15dp"
-                android:background="@color/gray_f5f5f5"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:background="@color/gray_f5f5f5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/service_recommend_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/img_service"
+                    android:layout_marginLeft="12dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="精品推荐"
+                    android:textColor="@color/gray_5a5a5a"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <wireless.libs.convenientbanner.ConvenientBanner
+                android:id="@+id/banner_recommend"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12sp"
+                android:layout_marginTop="5dp"
+                app:canLoop="true" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:background="@color/gray_f5f5f5" />
+
+
+            <!--  <TextView
+                  android:id="@+id/cooperation_tv"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:drawableTop="@drawable/cooperation"
+                  android:drawablePadding="5dp"
+                  android:gravity="center"
+                  android:text="@string/cooperation"
+                  android:textColor="@color/gray_3c3c3c"
+                  android:textSize="14sp" />-->
 
             <LinearLayout
                 android:id="@+id/service_parent_group"

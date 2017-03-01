@@ -21,7 +21,6 @@ import wireless.libs.bean.vo.UpdateVo;
 import wireless.libs.bean.vo.User;
 import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
-import wireless.libs.bean.resp.ServiceList;
 import wireless.libs.bean.resp.WeatherNewsList;
 import wireless.libs.bean.resp.WifiList;
 import wireless.libs.bean.resp.WifiMapList;
@@ -143,16 +142,6 @@ public class NetWorkWarpper {
      */
     public static void getWifiMap(HttpHandler<WifiMapList> handler) {
         String path = "get_all_aps";
-        HttpParams httpParams = new HttpParams();
-        HttpUtils.post(path, httpParams, handler);
-    }
-
-    /**
-     * 获取服务列表
-     * @param handler
-     */
-    public static void services(HttpHandler<ServiceList> handler) {
-        String path = "services";
         HttpParams httpParams = new HttpParams();
         HttpUtils.post(path, httpParams, handler);
     }
