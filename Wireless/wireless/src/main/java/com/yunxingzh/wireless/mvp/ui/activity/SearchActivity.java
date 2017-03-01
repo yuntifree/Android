@@ -13,6 +13,7 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.ClearEditText;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
 /**
@@ -49,6 +50,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if (mSearchBtn == v) {
+            AppUtils.animation(mSearchBtn);
             if (mSearchBtn.getText().equals("取消")) {
                 finish();
             } else if (mSearchBtn.getText().equals("搜索")) {

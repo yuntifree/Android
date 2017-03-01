@@ -18,6 +18,7 @@ import com.yunxingzh.wireless.mvp.presenter.impl.DefHeadPresenterImpl;
 import com.yunxingzh.wireless.mvp.presenter.impl.MinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.view.IDefHeadView;
+import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
@@ -78,6 +79,7 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
         if (mTitleReturnIv == v) {
             finish();
         } else if (mNickRefreshTv == v) {
+            AppUtils.animation(mNickRefreshTv);
             if (!StringUtils.isEmpty(mNickInputEt.getText().toString())){
                 mNickInputEt.setText("");
             }

@@ -50,6 +50,7 @@ import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IWirelessView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
+import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
@@ -357,6 +358,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 startActivity(WebViewActivity.class, Constants.URL, weatherNewsData.dst, Constants.TITLE, "东莞天气");
             }
         } else if (footView == v) {//查看更多新闻
+            AppUtils.animation(footView);
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mMainWifiManager == v) {//wifi管理
             startActivity(WifiManagerActivity.class, "", "", "", "");
@@ -376,12 +378,16 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 startActivity(WifiSpiritedActivity.class, "", "", "", "");
             }
         } else if (mFontNewsTv == v) { // 东莞头条
+            AppUtils.animation(mFontNewsTv);
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mFontVideoTv == v) { //热门视频
+            AppUtils.animation(mFontVideoTv);
             EventBus.getDefault().post(new EventBusType(0, Constants.VIDEO));
         } else if (mFontServiceTv == v) { //同城服务
+            AppUtils.animation(mFontServiceTv);
             // EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
         } else if (mFontZhiTv == v) { //智慧服务
+            AppUtils.animation(mFontZhiTv);
             EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
         } else if (mFontPlayingTv == v) { //同城直播
 

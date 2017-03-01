@@ -9,6 +9,10 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 
 import java.util.List;
 
@@ -217,5 +221,28 @@ public class AppUtils {
 			}
 		}
 		return false;
+	}
+
+
+	/**
+	 * 缩放动画效果
+	 */
+	public static void animation(View view) {
+		// 参数1：x轴的初始值
+		// 参数2：x轴收缩后的值
+		// 参数3：y轴的初始值
+		// 参数4：y轴收缩后的值
+		// 参数5：确定x轴坐标的类型
+		// 参数6：x轴的值，0.5f表明是以自身这个控件的一半长度为x轴
+		// 参数7：确定y轴坐标的类型
+		// 参数8：y轴的值，0.5f表明是以自身这个控件的一半长度为x轴
+		AnimationSet animationSet = new AnimationSet(true);
+		ScaleAnimation scaleAnimation = new ScaleAnimation(0.95f, 1.0f, 0.95f,
+				1.0f, Animation.RELATIVE_TO_SELF, 0.8f,
+				Animation.RELATIVE_TO_SELF, 0.8f);
+		scaleAnimation.setDuration(200);
+		animationSet.addAnimation(scaleAnimation);
+		view.startAnimation(animationSet);
+
 	}
 }

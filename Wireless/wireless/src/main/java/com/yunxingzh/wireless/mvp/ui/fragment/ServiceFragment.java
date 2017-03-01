@@ -27,6 +27,7 @@ import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
+import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -210,6 +211,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 cityLay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        AppUtils.animation(v);
                         FindList.CityServiceVo cityServiceVo = (FindList.CityServiceVo) v.getTag();
                         if (iWirelessPresenter != null) {
                             iWirelessPresenter.clickCount(cityServiceVo.id, 12, "");//上报
@@ -279,6 +281,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 LinearLayout childLay = new LinearLayout(getActivity());
                 for (int k = 0; k < 4; k++) {//循环子item
                     LinearLayout itemLay = new LinearLayout(getActivity());
+                    itemLay.setBackground(getResources().getDrawable(R.drawable.view_selector));
                     itemLay.setOrientation(LinearLayout.VERTICAL);
                     int positon = j * 4 + k;//得到item当前position
                     if (positon >= size) {//一行不足3个时填充空view

@@ -18,6 +18,7 @@ import com.yunxingzh.wireless.mvp.presenter.IDefHeadPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.DefHeadPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.view.IDefHeadView;
+import com.yunxingzh.wireless.utils.AppUtils;
 
 import java.util.List;
 
@@ -108,6 +109,7 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                 maleItems.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        AppUtils.animation(v);
                         DefHeadMaleVo maleVo = (DefHeadMaleVo) v.getTag();
                         Intent mIntent = new Intent();
                         mIntent.putExtra("headUrl", maleVo.headurl);
@@ -135,7 +137,11 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                 age.setTextSize(10);
                 age.setText(femaleVos.get(i).age);
 
-                femaleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 130, 130, 0, 0, 0, 0));
+                if (width <= 720 && height <= 1280) {
+                    femaleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 130, 130, 0, 0, 0, 0));
+                } else {
+                    femaleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 250, 250, 0, 0, 0, 0));
+                }
                 femaleItems.addView(name, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
                 femaleItems.addView(age, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
 
@@ -143,6 +149,7 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                 femaleItems.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        AppUtils.animation(v);
                         DefHeadFemaleVo femaleVo = (DefHeadFemaleVo) v.getTag();
                         Intent mIntent = new Intent();
                         mIntent.putExtra("headUrl", femaleVo.headurl);
