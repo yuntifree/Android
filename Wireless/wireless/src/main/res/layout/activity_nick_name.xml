@@ -22,6 +22,16 @@
         android:text="换一个试试"
         android:id="@+id/nick_refresh_tv" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:textSize="12sp"
+        android:textColor="@color/gray_b4b4b4"
+        android:text="12个字以内" />
+
     <com.yunxingzh.wireless.mview.ClearEditText
         android:id="@+id/nick_input_et"
         android:layout_width="match_parent"
@@ -29,7 +39,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/border_feed_phone"
         android:hint="我我我"
         android:paddingLeft="10dp"

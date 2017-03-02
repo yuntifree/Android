@@ -27,28 +27,28 @@ public class Util {
         double speedIn = speed;
         // 如果是bit那么直接返回bit
         if (speed == 0) {
-            return "0 KB/s";
+            return "0 Mbps";
         }
         if (speed < 1024) {
-            String r = "B/s";
-            res = format1.format(speedIn) + " " + r;
+            String r = "Mbps";
+            res = format1.format(speedIn / 1024 / 1024 * 8) + " " + r;
         } else {
             // 如果比bit大，那么直接换算成KB
-            speedIn = speedIn / 1024;
+            speedIn = speedIn / 1024 / 1024 * 8;
             if (speedIn < 1024) {
-                String r = "KB/s";
+                String r = "Mbps";
                 res = format1.format(speedIn) + " " + r;
             } else {
                 // 如果比KB大，那么直接换算成MB，当换算成gB的时候
-                speedIn = speedIn / 1024;
+                speedIn = speedIn / 1024 / 1024 * 8;
                 if (speedIn < 1024) {
-                    String r = "MB/s";
+                    String r = "Mbps";
                     res = format1.format(speedIn) + " " + r;
                 } else {
                     // 如果比mB大，那么直接换算成gB，当换算成gB的时候
-                    speedIn = speedIn / 1024;
+                    speedIn = speedIn / 1024 / 1024 * 8;
                     if (speedIn < 1024) {
-                        String r = "GB/s";
+                        String r = "Mbps";
                         res = format1.format(speedIn) + " " + r;
                     }
                 }

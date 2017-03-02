@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.utils.StringUtils;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import wireless.libs.bean.vo.LiveVo;
@@ -35,7 +36,11 @@ public class HeadLineLiveAdapter extends BaseQuickAdapter<LiveVo> {
             baseViewHolder.setText(R.id.live_nick_name_tv, liveVo.nickname + "");
         }
         Glide.with(mContext).load(liveVo.avatar).into((ImageView) baseViewHolder.getView(R.id.live_img_small_iv));
-        baseViewHolder.setText(R.id.live_watchs_tv, liveVo.watches + "");
+        if (liveVo.watches > 10000) {
+            baseViewHolder.setText(R.id.live_watchs_tv, new DecimalFormat("0").format(liveVo.watches / 10000) + "万");
+        } else {
+            baseViewHolder.setText(R.id.live_watchs_tv, liveVo.watches + "");
+        }
         baseViewHolder.setText(R.id.live_location_tv, liveVo.location + "");
         baseViewHolder.setOnClickListener(R.id.live_item_lay, new View.OnClickListener() {
             @Override

@@ -2,18 +2,18 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
@@ -21,7 +21,7 @@ import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.EpisodeAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IGetJokesView;
-import com.yunxingzh.wireless.utils.SpacesItemDecoration;
+import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,67 +37,105 @@ import wireless.libs.bean.resp.JokeList;
  * 段子
  */
 
-public class EpisodeFrament extends BaseFragment implements IGetJokesView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class EpisodeFrament extends BaseFragment implements IGetJokesView, SwipeRefreshLayout.OnRefreshListener,NetErrorLayout.OnNetErrorClickListener {
 
     private static final int ZAN_TYPE = 5;//点赞
     private static final int CAI_TYPE = 9;//点赞
 
-    private RecyclerView mListRv;
+    private ListView mListLv;
     private SwipeRefreshLayout mSwipeRefreshLay;
     private IHeadLinePresenter iHeadLinePresenter;
     private IWirelessPresenter iWirelessPresenter;
-    private boolean isFirstRefresh = true;
     private EpisodeAdapter episodeAdapter;
     private List<JokeList.JokeVo> jokeVos;
+    private JokeList jokeList;
+    private boolean isFastClick;
+    private LinearLayout mNetErrorLay;
+    private NetErrorLayout netErrorLayout;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_live, container, false);
+        View view = inflater.inflate(R.layout.fragment_episode, container, false);
         initView(view);
         initData();
         return view;
     }
 
     public void initView(View view) {
-        mListRv = findView(view, R.id.live_rv);
-        mSwipeRefreshLay = findView(view, R.id.swipe_refresh_live);
+        mListLv = findView(view, R.id.epi_lv);
+        mSwipeRefreshLay = findView(view, R.id.epi_sw);
         mSwipeRefreshLay.setOnRefreshListener(this);
-        mListRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mListRv.setHasFixedSize(true);
-        mListRv.addItemDecoration(new SpacesItemDecoration(30));
+        mNetErrorLay = findView(view, R.id.net_error_lay);
     }
 
     public void initData() {
         //注册EventBus
         EventBus.getDefault().register(this);
-        episodeAdapter = new EpisodeAdapter(new ArrayList<JokeList.JokeVo>());
-        episodeAdapter.openLoadMore(Constants.PAGE_SIZE);
-        episodeAdapter.setOnLoadMoreListener(this);
-        episodeAdapter.setEmptyView(emptyView(mListRv));
-        mListRv.setAdapter(episodeAdapter);
         iWirelessPresenter = new WirelessPresenterImpl(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iHeadLinePresenter.getJokes(0);
+        mListLv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                switch (scrollState) {
+                    // 当不滚动时
+                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                        // 判断滚动到底部
+                        if (mListLv.getLastVisiblePosition() == (mListLv.getCount() - 1)) {
+                            if (jokeList.hasmore == 0) {
+                                ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
+                            } else {
+                                if (isFastClick) {
+                                    isFastClick = false;
+                                    if (jokeList != null && jokeList.infos.size() > 0) {
+                                        iHeadLinePresenter.getJokes(jokeList.infos.get(jokeList.infos.size() - 1).seq);
+                                    }
+                                }
+                            }
+                        }
+                        // 判断滚动到顶部
+                        if (mListLv.getFirstVisiblePosition() == 0) {
+                            // ToastUtil.showMiddle(getActivity(), "顶部");
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
+        netErrorLayout = new NetErrorLayout(getActivity());
+        netErrorLayout.setOnNetErrorClickListener(this);
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            mSwipeRefreshLay.setVisibility(View.GONE);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+            View netErrorView = netErrorLayout.netErrorLay(0);
+            mNetErrorLay.addView(netErrorView);
+        }
     }
 
     @Override
-    public void getJokesSuccess(JokeList jokeList) {
+    public void getJokesSuccess(JokeList jokes) {
+        isFastClick = true;
         mSwipeRefreshLay.setRefreshing(false);
-        if (jokeList != null) {
-            jokeVos = jokeList.infos;
-            if (jokeVos != null && jokeList.hasmore == 1) {
-                if (isFirstRefresh) {
-                    isFirstRefresh = false;
-                    episodeAdapter.setNewData(jokeVos);
-                } else {
-                    episodeAdapter.addData(jokeVos);
-                }
-            } else {
-                // 数据全部加载完毕就调用 loadComplete
-                episodeAdapter.loadComplete();
-                ToastUtil.showMiddle(getActivity(), R.string.no_resource);
+        if (jokes != null) {
+            jokeList = jokes;
+        }
+
+        if (jokeVos == null) {
+            jokeVos = new ArrayList<JokeList.JokeVo>();
+        }
+
+        if (jokeList.infos != null) {
+            jokeVos.addAll(jokeList.infos);
+            if (episodeAdapter == null) {
+                episodeAdapter = new EpisodeAdapter(getActivity(), jokeVos);
+                mListLv.setAdapter(episodeAdapter);
             }
+            episodeAdapter.notifyDataSetChanged();
         } else {
-            ToastUtil.showMiddle(getActivity(), R.string.re_error);
+            ToastUtil.showMiddle(getActivity(), R.string.no_news);
         }
     }
 
@@ -111,15 +149,8 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
 
     @Override
     public void onRefresh() {
-        isFirstRefresh = true;
         iHeadLinePresenter.getJokes(0);
-    }
-
-    @Override
-    public void onLoadMoreRequested() {
-        if (iHeadLinePresenter != null && jokeVos != null) {
-            iHeadLinePresenter.getJokes(jokeVos.get(jokeVos.size() - 1).seq);
-        }
+        jokeVos.clear();
     }
 
     @Subscribe
@@ -135,19 +166,9 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
                 iWirelessPresenter.clickCount(jokeVos.get(position).id, CAI_TYPE, "");
             }
         }
-    }
-
-    private View emptyView(ViewGroup viewGroup) {
-        View netView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, viewGroup, false);
-        TextView netErrorBtn = (TextView) netView.findViewById(R.id.video_net_error_btn);
-        netErrorBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isFirstRefresh = true;
-                iHeadLinePresenter.getJokes(0);
-            }
-        });
-        return netView;
+        if (event.getMsg() == Constants.NET_ERROR) {//网络不可用（无法上网）
+            netErrorClick();
+        }
     }
 
     @Override
@@ -158,5 +179,16 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
             iWirelessPresenter.onDestroy();
         }
         EventBus.getDefault().unregister(this);//反注册EventBus
+    }
+
+    @Override
+    public void netErrorClick() {
+        if (!NetUtils.isNetworkAvailable(getActivity())) {
+            ToastUtil.showMiddle(getActivity(), R.string.net_set);
+        } else {
+            mNetErrorLay.setVisibility(View.GONE);
+            mSwipeRefreshLay.setVisibility(View.VISIBLE);
+            iHeadLinePresenter.getJokes(0);
+        }
     }
 }

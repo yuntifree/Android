@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/gray_f0f0f0"
+    android:paddingTop="15dp"
     android:orientation="vertical">
 
     <FrameLayout
@@ -13,7 +14,7 @@
             android:id="@+id/joke_content_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="18dp"
             android:background="@color/white"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
@@ -46,8 +47,8 @@
 
             <ImageView
                 android:id="@+id/joke_unlike_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:src="@drawable/ico_unlike" />
 
             <TextView
@@ -57,6 +58,7 @@
                 android:text="1205人"
                 android:textColor="@color/gray_969696"
                 android:textSize="13sp" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -68,8 +70,8 @@
 
             <ImageView
                 android:id="@+id/joke_like_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:src="@drawable/ico_like_gray"/>
 
             <TextView

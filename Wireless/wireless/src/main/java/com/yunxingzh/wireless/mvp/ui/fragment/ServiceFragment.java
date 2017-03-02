@@ -203,7 +203,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 } else {
                     mServiceCityIv.setLayoutParams(getLayoutParams(0, Gravity.CENTER, 20, 60, 40, 14, 0, 10));
                     mServiceRecommendIv.setLayoutParams(getLayoutParams(0, Gravity.CENTER, 20, 60, 40, 14, 0, 10));
-                    cityLay.addView(cityIv, getLayoutParams(0, Gravity.CENTER, 160, 160, 0, 0, 0, 40));
+                    cityLay.addView(cityIv, getLayoutParams(0, Gravity.CENTER, 150, 150, 0, 0, 0, 40));
                 }
                 cityLay.addView(cityView);
 

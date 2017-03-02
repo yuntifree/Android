@@ -17,6 +17,7 @@ public class JokeList implements Serializable {
         public String content;
         public int heart;
         public int bad;
-        public boolean isClick;
+        public boolean isLikeClick;
+        public boolean isUnlikeClick;
     }
 }

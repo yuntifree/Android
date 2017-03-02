@@ -22,6 +22,7 @@ import com.yunxingzh.wireless.mview.SpeedTestDialog;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.utils.AppUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtil;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -71,7 +72,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     private RotatePointer mRotatePointer;
     private ExecutorService mExecutorService;
 
-    private TextView mTitleNameTv, mMiddleContentTv, mMiddleSpeedTv;
+    private TextView mTitleNameTv, mMiddleContentTv;
     private ImageView mTitleReturnIv;
     private LinearLayout mMiddleNoticeLay;
     private int speedFlag;
@@ -101,7 +102,6 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         mRotatePointer.setsecondSweepAngle(0);
         mRotatePointer.setSecondSpinColor(0xFF0063D2);
         mMiddleNoticeLay = (LinearLayout) findViewById(R.id.middle_notice_lay);
-        mMiddleSpeedTv = (TextView) findViewById(R.id.middle_speed_tv);
         mMiddleContentTv = (TextView) findViewById(R.id.middle_content_tv);
 
         mSpeed = (TextView) findViewById(R.id.tv_t_speed);
@@ -117,6 +117,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
                         mMiddleNoticeLay.setVisibility(View.INVISIBLE);
                         mBtnStart.setText(R.string.re_speed);
                     } else if (mBtnStart.getText().equals("重新测速")) {
+                        mMiddleContentTv.setText("请稍等片刻...");
                         startTestSpeed();
                     }
                 } else {
@@ -144,6 +145,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         mExecutorService = Executors.newScheduledThreadPool(3);
         mSpeed.setText(getTimeString(Util.speedMethodNormal(0)));
         mSpeed.setVisibility(View.VISIBLE);
+        mSpeed.setTextColor(Color.parseColor("#ffffff"));
 
         startTestSpeed();
     }
@@ -164,7 +166,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
                 return;
             }
         }
-
+        mSpeed.setTextColor(Color.parseColor("#ffffff"));
         mMiddleNoticeLay.setVisibility(View.VISIBLE);
         mBtnStart.setText(R.string.stop_speed);
         mList.clear();
@@ -218,8 +220,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             //tag = "网速碉堡了\n即刻下载推荐应用畅享高速WiFi";
             desc = "很快";
         }
-
-        mMiddleSpeedTv.setText(getTimeString(Util.speedMethodNormal(speed)));
+        mSpeed.setTextColor(Color.parseColor("#ffec00"));
         mMiddleContentTv.setText(tag);
         mBtnStart.setText(R.string.re_speed);
     }
@@ -393,22 +394,30 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private int speedToAngle(long speed) {
-        int angle = 0;
-        if (speed < 1024) {
-            angle = 0;
-        } else if (speed < 1024 * 1024 && speed >= 1024) {
-            // 0~1M, 每100k 11.25度
-            angle = (int) (speed * 11.25 / (1024 * 100));
-        } else if (speed < 5120 * 1024 && speed >= 1024 * 1024) {
-            // 1M~5M, 每1M，11.25度
-            angle = (int) ((speed * 1.0 / (1024 * 1024) - 1) * 11.25 + 112.5);
-        } else if (speed < 10240 * 1024 && speed >= 5120 * 1024) {
-            // 5M~10M, 每2.5M 11.25度
-            angle = (int) ((speed * 1.0 / (1024 * 1024) - 5) / 2.5 * 11.25 + 157.5);
-        } else if (speed >= 10240 * 1024) {
-            angle = 180;
+        int speedMb = (int) (speed / 1024 / 1024 * 8);
+        int angle;
+        if (speedMb < 3) {
+            // 0~3M，每0.5M 11.25度
+            angle = (int) (speedMb / 0.5 * 11.25);
+        } else if (speedMb >= 3 && speedMb < 5) {
+            // 3~5M，每1M 11.25度
+            angle = (int) ((speedMb - 3) * 11.25 + 67.5);
+        } else if (speedMb >= 5 && speedMb < 10) {
+            // 5~10M，每2.5M 11.25度
+            angle = (int) ((speedMb - 5) / 2.5 * 11.25 + 90);
+        } else if (speedMb >= 10 && speedMb < 30) {
+            // 10~30M，每5M 11.25度
+            angle = (int) ((speedMb - 10) / 5 * 11.25 + 112.5);
+        } else if (speedMb >=30 && speedMb < 50) {
+            // 30~50M，每10M 11.25度
+            angle = (int) ((speedMb - 30) / 10 * 11.25 + 157.5);
+        } else {
+            // 超出50M
+            angle = 175;
         }
+        LogUtils.i("sss", angle + "");
         return angle;
+
     }
 
     private static int mRunnableCount = 0;
