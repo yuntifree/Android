@@ -46,7 +46,6 @@ import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiSpiritedActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
-import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IWirelessView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
@@ -64,7 +63,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -77,9 +75,6 @@ import wireless.libs.bean.vo.MainNewsVo;
 import wireless.libs.bean.vo.NoticeVo;
 import wireless.libs.bean.vo.UserConnectVo;
 import wireless.libs.bean.vo.WeatherVo;
-import wireless.libs.convenientbanner.ConvenientBanner;
-import wireless.libs.convenientbanner.holder.CBViewHolderCreator;
-import wireless.libs.convenientbanner.listener.OnItemClickListener;
 import wireless.libs.network.request.NetWorkWarpper;
 
 /**
@@ -271,8 +266,16 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         }
 
         timeChanged();
-        mWirelessNickTv.setText(MainApplication.get().getNick());
-        Glide.with(getActivity()).load(MainApplication.get().getHeadUrl()).into(mWirelessHeadImgIv);
+        if (!StringUtils.isEmpty(MainApplication.get().getNick())) {
+            mWirelessNickTv.setText(MainApplication.get().getNick());
+        } else {
+            mWirelessNickTv.setText("东莞无限");
+        }
+        if (!StringUtils.isEmpty(MainApplication.get().getHeadUrl())) {
+            Glide.with(getActivity()).load(MainApplication.get().getHeadUrl()).into(mWirelessHeadImgIv);
+        } else {
+            Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mWirelessHeadImgIv);
+        }
     }
 
     @Override

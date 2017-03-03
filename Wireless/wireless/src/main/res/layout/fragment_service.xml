@@ -67,6 +67,7 @@
                 android:background="@color/gray_f5f5f5" />
 
             <LinearLayout
+                android:id="@+id/service_recommend_lay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -100,6 +101,7 @@
                 app:canLoop="true" />
 
             <View
+                android:id="@+id/service_line"
                 android:layout_width="match_parent"
                 android:layout_height="12dp"
                 android:background="@color/gray_f5f5f5" />

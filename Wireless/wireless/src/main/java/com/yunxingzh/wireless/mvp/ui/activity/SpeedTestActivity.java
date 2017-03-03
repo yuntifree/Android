@@ -145,7 +145,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         mExecutorService = Executors.newScheduledThreadPool(3);
         mSpeed.setText(getTimeString(Util.speedMethodNormal(0)));
         mSpeed.setVisibility(View.VISIBLE);
-        mSpeed.setTextColor(Color.parseColor("#ffffff"));
+         mSpeed.setTextColor(Color.parseColor("#ffffff"));
 
         startTestSpeed();
     }

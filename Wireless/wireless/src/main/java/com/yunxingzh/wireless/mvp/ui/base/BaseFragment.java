@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,6 +28,11 @@ public class BaseFragment extends Fragment implements IBaseView, View.OnTouchLis
         return (T) view.findViewById(id);
     }
 
+    private String pageName;
+    public BaseFragment() {
+        pageName = getClass().getSimpleName();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,7 +51,38 @@ public class BaseFragment extends Fragment implements IBaseView, View.OnTouchLis
         if (getActivity() == null) {
             return;
         }
-        MobclickAgent.onPageEnd(getActivity().getLocalClassName());
+        if(getUserVisibleHint()){
+            onVisibilityChangedToUser(true, false);
+        }
+       // MobclickAgent.onPageEnd(getActivity().getLocalClassName());
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if(isResumed()){
+            onVisibilityChangedToUser(isVisibleToUser, true);
+        }
+    }
+
+    /**
+     * 当Fragment对用户的可见性发生了改变的时候就会回调此方法
+     * @param isVisibleToUser true：用户能看见当前Fragment；false：用户看不见当前Fragment
+     * @param isHappenedInSetUserVisibleHintMethod true：本次回调发生在setUserVisibleHintMethod方法里；false：发生在onResume或onPause方法里
+     */
+    public void onVisibilityChangedToUser(boolean isVisibleToUser, boolean isHappenedInSetUserVisibleHintMethod){
+        if(isVisibleToUser){
+            if(pageName != null){
+                MobclickAgent.onPageStart(pageName);
+                Log.i("UmengPageTrack", pageName + " - display - "+(isHappenedInSetUserVisibleHintMethod?"setUserVisibleHint":"onResume"));
+            }
+        }else{
+            if(pageName != null){
+                MobclickAgent.onPageEnd(pageName);
+                Log.w("UmengPageTrack", pageName + " - hidden - "+(isHappenedInSetUserVisibleHintMethod?"setUserVisibleHint":"onPause"));
+            }
+        }
     }
 
     @Override
@@ -54,7 +91,10 @@ public class BaseFragment extends Fragment implements IBaseView, View.OnTouchLis
         if (getView() != null) {
             getView().setOnTouchListener(this);
         }
-        MobclickAgent.onPageStart(getClass().getName());
+        if(getUserVisibleHint()){
+            onVisibilityChangedToUser(true, false);
+        }
+       // MobclickAgent.onPageStart(getClass().getName());
     }
 
     @Override

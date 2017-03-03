@@ -11,6 +11,7 @@ import android.os.Process;
 import com.baidu.mapapi.SDKInitializer;
 import com.dgwx.app.lib.bl.WifiInterface;
 import com.squareup.leakcanary.LeakCanary;
+import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
@@ -98,7 +99,7 @@ public class MainApplication extends Application {
         } else {
             LogUtils.d(TAG, "on create in service thread");
         }
-
+        MobclickAgent.openActivityDurationTrack(false);
     }
 
     public boolean isExit() {

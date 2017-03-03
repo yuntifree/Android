@@ -1,6 +1,7 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -41,6 +43,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import rx.Observable;
+import rx.Subscriber;
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.UpdateVo;
 
@@ -93,7 +97,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         //MiPushClient.subscribe(MainApplication.get(), 400+"", null);
         //int s = MainApplication.get().getUser().uid;
         //设置别名
-      //  MiPushClient.setAlias(MainApplication.get(), s + "", null);
+        //  MiPushClient.setAlias(MainApplication.get(), s + "", null);
     }
 
     public void initView() {
@@ -137,6 +141,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 getStatusBarColor(R.color.blue_009CFB);
                 Constants.FRAGMENT = Constants.HEADLINE_FLAG;
                 showFragment(headlineFragment);//头条
+//                Intent intent = new Intent();
+//                intent.putExtra("isWork", true);
+//                intent.setAction("com.yunxingzh.wireless.mvp.ui.fragment");
+//                sendBroadcast(intent);
                 break;
             case R.id.service_radio:
                 if (serviceFragment == null) {
@@ -307,7 +315,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void checkUpdateSuccess(UpdateVo updateVo) {
         if (updateVo != null) {
-            checkUpdateDialog = new CheckUpdateDialog(this,updateVo);
+            checkUpdateDialog = new CheckUpdateDialog(this, updateVo);
             checkUpdateDialog.show();
         }
     }

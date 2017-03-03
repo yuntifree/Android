@@ -145,8 +145,8 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     @Override
     public void onClick(View v) {
         if (mMineHeadIv == v) {
-            new AlertView("上传头像", null, "取消", null,
-                    new String[]{"从相册中选择", "选择默认头像"},
+            new AlertView("修改头像", null, "取消", null,
+                    new String[]{"自定义头像", "经典头像"},
                     getActivity(), AlertView.Style.ActionSheet, this).show();
         } else if (mMineFeedBackLay == v) {//反馈问题
             startActivity(FeedBackActivity.class);
@@ -160,8 +160,18 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     @Override
     public void getUserInfoSuccess(UserInfoVo userInfoVo) {
         if (userInfoVo != null) {
-            mMineNameTv.setText(userInfoVo.nickname);
-            Glide.with(getActivity()).load(userInfoVo.headurl).into(mMineHeadIv);
+            if (!StringUtils.isEmpty(userInfoVo.nickname)) {
+                mMineNameTv.setText(userInfoVo.nickname);
+            } else {
+                mMineNameTv.setText("东莞无限");
+            }
+
+            if (!StringUtils.isEmpty(userInfoVo.headurl)) {
+                Glide.with(getActivity()).load(userInfoVo.headurl).into(mMineHeadIv);
+            } else {
+                Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mMineHeadIv);
+            }
+
             mMineCountTv.setText(mMineCountTv.getText().toString() + userInfoVo.total + "次，");
             mMineMoneyTv.setText(mMineMoneyTv.getText().toString() + userInfoVo.save + "元");
         }

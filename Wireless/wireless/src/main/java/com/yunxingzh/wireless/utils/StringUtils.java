@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
@@ -71,6 +72,20 @@ public class StringUtils {
             e.printStackTrace();
         }
         return bRet;
+    }
+
+    /**
+     * 判断当天是否是工作日 (工作日：true；节假日：false)
+     * @return
+     */
+    public static boolean isWorkDay() {
+        //判断是否周六日
+        Calendar c = Calendar.getInstance();
+        int isWeek = c.get(Calendar.DAY_OF_WEEK);
+        if (isWeek == Calendar.SUNDAY || isWeek == Calendar.SATURDAY) {
+            return false;
+        }
+        return true;
     }
 
     /**

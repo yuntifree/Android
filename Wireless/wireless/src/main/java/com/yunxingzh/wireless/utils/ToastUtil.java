@@ -41,7 +41,7 @@ public class ToastUtil {
 
     public static void showMiddle(Context context, int resId) {
         if (context != null) {
-            context = context.getApplicationContext();
+            //context = context.getApplicationContext();
             showMiddle(context, context.getString(resId));
         }
     }

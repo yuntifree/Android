@@ -56,11 +56,12 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     private final static int CLICK_COUNT = 4;//0- 视频播放 1-新闻点击 2-广告展示 3-广告点击 4-服务
 
     private TextView mSearchTv;
-    private LinearLayout mServiceParentGroup, mServiceCityLay, mServiceCityItem;
+    private LinearLayout mServiceParentGroup, mServiceCityLay, mServiceCityItem, mServiceRecommendLay;
     private IServicePresenter iServicePresenter;
     private IWirelessPresenter iWirelessPresenter;
     private NetErrorLayout netErrorLayout;
     private WindowManager wm;
+    private View mServiceLine;
     private ImageView mServiceRecommendIv, mServiceCityIv;
     private ConvenientBanner mBannerAdvert, mBannerRecommend;
     private List<FindList.FindBannerVo> advertBannerVo;
@@ -85,6 +86,8 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         mBannerAdvert = findView(view, R.id.banner_advert);
         mBannerRecommend = findView(view, R.id.banner_recommend);
         mServiceCityItem = findView(view, R.id.service_city_item);
+        mServiceRecommendLay = findView(view, R.id.service_recommend_lay);
+        mServiceLine = findView(view, R.id.service_line);
     }
 
     public void initData() {
@@ -127,56 +130,65 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
          * 顶部广告
          */
         advertBannerVo = findList.banners;
-        int advertSize = advertBannerVo.size();
-        bannersState(advertSize, mBannerAdvert);
-        List<String> imageList = new ArrayList<String>(advertSize);
-        for (FindList.FindBannerVo bannersList : advertBannerVo) {
-            imageList.add(bannersList.img);
-        }
-        setBannerPages(mBannerAdvert, imageList);
-        //banner图跳转
-        mBannerAdvert.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                if (iWirelessPresenter != null) {
-                    iWirelessPresenter.clickCount(advertBannerVo.get(position).id, 10, "");//上报
-                }
-                String url = advertBannerVo.get(position).dst;
-                if (!StringUtils.isEmpty(url)) {
-                    startActivity(WebViewActivity.class, Constants.URL, url, "", "");
-                }
+        if (advertBannerVo != null) {
+            int advertSize = advertBannerVo.size();
+            bannersState(advertSize, mBannerAdvert);
+            List<String> imageList = new ArrayList<String>(advertSize);
+            for (FindList.FindBannerVo bannersList : advertBannerVo) {
+                imageList.add(bannersList.img);
             }
-        });
+            setBannerPages(mBannerAdvert, imageList);
+            //banner图跳转
+            mBannerAdvert.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    if (iWirelessPresenter != null) {
+                        iWirelessPresenter.clickCount(advertBannerVo.get(position).id, 10, "");//上报
+                    }
+                    String url = advertBannerVo.get(position).dst;
+                    if (!StringUtils.isEmpty(url)) {
+                        startActivity(WebViewActivity.class, Constants.URL, url, "", "");
+                    }
+                }
+            });
+        } else {
+            mBannerAdvert.setVisibility(View.GONE);
+        }
 
         /***
          * 精品推荐
          */
         recommendsBannerVo = findList.recommends;
-        int recomSize = recommendsBannerVo.size();
-        bannersState(recomSize, mBannerRecommend);
-        List<String> recomList = new ArrayList<String>(recomSize);
-        for (FindList.RecommendVo bannersList : recommendsBannerVo) {
-            recomList.add(bannersList.img);
-        }
-        setBannerPages(mBannerRecommend, recomList);
-        //banner图跳转
-        mBannerRecommend.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                if (iWirelessPresenter != null) {
-                    iWirelessPresenter.clickCount(recommendsBannerVo.get(position).id, 11, "");//上报
-                }
-                String url = recommendsBannerVo.get(position).dst;
-                if (!StringUtils.isEmpty(url)) {
-                    startActivity(WebViewActivity.class, Constants.URL, url, "", "");
-                }
+        if (recommendsBannerVo != null) {
+            int recomSize = recommendsBannerVo.size();
+            bannersState(recomSize, mBannerRecommend);
+            List<String> recomList = new ArrayList<String>(recomSize);
+            for (FindList.RecommendVo bannersList : recommendsBannerVo) {
+                recomList.add(bannersList.img);
             }
-        });
+            setBannerPages(mBannerRecommend, recomList);
+            //banner图跳转
+            mBannerRecommend.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+                    if (iWirelessPresenter != null) {
+                        iWirelessPresenter.clickCount(recommendsBannerVo.get(position).id, 11, "");//上报
+                    }
+                    String url = recommendsBannerVo.get(position).dst;
+                    if (!StringUtils.isEmpty(url)) {
+                        startActivity(WebViewActivity.class, Constants.URL, url, "", "");
+                    }
+                }
+            });
 
-        wm = getActivity().getWindowManager();
-        width = wm.getDefaultDisplay().getWidth();//720,1536
-        height = wm.getDefaultDisplay().getHeight();//1280,2560
-
+            wm = getActivity().getWindowManager();
+            width = wm.getDefaultDisplay().getWidth();//720,1536
+            height = wm.getDefaultDisplay().getHeight();//1280,2560
+        } else {
+            mServiceRecommendLay.setVisibility(View.GONE);
+            mServiceLine.setVisibility(View.GONE);
+            mBannerRecommend.setVisibility(View.GONE);
+        }
         /***
          * 城市服务
          */

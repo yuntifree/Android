@@ -87,19 +87,26 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
                 refresh ++;
                 mNickInputEt.setHint(nickIterator.next());
             } else {
-                nickIterator.remove();
-                nickSets.clear();
+                if (nickIterator.hasNext()){
+                    nickIterator.next();
+                    nickIterator.remove();
+                    nickSets.clear();
+                }
                 refresh = 0;
                 iDefHeadPresenter.getRandNick();
             }
         } else if (mNickQueryTv == v) {
-            if (!StringUtils.isEmpty(mNickInputEt.getText().toString())) {
-                iMinePresenter.updateUserInfo("", mNickInputEt.getText().toString());
-            } else if (!StringUtils.isEmpty(mNickInputEt.getHint().toString())) {
-                iMinePresenter.updateUserInfo("", mNickInputEt.getHint().toString());
-            } else {
-                ToastUtil.showMiddle(this, "请输入昵称");
-            }
+                if (!StringUtils.isEmpty(mNickInputEt.getText().toString())) {
+                    if (mNickInputEt.getText().length() <= 12) {
+                        iMinePresenter.updateUserInfo("", mNickInputEt.getText().toString());
+                    } else {
+                        ToastUtil.showMiddle(this, "昵称只能12字以内哦");
+                    }
+                } else if (!StringUtils.isEmpty(mNickInputEt.getHint().toString())) {
+                    iMinePresenter.updateUserInfo("", mNickInputEt.getHint().toString());
+                } else {
+                    ToastUtil.showMiddle(this, "请输入昵称");
+                }
         }
     }
 

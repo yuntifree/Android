@@ -1,12 +1,15 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +26,12 @@ import com.yunxingzh.wireless.mvp.view.IGetHeadLineMenuView;
 import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +53,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     private final static int INDEX_ONE = 1;
     private final static int INDEX_TWO = 2;
     private final static int INDEX_THREE = 3;
+    private final static int INDEX_FOUR = 4;
 
     private ViewPager mViewPager;
     private MyPagerAdapter adapter;
@@ -57,6 +63,8 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     private NetErrorLayout netErrorLayout;
     private LinearLayout mNetErrorLay;
     private WebViewFragment webViewFragment;
+    // private MyReceiver rec;
+    private int loadCount;
 
     @Nullable
     @Override
@@ -86,17 +94,20 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
-
             @Override
             public void onPageSelected(int position) {
 
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
 
             }
         });
+//        rec = new MyReceiver();
+//        //实例化过滤器并设置要过滤的广播
+//        IntentFilter intentFilter = new IntentFilter("com.yunxingzh.wireless.mvp.ui.fragment");
+//        //注册广播
+//        getActivity().registerReceiver(rec, intentFilter);
     }
 
     @Subscribe
@@ -112,6 +123,17 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         }
     }
 
+    //接收
+//    private class MyReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            boolean iswork = intent.getBooleanExtra("isWork", false);
+//            if (iswork) {
+//                ToastUtil.showMiddle(getActivity(),"sssssss");
+//            }
+//        }
+//    }
+
 //    private void setLineSelect(boolean leftSelected, boolean rightSelected) {
 //        mIdTabLeftLine.setVisibility(leftSelected ? View.VISIBLE : View.GONE);
 //        mIdTabRightLine.setVisibility(rightSelected ? View.VISIBLE : View.GONE);
@@ -123,6 +145,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         if (getHeadLineMenuPresenter != null) {
             getHeadLineMenuPresenter.onDestroy();
         }
+        // getActivity().unregisterReceiver(rec);
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
@@ -177,6 +200,21 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
 //            mViewPager.setPageMargin(pageMargin);
             mViewPager.setAdapter(adapter);
             tabStrip.setViewPager(mViewPager);
+
+            if (loadCount < 1) {
+                loadCount++;
+                String hour = StringUtils.getTime();
+                int h = Integer.parseInt(hour);
+                if (StringUtils.isWorkDay()) {//true为工作日
+                    if (h >= 8 && h < 20) {
+
+                    } else {
+                        mViewPager.setCurrentItem(INDEX_FOUR);//跳转直播
+                    }
+                } else {
+                    mViewPager.setCurrentItem(INDEX_FOUR);//跳转直播
+                }
+            }
         }
     }
 
@@ -198,7 +236,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         @Override
         public CharSequence getPageTitle(int position) {
             if (menuVos.size() <= position) {
-                LogUtils.e("headlinefragment","out of index");
+                LogUtils.e("headlinefragment", "out of index");
                 return "";
             }
             return menuVos.get(position).title;
@@ -212,31 +250,31 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         @Override
         public Fragment getItem(int position) {
             if (menuVos.size() <= position) {
-                LogUtils.e("headlinefragment","out of index");
+                LogUtils.e("headlinefragment", "out of index");
                 return null;
             }
-                int ctype = menuVos.get(position).ctype;
-                switch (ctype) {
-                    case Constants.CTYPE_NEWS://新闻
-                        return HeadLineNewsFragment.getInstance(menuInfos.get(position).type);
-                    case Constants.CTYPE_VIDEO://视频
-                        return new HeadLineVideoFragment();
-                    case Constants.CTYPE_WEBVIEW://网页
-                        return argumentsFragment("http://www.baidu.com");
-                    case Constants.CTYPE_JOKE://搞笑
-                        return new HeadLineAppFragment();
-                    case Constants.CTYPE_LIVE://直播
-                        return new HeadLineLiveFragment();
-                    case Constants.CTYPE_EPISODE://段子
-                        return new EpisodeFrament();
-                    default:
-                        break;
-                }
+            int ctype = menuVos.get(position).ctype;
+            switch (ctype) {
+                case Constants.CTYPE_NEWS://新闻
+                    return HeadLineNewsFragment.getInstance(menuInfos.get(position).type);
+                case Constants.CTYPE_VIDEO://视频
+                    return new HeadLineVideoFragment();
+                case Constants.CTYPE_WEBVIEW://网页
+                    return argumentsFragment("http://www.baidu.com");
+                case Constants.CTYPE_JOKE://搞笑
+                    return new HeadLineAppFragment();
+                case Constants.CTYPE_LIVE://直播
+                    return new HeadLineLiveFragment();
+                case Constants.CTYPE_EPISODE://段子
+                    return new EpisodeFrament();
+                default:
+                    break;
+            }
             return null;
         }
     }
 
-    public Fragment argumentsFragment(String url){
+    public Fragment argumentsFragment(String url) {
         if (webViewFragment == null) {
             webViewFragment = new WebViewFragment();
         }
