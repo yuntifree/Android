@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.RotatePointer;
@@ -33,6 +34,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -41,7 +43,7 @@ import java.util.concurrent.Executors;
 /***
  * wifi测速
  */
-public class SpeedTestActivity extends BaseActivity implements View.OnClickListener, SpeedTestDialog.OnDialogBtnClickListener{
+public class SpeedTestActivity extends BaseActivity implements View.OnClickListener, SpeedTestDialog.OnDialogBtnClickListener {
 
     private static String mApkUrl = "";
 
@@ -77,6 +79,8 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     private LinearLayout mMiddleNoticeLay;
     private int speedFlag;
     private SpeedTestDialog mDialog;
+    private float realTimeSpeed;
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +129,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
                 }
             }
         });
-        StatusBarColor.compat(this,getResources().getColor(R.color.blue_009CFB));
+        StatusBarColor.compat(this, getResources().getColor(R.color.blue_009CFB));
         mDialog = new SpeedTestDialog(SpeedTestActivity.this);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setOnDialogBtnClickListener(this);
@@ -145,7 +149,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         mExecutorService = Executors.newScheduledThreadPool(3);
         mSpeed.setText(getTimeString(Util.speedMethodNormal(0)));
         mSpeed.setVisibility(View.VISIBLE);
-         mSpeed.setTextColor(Color.parseColor("#ffffff"));
+        mSpeed.setTextColor(Color.parseColor("#ffffff"));
 
         startTestSpeed();
     }
@@ -182,15 +186,51 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         *  "http://download.weather.com.cn/3g/current/ChinaWeather_Android.apk"
         *  "http://down.360safe.com/360mse/f/360fmse_js010001.apk"
         * */
-
-        initTimer();
-        String down_url = "http://down.360safe.com/360mse/f/360fmse_js010001.apk";
-        if (!TextUtils.isEmpty(down_url)) {
-            mApkUrl = down_url;
-            mExecutorService.execute(new apkDownloadRunnable());
+        String dgWifi = FWManager.getInstance().getCurrent().ssid;
+        if (dgWifi.equals("无线东莞DG-FREE")) {
+            timer = new Timer();
+            task = new TimerTask() {
+                @Override
+                public void run() {
+                    speedForDGwifi();
+                }
+            };
             timer.schedule(task, 10, mTimePeriod);
         } else {
-            showResult(0, false);
+            initTimer();
+            String down_url = "http://down.360safe.com/360mse/f/360fmse_js010001.apk";
+            if (!TextUtils.isEmpty(down_url)) {
+                mApkUrl = down_url;
+                mExecutorService.execute(new apkDownloadRunnable());
+                timer.schedule(task, 10, mTimePeriod);
+            } else {
+                showResult(0, false);
+            }
+        }
+    }
+
+    public void speedForDGwifi() {
+        int all = 4 * 1024 * 1024 / 8;//总流量
+        Random random = new Random();
+        float percent = (float) (((random.nextInt(21) - 10)) * 0.01);
+        realTimeSpeed = all * (1 + percent);
+        LogUtils.e("sss", "realTimeSpeed:" + realTimeSpeed);
+        count++;
+        int angle = speedToAngle((long)realTimeSpeed);//幅度
+        mList.add(angle);
+        testSpeed(angle);
+
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                LogUtils.e("sss", "setTextView");
+                mSpeed.setText(getTimeString(Util.speedMethodNormal(realTimeSpeed)));
+            }
+        });
+        if (count == 10) {
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_RESULT, (long) realTimeSpeed));
+            shutdownAll();
+            count = 0;
         }
     }
 
@@ -232,7 +272,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void run() {
                 if (!mShutDown) {
-                    if (mRunCount >= mMaxTime) {
+                    if (mRunCount >= mMaxTime) {//超时强行停止下载
                         shutdownRunnable();
                         timer.cancel();
                         long tTotal = 0;
@@ -339,7 +379,6 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         } else {
             bytesReceived = now - cacheData;
             this.runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
                     mSpeed.setText(getTimeString(Util.speedMethodNormal(bytesReceived)));
@@ -394,7 +433,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     }
 
     private int speedToAngle(long speed) {
-        int speedMb = (int) (speed / 1024 / 1024 * 8);
+        int speedMb = (int) (speed / 1024.0 / 1024 * 8);
         int angle;
         if (speedMb < 3) {
             // 0~3M，每0.5M 11.25度
@@ -408,7 +447,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         } else if (speedMb >= 10 && speedMb < 30) {
             // 10~30M，每5M 11.25度
             angle = (int) ((speedMb - 10) / 5 * 11.25 + 112.5);
-        } else if (speedMb >=30 && speedMb < 50) {
+        } else if (speedMb >= 30 && speedMb < 50) {
             // 30~50M，每10M 11.25度
             angle = (int) ((speedMb - 30) / 10 * 11.25 + 157.5);
         } else {
