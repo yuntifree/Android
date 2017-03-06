@@ -153,6 +153,9 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                 iWirelessPresenter.clickCount(data.infos.get(index).id, CLICK_COUNT,"");
             }
         }
+        if (event.getMsg() == Constants.NET_ERROR) {//网络不可用（无法上网）
+            netErrorClick();
+        }
     }
 
     @Override

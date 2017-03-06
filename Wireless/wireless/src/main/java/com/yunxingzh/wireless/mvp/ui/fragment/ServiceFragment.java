@@ -126,6 +126,9 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         if (getActivity() == null || findList == null) {
             return;
         }
+        wm = getActivity().getWindowManager();
+        width = wm.getDefaultDisplay().getWidth();//720,1536
+        height = wm.getDefaultDisplay().getHeight();//1280,2560
         /***
          * 顶部广告
          */
@@ -180,10 +183,6 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                     }
                 }
             });
-
-            wm = getActivity().getWindowManager();
-            width = wm.getDefaultDisplay().getWidth();//720,1536
-            height = wm.getDefaultDisplay().getHeight();//1280,2560
         } else {
             mServiceRecommendLay.setVisibility(View.GONE);
             mServiceLine.setVisibility(View.GONE);
