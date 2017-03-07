@@ -8,8 +8,8 @@
         android:color="@color/black_mask" />
     <!-- 指定圆角矩形的4个圆角的半径 -->
     <corners
-        android:bottomLeftRadius="30px"
-        android:bottomRightRadius="30px"
-        android:topLeftRadius="30px"
-        android:topRightRadius="30px" />
+        android:bottomLeftRadius="100px"
+        android:bottomRightRadius="100px"
+        android:topLeftRadius="100px"
+        android:topRightRadius="100px" />
 </shape>

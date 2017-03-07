@@ -468,7 +468,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
                     CheckAndLogon();
                 } else {
-                    updateConnectState(true);
+                    updateConnectState(false);
                 }
 
             } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
@@ -774,6 +774,15 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         }
         if (event.getmFlag() == Constants.NICK_NAME_FLAG) {//更换昵称
             mWirelessNickTv.setText(event.getmMsg());
+        }
+        if (event.getmFlag() == Constants.USER_MINE_FLAG) {
+            if (event.getUserInfoVo() != null) {
+                Glide.with(getActivity()).load(event.getUserInfoVo().headurl).into(mWirelessHeadImgIv);
+                mWirelessNickTv.setText(event.getUserInfoVo().nickname);
+            } else {
+                Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mWirelessHeadImgIv);
+                mWirelessNickTv.setText("东莞无限");
+            }
         }
     }
 

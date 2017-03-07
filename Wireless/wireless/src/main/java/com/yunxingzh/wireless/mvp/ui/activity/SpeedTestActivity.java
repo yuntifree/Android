@@ -118,6 +118,8 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
                         initThread();
                     } else if (mBtnStart.getText().equals("停止测速")) {
                         shutdownAll();
+//                        mRotatePointer.setRotate(0);
+//                        mRotatePointer.setsecondSweepAngle(0);
                         mMiddleNoticeLay.setVisibility(View.INVISIBLE);
                         mBtnStart.setText(R.string.re_speed);
                     } else if (mBtnStart.getText().equals("重新测速")) {

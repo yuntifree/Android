@@ -15,7 +15,7 @@
         android:id="@+id/enter"
         android:layout_width="176dp"
         android:layout_height="40dp"
-        android:textColor="@color/blue_4a90e2"
+        android:textColor="@drawable/guide_btn_style"
         android:textSize="18sp"
         android:background="@drawable/border_guided_style"
         android:text="@string/jump"

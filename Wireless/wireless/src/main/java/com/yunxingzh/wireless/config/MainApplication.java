@@ -24,6 +24,7 @@ import com.yunxingzh.wireless.utils.StringUtils;
 import java.util.List;
 
 import wireless.libs.bean.vo.User;
+import wireless.libs.bean.vo.UserInfoVo;
 
 /**
  * Created by Carey on 2016/5/25.
@@ -56,7 +57,7 @@ public class MainApplication extends Application {
     private static final String APP_ID = "2882303761517531135";
     private static final String APP_KEY = "5191753131135";
 
-
+    private UserInfoVo userInfoVo;
 
     @Override
     public void onCreate() {
@@ -198,6 +199,18 @@ public class MainApplication extends Application {
     public void setUser(User mUser) {
         this.mUser = mUser;
         SPUtils.putObject(sInst, Constants.SP_KEY_USER, mUser);
+    }
+
+    public UserInfoVo getUserMine() {
+        if (userInfoVo == null) {
+            userInfoVo = (UserInfoVo) SPUtils.getObject(sInst, Constants.SP_KEY_USER_MINE);
+        }
+        return userInfoVo;
+    }
+
+    public void setUserMine(UserInfoVo mUser) {
+        this.userInfoVo = userInfoVo;
+        SPUtils.putObject(sInst, Constants.SP_KEY_USER_MINE, mUser);
     }
 
     //过期时间

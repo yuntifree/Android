@@ -24,20 +24,21 @@
             android:orientation="horizontal">
 
             <FrameLayout
-                android:layout_width="95dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/wireless_nick_tv"
-                    android:layout_width="80dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center|left"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:maxLines="1"
-                    android:paddingLeft="18dp"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="10dp"
                     android:layout_marginLeft="4dp"
-                    android:gravity="center|left"
+                    android:gravity="center"
                     android:ellipsize="end"
                     android:background="@drawable/wireless_head_style"
                     android:text="东莞无限" />

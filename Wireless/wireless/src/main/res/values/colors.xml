@@ -10,6 +10,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
 
+    <!--不透明度-->
+    <color name="white_40">#66ffffff</color>
+
     <!--覆盖颜色-->
     <color name="bgColor_overlay">#60000000</color>
     <!--窗口背景颜色-->
@@ -188,7 +191,7 @@
     <color name="blue_236EC5">#236EC5</color>
     <color name="blue_68CDFF">#68CDFF</color>
     <color name="blue_2d527c">#2d527c</color>
-
+    <color name="blue_9AC8FF">#9AC8FF</color>
 
 
 

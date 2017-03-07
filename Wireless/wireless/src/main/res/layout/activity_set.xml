@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingLeft="10dp"
+                android:paddingLeft="20dp"
                 android:text="@string/clean"
                 android:textColor="@color/gray_282828"
                 android:textSize="16sp" />
@@ -65,6 +65,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2.2M"
+                android:textColor="@color/gray_b4b4b4"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/set_ico_next"
+                android:paddingRight="10dp"/>
+
+        </LinearLayout>
+
+        <View style="@style/divide_line_horizontal"
+            android:background="@color/gray_e7e7e7"/>
+
+        <LinearLayout
+            android:id="@+id/set_update_lay"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/view_selector"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="20dp"
+                android:text="@string/update"
+                android:textColor="@color/gray_282828"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/set_update_num_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="v2.0"
+                android:visibility="invisible"
                 android:textColor="@color/gray_b4b4b4"
                 android:textSize="14sp" />
 
@@ -92,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/about_us"
-                android:paddingLeft="10dp"
+                android:paddingLeft="20dp"
                 android:textColor="@color/gray_282828"
                 android:textSize="16sp" />
 

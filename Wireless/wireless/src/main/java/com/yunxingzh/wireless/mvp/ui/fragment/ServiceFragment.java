@@ -214,7 +214,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 } else {
                     mServiceCityIv.setLayoutParams(getLayoutParams(0, Gravity.CENTER, 20, 60, 40, 14, 0, 10));
                     mServiceRecommendIv.setLayoutParams(getLayoutParams(0, Gravity.CENTER, 20, 60, 40, 14, 0, 10));
-                    cityLay.addView(cityIv, getLayoutParams(0, Gravity.CENTER, 150, 150, 0, 0, 0, 40));
+                    cityLay.addView(cityIv, getLayoutParams(0, Gravity.CENTER, 140, 140, 0, 0, 0, 40));
                 }
                 cityLay.addView(cityView);
 
@@ -266,15 +266,15 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 //            lineSmall.setMinimumHeight(1);
 //            lineSmall.setBackgroundColor(getResources().getColor(R.color.gray_e6e6e6));
 
-//            View line = new View(getActivity());
-//            line.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
+            View line = new View(getActivity());
+            line.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
 
             if (width <= 720 && height <= 1280) {
-                // line.setMinimumHeight(20);
+                line.setMinimumHeight(25);
                 mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 10, 30, 20, 20, 0, 5));
                 mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 10, 20, 0, 5));
             } else {
-                // line.setMinimumHeight(40);
+                line.setMinimumHeight(50);
                 mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 20, 60, 40, 40, 0, 10));
                 mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 20, 40, 0, 10));
             }
@@ -341,6 +341,11 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                 }
             }
             mServiceParentGroup.addView(mServiceItem);
+
+            if (i == list.size() - 1){
+                return;
+            }
+            mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
         }
     }
 

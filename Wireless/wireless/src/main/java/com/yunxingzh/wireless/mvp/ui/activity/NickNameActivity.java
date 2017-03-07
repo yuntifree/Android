@@ -46,6 +46,7 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
     private Iterator<String> nickIterator;
     private Set<String> nickSets;
     private int refresh = 0;//刷新重试的次数
+    private String nickName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +73,8 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
         iDefHeadPresenter = new DefHeadPresenterImpl(this);
         iMinePresenter = new MinePresenterImpl(this);
         iDefHeadPresenter.getRandNick();
+        nickName = getIntent().getStringExtra("nickName");
+        mNickInputEt.setHint(nickName);
     }
 
     @Override
@@ -115,7 +118,6 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
         if (nickNameList != null) {
             nickSets = nickNameList.nicknames;
             nickIterator = nickSets.iterator();
-            mNickInputEt.setHint(nickIterator.next());
         }
     }
 
@@ -137,7 +139,9 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
     protected void onDestroy() {
         super.onDestroy();
         if (nickSets != null) {
-            nickIterator.remove();
+            if (!nickIterator.hasNext()) {
+                nickIterator.remove();
+            }
             nickSets.clear();
         }
         if (iDefHeadPresenter != null && iMinePresenter != null) {

@@ -82,6 +82,7 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     private ImageUploadVo uploadVo;
     private int headImgFrom = 0;//=1表示从相册选择上传
     private String mHeadUrl;
+    private UserInfoVo infoVo;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
@@ -149,17 +150,22 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
                     new String[]{"自定义头像", "经典头像"},
                     getActivity(), AlertView.Style.ActionSheet, this).show();
         } else if (mMineFeedBackLay == v) {//反馈问题
-            startActivity(FeedBackActivity.class);
+            startActivity(FeedBackActivity.class, "");
         } else if (mMineSetLay == v) {//设置
-            startActivity(SetActivity.class);
+            startActivity(SetActivity.class, "");
         } else if (mMineNameTv == v) {//修改昵称
-            startActivity(NickNameActivity.class);
+            if (infoVo != null) {
+                startActivity(NickNameActivity.class, infoVo.nickname);
+            } else {
+                startActivity(NickNameActivity.class, "东莞无限");
+            }
         }
     }
 
     @Override
     public void getUserInfoSuccess(UserInfoVo userInfoVo) {
         if (userInfoVo != null) {
+            infoVo = userInfoVo;
             if (!StringUtils.isEmpty(userInfoVo.nickname)) {
                 mMineNameTv.setText(userInfoVo.nickname);
             } else {
@@ -171,7 +177,8 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
             } else {
                 Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mMineHeadIv);
             }
-
+            MainApplication.get().setUserMine(userInfoVo);
+            EventBus.getDefault().post(new MineHeadImg(Constants.USER_MINE_FLAG, "", userInfoVo));
             mMineCountTv.setText(mMineCountTv.getText().toString() + userInfoVo.total + "次，");
             mMineMoneyTv.setText(mMineMoneyTv.getText().toString() + userInfoVo.save + "元");
         }
@@ -307,8 +314,9 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
         startActivityForResult(intent, CUT_IMG);
     }
 
-    public void startActivity(Class activity) {
+    public void startActivity(Class activity, String value) {
         Intent intent = new Intent(getActivity(), activity);
+        intent.putExtra("nickName", value);
         startActivity(intent);
     }
 

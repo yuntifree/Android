@@ -14,24 +14,35 @@ import android.widget.TextView;
 import com.yunxingzh.wireless.BuildConfig;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.mview.CheckUpdateDialog;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mview.loading.ACProgressConstant;
 import com.yunxingzh.wireless.mview.loading.ACProgressFlower;
+import com.yunxingzh.wireless.mvp.presenter.IGetAdvertPresenter;
+import com.yunxingzh.wireless.mvp.presenter.impl.GetAdvertPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.mvp.view.IGetAdvertView;
 import com.yunxingzh.wireless.utils.CacheCleanUtil;
+import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
+
+import wireless.libs.bean.vo.AdvertVo;
+import wireless.libs.bean.vo.UpdateVo;
 
 /**
  * Created by stephen on 2016/12/23.
  * 设置
  */
 
-public class SetActivity extends BaseActivity implements View.OnClickListener {
+public class SetActivity extends BaseActivity implements View.OnClickListener, IGetAdvertView {
 
     private ImageView mTitleReturnIv;
-    private TextView mTitleNameTv, mSetCacheSizeTv, mSetUseTv, mSetVersionTv;
-    private LinearLayout mSetCleanLay, mSetAboutLay;
+    private TextView mTitleNameTv, mSetCacheSizeTv, mSetUseTv, mSetVersionTv, mSetUpdateNumTv;
+    private LinearLayout mSetCleanLay, mSetAboutLay, mSetUpdateLay;
     private ACProgressFlower acProgressPie;
+    private IGetAdvertPresenter iGetAdvertPresenter;
+    private CheckUpdateDialog checkUpdateDialog;
+    private UpdateVo data;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,10 +65,15 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
         mSetAboutLay.setOnClickListener(this);
         mSetUseTv = findView(R.id.set_use_tv);
         mSetUseTv.setOnClickListener(this);
+        mSetUpdateLay = findView(R.id.set_update_lay);
+        mSetUpdateLay.setOnClickListener(this);
+        mSetUpdateNumTv = findView(R.id.set_update_num_tv);
     }
 
     public void initData() {
         StatusBarColor.compat(this, getResources().getColor(R.color.blue_009CFB));
+        iGetAdvertPresenter = new GetAdvertPresenterImpl(this);
+        iGetAdvertPresenter.checkUpdate();
         mSetVersionTv.setText("v" + BuildConfig.VERSION_NAME);
         mSetCacheSizeTv.setText(CacheCleanUtil.getTotalCacheSize(this));
     }
@@ -78,7 +94,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
                         .fadeColor(Color.DKGRAY).build();
                 acProgressPie.show();
 
-                new Handler().postDelayed(new Runnable(){
+                new Handler().postDelayed(new Runnable() {
                     public void run() {
                         acProgressPie.dismiss();
                         mSetCacheSizeTv.setText(CacheCleanUtil.getTotalCacheSize(SetActivity.this));
@@ -97,6 +113,13 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
             startActivity(WebViewActivity.class, "关于我们", Constants.ABOUT_US);
         } else if (mSetUseTv == v) {//用户协议
             startActivity(WebViewActivity.class, "用户协议", Constants.URL_AGREEMENT);
+        } else if (mSetUpdateLay == v) {//版本升级
+            if (mSetUpdateNumTv.getVisibility() == View.VISIBLE && data != null) {
+                checkUpdateDialog = new CheckUpdateDialog(this, data);
+                checkUpdateDialog.show();
+            } else {
+                ToastUtil.showMiddle(this, "当前已是最新版本");
+            }
         }
     }
 
@@ -106,4 +129,18 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
         intent.putExtra(Constants.URL, url);
         startActivity(intent);
     }
+
+    @Override
+    public void checkUpdateSuccess(UpdateVo updateVo) {
+        if (updateVo != null) {
+            data = updateVo;
+            mSetUpdateNumTv.setVisibility(View.VISIBLE);
+            mSetUpdateNumTv.setText(updateVo.version.toString());
+        }
+    }
+
+    @Override
+    public void getAdvertSuccess(AdvertVo advertData) {
+    }
+
 }

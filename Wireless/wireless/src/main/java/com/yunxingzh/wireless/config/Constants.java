@@ -10,6 +10,7 @@ public class Constants {
     public static final String SP_HEAD_URL = "headUrl";
     public static final String SP_KEY_MACHINE = "MachineId";
     public static final String SP_KEY_USER = "sp_key_user";
+    public static final String SP_KEY_USER_MINE = "sp_key_user_mine";
     public static final String SP_KEY_PRIVDATA = "sp_key_privdata";
     public static final String SP_KEY_EXPIRE = "sp_key_expire";
 
@@ -88,4 +89,5 @@ public class Constants {
     //我flag
     public static final int HEAD_IMG_FLAG = 1;//更换头像flag
     public static final int NICK_NAME_FLAG = 2;//更改昵称flag
+    public static final int USER_MINE_FLAG = 3;//用户对象
 }
