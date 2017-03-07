@@ -134,8 +134,8 @@
 
                 <View
                     android:layout_width="220dp"
-                    android:layout_height="1dp"
-                    android:background="@color/gray_979797"
+                    android:layout_height="0.5dp"
+                    android:background="@color/gray_969696"
                     android:layout_marginTop="10sp" />
 
                 <LinearLayout
@@ -166,8 +166,8 @@
 
                 <View
                     android:layout_width="220dp"
-                    android:layout_height="1dp"
-                    android:background="@color/gray_979797"
+                    android:layout_height="0.5dp"
+                    android:background="@color/gray_969696"
                     android:layout_marginTop="10sp" />
 
                 <TextView

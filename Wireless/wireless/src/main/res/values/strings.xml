@@ -96,7 +96,7 @@
     <string name="scan_error">扫描失败,请重试</string>
     <string name="start_speed">开始测速</string>
     <string name="phone">请输入手机号</string>
-    <string name="input_content">搜索或输入网址</string>
+    <string name="input_content">点击搜索</string>
     <string name="enter_phone">请输入手机号</string>
     <string name="enter_right_phone">请输入正确的手机号</string>
     <string name="re_error">没有获取到相关信息</string>

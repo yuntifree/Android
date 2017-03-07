@@ -157,8 +157,12 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
             if (!StringUtils.isEmpty(nick)) {
                 startActivity(NickNameActivity.class, nick);
             } else {
-                nick = MainApplication.get().getUserMine().nickname;
-                startActivity(NickNameActivity.class, nick + "");
+                if (MainApplication.get().getUserMine() != null && !StringUtils.isEmpty(MainApplication.get().getUserMine().nickname)) {
+                    nick = MainApplication.get().getUserMine().nickname;
+                    startActivity(NickNameActivity.class, nick + "");
+                } else {
+                    startActivity(NickNameActivity.class, "");
+                }
             }
         }
     }

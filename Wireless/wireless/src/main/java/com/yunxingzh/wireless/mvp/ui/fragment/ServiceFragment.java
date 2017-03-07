@@ -126,6 +126,9 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         if (getActivity() == null || findList == null) {
             return;
         }
+
+        viewVisibile(true);
+
         wm = getActivity().getWindowManager();
         width = wm.getDefaultDisplay().getWidth();//720,1536
         height = wm.getDefaultDisplay().getHeight();//1280,2560
@@ -270,7 +273,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             line.setBackgroundColor(getResources().getColor(R.color.gray_f5f5f5));
 
             if (width <= 720 && height <= 1280) {
-                line.setMinimumHeight(20);
+                line.setMinimumHeight(25);
                 mItemTop.addView(mServiceImg, getLayoutParams(0, Gravity.CENTER, 10, 30, 20, 20, 0, 5));
                 mItemTop.addView(mServiceTitle, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 10, 20, 0, 5));
             } else {
@@ -347,6 +350,15 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             }
             mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
         }
+    }
+
+    public void viewVisibile(boolean isVisibile) {
+        //顶部view（城市服务，精品推荐等）
+        mServiceCityItem.setVisibility(isVisibile ? View.VISIBLE : View.GONE);
+        mServiceCityLay.setVisibility(isVisibile ? View.VISIBLE : View.GONE);
+        mServiceRecommendLay.setVisibility(isVisibile ? View.VISIBLE : View.GONE);
+        mServiceLine.setVisibility(isVisibile ? View.VISIBLE : View.GONE);
+        mBannerRecommend.setVisibility(isVisibile ? View.VISIBLE : View.GONE);
     }
 
     public void bannersState(int size, ConvenientBanner banner) {
@@ -426,6 +438,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
     private void netErrorState() {
         if (netErrorLayout == null) {
+            viewVisibile(false);
             netErrorLayout = new NetErrorLayout(getActivity());
             final View netErrorView = netErrorLayout.netErrorLay(0);
             netErrorLayout.setOnNetErrorClickListener(new NetErrorLayout.OnNetErrorClickListener() {
@@ -443,6 +456,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                     }
                 }
             });
+
             mServiceParentGroup.addView(netErrorView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 200, 0, 0));
         }
     }

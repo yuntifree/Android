@@ -22,7 +22,8 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/mine_head_iv"
                 android:layout_width="66dp"
-                android:layout_height="66dp" />
+                android:layout_height="66dp"
+                android:src="@drawable/my_ico_pic"/>
 
             <TextView
                 android:id="@+id/mine_name_tv"

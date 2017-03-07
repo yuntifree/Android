@@ -39,9 +39,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:layout_marginTop="35dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/set_clean_lay"
@@ -71,13 +71,17 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/set_ico_next"
-                android:paddingRight="10dp"/>
+                android:paddingRight="10dp"
+                android:src="@drawable/set_ico_next" />
 
         </LinearLayout>
 
-        <View style="@style/divide_line_horizontal"
-            android:background="@color/gray_e7e7e7"/>
+        <View
+            style="@style/divide_line_horizontal"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/gray_e7e7e7" />
 
         <LinearLayout
             android:id="@+id/set_update_lay"
@@ -101,20 +105,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="v2.0"
-                android:visibility="invisible"
                 android:textColor="@color/gray_b4b4b4"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="invisible" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/set_ico_next"
-                android:paddingRight="10dp"/>
+                android:paddingRight="10dp"
+                android:src="@drawable/set_ico_next" />
 
         </LinearLayout>
 
-        <View style="@style/divide_line_horizontal"
-            android:background="@color/gray_e7e7e7"/>
+        <View
+            style="@style/divide_line_horizontal"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/gray_e7e7e7" />
 
         <LinearLayout
             android:id="@+id/set_about_lay"
@@ -128,16 +136,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/about_us"
                 android:paddingLeft="20dp"
+                android:text="@string/about_us"
                 android:textColor="@color/gray_282828"
                 android:textSize="16sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/set_ico_next"
-                android:paddingRight="10dp"/>
+                android:paddingRight="10dp"
+                android:src="@drawable/set_ico_next" />
 
         </LinearLayout>
 
@@ -147,19 +155,19 @@
         android:id="@+id/set_use_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="140dp"
         android:text="@string/agree_content"
         android:textColor="@color/blue_00A0FB"
-        android:layout_marginTop="140dp"
-        android:layout_gravity="center"
-        android:textSize="11sp"/>
+        android:textSize="11sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_content"
-        android:layout_marginTop="5dp"
-        android:textColor="@color/gray_b4b4b4"
         android:layout_gravity="center"
-        android:textSize="12sp"/>
+        android:layout_marginTop="5dp"
+        android:text="@string/app_content"
+        android:textColor="@color/gray_b4b4b4"
+        android:textSize="12sp" />
 
 </LinearLayout>

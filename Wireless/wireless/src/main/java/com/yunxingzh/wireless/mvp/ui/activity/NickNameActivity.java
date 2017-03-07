@@ -75,7 +75,7 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
         iMinePresenter = new MinePresenterImpl(this);
         iDefHeadPresenter.getRandNick();
         nickName = getIntent().getStringExtra("nickName");
-        mNickInputEt.setHint(nickName);
+        mNickInputEt.setText(nickName + "");
     }
 
     @Override
@@ -83,7 +83,7 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
         if (mTitleReturnIv == v) {
             finish();
         } else if (mNickRefreshTv == v) {
-            AppUtils.animation(mNickRefreshTv);
+            //AppUtils.animation(mNickRefreshTv);
             if (!StringUtils.isEmpty(mNickInputEt.getText().toString())){
                 mNickInputEt.setText("");
             }
@@ -91,7 +91,7 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
                 refresh ++;
                 mNickInputEt.setHint(nickIterator.next());
             } else {
-                if (nickIterator.hasNext()){
+                if (nickIterator != null && nickIterator.hasNext()){
                     nickIterator.next();
                     nickIterator.remove();
                     nickSets.clear();
