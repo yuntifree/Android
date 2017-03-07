@@ -1,9 +1,5 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,7 +27,6 @@ import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,10 +89,12 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
+
             @Override
             public void onPageSelected(int position) {
 
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
 
@@ -175,6 +172,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
 
     @Override
     public void getHeadLineMenuSuccess(MenuList menuList) {
+        EventBus.getDefault().unregister(this);//反注册EventBus
         if (menuList != null) {
             int size = menuList.infos.size();
             menuInfos = new ArrayList<MenuVo>();
@@ -194,6 +192,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
                     menuInfos.add(menuList.infos.get(i));
                 }
             }
+
             adapter = new MyPagerAdapter(getChildFragmentManager(), menuInfos);
 //            final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
 //                    .getDisplayMetrics());

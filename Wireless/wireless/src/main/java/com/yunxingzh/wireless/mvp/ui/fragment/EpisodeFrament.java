@@ -145,6 +145,18 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
             mSwipeRefreshLay.setRefreshing(false);
         }
         ToastUtil.showMiddle(getActivity(), R.string.net_error);
+
+        if (netErrorLayout == null) {
+            mSwipeRefreshLay.setVisibility(View.GONE);
+            netErrorLayout = new NetErrorLayout(getActivity());
+            netErrorLayout.setOnNetErrorClickListener(this);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+            View netErrorView = netErrorLayout.netErrorLay(0);
+            mNetErrorLay.addView(netErrorView);
+        } else {
+            mSwipeRefreshLay.setVisibility(View.GONE);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -165,9 +177,6 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
             if (iWirelessPresenter != null && jokeVos != null) {
                 iWirelessPresenter.clickCount(jokeVos.get(position).id, CAI_TYPE, "");
             }
-        }
-        if (event.getMsg() == Constants.NET_ERROR) {//网络不可用（无法上网）
-            netErrorClick();
         }
     }
 

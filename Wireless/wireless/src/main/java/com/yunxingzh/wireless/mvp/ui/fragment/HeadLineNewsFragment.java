@@ -21,6 +21,7 @@ import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.adapter.NewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.vo.HotInfo;
+import wireless.libs.network.ErrorType;
 
 /**
  * Created by stephon_ on 2016/11/2.
@@ -56,7 +58,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private HotInfoList data;
     private LinearLayout mNetErrorLay;
     private NetErrorLayout netErrorLayout;
-
     private boolean isFastClick = true;
 
     private int newsTypes;
@@ -117,8 +118,8 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                 int topRowVerticalPosition =
                         (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
                 //swipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
-                if (topRowVerticalPosition >= 0){
-                    if (swipeRefreshLayout.isRefreshing()){
+                if (topRowVerticalPosition >= 0) {
+                    if (swipeRefreshLayout.isRefreshing()) {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }
@@ -135,10 +136,10 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
             iHeadLinePresenter.getHeadLine(this.newsTypes, HEAD_LINE_SEQ);
             swipeRefreshLayout.setRefreshing(true);
         }
-        netErrorLayout = new NetErrorLayout(getActivity());
-        netErrorLayout.setOnNetErrorClickListener(this);
         if (!NetUtils.isNetworkAvailable(getActivity())) {
             swipeRefreshLayout.setVisibility(View.GONE);
+            netErrorLayout = new NetErrorLayout(getActivity());
+            netErrorLayout.setOnNetErrorClickListener(this);
             mNetErrorLay.setVisibility(View.VISIBLE);
             View netErrorView = netErrorLayout.netErrorLay(0);
             mNetErrorLay.addView(netErrorView);
@@ -150,12 +151,13 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         int index = event.getChildMsg();
         if (event.getMsg() == Constants.HEAD_LINE_NEWS_FLAG && index != -1) {//上报
             if (iWirelessPresenter != null && data != null) {
-                iWirelessPresenter.clickCount(data.infos.get(index).id, CLICK_COUNT,"");
+                iWirelessPresenter.clickCount(data.infos.get(index).id, CLICK_COUNT, "");
             }
         }
-        if (event.getMsg() == Constants.NET_ERROR) {//网络不可用（无法上网）
-            netErrorClick();
-        }
+//        if (event.getMsg() == Constants.NET_ERROR) {//网络不可用（无法上网）
+//            errorno = event.getChildMsg();
+//            showErrorLay();
+//        }
     }
 
     @Override
@@ -171,7 +173,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
 
     @Override
     public void getHeadLineSuccess(HotInfoList newsVo) {
-
         firstLoad = false;
         isFastClick = true;
 
@@ -209,6 +210,18 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         }
         isFastClick = true;
         ToastUtil.showMiddle(getActivity(), R.string.net_error);
+
+        if (netErrorLayout == null) {
+            swipeRefreshLayout.setVisibility(View.GONE);
+            netErrorLayout = new NetErrorLayout(getActivity());
+            netErrorLayout.setOnNetErrorClickListener(this);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+            View netErrorView = netErrorLayout.netErrorLay(0);
+            mNetErrorLay.addView(netErrorView);
+        } else {
+            swipeRefreshLayout.setVisibility(View.GONE);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

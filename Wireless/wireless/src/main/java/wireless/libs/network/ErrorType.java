@@ -11,7 +11,7 @@ public class ErrorType {
     public static final int E_LOCAL = -1; //本地网络框架报告的异常
     public static final int E_NETWORK = -2;  //网络错误
     public static final int E_JSON_PARSE = -3; //json解析错误
-    public static final int E_IO_EXCEPTION = -4; //json解析错误
+    public static final int E_IO_EXCEPTION = -4;
 
     public static final int E_OK = 0; //正常
     public static final int E_MISS_PARAM = 1;  //缺少参数

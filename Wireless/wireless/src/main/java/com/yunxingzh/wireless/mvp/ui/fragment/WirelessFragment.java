@@ -266,13 +266,15 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         }
 
         timeChanged();
-        if (!StringUtils.isEmpty(MainApplication.get().getNick())) {
-            mWirelessNickTv.setText(MainApplication.get().getNick());
+        String nickName = MainApplication.get().getNick();
+        String headurl = MainApplication.get().getHeadUrl();
+        if (!StringUtils.isEmpty(nickName)) {
+            mWirelessNickTv.setText(nickName);
         } else {
             mWirelessNickTv.setText("东莞无限");
         }
-        if (!StringUtils.isEmpty(MainApplication.get().getHeadUrl())) {
-            Glide.with(getActivity()).load(MainApplication.get().getHeadUrl()).into(mWirelessHeadImgIv);
+        if (!StringUtils.isEmpty(headurl)) {
+            Glide.with(getActivity()).load(headurl).into(mWirelessHeadImgIv);
         } else {
             Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mWirelessHeadImgIv);
         }

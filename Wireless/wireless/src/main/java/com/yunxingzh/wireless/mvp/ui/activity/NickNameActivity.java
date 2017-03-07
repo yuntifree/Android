@@ -19,6 +19,7 @@ import com.yunxingzh.wireless.mvp.presenter.impl.MinePresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.view.IDefHeadView;
 import com.yunxingzh.wireless.utils.AppUtils;
+import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
@@ -131,7 +132,7 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
             nickName = mNickInputEt.getHint().toString();
         }
         MainApplication.get().setNick(nickName);
-        EventBus.getDefault().post(new MineHeadImg(Constants.NICK_NAME_FLAG, nickName));
+        EventBus.getDefault().post(new MineHeadImg(Constants.NICK_NAME_FLAG, nickName + ""));
         finish();
     }
 

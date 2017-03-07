@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
-import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
@@ -31,7 +30,6 @@ import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +135,18 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
             mSwipeRefreshLay.setRefreshing(false);
         }
         ToastUtil.showMiddle(getActivity(), R.string.net_error);
+
+        if (netErrorLayout == null) {
+            mSwipeRefreshLay.setVisibility(View.GONE);
+            netErrorLayout = new NetErrorLayout(getActivity());
+            netErrorLayout.setOnNetErrorClickListener(this);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+            View netErrorView = netErrorLayout.netErrorLay(0);
+            mNetErrorLay.addView(netErrorView);
+        } else {
+            mSwipeRefreshLay.setVisibility(View.GONE);
+            mNetErrorLay.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -149,13 +159,6 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
     public void onLoadMoreRequested() {
         if (iHeadLinePresenter != null && liveVos != null) {
             iHeadLinePresenter.getLiveList(liveVos.get(liveVos.size() - 1).seq);
-        }
-    }
-
-    @Subscribe
-    public void onEventMainThread(EventBusType event) {
-        if (event.getMsg() == Constants.NET_ERROR) {//网络不可用（无法上网）
-            netErrorClick();
         }
     }
 
