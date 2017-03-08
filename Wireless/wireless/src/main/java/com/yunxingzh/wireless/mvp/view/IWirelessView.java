@@ -1,7 +1,7 @@
 package com.yunxingzh.wireless.mvp.view;
 
-import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.WeatherNewsList;
+import wireless.libs.bean.resp.WifiMapList;
 
 /**
  * Created by stephen on 2017/2/9.
@@ -9,7 +9,7 @@ import wireless.libs.bean.resp.WeatherNewsList;
 
 public interface IWirelessView extends IBaseView {
     void weatherNewsSuccess(WeatherNewsList weatherNewsVo);
-    void getFontInfoSuccess(FontInfoList fontInfoVo);
     void wifiConnectSuccess();
     void wifiConnectFailed();
+    void getNearApsSuccess(WifiMapList wifiMapList);
 }

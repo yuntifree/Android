@@ -1,6 +1,6 @@
 package wireless.libs.model;
 
-import wireless.libs.bean.resp.FontInfoList;
+import wireless.libs.bean.resp.WifiMapList;
 
 /**
  * Created by stephen on 2017/2/9.
@@ -11,13 +11,14 @@ public interface IWirelessModel {
         void onClickCountSuccess();
     }
 
-    interface onGetFontInfoListener{
-        void onGetFontInfoSuccess(FontInfoList fontInfoVo);
-    }
-
     interface onWifiConnectListener{
         void onWifiConnectSuccess();
         void onWifiConnectFaild();
+    }
+
+
+    interface onGetNearApsListener{
+        void onGetNearApsSuccess(WifiMapList wifiMapList);
     }
 
     /***
@@ -27,15 +28,16 @@ public interface IWirelessModel {
     void clickCount(int id, int type, String name, onClickCountListener listener);
 
     /***
-     * 拉下半页的信息
-     * @param listener
-     */
-    void getFontInfo(onGetFontInfoListener listener);
-
-    /***
      * 连接东莞wifi
      * @param listener
      */
     void wifiConnect(String wlanacname, String wlanuserip, String wlanacip, String wlanusermac, String apmac, onWifiConnectListener listener);
+
+
+    /***
+     * 获取周围wifi热点
+     * @param listener
+     */
+    void getNearAps(double longitude, double latitude, onGetNearApsListener listener);
 
 }

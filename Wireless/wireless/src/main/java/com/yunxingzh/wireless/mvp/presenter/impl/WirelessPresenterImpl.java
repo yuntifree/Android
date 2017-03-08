@@ -7,8 +7,8 @@ import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.IServiceView;
 import com.yunxingzh.wireless.mvp.view.IWirelessView;
 
-import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.WeatherNewsList;
+import wireless.libs.bean.resp.WifiMapList;
 import wireless.libs.model.IWeatherNewsModel;
 import wireless.libs.model.IWirelessModel;
 import wireless.libs.model.impl.WeatherNewsModelImpl;
@@ -19,7 +19,7 @@ import wireless.libs.model.impl.WirelessModelImpl;
  */
 
 public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel.onClickCountListener,
-        IWeatherNewsModel.onWeatherNewsListener, IWirelessModel.onGetFontInfoListener, IWirelessModel.onWifiConnectListener {
+        IWeatherNewsModel.onWeatherNewsListener, IWirelessModel.onWifiConnectListener, IWirelessModel.onGetNearApsListener {
 
     private IWeatherNewsModel iWeatherNewsModel;
     private IWirelessModel iWirelessModel;
@@ -91,16 +91,16 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
     }
 
     @Override
-    public void getFontInfo() {
-        if (iWirelessView != null){
-            iWirelessModel.getFontInfo(this);
+    public void wifiConnect(String wlanacname, String wlanuserip, String wlanacip, String wlanusermac, String apmac) {
+        if (iWirelessView != null) {
+            iWirelessModel.wifiConnect(wlanacname,wlanuserip,wlanacip,wlanusermac,apmac,this);
         }
     }
 
     @Override
-    public void wifiConnect(String wlanacname, String wlanuserip, String wlanacip, String wlanusermac, String apmac) {
+    public void getNearAps(double longitude, double latitude) {
         if (iWirelessView != null) {
-            iWirelessModel.wifiConnect(wlanacname,wlanuserip,wlanacip,wlanusermac,apmac,this);
+            iWirelessModel.getNearAps(longitude, latitude, this);
         }
     }
 
@@ -113,13 +113,6 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
     public void onWeatherNewsSuccess(WeatherNewsList weatherNewsVo) {
         if (iWirelessView != null){
             iWirelessView.weatherNewsSuccess(weatherNewsVo);
-        }
-    }
-
-    @Override
-    public void onGetFontInfoSuccess(FontInfoList fontInfoVo) {
-        if (iWirelessView != null){
-            iWirelessView.getFontInfoSuccess(fontInfoVo);
         }
     }
 
@@ -144,5 +137,12 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
         iGetLiveListView = null;
         iServiceView = null;
         iGetJokesView = null;
+    }
+
+    @Override
+    public void onGetNearApsSuccess(WifiMapList wifiMapList) {
+        if (iWirelessView != null){
+            iWirelessView.getNearApsSuccess(wifiMapList);
+        }
     }
 }

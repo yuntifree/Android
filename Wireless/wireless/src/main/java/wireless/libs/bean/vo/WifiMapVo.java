@@ -8,6 +8,7 @@ import java.util.List;
  */
 
 public class WifiMapVo implements Serializable{
+    public int id;
     public double longitude;
     public double latitude;
     public String address;

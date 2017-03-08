@@ -81,7 +81,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         swipeRefreshLayout = findView(view, R.id.swipe_ly);
         mMainNewsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMainNewsRv.setHasFixedSize(true);
-        mMainNewsRv.addItemDecoration(new SpacesItemDecoration(3));
+        mMainNewsRv.addItemDecoration(new SpacesItemDecoration(1));
         swipeRefreshLayout.setOnRefreshListener(this);
         mNetErrorLay = findView(view, R.id.net_error_lay);
 

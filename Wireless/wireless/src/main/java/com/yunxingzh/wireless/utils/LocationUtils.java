@@ -41,6 +41,9 @@ public class LocationUtils {
             case 3://wifi公益
                 span = 0;
                 break;
+            case 4://首页
+                span = 1000 * 6 * 10;
+                break;
         }
         initParams();
         mLocationClient.registerLocationListener(myListener);

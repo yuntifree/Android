@@ -1,7 +1,7 @@
 package wireless.libs.model.impl;
 
-import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.ServerTip;
+import wireless.libs.bean.resp.WifiMapList;
 import wireless.libs.model.IWirelessModel;
 import wireless.libs.network.HttpHandler;
 import wireless.libs.network.request.NetWorkWarpper;
@@ -23,16 +23,6 @@ public class WirelessModelImpl implements IWirelessModel {
     }
 
     @Override
-    public void getFontInfo(final onGetFontInfoListener listener) {
-        NetWorkWarpper.getFontInfo(new HttpHandler<FontInfoList>() {
-            @Override
-            public void onSuccess(ServerTip serverTip, FontInfoList requestVo) {
-                listener.onGetFontInfoSuccess(requestVo);
-            }
-        });
-    }
-
-    @Override
     public void wifiConnect(String wlanacname, String wlanuserip, String wlanacip, String wlanusermac, String apmac, final onWifiConnectListener listener) {
         NetWorkWarpper.wifiConnect(wlanacname, wlanuserip, wlanacip, wlanusermac, apmac, new HttpHandler<Object>() {
             @Override
@@ -43,6 +33,16 @@ public class WirelessModelImpl implements IWirelessModel {
             @Override
             public void onFailure(ServerTip serverTip) {
                 listener.onWifiConnectFaild();
+            }
+        });
+    }
+
+    @Override
+    public void getNearAps(double longitude, double latitude, final onGetNearApsListener listener) {
+        NetWorkWarpper.getNearAps(longitude, latitude, new HttpHandler<WifiMapList>() {
+            @Override
+            public void onSuccess(ServerTip serverTip, WifiMapList o) {
+                listener.onGetNearApsSuccess(o);
             }
         });
     }

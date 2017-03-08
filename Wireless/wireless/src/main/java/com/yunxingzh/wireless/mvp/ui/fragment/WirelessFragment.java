@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,10 +20,12 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.webkit.URLUtil;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
 import com.bumptech.glide.Glide;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
@@ -30,10 +33,8 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.config.MineHeadImg;
-import com.yunxingzh.wireless.mview.BadgeView;
 import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mview.MyListview;
-import com.yunxingzh.wireless.mview.MyScrollView;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
@@ -43,13 +44,12 @@ import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.SpeedTestActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
-import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiSpiritedActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IWirelessView;
-import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
-import com.yunxingzh.wireless.utils.AppUtils;
+import com.yunxingzh.wireless.utils.LocationUtils;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
@@ -68,12 +68,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.WeatherNewsList;
-import wireless.libs.bean.vo.BannerVo;
+import wireless.libs.bean.resp.WifiMapList;
 import wireless.libs.bean.vo.MainNewsVo;
 import wireless.libs.bean.vo.NoticeVo;
-import wireless.libs.bean.vo.UserConnectVo;
 import wireless.libs.bean.vo.WeatherVo;
 import wireless.libs.network.request.NetWorkWarpper;
 
@@ -82,36 +80,27 @@ import wireless.libs.network.request.NetWorkWarpper;
  * 无线
  */
 
-public class WirelessFragment extends BaseFragment implements IWirelessView, View.OnClickListener, ScrollViewListener,
+public class WirelessFragment extends BaseFragment implements IWirelessView, View.OnClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback, SwipeRefreshLayout.OnRefreshListener {
 
-    private final static String TAG = "WirelessFragment";
-    private final static int HEAD_LINE_TYPE = 0;//0-新闻 1-视频 2-应用 3-游戏
-    private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
-    private final static int PULL_HEIGHT = 10;
-    private final static int HEIGHT = 0;
-    private final static int ITEM = 0;
     private final static int NEWS = 1;//新闻点击上报
     private final static int SCANNIN_GREQUEST_CODE = 1;
-    private static final int DG_SDK_TIME_OUT = 10 * 1000;
+    private final static int WIRELESS_PAGER = 4;//首页定位flag
 
-    private LinearLayout mNoticeLay, mMainWifiManager, mMainMapLay, mMainSpeedtest, mMachineErrorLay,
-            mMainHeadImg, mWeatherLay, mMainSpiritedLay, mTitleLay, mWirelessTimesLay, mTitleLeftLay, mTitleForWirelessLay;
-    private MyScrollView scrollView;
-    private TextView mConnectCountTv, mTitleNameTv, mWirelessNumTv,
-            mEconomizeTv, mFontNewsTv, mFontVideoTv, mFontServiceTv, mFontZhiTv, mFontPlayingTv, mFontBuyingTv;
-    private ImageView mShowMoreIv, mTitleRightIv, mWeatherImgBottom, mWeatherImgTop, mConnectIv, mTitleMainImg,
-            mCircleIv, mWirelessCircleIv, mWirelessCircleBig, mWirelessCircleSmall, mMachineErrorIv;
+    private LinearLayout mMachineErrorLay, mMainHeadImg, mWeatherLay, mTitleLay, mWirelessTimesLay, mTitleLeftLay,
+            mTitleForWirelessLay, mMoreNewsLay, mWirelessConnectedBtnLay;
+    private FrameLayout mCenterCircleLay;
+    private TextView mTitleNameTv, mWirelessNumTv, mConnectText, mWirelessNickTv, mConnectTv;
+    private ImageView mTitleRightIv, mWeatherImgBottom, mWeatherImgTop, mConnectIv, mTitleMainImg,
+            mCircleIv, mWirelessCircleIv, mWirelessCircleBig, mWirelessCircleSmall, mMachineErrorIv,
+            mSpeedIv, mSpiritedIv;
     private MyListview mMainNewsLv;
     private IWirelessPresenter iWirelessPresenter;
     private CircleWaveView mAnimationTv;
-    private TextView footView, mConnectText, mWirelessNickTv;
     private List<MainNewsVo> mainNewsVos;
     private MainNewsAdapter mainNewsAdapter;
     private SwipeRefreshLayout mMainRefreshLay;
 
-    private List<BannerVo> bannersVo;
-    private UserConnectVo userVo;
     private TextView mMainTemperature, mMainWeather, mMachineErrorTv;
     private WeatherVo weatherNewsData;
     private NoticeVo noticeVo;
@@ -120,20 +109,18 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     private CheckEnvTask mCheckTask = null;
     private AccessPoint currentAp;
 
-    private boolean mDGFreeConnected = false;
+    private boolean mDGFreeConnected = false;//是否连接了东莞wifi
     private RotateAnimation animation;
     private int recLen = 5;
     private Handler handler = new Handler();
-    private BadgeView mBadgeView;
     private WindowManager wm;
     private WifiState wifiState;
     private CircleImageView mWirelessHeadImgIv;
 
     private AlertView switchAlert;
-
     private boolean isValidate = false;//东莞wifi是否认证通过
-
     private boolean isCountTime = false;//true打开（start），false关闭（stop）
+    private LocationUtils locationUtils;
 
     @Nullable
     @Override
@@ -142,7 +129,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         initView(view);
         initData();
         currentAp = FWManager.getInstance().getCurrent();
-        if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid) && currentAp.ssid.equals(Constants.SSID)) {
+        if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid) && currentAp.ssid.equals("无线东莞DG-FREE")) {
             CheckAndLogon();
         }
         return view;
@@ -166,14 +153,17 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         mTitleRightIv = findView(view, R.id.title_right_iv);
         mTitleRightIv.setVisibility(View.VISIBLE);
         mTitleRightIv.setOnClickListener(this);
-        scrollView = findView(view, R.id.scrollView);
-        scrollView.setScrollViewListener(this);
+
+        mCenterCircleLay = findView(view, R.id.center_circle_lay);
+        mWirelessConnectedBtnLay = findView(view, R.id.wireless_connected_btn_lay);
+        mSpeedIv = findView(view, R.id.speed_iv);
+        mSpeedIv.setOnClickListener(this);
+        mSpiritedIv = findView(view, R.id.spirited_iv);
+        mSpiritedIv.setOnClickListener(this);
+
         mMainNewsLv = findView(view, R.id.main_news_lv);
-        mNoticeLay = findView(view, R.id.notice_lay);
-        mShowMoreIv = findView(view, R.id.show_more_iv);
-        mMainSpiritedLay = findView(view, R.id.main_spirited_lay);
-        mMainSpiritedLay.setOnClickListener(this);
         mAnimationTv = findView(view, R.id.animation_tv);
+        mConnectTv = findView(view, R.id.connect_tv);
         mConnectIv = findView(view, R.id.connect_iv);
         mConnectIv.setOnClickListener(this);
         mMainRefreshLay = findView(view, R.id.main_refresh_lay);
@@ -200,35 +190,15 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         animation.setFillAfter(false);//动画执行完后是否停留在执行完的状态
         animation.setStartOffset(0);//执行前的等待时间
 
-        mMainWifiManager = findView(view, R.id.main_wifi_manager);
-        mMainWifiManager.setOnClickListener(this);
-        mMainMapLay = findView(view, R.id.main_map_lay);
-        mMainMapLay.setOnClickListener(this);
-        mConnectCountTv = findView(view, R.id.connect_count_tv);
-        mEconomizeTv = findView(view, R.id.economize_tv);
-        mMainSpeedtest = findView(view, R.id.main_speedtest_lay);
-        mMainSpeedtest.setOnClickListener(this);
         mMainTemperature = findView(view, R.id.main_temperature);
         mMainWeather = findView(view, R.id.main_weather);
         mMainHeadImg = findView(view, R.id.main_head_img);
         mWeatherLay = findView(view, R.id.weather_lay);
         mWeatherLay.setOnClickListener(this);
-        footView = findView(view, R.id.foot_view);
-        footView.setOnClickListener(this);
+        mMoreNewsLay = findView(view, R.id.more_news_lay);
+        mMoreNewsLay.setOnClickListener(this);
         mConnectText = findView(view, R.id.connect_text);
 
-        mFontNewsTv = findView(view, R.id.font_news_tv);
-        mFontNewsTv.setOnClickListener(this);
-        mFontVideoTv = findView(view, R.id.font_video_tv);
-        mFontVideoTv.setOnClickListener(this);
-        mFontServiceTv = findView(view, R.id.font_service_tv);
-        mFontServiceTv.setOnClickListener(this);
-        mFontZhiTv = findView(view, R.id.font_zhi_tv);
-        mFontZhiTv.setOnClickListener(this);
-        mFontPlayingTv = findView(view, R.id.font_playing_tv);
-        mFontPlayingTv.setOnClickListener(this);
-        mFontBuyingTv = findView(view, R.id.font_buying_tv);
-        mFontBuyingTv.setOnClickListener(this);
         mWeatherImgBottom = findView(view, R.id.weather_img_bottom);
         mWeatherImgTop = findView(view, R.id.weather_img_top);
 
@@ -240,12 +210,12 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         wifiUtils = new WifiUtils(getActivity());
         //注册EventBus
         EventBus.getDefault().register(this);
-        mBadgeView = new BadgeView(getActivity());
-        mBadgeView.setBadgeMargin(0, 35, 10, 0);
-        mBadgeView.setTargetView(mMainWifiManager);
         // mBadgeView.set
         iWirelessPresenter = new WirelessPresenterImpl(this);
         iWirelessPresenter.weatherNews();
+        //开始定位
+        locationUtils = new LocationUtils(getActivity(), WIRELESS_PAGER);
+        locationUtils.startMonitor(locationHandler);
 
         FWManager.getInstance().addWifiObserver(wifiObserver);
         //获取屏幕宽高
@@ -326,15 +296,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         mMainNewsLv.setAdapter(mainNewsAdapter);
         Utility.setListViewHeight(mMainNewsLv);
 
-        iWirelessPresenter.getFontInfo();
-    }
-
-    @Override
-    public void getFontInfoSuccess(FontInfoList fontInfoVo) {
-        bannersVo = fontInfoVo.banner;
-        userVo = fontInfoVo.user;
-        mConnectCountTv.setText(userVo.total + "");
-        mEconomizeTv.setText(userVo.save + "");
     }
 
     private void CheckAndLogon() {
@@ -349,40 +310,36 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     @Override
     public void onClick(View v) {
         if (mConnectIv == v) {//一键连接
-            if (mDGFreeConnected) {
-                EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
-            } else {
-                if (wifiUtils.getWlanState()) {//是否打开
-                    checkDGWifi();
-                } else {
-                    startActivity(WifiManagerActivity.class, "", "", "", "");
-                }
+            if (wifiUtils.getWlanState()) {//是否打开
+                checkDGWifi();
+            } else {//是否跳转系统设置的wifi列表？
+                ToastUtil.showMiddle(getActivity(), R.string.please_open_wifi);
+                //startActivity(WifiManagerActivity.class, "", "", "", "");
             }
         } else if (mWeatherLay == v) {// 天气
             if (weatherNewsData != null) {
                 startActivity(WebViewActivity.class, Constants.URL, weatherNewsData.dst, Constants.TITLE, "东莞天气");
             }
-        } else if (footView == v) {//查看更多新闻
-            AppUtils.animation(footView);
+        } else if (mMoreNewsLay == v) {//本地热点
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
-        } else if (mMainWifiManager == v) {//wifi管理
+        } /*else if (mMainWifiManager == v) {//wifi管理
             startActivity(WifiManagerActivity.class, "", "", "", "");
         } else if (mMainMapLay == v) {//wifi地图
             startActivity(WifiMapActivity.class, "", "", "", "");
-        } else if (mTitleRightIv == v) {//扫码连接东莞wifi
+        } */ else if (mTitleRightIv == v) {//扫码连接东莞wifi
             Intent intent = new Intent();
             intent.setClass(getActivity(), ScanCodeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
-        } else if (mMainSpeedtest == v) { // wifi 测速
+        } else if (mSpeedIv == v) { // wifi 测速
             startActivity(SpeedTestActivity.class, "", "", "", "");
-        } else if (mMainSpiritedLay == v) {//wifi公益
+        } else if (mSpiritedIv == v) {//wifi公益
             if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid)) {
                 startActivity(WifiSpiritedActivity.class, "ssid", currentAp.ssid, "", "");
             } else {
                 startActivity(WifiSpiritedActivity.class, "", "", "", "");
             }
-        } else if (mFontNewsTv == v) { // 东莞头条
+        } /*else if (mFontNewsTv == v) { // 东莞头条
             AppUtils.animation(mFontNewsTv);
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mFontVideoTv == v) { //热门视频
@@ -398,7 +355,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
         } else if (mFontBuyingTv == v) { //抢购
 
-        } else if (mTitleForWirelessLay == v) {
+        } */ else if (mTitleForWirelessLay == v) {
             EventBus.getDefault().post(new EventBusType(Constants.MINE));
         } else if (mMachineErrorIv == v) {//不可抗力异常关闭
             mMachineErrorLay.setVisibility(View.GONE);
@@ -423,7 +380,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             } else {
                 countDown();
                 mConnectIv.setVisibility(View.VISIBLE);
-                mConnectIv.setImageResource(R.drawable.main_connect_btn);
                 recLen = 5;
                 mWirelessNumTv.setText(recLen + "");
                 isCountTime = false;
@@ -548,9 +504,12 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 switch (mCheckRet) {
                     case Constants.UNKNOW_ERROR://-1:未知异常
                         ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                        // 判断下按钮的状态
+                        updateConnectState(false);
                         break;
                     case Constants.NET_DISCONNECT://0：无网络
-                       // ToastUtil.showMiddle(getActivity(), R.string.internet_error);
+                        updateConnectState(false);
+                        // ToastUtil.showMiddle(getActivity(), R.string.internet_error);
                         break;
                     case Constants.NET_OK://1：无须认证的网络（可以上网）
                         isValidate = true;
@@ -584,6 +543,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     @Override
     public void wifiConnectSuccess() {
         isValidate = true;
+        mDGFreeConnected = true;
         // 判断下按钮的状态
         updateConnectState(false);
     }
@@ -595,27 +555,58 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         updateConnectState(false);
     }
 
+    @Override
+    public void getNearApsSuccess(WifiMapList wifiMapList) {
+        if (wifiMapList != null) {
+
+        }
+    }
+
+    final Handler locationHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                iWirelessPresenter.getNearAps(locationUtils.getBaseLocation().longitude, locationUtils.getBaseLocation().latitude);
+            } else if(msg.what == BDLocation.TypeServerError) {
+                ToastUtil.showMiddle(getActivity(),R.string.location_error);
+                switchAlert = new AlertView("温馨提示", "亲,定位失败,请打开定位权限", "取消", new String[]{"去设置"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        if (position != AlertView.CANCELPOSITION) {
+                            Intent intent =  new Intent(Settings.ACTION_SETTINGS);
+                            startActivity(intent);
+                        }
+                    }
+                }).setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                        if (switchAlert != null) {
+                            switchAlert.dismiss();
+                        }
+                    }
+                });
+                switchAlert.show();
+            } else {
+                LogUtils.i("lsd","location error:" + msg.what);
+            }
+        }
+    };
+
     //连接后改变状态
     public void updateConnectState(boolean updateNews) {
         currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
         wifiState = FWManager.getInstance().getState();
         mDGFreeConnected = false;
-        if (currentAp != null && wifiState == WifiState.CONNECTED) {
-            String ssidText = "";
-            if (currentAp.ssid.equals(Constants.SSID) && isValidate) {
+        if (currentAp != null && wifiState == WifiState.CONNECTED) {//当前已连接wifi
+            if (currentAp.ssid.equals(Constants.SSID) && isValidate) {//当前已连接东莞wifi并且认证成功
                 if (!isCountTime) {
                     mConnectIv.setVisibility(View.VISIBLE);
-                    mConnectIv.setImageResource(R.drawable.main_connect_btn);
                 }
-                if (isAdded()) {
-                    ssidText = getResources().getString(R.string.connect_wifi) + getResources().getString(R.string.connect_dg_success);
-                }
-                if (currentAp != null) {
-                    mConnectText.setText(ssidText);
-                }
+                mConnectText.setText("已连接免费WiFi");
                 mDGFreeConnected = true;
                 lineViewVisible(true);
-            } else {
+            } else {//连接其他的wifi
                 lineViewVisible(false);
                 if (isAdded()) {
                     if (currentAp != null) {
@@ -623,14 +614,19 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                     }
                 }
             }
-
-        } else {
+            mWirelessConnectedBtnLay.setVisibility(View.VISIBLE);
+            mCenterCircleLay.setVisibility(View.GONE);//连接wifi后中间圆圈等按钮隐藏
+        } else {// 当前未连接wifi
+            mWirelessConnectedBtnLay.setVisibility(View.GONE);
+            mCenterCircleLay.setVisibility(View.VISIBLE);
             lineViewVisible(false);
             AccessPoint DGWifiAp = getDGWifiFromList();//找出附近wifi列表中的东莞wifi
-            if (DGWifiAp != null) {
-                mConnectText.setText(R.string.find_wifi);
+            if (DGWifiAp != null) {//周围有东莞wifi
+                mConnectTv.setText("一键连接");
+                mConnectText.setText("检测到免费WiFi热点");
             } else {
-                mConnectText.setText(R.string.wireless_dg);
+                mConnectTv.setText("找WiFi");
+                mConnectText.setText("寻找附近免费WiFi");
             }
         }
         if (mDGFreeConnected) {
@@ -657,7 +653,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         } else {
             mAnimationTv.setVisibility(View.VISIBLE);
             mConnectIv.setVisibility(View.VISIBLE);
-            mConnectIv.setImageResource(R.drawable.need_connect);
+            //mConnectIv.setImageResource(R.drawable.need_connect);
             mAnimationTv.start();
         }
     }
@@ -791,22 +787,13 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     @Override
     public void onDestroy() {
         super.onDestroy();
+        locationUtils.stopMonitor();
         if (iWirelessPresenter != null) {
             iWirelessPresenter.onDestroy();
         }
         mAnimationTv.destroyBitMap();
         FWManager.getInstance().removeWifiObserver(wifiObserver);
         EventBus.getDefault().unregister(this);//反注册EventBus
-    }
-
-    @Override
-    public void onScrollChanged(MyScrollView scrollView, int x, int y, int oldx, int oldy) {
-        if (y > PULL_HEIGHT) { //下拉高度大于10
-            // mNoticeLay.setVisibility(View.GONE);
-            mShowMoreIv.setVisibility(View.INVISIBLE);
-        } else if (y == HEIGHT) {
-            // mNoticeLay.setVisibility(View.VISIBLE);
-        }
     }
 
     public String getCurrentWifiMacAddress() {
@@ -853,9 +840,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     public void onResume() {
         super.onResume();
         List<AccessPoint> apList = FWManager.getInstance().getList();//先拿到附近列表
-        if (mBadgeView != null) {
-            mBadgeView.setBadgeCount(apList.size());
-        }
         updateConnectState(false);
     }
 

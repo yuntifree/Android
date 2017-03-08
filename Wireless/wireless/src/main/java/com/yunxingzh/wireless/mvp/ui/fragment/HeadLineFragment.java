@@ -261,7 +261,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
                 case Constants.CTYPE_WEBVIEW://网页
                     return argumentsFragment("http://www.baidu.com");
                 case Constants.CTYPE_JOKE://搞笑
-                    return new HeadLineAppFragment();
+                   // return new HeadLineAppFragment();
                 case Constants.CTYPE_LIVE://直播
                     return new HeadLineLiveFragment();
                 case Constants.CTYPE_EPISODE://段子

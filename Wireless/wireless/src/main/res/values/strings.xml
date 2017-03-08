@@ -57,7 +57,7 @@
     <string name="second">秒</string>
     <string name="re_get_verification_code">重新获取</string>
     <string name="register_success">欢迎使用东莞无限</string>
-    <string name="get_more">查看更多东莞头条新闻>></string>
+    <string name="get_hot">本地热点</string>
     <string name="no_news">没有找到相关新闻</string>
     <string name="no_resourse">没有更多数据了</string>
     <string name="head_line">东莞头条</string>
@@ -114,6 +114,7 @@
     <string name="find_near_wifi">寻找身边免费WiFi</string>
     <string name="turn_on_wifi">开启WiFi</string>
     <string name="connect_success">恭喜您连接成功</string>
+    <string name="please_open_wifi">请先打开WiFi</string>
     <string name="jump">立即体验</string>
     <string name="network_error">网络跑路啦</string>
     <string name="network_need_login">已连接,点我登录验证</string>
@@ -155,7 +156,7 @@
     <string name="input_phone">请输入您的QQ号码或者手机号</string>
     <string name="commit_success">感谢您的反馈</string>
     <string name="input_feed_content">请输入要反馈的内容</string>
-    <string name="concect_dg_free">请稍候...正在连接东莞无限</string>
+    <string name="concect_dg_free">正在连接免费WiFi</string>
     <string name="concect_faild">亲,连接东莞无限超时哦,请重试</string>
     <string name="problem">反馈问题</string>
 

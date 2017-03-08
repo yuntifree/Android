@@ -19,7 +19,6 @@ import wireless.libs.bean.vo.ImageTokenVo;
 import wireless.libs.bean.vo.ImageUploadVo;
 import wireless.libs.bean.vo.UpdateVo;
 import wireless.libs.bean.vo.User;
-import wireless.libs.bean.resp.FontInfoList;
 import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.resp.WeatherNewsList;
 import wireless.libs.bean.resp.WifiList;
@@ -96,15 +95,6 @@ public class NetWorkWarpper {
         httpParams.add("type", type);
         httpParams.add("seq", seq);
         HttpUtils.post(path, httpParams, httpHandler);
-    }
-
-    /***
-     * 拉首页下半页的信息
-     */
-    public static void getFontInfo(HttpHandler<FontInfoList> handler) {
-        String path = "get_front_info";
-        HttpParams httpParams = new HttpParams();
-        HttpUtils.post(path, httpParams, handler);
     }
 
     /***
@@ -358,6 +348,17 @@ public class NetWorkWarpper {
     public static void getRandNick(HttpHandler<NickNameList> httpHandler) {
         String path = "get_rand_nick";
         HttpParams httpParams = new HttpParams();
+        HttpUtils.post(path, httpParams, httpHandler);
+    }
+
+    /***
+     * 获取周围的热点
+     * */
+    public static void getNearAps(double longitude, double latitude, HttpHandler<WifiMapList> httpHandler) {
+        String path = "get_nearby_aps";
+        HttpParams httpParams = new HttpParams();
+        httpParams.add("longitude", longitude);
+        httpParams.add("latitude", latitude);
         HttpUtils.post(path, httpParams, httpHandler);
     }
 
