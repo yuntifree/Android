@@ -26,8 +26,10 @@ import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtil;
 import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 import com.yunxingzh.wireless.utils.Util;
+import com.yunxingzh.wireless.wifi.AccessPoint;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -188,7 +190,11 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         *  "http://download.weather.com.cn/3g/current/ChinaWeather_Android.apk"
         *  "http://down.360safe.com/360mse/f/360fmse_js010001.apk"
         * */
-        String dgWifi = FWManager.getInstance().getCurrent().ssid;
+        String dgWifi = "";
+        AccessPoint current = FWManager.getInstance().getCurrent();
+        if (current != null && !StringUtils.isEmpty(current.ssid)) {
+            dgWifi = current.ssid;
+        }
         if (dgWifi.equals("无线东莞DG-FREE")) {
             timer = new Timer();
             task = new TimerTask() {
@@ -218,7 +224,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         realTimeSpeed = all * (1 + percent);
         LogUtils.e("sss", "realTimeSpeed:" + realTimeSpeed);
         count++;
-        int angle = speedToAngle((long)realTimeSpeed);//幅度
+        int angle = speedToAngle((long) realTimeSpeed);//幅度
         mList.add(angle);
         testSpeed(angle);
 
