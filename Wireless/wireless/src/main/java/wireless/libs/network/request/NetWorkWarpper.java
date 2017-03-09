@@ -351,15 +351,4 @@ public class NetWorkWarpper {
         HttpUtils.post(path, httpParams, httpHandler);
     }
 
-    /***
-     * 获取周围的热点
-     * */
-    public static void getNearAps(double longitude, double latitude, HttpHandler<WifiMapList> httpHandler) {
-        String path = "get_nearby_aps";
-        HttpParams httpParams = new HttpParams();
-        httpParams.add("longitude", longitude);
-        httpParams.add("latitude", latitude);
-        HttpUtils.post(path, httpParams, httpHandler);
-    }
-
 }

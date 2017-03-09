@@ -16,11 +16,6 @@ public interface IWirelessModel {
         void onWifiConnectFaild();
     }
 
-
-    interface onGetNearApsListener{
-        void onGetNearApsSuccess(WifiMapList wifiMapList);
-    }
-
     /***
      * 记录点击次数
      * @param listener
@@ -32,12 +27,5 @@ public interface IWirelessModel {
      * @param listener
      */
     void wifiConnect(String wlanacname, String wlanuserip, String wlanacip, String wlanusermac, String apmac, onWifiConnectListener listener);
-
-
-    /***
-     * 获取周围wifi热点
-     * @param listener
-     */
-    void getNearAps(double longitude, double latitude, onGetNearApsListener listener);
 
 }

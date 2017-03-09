@@ -19,7 +19,7 @@ import wireless.libs.model.impl.WirelessModelImpl;
  */
 
 public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel.onClickCountListener,
-        IWeatherNewsModel.onWeatherNewsListener, IWirelessModel.onWifiConnectListener, IWirelessModel.onGetNearApsListener {
+        IWeatherNewsModel.onWeatherNewsListener, IWirelessModel.onWifiConnectListener {
 
     private IWeatherNewsModel iWeatherNewsModel;
     private IWirelessModel iWirelessModel;
@@ -98,13 +98,6 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
     }
 
     @Override
-    public void getNearAps(double longitude, double latitude) {
-        if (iWirelessView != null) {
-            iWirelessModel.getNearAps(longitude, latitude, this);
-        }
-    }
-
-    @Override
     public void onClickCountSuccess() {
         //上报无需返回
     }
@@ -137,12 +130,5 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
         iGetLiveListView = null;
         iServiceView = null;
         iGetJokesView = null;
-    }
-
-    @Override
-    public void onGetNearApsSuccess(WifiMapList wifiMapList) {
-        if (iWirelessView != null){
-            iWirelessView.getNearApsSuccess(wifiMapList);
-        }
     }
 }
