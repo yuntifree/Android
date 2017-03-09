@@ -75,6 +75,13 @@ IMineModel.onUpdateUserInfoListener {
     }
 
     @Override
+    public void onGetUserInfoFailed() {
+        if (iMineView != null) {
+            iMineView.getUserInfoFailed();
+        }
+    }
+
+    @Override
     public void onUpdateUserInfoSuccess() {
         if (iMineView != null) {
             iMineView.updateUserInfoSuccess();

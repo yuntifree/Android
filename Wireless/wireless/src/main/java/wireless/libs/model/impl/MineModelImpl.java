@@ -31,6 +31,12 @@ public class MineModelImpl implements IMineModel {
             public void onSuccess(ServerTip serverTip, UserInfoVo o) {
                 listener.onGetUserInfoSuccess(o);
             }
+
+            @Override
+            public void onFailure(ServerTip serverTip) {
+                super.onFailure(serverTip);
+                listener.onGetUserInfoFailed();
+            }
         });
     }
 

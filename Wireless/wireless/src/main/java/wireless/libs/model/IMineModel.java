@@ -16,6 +16,7 @@ public interface IMineModel {
 
     interface onGetUserInfoListener{
         void onGetUserInfoSuccess(UserInfoVo userInfoVo);
+        void onGetUserInfoFailed();
     }
 
     interface onUpdateUserInfoListener{

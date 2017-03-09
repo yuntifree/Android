@@ -175,7 +175,6 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
             } else {
                 mMineNameTv.setText("东莞无限");
             }
-
             if (!StringUtils.isEmpty(userInfoVo.headurl)) {
                 Glide.with(getActivity()).load(userInfoVo.headurl).into(mMineHeadIv);
             } else {
@@ -187,6 +186,15 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
             EventBus.getDefault().post(new MineHeadImg(Constants.USER_MINE_FLAG, "", userInfoVo));
             mMineCountTv.setText(mMineCountTv.getText().toString() + userInfoVo.total + "次，");
             mMineMoneyTv.setText(mMineMoneyTv.getText().toString() + userInfoVo.save + "元");
+        }
+    }
+
+    @Override
+    public void getUserInfoFailed() {
+        UserInfoVo infoVo = MainApplication.get().getUserMine();
+        if (infoVo != null) {
+            mMineNameTv.setText(infoVo.nickname);
+            Glide.with(getActivity()).load(infoVo.headurl).into(mMineHeadIv);
         }
     }
 
