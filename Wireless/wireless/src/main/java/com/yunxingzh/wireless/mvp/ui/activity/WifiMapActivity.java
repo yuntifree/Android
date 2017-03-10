@@ -2,6 +2,7 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -91,6 +93,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         mTitleReturnIv.setOnClickListener(this);
         mapView = findView(R.id.baidu_mv);
         mMapLocationIv = findView(R.id.map_location_iv);
+        mMapLocationIv.setVisibility(View.VISIBLE);
         mMapLocationIv.setOnClickListener(this);
     }
 
@@ -246,8 +249,10 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         if (iWifiMapPresenter != null) {
             iWifiMapPresenter.onDestroy();
         }
-        mapView.onDestroy();
-        mapView = null;
+        if (mapView != null) {
+            mapView.onDestroy();
+            mapView = null;
+        }
         locationUtils.stopMonitor();
     }
 
@@ -287,12 +292,16 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     }
 
     public void showWindow(Marker marker) {
+        WindowManager wm = getWindowManager();
+        int width = wm.getDefaultDisplay().getWidth();//720,1536
+        int height = wm.getDefaultDisplay().getHeight();//1280,2560
+
         //获得marker中的数据
         Bundle bun = marker.getExtraInfo();
         if (bun == null) {
             return;
         }
-        WifiMapVo info = (WifiMapVo) bun.get("info");
+        final WifiMapVo info = (WifiMapVo) bun.get("info");
         if (info == null) {
             return;
         }
@@ -308,6 +317,18 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         markerLayout.setGravity(Gravity.CENTER);
         markerLayout.setBackgroundResource(R.drawable.wifi_info);
 
+        //左右模块容器
+        LinearLayout conLay = new LinearLayout(getApplicationContext());
+        conLay.setOrientation(LinearLayout.VERTICAL);
+
+        //人物和地址容器
+        LinearLayout addressLay = new LinearLayout(getApplicationContext());
+        addressLay.setOrientation(LinearLayout.HORIZONTAL);
+
+        ImageView addressImg = new ImageView(getApplicationContext());
+        addressImg.setImageResource(R.drawable.ico_location);
+
+        //地址
         TextView address = new TextView(getApplicationContext());
         address.setTextColor(getResources().getColor(R.color.gray_b4b4b4));
         address.setTextSize(10);
@@ -316,24 +337,51 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         address.setSingleLine();
         address.setText(info.address);
 
+        addressLay.addView(addressImg);
+        addressLay.addView(address);
+
+        //距离
         TextView distancesView = new TextView(getApplicationContext());
         distancesView.setTextColor(getResources().getColor(R.color.blue_00a6f9));
-        distancesView.setTextSize(10);
+        distancesView.setTextSize(14);
+
         if (distance >= 1000) {
             distancesView.setText(new DecimalFormat("0.0").format(distance / 1000) + "km");
         } else {
             distancesView.setText(new DecimalFormat("0").format(distance) + "m");
         }
 
-        ImageView addressImg = new ImageView(getApplicationContext());
-        addressImg.setImageResource(R.drawable.ico_location);
-        ImageView distancesImg = new ImageView(getApplicationContext());
-        distancesImg.setImageResource(R.drawable.ico_walk);
+        if (width <= 720 && height <= 1280) {
+            address.setPadding(20, 0, 0, 0);
+            addressLay.setPadding(25, 0, 20, 0);
+            distancesView.setPadding(80, 0, 0, 0);
+        } else {
+            address.setPadding(30, 0, 0, 0);
+            addressLay.setPadding(40, 0, 20, 0);
+            distancesView.setPadding(120, 0, 0, 0);
+        }
 
-        markerLayout.addView(addressImg);
-        markerLayout.addView(address);
-        markerLayout.addView(distancesImg);
-        markerLayout.addView(distancesView);
+        conLay.addView(addressLay, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+        conLay.addView(distancesView);
+
+        ImageView goImg = new ImageView(getApplicationContext());
+        Drawable selected = this.getResources().getDrawable(R.drawable.map_btn_style);
+        goImg.setBackground(selected);
+        goImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WifiMapActivity.this, NavigationActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("wifiMapInfo", info);
+                intent.putExtras(bundle);
+                intent.putExtra("myLat", lat);
+                intent.putExtra("myLon", lon);
+                startActivity(intent);
+            }
+        });
+
+        markerLayout.addView(conLay, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 20));
+        markerLayout.addView(goImg, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 20));
         //将marker所在的经纬度的信息转化成屏幕上的坐标
         LatLng ll = marker.getPosition();
         Point p = baiduMap.getProjection().toScreenLocation(ll);
@@ -343,4 +391,13 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         //显示InfoWindow
         baiduMap.showInfoWindow(mInfoWindow);
     }
+
+    public LinearLayout.LayoutParams getLayoutParams(int weight, int isGravity, int width, int height, int left, int top, int right, int bottom) {
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
+        lp.gravity = isGravity;
+        lp.weight = weight;
+        lp.setMargins(left, top, right, bottom);
+        return lp;
+    }
+
 }

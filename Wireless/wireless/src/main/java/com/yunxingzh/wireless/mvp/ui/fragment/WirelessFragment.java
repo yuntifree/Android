@@ -35,13 +35,11 @@ import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mview.MyListview;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
-import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.SpeedTestActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
-import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiSpiritedActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
@@ -346,7 +344,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
         } else if (mFontBuyingTv == v) { //抢购
 
-        } */ else if (mTitleForWirelessLay == v) {
+        } */ else if (mTitleForWirelessLay == v) {//个人中心
             EventBus.getDefault().post(new EventBusType(Constants.MINE));
         } else if (mMachineErrorIv == v) {//不可抗力异常关闭
             mMachineErrorLay.setVisibility(View.GONE);

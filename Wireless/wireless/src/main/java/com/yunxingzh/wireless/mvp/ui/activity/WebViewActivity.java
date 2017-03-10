@@ -82,10 +82,19 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
 //                return false;
 //            }
 
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                return false;
-//            }
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.startsWith("tel:")) {//调起系统拨打电话和发送短信
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
+                    startActivity(intent);
+                    return true;
+                } else if (url.startsWith("sms:")) {
+                    Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(url));
+                    startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
 
             @Override
             public void onPageFinished(WebView view, String url) {
