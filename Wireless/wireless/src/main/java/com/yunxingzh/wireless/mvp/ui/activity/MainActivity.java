@@ -127,6 +127,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.wireless_radio:
+                MobclickAgent.onEvent(this, "tab_Index");
                 if (wirelessFragment == null) {
                     wirelessFragment = new WirelessFragment();
                 }
@@ -135,6 +136,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 showFragment(wirelessFragment);//无线
                 break;
             case R.id.head_line_radio:
+                MobclickAgent.onEvent(this, "tab_entertainment");
                 if (headlineFragment == null) {
                     headlineFragment = new HeadLineFragment();
                 }
@@ -147,6 +149,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 //                sendBroadcast(intent);
                 break;
             case R.id.service_radio:
+                MobclickAgent.onEvent(this, "tab_life");
                 if (serviceFragment == null) {
                     serviceFragment = new ServiceFragment();
                 }
@@ -155,6 +158,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 showFragment(serviceFragment);//服务
                 break;
             case R.id.stretch_radio:
+                MobclickAgent.onEvent(this, "tab_me");
                 if (mineFragment == null) {
                     mineFragment = new MineFragment();
                 }

@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.MainApplication;
@@ -81,17 +82,25 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
     @Override
     public void onClick(View v) {
         if (mTitleReturnIv == v) {
+            MobclickAgent.onEvent(this, "profile_name_cancel");
             finish();
         } else if (mNickRefreshTv == v) {
+            MobclickAgent.onEvent(this, "profile_name_random");
             //AppUtils.animation(mNickRefreshTv);
-            if (!StringUtils.isEmpty(mNickInputEt.getText().toString())){
+            if (!StringUtils.isEmpty(mNickInputEt.getText().toString())) {
                 mNickInputEt.setText("");
             }
             if (nickIterator != null && nickIterator.hasNext() && refresh < 10) {
-                refresh ++;
+                refresh++;
+                if (refresh == 3) {
+                    MobclickAgent.onEvent(this, "profile_name_random_3");
+                }
+                if (refresh == 5) {
+                    MobclickAgent.onEvent(this, "profile_name_random_5");
+                }
                 mNickInputEt.setHint(nickIterator.next());
             } else {
-                if (nickIterator != null && nickIterator.hasNext()){
+                if (nickIterator != null && nickIterator.hasNext()) {
                     nickIterator.next();
                     nickIterator.remove();
                     nickSets.clear();
@@ -100,17 +109,19 @@ public class NickNameActivity extends BaseActivity implements IDefHeadView, View
                 iDefHeadPresenter.getRandNick();
             }
         } else if (mNickQueryTv == v) {
-                if (!StringUtils.isEmpty(mNickInputEt.getText().toString())) {
-                    if (mNickInputEt.getText().length() <= 12) {
-                        iMinePresenter.updateUserInfo("", mNickInputEt.getText().toString());
-                    } else {
-                        ToastUtil.showMiddle(this, "昵称只能12字以内哦");
-                    }
-                } else if (!StringUtils.isEmpty(mNickInputEt.getHint().toString())) {
-                    iMinePresenter.updateUserInfo("", mNickInputEt.getHint().toString());
+            if (!StringUtils.isEmpty(mNickInputEt.getText().toString())) {
+                if (mNickInputEt.getText().length() <= 12) {
+                    MobclickAgent.onEvent(this, "profile_name_ok");
+                    iMinePresenter.updateUserInfo("", mNickInputEt.getText().toString());
                 } else {
-                    ToastUtil.showMiddle(this, "请输入昵称");
+                    ToastUtil.showMiddle(this, "昵称只能12字以内哦");
                 }
+            } else if (!StringUtils.isEmpty(mNickInputEt.getHint().toString())) {
+                MobclickAgent.onEvent(this, "profile_name_random_ok");
+                iMinePresenter.updateUserInfo("", mNickInputEt.getHint().toString());
+            } else {
+                ToastUtil.showMiddle(this, "请输入昵称");
+            }
         }
     }
 

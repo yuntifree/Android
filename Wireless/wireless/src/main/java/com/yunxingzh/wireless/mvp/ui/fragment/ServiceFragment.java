@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
@@ -114,6 +115,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     @Override
     public void onClick(View v) {
         if (mSearchTv == v) {//搜索
+            MobclickAgent.onEvent(getActivity(),"life_search");
             startActivity(SearchActivity.class, "", "", "", "");
         }
     }
@@ -230,6 +232,24 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                         if (iWirelessPresenter != null) {
                             iWirelessPresenter.clickCount(cityServiceVo.id, 12, "");//上报
                         }
+                        //友盟上报
+                        switch (cityServiceVo.title) {
+                            case "更多":
+                                MobclickAgent.onEvent(getActivity(),"life_more");
+                                break;
+                            case "招聘":
+                                MobclickAgent.onEvent(getActivity(),"life_recruit");
+                                break;
+                            case "租房":
+                                MobclickAgent.onEvent(getActivity(),"life_rental");
+                                break;
+                            case "二手":
+                                MobclickAgent.onEvent(getActivity(),"life_secondhand");
+                                break;
+                            case "家政":
+                                MobclickAgent.onEvent(getActivity(),"life_service");
+                                break;
+                        }
                         startActivity(WebViewActivity.class, Constants.URL, cityServiceVo.dst, Constants.TITLE, cityServiceVo.title);
                     }
                 });
@@ -322,6 +342,43 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                                 if (iWirelessPresenter != null) {
                                     iWirelessPresenter.clickCount(dv.sid, CLICK_COUNT, "");//上报
                                 }
+                                //友盟上报
+                                switch (dv.title) {
+                                    case "公交查询":
+                                        MobclickAgent.onEvent(getActivity(),"life_bus");
+                                        break;
+                                    case "汽车票":
+                                        MobclickAgent.onEvent(getActivity(),"life_busticket");
+                                        break;
+                                    case "预约挂号":
+                                        MobclickAgent.onEvent(getActivity(),"life_docappointment");
+                                        break;
+                                    case "医院查询":
+                                        MobclickAgent.onEvent(getActivity(),"life_hospitical");
+                                        break;
+                                    case "积分入户":
+                                        MobclickAgent.onEvent(getActivity(),"life_integralhome");
+                                        break;
+                                    case "积分入学":
+                                        MobclickAgent.onEvent(getActivity(),"life_integralstudy");
+                                        break;
+                                    case "发票真伪":
+                                        MobclickAgent.onEvent(getActivity(),"life_invoice");
+                                        break;
+                                    case "违章查询":
+                                        MobclickAgent.onEvent(getActivity(),"life_peccancy");
+                                        break;
+                                    case "飞机票":
+                                        MobclickAgent.onEvent(getActivity(),"life_planeticket");
+                                        break;
+                                    case "社保查询":
+                                        MobclickAgent.onEvent(getActivity(),"life_socialinsurance");
+                                        break;
+                                    case "火车票":
+                                        MobclickAgent.onEvent(getActivity(),"life_trainticket");
+                                        break;
+                                }
+
                                 startActivity(WebViewActivity.class, Constants.URL, dv.dst, Constants.TITLE, dv.title);
                             }
                         });

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.ClearEditText;
 import com.yunxingzh.wireless.mview.StatusBarColor;
@@ -79,6 +80,7 @@ public class WifiSpiritedActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (mTitleReturnIv == v) {
+            MobclickAgent.onEvent(this, "share_wifi_cancel");
             finish();
         } else if (mSpJoinBtn == v) {
             if (StringUtils.isEmpty(getSsid())) {

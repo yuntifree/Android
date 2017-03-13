@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mview.PagerSlidingTabStrip;
 import com.yunxingzh.wireless.mvp.presenter.impl.GetHeadLineMenuPresenterImpl;
@@ -60,6 +62,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     private WebViewFragment webViewFragment;
     // private MyReceiver rec;
     private int loadCount;
+    private int lastPosition;//上一个tab的position
 
     @Nullable
     @Override
@@ -87,17 +90,19 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         tabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                if (menuInfos != null && menuInfos.size() > 0) {
+                    //点击切换tab上报至友盟
+                    reportUmeng(menuInfos.get(lastPosition).type, menuInfos.get(position).type);
+                }
+                lastPosition = position;//保存上一次切换的position
             }
 
             @Override
             public void onPageSelected(int position) {
-
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 //        rec = new MyReceiver();
@@ -105,6 +110,55 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
 //        IntentFilter intentFilter = new IntentFilter("com.yunxingzh.wireless.mvp.ui.fragment");
 //        //注册广播
 //        getActivity().registerReceiver(rec, intentFilter);
+    }
+
+    public void reportUmeng(int lastType, int currentType) {
+        StringBuffer stringBuffer = new StringBuffer();
+        if (lastType != currentType) {
+            //上一个tab
+            switch (lastType) {
+                case Constants.TYPE_HOT://热点
+                    stringBuffer.append("hotspot");
+                    break;
+                case Constants.TYPE_VIDEO://视频
+                    stringBuffer.append("video");
+                    break;
+                case Constants.TYPE_LOCAL://本地
+                    stringBuffer.append("DG");
+                    break;
+                case Constants.TYPE_DISPORT://娱乐
+                    stringBuffer.append("entertainment");
+                    break;
+                case Constants.TYPE_LIVE://直播
+                    stringBuffer.append("stream");
+                    break;
+                default:
+                    break;
+            }
+
+            //当前跳转（切换）过来的tab
+            switch (currentType) {
+                case Constants.TYPE_HOT://热点
+                    stringBuffer.append("_hotspot");
+                    break;
+                case Constants.TYPE_VIDEO://视频
+                    stringBuffer.append("_video");
+                    break;
+                case Constants.TYPE_LOCAL://本地
+                    stringBuffer.append("_DG");
+                    break;
+                case Constants.TYPE_DISPORT://娱乐
+                    stringBuffer.append("_entertainment");
+                    break;
+                case Constants.TYPE_LIVE://直播
+                    stringBuffer.append("_stream");
+                    break;
+                default:
+                    break;
+            }
+            LogUtils.e("lsd", stringBuffer.toString());
+            MobclickAgent.onEvent(MainApplication.get(), stringBuffer.toString());
+        }
     }
 
     @Subscribe
@@ -261,7 +315,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
                 case Constants.CTYPE_WEBVIEW://网页
                     return argumentsFragment("http://www.baidu.com");
                 case Constants.CTYPE_JOKE://搞笑
-                   // return new HeadLineAppFragment();
+                    // return new HeadLineAppFragment();
                 case Constants.CTYPE_LIVE://直播
                     return new HeadLineLiveFragment();
                 case Constants.CTYPE_EPISODE://段子

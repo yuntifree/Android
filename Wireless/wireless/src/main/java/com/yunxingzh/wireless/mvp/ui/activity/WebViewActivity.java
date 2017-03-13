@@ -124,9 +124,11 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-                if (StringUtils.isEmpty(mTitle) && !StringUtils.isEmpty(title)) {
+                if (!StringUtils.isEmpty(title)) {
                     mTitle = title;
                     mTitleNameTv.setText(title);
+                } else if (!StringUtils.isEmpty(mTitle)) {
+                    mTitleNameTv.setText(mTitle);
                 }
             }
 

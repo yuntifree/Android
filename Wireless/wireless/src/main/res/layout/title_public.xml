@@ -14,44 +14,60 @@
         android:focusableInTouchMode="true">
 
         <LinearLayout
-            android:id="@+id/title_for_wireless_lay"
+            android:id="@+id/wireless_mine_lay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
             android:layout_weight="1"
             android:visibility="gone"
-            android:layout_marginLeft="8dp"
-            android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/wireless_nick_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center|left"
-                    android:textColor="@color/white"
-                    android:textSize="10sp"
-                    android:maxLines="1"
-                    android:paddingLeft="25dp"
-                    android:paddingRight="10dp"
-                    android:layout_marginLeft="4dp"
-                    android:gravity="center"
-                    android:ellipsize="end"
-                    android:background="@drawable/wireless_head_style"
-                    android:text="东莞无限" />
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/wireless_head_img_iv"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center|left"
-                    android:src="@drawable/my_ico_pic" />
-
-            </FrameLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/person" />
         </LinearLayout>
+        <!-- 圆形昵称
+        <LinearLayout
+             android:id="@+id/title_for_wireless_lay"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:visibility="gone"
+             android:layout_marginLeft="8dp"
+             android:layout_gravity="center"
+             android:orientation="horizontal">
+
+             <FrameLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+
+                 <TextView
+                     android:id="@+id/wireless_nick_tv"
+                     android:layout_width="wrap_content"
+                     android:layout_height="20dp"
+                     android:layout_gravity="center|left"
+                     android:textColor="@color/white"
+                     android:textSize="10sp"
+                     android:maxLines="1"
+                     android:paddingLeft="25dp"
+                     android:paddingRight="10dp"
+                     android:layout_marginLeft="4dp"
+                     android:gravity="center"
+                     android:ellipsize="end"
+                     android:background="@drawable/wireless_head_style"
+                     android:text="东莞无限" />
+
+                 <de.hdodenhof.circleimageview.CircleImageView
+                     android:id="@+id/wireless_head_img_iv"
+                     android:layout_width="26dp"
+                     android:layout_height="26dp"
+                     android:layout_gravity="center|left"
+                     android:src="@drawable/my_ico_pic" />
+
+             </FrameLayout>
+         </LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/title_left_lay"

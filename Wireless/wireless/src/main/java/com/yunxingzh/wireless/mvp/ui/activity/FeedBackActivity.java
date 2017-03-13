@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.presenter.impl.FeedBackPresenterImpl;
@@ -53,6 +54,7 @@ public class FeedBackActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if (mTitleReturnIv == v) {
+            MobclickAgent.onEvent(this,"feedback_cancel");
             finish();
         } else if (mFeedCommitTv == v) {
             if (!StringUtils.isEmpty(getContent())) {

@@ -63,6 +63,15 @@ public class Constants {
     public static final int CTYPE_LIVE = 4;
     public static final int CTYPE_EPISODE = 5;
 
+    //0-热点 1-视频 2-应用 3-游戏 4-本地 5-娱乐 6？ 99-直播（后台无type）
+    public static final int TYPE_HOT = 0;
+    public static final int TYPE_VIDEO = 1;
+    public static final int TYPE_APP = 2;
+    public static final int TYPE_GAME = 3;
+    public static final int TYPE_LOCAL = 4;
+    public static final int TYPE_DISPORT = 5;
+    public static final int TYPE_LIVE = 99;
+
     //类型 0-晴 1-阴 2-雨 3-雪
     public static final int SUNNY = 0;
     public static final int CLOUDY = 1;

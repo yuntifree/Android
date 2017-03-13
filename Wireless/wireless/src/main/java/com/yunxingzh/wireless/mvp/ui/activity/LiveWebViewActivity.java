@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebChromeClient;
@@ -20,15 +21,19 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.BuildConfig;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
 import java.lang.reflect.Field;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by stephen on 2017/2/14.
@@ -121,8 +126,30 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
                 if (view.canGoBack()) {//进入了第二个界面
                     mLiveOverLay.setVisibility(View.VISIBLE);
                     mLiveNumTv.startAnimation(animation);
+
+                    ViewGroup parent = (ViewGroup) mLiveOverLay.getParent();
+                    if (parent != null) {
+                        parent.removeAllViews();
+                    }
                     mOverFrameLay.addView(mLiveOverLay);
+
                     handler.postDelayed(runnable, 1000);
+
+                    Timer timer = new Timer();
+                    TimerTask taskThree = new TimerTask() {
+                        @Override
+                        public void run() {
+                            MobclickAgent.onEvent(LiveWebViewActivity.this, "stream_view_3min");
+                        }
+                    };
+                    timer.schedule(taskThree, 3000 * 60 * 3);//三分钟上报友盟
+                    TimerTask taskFive = new TimerTask() {
+                        @Override
+                        public void run() {
+                            MobclickAgent.onEvent(LiveWebViewActivity.this, "stream_view_5min");
+                        }
+                    };
+                    timer.schedule(taskFive, 3000 * 60 * 5);//五分钟上报友盟
                 }
             }
         });

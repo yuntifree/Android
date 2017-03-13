@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.MainApplication;
@@ -56,6 +57,9 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
     private List<LiveVo> liveVos;
     private LinearLayout mNetErrorLay;
     private NetErrorLayout netErrorLayout;
+    private long liveId;
+    private int countThree = 0;
+    private int countFive = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
@@ -99,6 +103,16 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
                     iWirelessPresenter.clickCount(0, LIVE_TYPE, "livedetail");
                 }
                 if (liveVo != null) {
+                    if (liveId != liveVo.live_id) {
+                        countThree++;
+                        if (countThree == 3) {
+                            MobclickAgent.onEvent(getActivity(), "stream_triple_view");
+                        }
+                        if (countThree == 5) {
+                            MobclickAgent.onEvent(getActivity(), "stream_penta_view");
+                        }
+                    }
+                    liveId = liveVo.live_id;
                     Intent intent = new Intent(getActivity(), LiveWebViewActivity.class);
                     intent.putExtra(Constants.URL, Constants.LIVE_NUM + liveVo.live_id + "");
                     startActivity(intent);

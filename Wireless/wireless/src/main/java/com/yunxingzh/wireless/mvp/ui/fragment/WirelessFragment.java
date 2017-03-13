@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
@@ -81,7 +82,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     private final static int SCANNIN_GREQUEST_CODE = 1;
 
     private LinearLayout mMachineErrorLay, mMainHeadImg, mWeatherLay, mTitleLay, mWirelessTimesLay, mTitleLeftLay,
-            mTitleForWirelessLay, mMoreNewsLay, mWirelessConnectedBtnLay;
+            mTitleForWirelessLay, mMoreNewsLay, mWirelessConnectedBtnLay, mWirelessMineLay;
     private FrameLayout mCenterCircleLay;
     private TextView mTitleNameTv, mWirelessNumTv, mConnectText, mWirelessNickTv, mConnectTv;
     private ImageView mTitleRightIv, mWeatherImgBottom, mWeatherImgTop, mConnectIv, mTitleMainImg,
@@ -108,9 +109,8 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     private Handler handler = new Handler();
     private WindowManager wm;
     private WifiState wifiState;
-    private CircleImageView mWirelessHeadImgIv;
+   // private CircleImageView mWirelessHeadImgIv;
 
-    private AlertView switchAlert;
     private boolean isValidate = false;//东莞wifi是否认证通过
     private boolean isCountTime = false;//true打开（start），false关闭（stop）
 
@@ -131,11 +131,14 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         mTitleLeftLay = findView(view, R.id.title_left_lay);
         mTitleLeftLay.setVisibility(View.GONE);
         //头像
-        mTitleForWirelessLay = findView(view, R.id.title_for_wireless_lay);
-        mTitleForWirelessLay.setVisibility(View.VISIBLE);
-        mTitleForWirelessLay.setOnClickListener(this);
-        mWirelessNickTv = findView(view, R.id.wireless_nick_tv);
-        mWirelessHeadImgIv = findView(view, R.id.wireless_head_img_iv);
+//        mTitleForWirelessLay = findView(view, R.id.title_for_wireless_lay);
+//        mTitleForWirelessLay.setVisibility(View.VISIBLE);
+//        mTitleForWirelessLay.setOnClickListener(this);
+//        mWirelessNickTv = findView(view, R.id.wireless_nick_tv);
+//        mWirelessHeadImgIv = findView(view, R.id.wireless_head_img_iv);
+        mWirelessMineLay = findView(view, R.id.wireless_mine_lay);
+        mWirelessMineLay.setVisibility(View.VISIBLE);
+        mWirelessMineLay.setOnClickListener(this);
 
         mTitleNameTv = findView(view, R.id.title_name_tv);
         mTitleNameTv.setVisibility(View.GONE);
@@ -225,18 +228,18 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         }
 
         timeChanged();
-        String nickName = MainApplication.get().getNick();
-        String headurl = MainApplication.get().getHeadUrl();
-        if (!StringUtils.isEmpty(nickName)) {
-            mWirelessNickTv.setText(nickName);
-        } else {
-            mWirelessNickTv.setText("东莞无限");
-        }
-        if (!StringUtils.isEmpty(headurl)) {
-            Glide.with(getActivity()).load(headurl).into(mWirelessHeadImgIv);
-        } else {
-            Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mWirelessHeadImgIv);
-        }
+//        String nickName = MainApplication.get().getNick();
+//        String headurl = MainApplication.get().getHeadUrl();
+//        if (!StringUtils.isEmpty(nickName)) {
+//            mWirelessNickTv.setText(nickName);
+//        } else {
+//            mWirelessNickTv.setText("东莞无限");
+//        }
+//        if (!StringUtils.isEmpty(headurl)) {
+//            Glide.with(getActivity()).load(headurl).into(mWirelessHeadImgIv);
+//        } else {
+//            Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mWirelessHeadImgIv);
+//        }
     }
 
     @Override
@@ -310,19 +313,23 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 startActivity(WebViewActivity.class, Constants.URL, weatherNewsData.dst, Constants.TITLE, "东莞天气");
             }
         } else if (mMoreNewsLay == v) {//本地热点
+            MobclickAgent.onEvent(getActivity(),"Index_click_header_hot");
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } /*else if (mMainWifiManager == v) {//wifi管理
             startActivity(WifiManagerActivity.class, "", "", "", "");
         } else if (mMainMapLay == v) {//wifi地图
             startActivity(WifiMapActivity.class, "", "", "", "");
         } */ else if (mTitleRightIv == v) {//扫码连接东莞wifi
+            MobclickAgent.onEvent(getActivity(),"Index_QR");
             Intent intent = new Intent();
             intent.setClass(getActivity(), ScanCodeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
         } else if (mSpeedIv == v) { // wifi 测速
+            MobclickAgent.onEvent(getActivity(),"Index_speedtest");
             startActivity(SpeedTestActivity.class, "", "", "", "");
-        } else if (mSpiritedIv == v) {//wifi公益
+        } else if (mSpiritedIv == v) {//wifi共享
+            MobclickAgent.onEvent(getActivity(),"Index_share_wifi");
             if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid)) {
                 startActivity(WifiSpiritedActivity.class, "ssid", currentAp.ssid, "", "");
             } else {
@@ -344,7 +351,8 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
         } else if (mFontBuyingTv == v) { //抢购
 
-        } */ else if (mTitleForWirelessLay == v) {//个人中心
+        } */ else if (mWirelessMineLay == v) {//个人中心
+            MobclickAgent.onEvent(getActivity(),"Index_userinfo");
             EventBus.getDefault().post(new EventBusType(Constants.MINE));
         } else if (mMachineErrorIv == v) {//不可抗力异常关闭
             mMachineErrorLay.setVisibility(View.GONE);
@@ -693,24 +701,24 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         }
     }
 
-    @Subscribe
-    public void onEventMainThread(MineHeadImg event) {
-        if (event.getmFlag() == Constants.HEAD_IMG_FLAG) {
-            Glide.with(getActivity()).load(event.getmMsg()).into(mWirelessHeadImgIv);
-        }
-        if (event.getmFlag() == Constants.NICK_NAME_FLAG) {//更换昵称
-            mWirelessNickTv.setText(event.getmMsg());
-        }
-        if (event.getmFlag() == Constants.USER_MINE_FLAG) {
-            if (event.getUserInfoVo() != null) {
-                Glide.with(getActivity()).load(event.getUserInfoVo().headurl).into(mWirelessHeadImgIv);
-                mWirelessNickTv.setText(event.getUserInfoVo().nickname);
-            } else {
-                Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mWirelessHeadImgIv);
-                mWirelessNickTv.setText("东莞无限");
-            }
-        }
-    }
+//    @Subscribe
+//    public void onEventMainThread(MineHeadImg event) {
+//        if (event.getmFlag() == Constants.HEAD_IMG_FLAG) {
+//            Glide.with(getActivity()).load(event.getmMsg()).into(mWirelessHeadImgIv);
+//        }
+//        if (event.getmFlag() == Constants.NICK_NAME_FLAG) {//更换昵称
+//            mWirelessNickTv.setText(event.getmMsg());
+//        }
+//        if (event.getmFlag() == Constants.USER_MINE_FLAG) {
+//            if (event.getUserInfoVo() != null) {
+//                Glide.with(getActivity()).load(event.getUserInfoVo().headurl).into(mWirelessHeadImgIv);
+//                mWirelessNickTv.setText(event.getUserInfoVo().nickname);
+//            } else {
+//                Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mWirelessHeadImgIv);
+//                mWirelessNickTv.setText("东莞无限");
+//            }
+//        }
+//    }
 
     @Override
     public void onDestroy() {

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
@@ -59,6 +60,9 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private LinearLayout mNetErrorLay;
     private NetErrorLayout netErrorLayout;
     private boolean isFastClick = true;
+    //友盟统计下拉刷新
+    private int countUmeng = 0;
+
 
     private int newsTypes;
     private boolean firstLoad = true;
@@ -101,6 +105,38 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                                 } else {
                                     if (isFastClick) {
                                         isFastClick = false;
+                                        //友盟刷新上报
+                                        countUmeng++;
+                                        switch (newsTypes) {
+                                            case Constants.TYPE_LOCAL:
+                                                LogUtils.e("lsd","东莞"+countUmeng+"");
+                                                if (countUmeng == 3) {
+                                                    MobclickAgent.onEvent(getActivity(),"DG_triple_load");
+                                                }
+                                                if (countUmeng == 5) {
+                                                    MobclickAgent.onEvent(getActivity(),"DG_penta_load");
+                                                }
+                                                break;
+                                            case Constants.TYPE_HOT:
+                                                LogUtils.e("lsd","热点"+countUmeng+"");
+                                                if (countUmeng == 3) {
+                                                    MobclickAgent.onEvent(getActivity(),"hotspot_triple_load");
+                                                }
+                                                if (countUmeng == 5) {
+                                                    MobclickAgent.onEvent(getActivity(),"hotspot_penta_load");
+                                                }
+                                                break;
+                                            case Constants.TYPE_DISPORT:
+                                                LogUtils.e("lsd","娱乐"+countUmeng+"");
+                                                if (countUmeng == 3) {
+                                                    MobclickAgent.onEvent(getActivity(),"entertainment_triple_load");
+                                                }
+                                                if (countUmeng == 5) {
+                                                    MobclickAgent.onEvent(getActivity(),"entertainment_penta_load");
+                                                }
+                                                break;
+                                        }
+
                                         if (data != null && data.infos.size() > 0) {
                                             iHeadLinePresenter.getHeadLine(newsTypes, data.infos.get(data.infos.size() - 1).seq);
                                         }

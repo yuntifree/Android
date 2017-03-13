@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.MainApplication;
@@ -65,6 +66,8 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private AlertView alertView;
     private LinearLayout mNetErrorLay;
     private NetErrorLayout netErrorLayout;
+    private int itemId;
+    private int countUmeng = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -110,6 +113,17 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 // TODO: 临时用final来满足dialog的要求，找更好的方法替代
                 final List<HotInfo> data2 = data;
                 HotInfo item = data.get(i);
+
+                if (itemId != item.id) {
+                    countUmeng++;
+                    if (countUmeng == 3) {
+                        MobclickAgent.onEvent(getActivity(), "video_triple_view");
+                    }
+                    if (countUmeng == 5) {
+                        MobclickAgent.onEvent(getActivity(), "video_penta_view");
+                    }
+                }
+                itemId = item.id;
 
                 if (!NetUtils.isWifi(getActivity())) {
                     alertView = new AlertView("温馨提示", "亲,您当前处于流量状态下,继续观看需要花费少许流量哦!", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {

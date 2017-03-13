@@ -28,6 +28,7 @@ import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bumptech.glide.Glide;
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.MainApplication;
@@ -146,14 +147,18 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     @Override
     public void onClick(View v) {
         if (mMineHeadIv == v) {
+            MobclickAgent.onEvent(getActivity(),"Me_profile_photo");
             new AlertView("修改头像", null, "取消", null,
                     new String[]{"自定义头像", "经典头像"},
                     getActivity(), AlertView.Style.ActionSheet, this).show();
         } else if (mMineFeedBackLay == v) {//反馈问题
+            MobclickAgent.onEvent(getActivity(),"Me_feedback");
             startActivity(FeedBackActivity.class, "");
         } else if (mMineSetLay == v) {//设置
+            MobclickAgent.onEvent(getActivity(),"Me_setting");
             startActivity(SetActivity.class, "");
         } else if (mMineNameTv == v) {//修改昵称
+            MobclickAgent.onEvent(getActivity(),"Me_profile_name");
             if (!StringUtils.isEmpty(nick)) {
                 startActivity(NickNameActivity.class, nick);
             } else {

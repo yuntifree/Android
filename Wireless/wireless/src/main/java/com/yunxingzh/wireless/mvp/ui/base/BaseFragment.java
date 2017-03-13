@@ -58,9 +58,16 @@ public class BaseFragment extends Fragment implements IBaseView, View.OnTouchLis
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(isResumed()){
+            onVisibilityChangedToUser(hidden, true);
+        }
+    }
+
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-
         if(isResumed()){
             onVisibilityChangedToUser(isVisibleToUser, true);
         }

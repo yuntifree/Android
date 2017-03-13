@@ -33,6 +33,7 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
@@ -104,6 +105,7 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
     @Override
     public void onClick(View v) {
         if (mTitleReturnIv == v) {
+            MobclickAgent.onEvent(this, "QR_cancel");
             finish();
         }
         //打开手机中的相册

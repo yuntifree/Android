@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.BuildConfig;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
@@ -81,6 +82,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener, I
     @Override
     public void onClick(View v) {
         if (mTitleReturnIv == v) {
+            MobclickAgent.onEvent(this, "setting_cancel");
             finish();
         } else if (mSetCleanLay == v) {//清除缓存
             String cacheSize = CacheCleanUtil.getTotalCacheSize(this);

@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.presenter.IDefHeadPresenter;
@@ -66,6 +67,7 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
     @Override
     public void onClick(View v) {
         if (mTitleReturnIv == v) {
+            MobclickAgent.onEvent(this, "sys_profile_photo_cancel");
             finish();
         }
     }
@@ -111,6 +113,19 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                     public void onClick(View v) {
                         AppUtils.animation(v);
                         DefHeadMaleVo maleVo = (DefHeadMaleVo) v.getTag();
+                        //友盟上报
+                        switch (maleVo.desc) {
+                            case "小正太":
+                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_1");
+                                break;
+                            case "假小子":
+                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_2");
+                                break;
+                            case "型男范":
+                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_3");
+                                break;
+                        }
+
                         Intent mIntent = new Intent();
                         mIntent.putExtra("headUrl", maleVo.headurl);
                         DefaultHeadImgActivity.this.setResult(Activity.RESULT_OK, mIntent);
@@ -151,6 +166,19 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                     public void onClick(View v) {
                         AppUtils.animation(v);
                         DefHeadFemaleVo femaleVo = (DefHeadFemaleVo) v.getTag();
+                        //友盟上报
+                        switch (femaleVo.desc) {
+                            case "小萝莉":
+                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_4");
+                                break;
+                            case "女汉子":
+                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_5");
+                                break;
+                            case "御姐范":
+                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_6");
+                                break;
+                        }
+
                         Intent mIntent = new Intent();
                         mIntent.putExtra("headUrl", femaleVo.headurl);
                         DefaultHeadImgActivity.this.setResult(Activity.RESULT_OK, mIntent);

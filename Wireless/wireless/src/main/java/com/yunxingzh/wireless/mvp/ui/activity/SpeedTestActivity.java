@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.MainApplication;
@@ -83,6 +84,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     private SpeedTestDialog mDialog;
     private float realTimeSpeed;
     private int count = 0;
+    private int speedCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +127,10 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
                         mMiddleNoticeLay.setVisibility(View.INVISIBLE);
                         mBtnStart.setText(R.string.re_speed);
                     } else if (mBtnStart.getText().equals("重新测速")) {
+                        speedCount++;
+                        if (speedCount == 1) {
+                            MobclickAgent.onEvent(SpeedTestActivity.this, "speedtest_twice");
+                        }
                         mMiddleContentTv.setText("请稍等片刻...");
                         startTestSpeed();
                     }

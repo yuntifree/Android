@@ -68,6 +68,8 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
         MainApplication.get().setExpire(userVo.expiretime);
         MainApplication.get().setUserName(iRegisterView.getPhone());
         MainApplication.get().setWifiPwd(iRegisterView.getCode());
+        MainApplication.get().setHeadUrl(userVo.headurl);
+        MainApplication.get().setNick(userVo.nickname);
         if (iRegisterView != null){
             iRegisterView.registerSuccess();
         }
