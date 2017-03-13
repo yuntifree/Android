@@ -57,6 +57,8 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
     private int recLen = 3;
     private Handler handler = new Handler();
     private Animation animation;
+    private Timer timer;
+    private TimerTask taskThree, taskFive;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -135,15 +137,15 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
 
                     handler.postDelayed(runnable, 1000);
 
-                    Timer timer = new Timer();
-                    TimerTask taskThree = new TimerTask() {
+                    timer = new Timer();
+                    taskThree = new TimerTask() {
                         @Override
                         public void run() {
                             MobclickAgent.onEvent(LiveWebViewActivity.this, "stream_view_3min");
                         }
                     };
                     timer.schedule(taskThree, 3000 * 60 * 3);//三分钟上报友盟
-                    TimerTask taskFive = new TimerTask() {
+                    taskFive = new TimerTask() {
                         @Override
                         public void run() {
                             MobclickAgent.onEvent(LiveWebViewActivity.this, "stream_view_5min");
@@ -227,6 +229,19 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
         mOverFrameLay.removeView(mLiveOverView);
         mLiveNumTv.clearAnimation();
         destroyWebView();
+        if (taskThree != null) {
+            taskThree.cancel();
+            taskThree = null;
+        }
+        if (taskFive != null) {
+            taskFive.cancel();
+            taskFive = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+            timer = null;
+        }
     }
 
     @Override

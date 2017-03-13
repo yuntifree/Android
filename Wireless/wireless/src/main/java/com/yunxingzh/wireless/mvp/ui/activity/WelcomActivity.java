@@ -1,19 +1,20 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.MainApplication;
-import com.yunxingzh.wireless.mvp.presenter.IFeedBackPresenter;
-import com.yunxingzh.wireless.mvp.presenter.impl.FeedBackPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
-import com.yunxingzh.wireless.mvp.view.IFeedBackView;
 import com.yunxingzh.wireless.utils.FileUtil;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
@@ -34,6 +35,9 @@ public class WelcomActivity extends BaseActivity {
     boolean isFirst;
     private String url;
     private String imgPath;
+    private Timer timer;
+    private TimerTask task;
+    private ImageView mSpinnerIv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +45,13 @@ public class WelcomActivity extends BaseActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_welcome);
+
+        mSpinnerIv = (ImageView) findViewById(R.id.spinner_iv);
+        // 获取ImageView上的动画背景
+        AnimationDrawable spinner = (AnimationDrawable) mSpinnerIv.getBackground();
+        // 开始动画
+        spinner.start();
+
         if (!StringUtils.isEmpty(MainApplication.get().getToken()) &&
                 StringUtils.isExpired(MainApplication.get().getExpire())) {//如果过期
             new Thread(new Runnable() {
@@ -74,9 +85,9 @@ public class WelcomActivity extends BaseActivity {
     };
     public void advertJump(){
         //实现欢迎界面的自动跳转
-        Timer timer = new Timer();
+        timer = new Timer();
         isFirst = SPUtils.get(WelcomActivity.this, "isFirst", true);
-        TimerTask task = new TimerTask() {
+        task = new TimerTask() {
             @Override
             public void run() {
                 if (isFirst) {//第一次
@@ -103,6 +114,20 @@ public class WelcomActivity extends BaseActivity {
             }
         };
         timer.schedule(task, 1000); //1秒后
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (task != null) {
+            task.cancel();
+            task = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+            timer = null;
+        }
     }
 
     public void startActivity(Class activity, String urlKey, String url, String byteKey, String mByte) {
