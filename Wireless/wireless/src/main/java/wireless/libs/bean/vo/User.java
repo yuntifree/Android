@@ -13,4 +13,6 @@ public class User implements Serializable {
     public String expiretime;
     public String headurl;
     public String nickname;
+    public int pushtest;//是否需要订阅小米推送topic yuntitest
+
 }

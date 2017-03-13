@@ -6,6 +6,7 @@ import com.yunxingzh.wireless.mvp.view.IDefHeadView;
 import com.yunxingzh.wireless.mvp.view.IMineView;
 
 import wireless.libs.bean.vo.ImageUploadVo;
+import wireless.libs.bean.vo.User;
 import wireless.libs.bean.vo.UserInfoVo;
 import wireless.libs.model.IMineModel;
 import wireless.libs.model.impl.MineModelImpl;
@@ -43,7 +44,10 @@ IMineModel.onUpdateUserInfoListener {
     @Override
     public void getUserInfo() {
         if (iMineView != null) {
-            iMineModel.getUserInfo(MainApplication.get().getUser().uid, this);
+            User user = MainApplication.get().getUser();
+            if (user != null) {
+                iMineModel.getUserInfo(user.uid, this);
+            }
         }
     }
 

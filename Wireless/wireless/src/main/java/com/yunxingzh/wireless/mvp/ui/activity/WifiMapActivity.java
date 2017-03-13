@@ -76,6 +76,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     private boolean isFirst = true;
     private AlertView alertView;
     private Marker mMarker;
+    private BitmapDescriptor mineBitmap, hotBitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -134,10 +135,10 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
                     .longitude(lon).build();
             // 设置定位数据
             baiduMap.setMyLocationData(locData);
-            BitmapDescriptor bitmap = BitmapDescriptorFactory
+            mineBitmap = BitmapDescriptorFactory
                     .fromResource(R.drawable.mine);
             MyLocationConfiguration config = new MyLocationConfiguration(
-                    MyLocationConfiguration.LocationMode.NORMAL, true, bitmap);
+                    MyLocationConfiguration.LocationMode.NORMAL, true, mineBitmap);
             baiduMap.setMyLocationConfigeration(config);
             iWifiMapPresenter.getWifiMap();//获取周围热点lon,lat
         }
@@ -157,11 +158,11 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         for (WifiMapVo info : wifiMapInfo) {
             // 位置
             latLng = new LatLng(info.latitude, info.longitude);
-            BitmapDescriptor bitmap = BitmapDescriptorFactory
+            hotBitmap = BitmapDescriptorFactory
                     .fromResource(R.drawable.hot_point);
             // 图标
             overlayOptions = new MarkerOptions().position(latLng)
-                    .icon(bitmap).zIndex(5);
+                    .icon(hotBitmap).zIndex(5);
             marker = (Marker) (baiduMap.addOverlay(overlayOptions));
             Bundle bundle = new Bundle();
             bundle.putSerializable("info", info);
@@ -242,6 +243,15 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     protected void onDestroy() {
         super.onDestroy();
         baiduMap.setMyLocationEnabled(false);//关闭定位图层
+        if(mineBitmap != null){
+            mineBitmap.recycle();
+            mineBitmap = null;
+        }
+        if(hotBitmap != null){
+            hotBitmap.recycle();
+            hotBitmap = null;
+        }
+
         if (wifiMapInfo != null) {
             wifiMapInfo.clear();
             wifiMapInfo = null;

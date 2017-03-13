@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
@@ -109,7 +110,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     private Handler handler = new Handler();
     private WindowManager wm;
     private WifiState wifiState;
-   // private CircleImageView mWirelessHeadImgIv;
+    // private CircleImageView mWirelessHeadImgIv;
 
     private boolean isValidate = false;//东莞wifi是否认证通过
     private boolean isCountTime = false;//true打开（start），false关闭（stop）
@@ -236,9 +237,13 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 //            mWirelessNickTv.setText("东莞无限");
 //        }
 //        if (!StringUtils.isEmpty(headurl)) {
+//        if (Util.isOnMainThread()) {
 //            Glide.with(getActivity()).load(headurl).into(mWirelessHeadImgIv);
+//       }
 //        } else {
+//        if (Util.isOnMainThread()) {
 //            Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mWirelessHeadImgIv);
+//        }
 //        }
     }
 
@@ -313,23 +318,23 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 startActivity(WebViewActivity.class, Constants.URL, weatherNewsData.dst, Constants.TITLE, "东莞天气");
             }
         } else if (mMoreNewsLay == v) {//本地热点
-            MobclickAgent.onEvent(getActivity(),"Index_click_header_hot");
+            MobclickAgent.onEvent(getActivity(), "Index_QR");
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } /*else if (mMainWifiManager == v) {//wifi管理
             startActivity(WifiManagerActivity.class, "", "", "", "");
         } else if (mMainMapLay == v) {//wifi地图
             startActivity(WifiMapActivity.class, "", "", "", "");
         } */ else if (mTitleRightIv == v) {//扫码连接东莞wifi
-            MobclickAgent.onEvent(getActivity(),"Index_QR");
+            MobclickAgent.onEvent(getActivity(), "Index_QR");
             Intent intent = new Intent();
             intent.setClass(getActivity(), ScanCodeActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
         } else if (mSpeedIv == v) { // wifi 测速
-            MobclickAgent.onEvent(getActivity(),"Index_speedtest");
+            MobclickAgent.onEvent(getActivity(), "Index_speedtest");
             startActivity(SpeedTestActivity.class, "", "", "", "");
         } else if (mSpiritedIv == v) {//wifi共享
-            MobclickAgent.onEvent(getActivity(),"Index_share_wifi");
+            MobclickAgent.onEvent(getActivity(), "Index_share_wifi");
             if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid)) {
                 startActivity(WifiSpiritedActivity.class, "ssid", currentAp.ssid, "", "");
             } else {
@@ -352,7 +357,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         } else if (mFontBuyingTv == v) { //抢购
 
         } */ else if (mWirelessMineLay == v) {//个人中心
-            MobclickAgent.onEvent(getActivity(),"Index_userinfo");
+            MobclickAgent.onEvent(getActivity(), "Index_userinfo");
             EventBus.getDefault().post(new EventBusType(Constants.MINE));
         } else if (mMachineErrorIv == v) {//不可抗力异常关闭
             mMachineErrorLay.setVisibility(View.GONE);
