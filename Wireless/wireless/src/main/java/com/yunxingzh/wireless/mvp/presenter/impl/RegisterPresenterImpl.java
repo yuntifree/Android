@@ -13,7 +13,7 @@ import wireless.libs.model.impl.UserModelImpl;
 /**
  * Created by Stephen on 2016/9/10.
  */
-public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onValidateCodeListener,IUserModel.onRegisterListener{
+public class RegisterPresenterImpl implements IRegisterPresenter, IUserModel.onValidateCodeListener, IUserModel.onRegisterListener {
 
     private IRegisterView iRegisterView;
     private IUserModel iUserModel;
@@ -26,12 +26,12 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
     @Override
     public boolean inputValidate() {
 
-        if(StringUtils.isEmpty(iRegisterView.getPhone())){
+        if (StringUtils.isEmpty(iRegisterView.getPhone())) {
             iRegisterView.setPhone(R.string.enter_phone);
             return false;
         }
 
-        if(!StringUtils.validatePhoneNumber(iRegisterView.getPhone())){
+        if (!StringUtils.validatePhoneNumber(iRegisterView.getPhone())) {
             iRegisterView.setPhone(R.string.enter_right_phone);
             return false;
         }
@@ -42,35 +42,36 @@ public class RegisterPresenterImpl implements IRegisterPresenter,IUserModel.onVa
     @Override
     public void getValidateCode(String phone) {
         if (iRegisterView != null && inputValidate()) {
-            iUserModel.getValidateCode(phone,this);
+            iUserModel.getValidateCode(phone, this);
         }
     }
 
     @Override
     public void register(String username, String code) {
-        if (iRegisterView != null){
-            iUserModel.register(username,code,this);
+        if (iRegisterView != null) {
+            iUserModel.register(username, code, this);
         }
     }
 
     @Override
     public void onValidateCodeSuccess() {
-        if (iRegisterView != null){
+        if (iRegisterView != null) {
             iRegisterView.getValidateCodeSuccess();
         }
     }
 
     @Override
     public void onRegisterSuccess(User userVo) {
-        MainApplication.get().setUser(userVo);
-        MainApplication.get().setToken(userVo.token);
-        MainApplication.get().setPrivdata(userVo.privdata);
-        MainApplication.get().setExpire(userVo.expiretime);
-        MainApplication.get().setUserName(iRegisterView.getPhone());
-        MainApplication.get().setWifiPwd(iRegisterView.getCode());
-        MainApplication.get().setHeadUrl(userVo.headurl);
-        MainApplication.get().setNick(userVo.nickname);
-        if (iRegisterView != null){
+        if (iRegisterView != null && userVo != null) {
+            MainApplication.get().setUser(userVo);
+            MainApplication.get().setToken(userVo.token);
+            MainApplication.get().setPrivdata(userVo.privdata);
+            MainApplication.get().setExpire(userVo.expiretime);
+            MainApplication.get().setUserName(iRegisterView.getPhone());
+            MainApplication.get().setWifiPwd(iRegisterView.getCode());
+            MainApplication.get().setHeadUrl(userVo.headurl);
+            MainApplication.get().setNick(userVo.nickname);
+
             iRegisterView.registerSuccess();
         }
     }

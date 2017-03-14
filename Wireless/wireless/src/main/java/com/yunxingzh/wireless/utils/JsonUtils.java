@@ -1,12 +1,14 @@
 package com.yunxingzh.wireless.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
-import com.alibaba.fastjson.JSONObject;
+
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -73,6 +75,34 @@ public class JsonUtils {
             e.printStackTrace();
             LogUtils.e(TAG, "Json解析错误. " + e.toString());
             LogUtils.e(TAG, "json =  " + text);
+        }
+        return null;
+    }
+
+    /**
+     * Json 转成 Map<>
+     * @param jsonStr
+     * @return
+     */
+    public static Map<String, Object> getMapForJson(String jsonStr){
+       JSONObject jsonObject ;
+        try {
+            jsonStr = jsonStr.replace("\\", "");//有反斜杠\,需要替换掉
+            jsonObject = new JSONObject(jsonStr);
+
+            Iterator<String> keyIter= jsonObject.keys();
+            String key;
+            Object value ;
+            Map<String, Object> valueMap = new HashMap<String, Object>();
+            while (keyIter.hasNext()) {
+                key = keyIter.next();
+                value = jsonObject.get(key);
+                valueMap.put(key, value);
+            }
+            return valueMap;
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
         }
         return null;
     }

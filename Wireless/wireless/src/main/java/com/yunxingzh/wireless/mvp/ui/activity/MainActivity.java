@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 
 import com.networkbench.agent.impl.NBSAppAgent;
 import com.umeng.analytics.MobclickAgent;
+import com.xiaomi.mipush.sdk.MiPushClient;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.AppConfig;
 import com.yunxingzh.wireless.config.Constants;
@@ -94,10 +95,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         //小米推送服务
         //设置标签
-        //MiPushClient.subscribe(MainApplication.get(), 400+"", null);
-        //int s = MainApplication.get().getUser().uid;
+        MiPushClient.subscribe(MainApplication.get(), "yuntitest", null);
+        int s = MainApplication.get().getUser().uid;
         //设置别名
-        //  MiPushClient.setAlias(MainApplication.get(), s + "", null);
+        MiPushClient.setAlias(MainApplication.get(), s + "", null);
     }
 
     public void initView() {

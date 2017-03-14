@@ -2,6 +2,7 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,7 @@ import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.FileUtil;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
@@ -32,7 +34,7 @@ import wireless.libs.network.request.NetWorkWarpper;
 
 public class WelcomActivity extends BaseActivity {
 
-    boolean isFirst;
+    private int version;
     private String url;
     private String imgPath;
     private Timer timer;
@@ -86,12 +88,13 @@ public class WelcomActivity extends BaseActivity {
     public void advertJump(){
         //实现欢迎界面的自动跳转
         timer = new Timer();
-        isFirst = SPUtils.get(WelcomActivity.this, "isFirst", true);
+        version = SPUtils.get(WelcomActivity.this, "version", 0);
+        final int currentVersion = AppUtils.getVersionCode(WelcomActivity.this);
         task = new TimerTask() {
             @Override
             public void run() {
-                if (isFirst) {//第一次
-                    SPUtils.put(WelcomActivity.this, "isFirst", false);
+                if (version == 0 || version != currentVersion) {//第一次或者覆盖安装新版本
+                    SPUtils.put(WelcomActivity.this, "version", AppUtils.getVersionCode(WelcomActivity.this));
                     startActivity(GuidedActivity.class, "", "", "", "");
                     finish();
                 } else {
