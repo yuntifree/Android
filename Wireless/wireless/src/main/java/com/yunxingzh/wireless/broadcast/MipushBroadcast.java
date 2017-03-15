@@ -1,5 +1,6 @@
 package com.yunxingzh.wireless.broadcast;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
@@ -11,13 +12,12 @@ import com.xiaomi.mipush.sdk.PushMessageReceiver;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.ui.activity.MainActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.WelcomActivity;
 import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.JsonUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by stephen on 2017/2/9.
@@ -58,9 +58,15 @@ public class MipushBroadcast extends PushMessageReceiver {
             Map<String, Object> msgMap = JsonUtils.getMapForJson(msgJson);
 
             if (!AppUtils.isAppAlive(context, "com.yunxingzh.wireless")) {//app进程不存活
-                Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage("com.yunxingzh.wireless");
-                launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-                context.startActivity(launchIntent);
+//                Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage("com.yunxingzh.wireless");
+//                launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+//                context.startActivity(launchIntent);
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                intent.setClass(context, WelcomActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                Context mContext = context.getApplicationContext();
+                PendingIntent contextIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
             } else {
                 if (msgMap != null) {
                     int type = (int) msgMap.get("type");
@@ -69,11 +75,18 @@ public class MipushBroadcast extends PushMessageReceiver {
                         mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(mainIntent);
                     } else if (type == 2) {//type:2-跳转连接
-                        String dst = msgMap.get("dst").toString();
+                        String dst = String.valueOf(msgMap.get("dst"));
                         if (!StringUtils.isEmpty(dst)) {
-                            Intent mainIntent = new Intent(context, WebViewActivity.class);
-                            mainIntent.putExtra(Constants.URL, dst);
-                            context.startActivity(mainIntent);
+                            Intent myIntent = new Intent(context, MainActivity.class);
+                            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                            Intent intent = new Intent(context, WebViewActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                            intent.putExtra(Constants.URL, dst);
+
+                            Intent[] intents = {myIntent, intent};
+
+                            context.startActivities(intents);
                         }
                     }
                 }

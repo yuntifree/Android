@@ -48,6 +48,7 @@ import rx.Observable;
 import rx.Subscriber;
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.UpdateVo;
+import wireless.libs.bean.vo.User;
 
 /***
  * 首页底部导航
@@ -95,10 +96,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         //小米推送服务
         //设置标签
-        MiPushClient.subscribe(MainApplication.get(), "yuntitest", null);
-        int s = MainApplication.get().getUser().uid;
-        //设置别名
-        MiPushClient.setAlias(MainApplication.get(), s + "", null);
+        User user = MainApplication.get().getUser();
+        if (user != null) {
+            if (user.pushtest == 1) {
+                MiPushClient.subscribe(MainApplication.get(), "yuntitest", null);
+            } else {
+                MiPushClient.subscribe(MainApplication.get(), "yuntifree", null);
+            }
+            //设置别名
+            MiPushClient.setAlias(MainApplication.get(), user.uid + "", null);
+        }
     }
 
     public void initView() {
