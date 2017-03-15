@@ -10,6 +10,7 @@ public interface IWeatherNewsModel {
 
     interface onWeatherNewsListener{
         void onWeatherNewsSuccess(WeatherNewsList weatherNewsVo);
+        void onWeatherNewsFailed();
     }
 
     /***

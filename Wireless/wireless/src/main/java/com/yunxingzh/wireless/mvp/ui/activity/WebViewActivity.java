@@ -194,12 +194,16 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onPause() {
         myWebView.onPause();
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(false);
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         myWebView.onResume();
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
         super.onResume();
     }
 

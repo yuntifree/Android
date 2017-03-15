@@ -18,6 +18,12 @@ public class WeatherNewsModelImpl implements IWeatherNewsModel {
             public void onSuccess(ServerTip serverTip, WeatherNewsList resquestVo) {
                 listener.onWeatherNewsSuccess(resquestVo);
             }
+
+            @Override
+            public void onFailure(ServerTip serverTip) {
+                super.onFailure(serverTip);
+                listener.onWeatherNewsFailed();
+            }
         });
     }
 }

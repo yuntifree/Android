@@ -9,6 +9,7 @@ import wireless.libs.bean.resp.WifiMapList;
 
 public interface IWirelessView extends IBaseView {
     void weatherNewsSuccess(WeatherNewsList weatherNewsVo);
+    void weatherNewsFailed();
     void wifiConnectSuccess();
     void wifiConnectFailed();
 }

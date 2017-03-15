@@ -295,6 +295,42 @@
                     android:paddingRight="12dp"
                     android:scrollbars="none" />
 
+                <LinearLayout
+                    android:id="@+id/no_resource_lay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:src="@drawable/ico_crying"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_resource_text"
+                        android:textColor="@color/gray_9b9b9b"
+                        android:layout_marginTop="15dp"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/no_resource_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="刷新"
+                        android:gravity="center"
+                        android:paddingBottom="5dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@drawable/style_no_resource_btn"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"/>
+
+                </LinearLayout>
+
             </LinearLayout>
         </com.yunxingzh.wireless.mview.MyScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>

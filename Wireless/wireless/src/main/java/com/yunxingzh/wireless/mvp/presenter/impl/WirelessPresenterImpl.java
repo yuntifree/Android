@@ -110,6 +110,13 @@ public class WirelessPresenterImpl implements IWirelessPresenter, IWirelessModel
     }
 
     @Override
+    public void onWeatherNewsFailed() {
+        if (iWirelessView != null){
+            iWirelessView.weatherNewsFailed();
+        }
+    }
+
+    @Override
     public void onWifiConnectSuccess() {
         if (iWirelessView != null) {
             iWirelessView.wifiConnectSuccess();

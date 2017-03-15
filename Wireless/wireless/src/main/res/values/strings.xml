@@ -159,6 +159,7 @@
     <string name="concect_dg_free">正在连接免费WiFi</string>
     <string name="concect_faild">亲,连接东莞无限超时哦,请重试</string>
     <string name="problem">反馈问题</string>
+    <string name="no_resource_text">网络请求失败，请检查你的网络</string>
 
 
 

@@ -83,9 +83,9 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     private final static int SCANNIN_GREQUEST_CODE = 1;
 
     private LinearLayout mMachineErrorLay, mMainHeadImg, mWeatherLay, mTitleLay, mWirelessTimesLay, mTitleLeftLay,
-            mTitleForWirelessLay, mMoreNewsLay, mWirelessConnectedBtnLay, mWirelessMineLay;
+            mTitleForWirelessLay, mMoreNewsLay, mWirelessConnectedBtnLay, mWirelessMineLay, mNoResourceLay;
     private FrameLayout mCenterCircleLay;
-    private TextView mTitleNameTv, mWirelessNumTv, mConnectText, mWirelessNickTv, mConnectTv;
+    private TextView mTitleNameTv, mWirelessNumTv, mConnectText, mWirelessNickTv, mConnectTv, mNoResourceTv;
     private ImageView mTitleRightIv, mWeatherImgBottom, mWeatherImgTop, mConnectIv, mTitleMainImg,
             mCircleIv, mWirelessCircleIv, mWirelessCircleBig, mWirelessCircleSmall, mMachineErrorIv,
             mSpeedIv, mSpiritedIv;
@@ -156,6 +156,10 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         mSpeedIv.setOnClickListener(this);
         mSpiritedIv = findView(view, R.id.spirited_iv);
         mSpiritedIv.setOnClickListener(this);
+
+        mNoResourceLay = findView(view, R.id.no_resource_lay);
+        mNoResourceTv = findView(view, R.id.no_resource_tv);
+        mNoResourceTv.setOnClickListener(this);
 
         mMainNewsLv = findView(view, R.id.main_news_lv);
         mAnimationTv = findView(view, R.id.animation_tv);
@@ -253,7 +257,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             return;
         }
         weatherNewsData = weatherNewsVo.weather;
-        mainNewsVos = weatherNewsVo.news;
         noticeVo = weatherNewsVo.notice;
 
         if (noticeVo != null) {
@@ -289,10 +292,14 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         //新闻
         mainNewsVos = weatherNewsVo.news;
         mainNewsAdapter = new MainNewsAdapter(getActivity(), mainNewsVos);
-
         mMainNewsLv.setAdapter(mainNewsAdapter);
         Utility.setListViewHeight(mMainNewsLv);
 
+    }
+
+    @Override
+    public void weatherNewsFailed() {
+        mNoResourceLay.setVisibility(View.VISIBLE);
     }
 
     private void CheckAndLogon() {
@@ -354,9 +361,15 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
         } else if (mFontPlayingTv == v) { //同城直播
 
-        } else if (mFontBuyingTv == v) { //抢购
-
-        } */ else if (mWirelessMineLay == v) {//个人中心
+        } */else if (mNoResourceTv == v) { //无网络时点击刷新底部新闻
+            if (NetUtils.isNetworkAvailable(getActivity())) {
+                if (iWirelessPresenter != null) {
+                    iWirelessPresenter.weatherNews();
+                }
+            } else {
+                ToastUtil.showMiddle(getActivity(), R.string.net_error);
+            }
+        } else if (mWirelessMineLay == v) {//个人中心
             MobclickAgent.onEvent(getActivity(), "Index_userinfo");
             EventBus.getDefault().post(new EventBusType(Constants.MINE));
         } else if (mMachineErrorIv == v) {//不可抗力异常关闭
@@ -598,6 +611,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         if (updateNews) {
             // 网络更新时尝试刷新新闻
             new Thread(new RefreshNewsThread()).start();
+            mNoResourceLay.setVisibility(View.GONE);
         }
     }
 
