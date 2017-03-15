@@ -63,12 +63,14 @@ public class IptPasswordFragment extends Fragment {
             public void onClick(View v) {
                 String pwd = edt_password.getText().toString();
 
-                if(TextUtils.isEmpty(pwd)){
-                    ToastUtil.showMiddle(getActivity(),R.string.input_pwd);
-                } else {
-                    accessPoint.setPassword(pwd, AccessPoint.PasswordFrom.INPUT);
-                    FWManager.getInstance().connect(accessPoint);
-                    getActivity().finish();
+                if (isAdded() && getActivity() != null) {
+                    if (TextUtils.isEmpty(pwd)) {
+                        ToastUtil.showMiddle(getActivity(), R.string.input_pwd);
+                    } else {
+                        accessPoint.setPassword(pwd, AccessPoint.PasswordFrom.INPUT);
+                        FWManager.getInstance().connect(accessPoint);
+                        getActivity().finish();
+                    }
                 }
             }
         });

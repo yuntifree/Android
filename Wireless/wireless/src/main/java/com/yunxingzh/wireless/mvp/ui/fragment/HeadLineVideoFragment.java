@@ -78,7 +78,9 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     public void initView(View view) {
         mListRv = findView(view, R.id.list_rv);
-        mListRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (isAdded() && getActivity() != null) {
+            mListRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
         mListRv.setHasFixedSize(true);
         mListRv.addItemDecoration(new SpacesItemDecoration(Constants.ITEM_HEIGHT));
         mSwipeRefreshLay = findView(view, R.id.swipe_refresh_news);
@@ -95,16 +97,18 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iWirelessPresenter = new WirelessPresenterImpl(this);
-        if (NetUtils.isNetworkAvailable(getActivity())) {
-            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
-        }
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            mSwipeRefreshLay.setVisibility(View.GONE);
-            netErrorLayout = new NetErrorLayout(getActivity());
-            netErrorLayout.setOnNetErrorClickListener(this);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(0);
-            mNetErrorLay.addView(netErrorView);
+        if (isAdded() && getActivity() != null) {
+            if (NetUtils.isNetworkAvailable(getActivity())) {
+                iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+            }
+            if (!NetUtils.isNetworkAvailable(getActivity())) {
+                mSwipeRefreshLay.setVisibility(View.GONE);
+                netErrorLayout = new NetErrorLayout(getActivity());
+                netErrorLayout.setOnNetErrorClickListener(this);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+                View netErrorView = netErrorLayout.netErrorLay(0);
+                mNetErrorLay.addView(netErrorView);
+            }
         }
         mListRv.addOnItemTouchListener(new OnItemClickListener() {
             @Override
@@ -114,7 +118,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 final List<HotInfo> data2 = data;
                 HotInfo item = data.get(i);
 
-                if (itemId != item.id) {
+                if (itemId != item.id && isAdded() && getActivity() != null) {
                     countUmeng++;
                     if (countUmeng == 3) {
                         MobclickAgent.onEvent(getActivity(), "video_triple_view");
@@ -124,27 +128,28 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                     }
                 }
                 itemId = item.id;
-
-                if (!NetUtils.isWifi(getActivity())) {
-                    alertView = new AlertView("温馨提示", "亲,您当前处于流量状态下,继续观看需要花费少许流量哦!", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(Object o, int position) {
-                            if (position != AlertView.CANCELPOSITION) {
-                                HotInfo item = data2.get(i);
-                                videoItemClick(item, i);
+                if (isAdded() && getActivity() != null) {
+                    if (!NetUtils.isWifi(getActivity())) {
+                        alertView = new AlertView("温馨提示", "亲,您当前处于流量状态下,继续观看需要花费少许流量哦!", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(Object o, int position) {
+                                if (position != AlertView.CANCELPOSITION) {
+                                    HotInfo item = data2.get(i);
+                                    videoItemClick(item, i);
+                                }
                             }
-                        }
-                    }).setOnDismissListener(new OnDismissListener() {
-                        @Override
-                        public void onDismiss(Object o) {
-                            if (alertView != null) {
-                                alertView.dismiss();
+                        }).setOnDismissListener(new OnDismissListener() {
+                            @Override
+                            public void onDismiss(Object o) {
+                                if (alertView != null) {
+                                    alertView.dismiss();
+                                }
                             }
-                        }
-                    });
-                    alertView.show();
-                } else {
-                    videoItemClick(item, i);
+                        });
+                        alertView.show();
+                    } else {
+                        videoItemClick(item, i);
+                    }
                 }
             }
         });
@@ -175,10 +180,14 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             } else {
                 // 数据全部加载完毕就调用 loadComplete
                 headLineVideoAdapter.loadComplete();
-                ToastUtil.showMiddle(getActivity(), R.string.no_resource);
+                if (isAdded() && getActivity() != null) {
+                    ToastUtil.showMiddle(getActivity(), R.string.no_resource);
+                }
             }
         } else {
-            ToastUtil.showMiddle(getActivity(), R.string.re_error);
+            if (isAdded() && getActivity() != null) {
+                ToastUtil.showMiddle(getActivity(), R.string.re_error);
+            }
         }
     }
 
@@ -187,18 +196,20 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         if (mSwipeRefreshLay != null) {
             mSwipeRefreshLay.setRefreshing(false);
         }
-        ToastUtil.showMiddle(getActivity(), R.string.net_error);
+        if (isAdded() && getActivity() != null) {
+            ToastUtil.showMiddle(getActivity(), R.string.net_error);
 
-        if (netErrorLayout == null) {
-            mSwipeRefreshLay.setVisibility(View.GONE);
-            netErrorLayout = new NetErrorLayout(getActivity());
-            netErrorLayout.setOnNetErrorClickListener(this);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(0);
-            mNetErrorLay.addView(netErrorView);
-        } else {
-            mSwipeRefreshLay.setVisibility(View.GONE);
-            mNetErrorLay.setVisibility(View.VISIBLE);
+            if (netErrorLayout == null) {
+                mSwipeRefreshLay.setVisibility(View.GONE);
+                netErrorLayout = new NetErrorLayout(getActivity());
+                netErrorLayout.setOnNetErrorClickListener(this);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+                View netErrorView = netErrorLayout.netErrorLay(0);
+                mNetErrorLay.addView(netErrorView);
+            } else {
+                mSwipeRefreshLay.setVisibility(View.GONE);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -218,17 +229,22 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     @Override
     public void netErrorClick() {
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            ToastUtil.showMiddle(getActivity(), R.string.net_set);
-        } else {
-            mNetErrorLay.setVisibility(View.GONE);
-            mSwipeRefreshLay.setVisibility(View.VISIBLE);
-            isFirstRefresh = true;
-            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+        if (isAdded() && getActivity() != null) {
+            if (!NetUtils.isNetworkAvailable(getActivity())) {
+                ToastUtil.showMiddle(getActivity(), R.string.net_set);
+            } else {
+                mNetErrorLay.setVisibility(View.GONE);
+                mSwipeRefreshLay.setVisibility(View.VISIBLE);
+                isFirstRefresh = true;
+                iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
+            }
         }
     }
 
     private View emptyView(ViewGroup viewGroup) {
+        if (!isAdded() && getActivity() == null){
+            return null;
+        }
         View netView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, viewGroup, false);
         TextView netErrorBtn = (TextView) netView.findViewById(R.id.video_net_error_btn);
         netErrorBtn.setOnClickListener(new View.OnClickListener() {
@@ -263,15 +279,19 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         if (newsVo != null) {
             newsVo.clear();
         }
-        if (EventBus.getDefault().isRegistered(getActivity())){
-            EventBus.getDefault().unregister(getActivity());
+        if (isAdded() && getActivity() != null) {
+            if (EventBus.getDefault().isRegistered(getActivity())) {
+                EventBus.getDefault().unregister(getActivity());
+            }
         }
     }
 
     public void startActivity(Class activity,String key,String videoUrl) {
-        Intent intent = new Intent(getActivity(), activity);
-        intent.putExtra(key, videoUrl);
-        startActivity(intent);
+        if (isAdded() && getActivity() != null) {
+            Intent intent = new Intent(getActivity(), activity);
+            intent.putExtra(key, videoUrl);
+            startActivity(intent);
+        }
     }
 
 }

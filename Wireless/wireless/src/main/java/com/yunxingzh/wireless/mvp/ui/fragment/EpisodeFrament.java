@@ -81,7 +81,7 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
                     case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
                         // 判断滚动到底部
                         if (mListLv.getLastVisiblePosition() == (mListLv.getCount() - 1)) {
-                            if (jokeList.hasmore == 0) {
+                            if (jokeList.hasmore == 0 && isAdded() && getActivity() != null) {
                                 ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
                             } else {
                                 if (isFastClick) {
@@ -105,13 +105,15 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
 
             }
         });
-        netErrorLayout = new NetErrorLayout(getActivity());
-        netErrorLayout.setOnNetErrorClickListener(this);
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            mSwipeRefreshLay.setVisibility(View.GONE);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(0);
-            mNetErrorLay.addView(netErrorView);
+        if (isAdded() && getActivity() != null) {
+            netErrorLayout = new NetErrorLayout(getActivity());
+            netErrorLayout.setOnNetErrorClickListener(this);
+            if (!NetUtils.isNetworkAvailable(getActivity())) {
+                mSwipeRefreshLay.setVisibility(View.GONE);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+                View netErrorView = netErrorLayout.netErrorLay(0);
+                mNetErrorLay.addView(netErrorView);
+            }
         }
     }
 
@@ -129,13 +131,15 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
 
         if (jokeList.infos != null) {
             jokeVos.addAll(jokeList.infos);
-            if (episodeAdapter == null) {
+            if (episodeAdapter == null && isAdded() && getActivity() != null) {
                 episodeAdapter = new EpisodeAdapter(getActivity(), jokeVos);
                 mListLv.setAdapter(episodeAdapter);
             }
             episodeAdapter.notifyDataSetChanged();
         } else {
-            ToastUtil.showMiddle(getActivity(), R.string.no_news);
+            if (isAdded() && getActivity() != null) {
+                ToastUtil.showMiddle(getActivity(), R.string.no_resource);
+            }
         }
     }
 
@@ -144,18 +148,20 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
         if (mSwipeRefreshLay != null) {
             mSwipeRefreshLay.setRefreshing(false);
         }
-        ToastUtil.showMiddle(getActivity(), R.string.net_error);
+        if (isAdded() && getActivity() != null){
+            ToastUtil.showMiddle(getActivity(), R.string.net_error);
 
-        if (netErrorLayout == null) {
-            mSwipeRefreshLay.setVisibility(View.GONE);
-            netErrorLayout = new NetErrorLayout(getActivity());
-            netErrorLayout.setOnNetErrorClickListener(this);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(0);
-            mNetErrorLay.addView(netErrorView);
-        } else {
-            mSwipeRefreshLay.setVisibility(View.GONE);
-            mNetErrorLay.setVisibility(View.VISIBLE);
+            if (netErrorLayout == null) {
+                mSwipeRefreshLay.setVisibility(View.GONE);
+                netErrorLayout = new NetErrorLayout(getActivity());
+                netErrorLayout.setOnNetErrorClickListener(this);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+                View netErrorView = netErrorLayout.netErrorLay(0);
+                mNetErrorLay.addView(netErrorView);
+            } else {
+                mSwipeRefreshLay.setVisibility(View.GONE);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -192,12 +198,14 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
 
     @Override
     public void netErrorClick() {
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            ToastUtil.showMiddle(getActivity(), R.string.net_set);
-        } else {
-            mNetErrorLay.setVisibility(View.GONE);
-            mSwipeRefreshLay.setVisibility(View.VISIBLE);
-            iHeadLinePresenter.getJokes(0);
+        if (isAdded() && getActivity() != null) {
+            if (!NetUtils.isNetworkAvailable(getActivity())) {
+                ToastUtil.showMiddle(getActivity(), R.string.net_set);
+            } else {
+                mNetErrorLay.setVisibility(View.GONE);
+                mSwipeRefreshLay.setVisibility(View.VISIBLE);
+                iHeadLinePresenter.getJokes(0);
+            }
         }
     }
 }

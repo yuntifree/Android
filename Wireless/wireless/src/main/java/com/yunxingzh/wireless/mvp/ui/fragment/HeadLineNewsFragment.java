@@ -83,7 +83,9 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     public void initView(View view) {
         mMainNewsRv = findView(view, R.id.head_line_rv);
         swipeRefreshLayout = findView(view, R.id.swipe_ly);
-        mMainNewsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (isAdded() && getActivity() != null) {
+            mMainNewsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
         mMainNewsRv.setHasFixedSize(true);
         mMainNewsRv.addItemDecoration(new SpacesItemDecoration(1));
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -99,7 +101,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                     case RecyclerView.SCROLL_STATE_IDLE:
                         //滑动完成
                         if (!mMainNewsRv.canScrollVertically(1)) {//false:到底部
-                            if (data != null) {
+                            if (data != null && isAdded() && getActivity() != null) {
                                 if (data.hasmore == 0) {
                                     ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
                                 } else {
@@ -109,30 +111,30 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                                         countUmeng++;
                                         switch (newsTypes) {
                                             case Constants.TYPE_LOCAL:
-                                                LogUtils.e("lsd","东莞"+countUmeng+"");
+                                                LogUtils.e("lsd", "东莞" + countUmeng + "");
                                                 if (countUmeng == 3) {
-                                                    MobclickAgent.onEvent(getActivity(),"DG_triple_load");
+                                                    MobclickAgent.onEvent(getActivity(), "DG_triple_load");
                                                 }
                                                 if (countUmeng == 5) {
-                                                    MobclickAgent.onEvent(getActivity(),"DG_penta_load");
+                                                    MobclickAgent.onEvent(getActivity(), "DG_penta_load");
                                                 }
                                                 break;
                                             case Constants.TYPE_HOT:
-                                                LogUtils.e("lsd","热点"+countUmeng+"");
+                                                LogUtils.e("lsd", "热点" + countUmeng + "");
                                                 if (countUmeng == 3) {
-                                                    MobclickAgent.onEvent(getActivity(),"hotspot_triple_load");
+                                                    MobclickAgent.onEvent(getActivity(), "hotspot_triple_load");
                                                 }
                                                 if (countUmeng == 5) {
-                                                    MobclickAgent.onEvent(getActivity(),"hotspot_penta_load");
+                                                    MobclickAgent.onEvent(getActivity(), "hotspot_penta_load");
                                                 }
                                                 break;
                                             case Constants.TYPE_DISPORT:
-                                                LogUtils.e("lsd","娱乐"+countUmeng+"");
+                                                LogUtils.e("lsd", "娱乐" + countUmeng + "");
                                                 if (countUmeng == 3) {
-                                                    MobclickAgent.onEvent(getActivity(),"entertainment_triple_load");
+                                                    MobclickAgent.onEvent(getActivity(), "entertainment_triple_load");
                                                 }
                                                 if (countUmeng == 5) {
-                                                    MobclickAgent.onEvent(getActivity(),"entertainment_penta_load");
+                                                    MobclickAgent.onEvent(getActivity(), "entertainment_penta_load");
                                                 }
                                                 break;
                                         }
@@ -172,13 +174,15 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
             iHeadLinePresenter.getHeadLine(this.newsTypes, HEAD_LINE_SEQ);
             swipeRefreshLayout.setRefreshing(true);
         }
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            swipeRefreshLayout.setVisibility(View.GONE);
-            netErrorLayout = new NetErrorLayout(getActivity());
-            netErrorLayout.setOnNetErrorClickListener(this);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(0);
-            mNetErrorLay.addView(netErrorView);
+        if (isAdded() && getActivity() != null) {
+            if (!NetUtils.isNetworkAvailable(getActivity())) {
+                swipeRefreshLayout.setVisibility(View.GONE);
+                netErrorLayout = new NetErrorLayout(getActivity());
+                netErrorLayout.setOnNetErrorClickListener(this);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+                View netErrorView = netErrorLayout.netErrorLay(0);
+                mNetErrorLay.addView(netErrorView);
+            }
         }
     }
 
@@ -229,13 +233,17 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         if (data.infos != null) {
             newsListNext.addAll(data.infos);
             if (headLineNewsAdapter == null) {
-                headLineNewsAdapter = new NewsAdapter(getActivity(), newsListNext);
+                if (isAdded() && getActivity() != null) {
+                    headLineNewsAdapter = new NewsAdapter(getActivity(), newsListNext);
+                }
                 mMainNewsRv.setAdapter(headLineNewsAdapter);
             }
             // mMainNewsRv.setAdapter(headLineNewsAdapter);
             headLineNewsAdapter.notifyDataSetChanged();
         } else {
-            ToastUtil.showMiddle(getActivity(), R.string.re_error);
+            if (isAdded() && getActivity() != null) {
+                ToastUtil.showMiddle(getActivity(), R.string.re_error);
+            }
         }
     }
 
@@ -245,18 +253,20 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
             swipeRefreshLayout.setRefreshing(false);
         }
         isFastClick = true;
-        ToastUtil.showMiddle(getActivity(), R.string.net_error);
+        if (isAdded() && getActivity() != null) {
+            ToastUtil.showMiddle(getActivity(), R.string.net_error);
 
-        if (netErrorLayout == null) {
-            swipeRefreshLayout.setVisibility(View.GONE);
-            netErrorLayout = new NetErrorLayout(getActivity());
-            netErrorLayout.setOnNetErrorClickListener(this);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(0);
-            mNetErrorLay.addView(netErrorView);
-        } else {
-            swipeRefreshLayout.setVisibility(View.GONE);
-            mNetErrorLay.setVisibility(View.VISIBLE);
+            if (netErrorLayout == null) {
+                swipeRefreshLayout.setVisibility(View.GONE);
+                netErrorLayout = new NetErrorLayout(getActivity());
+                netErrorLayout.setOnNetErrorClickListener(this);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+                View netErrorView = netErrorLayout.netErrorLay(0);
+                mNetErrorLay.addView(netErrorView);
+            } else {
+                swipeRefreshLayout.setVisibility(View.GONE);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -266,20 +276,24 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     }
 
     public void startActivity(Class activity, String key, String videoUrl, String titleKey, String title) {
-        Intent intent = new Intent(getActivity(), activity);
-        intent.putExtra(key, videoUrl);
-        intent.putExtra(titleKey, title);
-        startActivity(intent);
+        if (isAdded() && getActivity() != null) {
+            Intent intent = new Intent(getActivity(), activity);
+            intent.putExtra(key, videoUrl);
+            intent.putExtra(titleKey, title);
+            startActivity(intent);
+        }
     }
 
     @Override
     public void netErrorClick() {
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            ToastUtil.showMiddle(getActivity(), R.string.net_set);
-        } else {
-            mNetErrorLay.setVisibility(View.GONE);
-            swipeRefreshLayout.setVisibility(View.VISIBLE);
-            iHeadLinePresenter.getHeadLine(newsTypes, HEAD_LINE_SEQ);
+        if (isAdded() && getActivity() != null) {
+            if (!NetUtils.isNetworkAvailable(getActivity())) {
+                ToastUtil.showMiddle(getActivity(), R.string.net_set);
+            } else {
+                mNetErrorLay.setVisibility(View.GONE);
+                swipeRefreshLayout.setVisibility(View.VISIBLE);
+                iHeadLinePresenter.getHeadLine(newsTypes, HEAD_LINE_SEQ);
+            }
         }
     }
 }

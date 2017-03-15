@@ -99,8 +99,10 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
         iWirelessPresenter = new WirelessPresenterImpl(this);
         iServicePresenter = new ServicePresenterImpl(this);
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            netErrorState();
+        if (isAdded() && getActivity() != null) {
+            if (!NetUtils.isNetworkAvailable(getActivity())) {
+                netErrorState();
+            }
         }
         iServicePresenter.getFind();
     }
@@ -114,7 +116,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
     @Override
     public void onClick(View v) {
-        if (mSearchTv == v) {//搜索
+        if (mSearchTv == v && isAdded() && getActivity() != null) {//搜索
             MobclickAgent.onEvent(getActivity(),"life_search");
             startActivity(SearchActivity.class, "", "", "", "");
         }
@@ -125,7 +127,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         //获取屏幕宽高
         int width = 0;
         int height = 0;
-        if (getActivity() == null || findList == null) {
+        if (!isAdded() && getActivity() == null || findList == null) {
             return;
         }
 
@@ -467,10 +469,12 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     }
 
     public void startActivity(Class activity, String key, String value, String titleKey, String titleValue) {
-        Intent intent = new Intent(getActivity(), activity);
-        intent.putExtra(key, value);
-        intent.putExtra(titleKey, titleValue);
-        startActivity(intent);
+        if (isAdded() && getActivity() != null) {
+            Intent intent = new Intent(getActivity(), activity);
+            intent.putExtra(key, value);
+            intent.putExtra(titleKey, titleValue);
+            startActivity(intent);
+        }
     }
 
     public LinearLayout.LayoutParams getLayoutParams(int weight, int isGravity, int width, int height, int left, int top, int right, int bottom) {
@@ -494,7 +498,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     }
 
     private void netErrorState() {
-        if (netErrorLayout == null) {
+        if (netErrorLayout == null && isAdded() && getActivity() != null) {
             viewVisibile(false);
             netErrorLayout = new NetErrorLayout(getActivity());
             final View netErrorView = netErrorLayout.netErrorLay(0);

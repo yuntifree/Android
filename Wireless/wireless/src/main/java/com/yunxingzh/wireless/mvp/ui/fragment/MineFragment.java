@@ -146,18 +146,18 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
 
     @Override
     public void onClick(View v) {
-        if (mMineHeadIv == v) {
+        if (mMineHeadIv == v && isAdded() && getActivity() != null) {
             MobclickAgent.onEvent(getActivity(),"Me_profile_photo");
             new AlertView("修改头像", null, "取消", null,
                     new String[]{"自定义头像", "经典头像"},
                     getActivity(), AlertView.Style.ActionSheet, this).show();
-        } else if (mMineFeedBackLay == v) {//反馈问题
+        } else if (mMineFeedBackLay == v && isAdded() && getActivity() != null) {//反馈问题
             MobclickAgent.onEvent(getActivity(),"Me_feedback");
             startActivity(FeedBackActivity.class, "");
-        } else if (mMineSetLay == v) {//设置
+        } else if (mMineSetLay == v && isAdded() && getActivity() != null) {//设置
             MobclickAgent.onEvent(getActivity(),"Me_setting");
             startActivity(SetActivity.class, "");
-        } else if (mMineNameTv == v) {//修改昵称
+        } else if (mMineNameTv == v && isAdded() && getActivity() != null) {//修改昵称
             MobclickAgent.onEvent(getActivity(),"Me_profile_name");
             if (!StringUtils.isEmpty(nick)) {
                 startActivity(NickNameActivity.class, nick);
@@ -180,10 +180,12 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
             } else {
                 mMineNameTv.setText("东莞无限");
             }
-            if (!StringUtils.isEmpty(userInfoVo.headurl)) {
-                Glide.with(getActivity()).load(userInfoVo.headurl).into(mMineHeadIv);
-            } else {
-                Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mMineHeadIv);
+            if (isAdded() && getActivity() != null) {
+                if (!StringUtils.isEmpty(userInfoVo.headurl)) {
+                    Glide.with(getActivity()).load(userInfoVo.headurl).into(mMineHeadIv);
+                } else {
+                    Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mMineHeadIv);
+                }
             }
             MainApplication.get().setUserMine(userInfoVo);
             MainApplication.get().setNick(userInfoVo.nickname);
@@ -197,7 +199,7 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     @Override
     public void getUserInfoFailed() {
         UserInfoVo infoVo = MainApplication.get().getUserMine();
-        if (infoVo != null) {
+        if (infoVo != null && isAdded() && getActivity() != null) {
             mMineNameTv.setText(infoVo.nickname);
             Glide.with(getActivity()).load(infoVo.headurl).into(mMineHeadIv);
         }
@@ -209,19 +211,21 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
             mHeadUrl = downLoadUrl + "/" + uploadVo.name;
             headImgFrom = 0;
         }
-        if (!StringUtils.isEmpty(mHeadUrl)) {
-            MainApplication.get().setHeadUrl(mHeadUrl);
-            EventBus.getDefault().post(new MineHeadImg(Constants.HEAD_IMG_FLAG, mHeadUrl));
-            ToastUtil.showMiddle(getActivity(), "恭喜，更换头像成功");
-        } else {
-            Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mMineHeadIv);
-            ToastUtil.showMiddle(getActivity(), "抱歉，请稍后重试");
+        if (isAdded() && getActivity() != null) {
+            if (!StringUtils.isEmpty(mHeadUrl)) {
+                MainApplication.get().setHeadUrl(mHeadUrl);
+                EventBus.getDefault().post(new MineHeadImg(Constants.HEAD_IMG_FLAG, mHeadUrl));
+                ToastUtil.showMiddle(getActivity(), "恭喜，更换头像成功");
+            } else {
+                Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mMineHeadIv);
+                ToastUtil.showMiddle(getActivity(), "抱歉，请稍后重试");
+            }
         }
     }
 
     @Subscribe
     public void onEventMainThread(MineHeadImg event) {
-        if (event.getmFlag() == Constants.HEAD_IMG_FLAG) {//更换头像
+        if (event.getmFlag() == Constants.HEAD_IMG_FLAG && isAdded() && getActivity() != null) {//更换头像
             Glide.with(getActivity()).load(event.getmMsg()).into(mMineHeadIv);
         }
         if (event.getmFlag() == Constants.NICK_NAME_FLAG) {//更换昵称
@@ -239,8 +243,10 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
                 startActivityForResult(intent, SELECT_IMG);
                 break;
             case CUT_IMG://选择默认头像
-                Intent headIntent = new Intent(getActivity(), DefaultHeadImgActivity.class);
-                startActivityForResult(headIntent, HEAD_IMG_URL);
+                if (isAdded() && getActivity() != null) {
+                    Intent headIntent = new Intent(getActivity(), DefaultHeadImgActivity.class);
+                    startActivityForResult(headIntent, HEAD_IMG_URL);
+                }
                 break;
         }
     }
@@ -282,7 +288,9 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
                         Log.e("HostId", serviceException.getHostId());
                         Log.e("RawMessage", serviceException.getRawMessage());
                     }
-                    ToastUtil.showMiddle(getActivity(), "上传失败");
+                    if (isAdded() && getActivity() != null) {
+                        ToastUtil.showMiddle(getActivity(), "上传失败");
+                    }
                 }
             });
         }
@@ -335,9 +343,11 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     }
 
     public void startActivity(Class activity, String value) {
-        Intent intent = new Intent(getActivity(), activity);
-        intent.putExtra("nickName", value);
-        startActivity(intent);
+        if (isAdded() && getActivity() != null) {
+            Intent intent = new Intent(getActivity(), activity);
+            intent.putExtra("nickName", value);
+            startActivity(intent);
+        }
     }
 
     @Override

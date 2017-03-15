@@ -83,8 +83,10 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
         //注册EventBus
         EventBus.getDefault().register(this);
         getHeadLineMenuPresenter = new GetHeadLineMenuPresenterImpl(this);
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            netErrorState();
+        if (isAdded() && getActivity() != null){
+            if (!NetUtils.isNetworkAvailable(getActivity())) {
+                netErrorState();
+            }
         }
         getHeadLineMenuPresenter.getHeadLineMenu();
         tabStrip.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -201,6 +203,9 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     }
 
     private void netErrorState() {
+        if (!isAdded() && getActivity() == null) {
+            return;
+        }
         if (netErrorLayout == null) {
             netErrorLayout = new NetErrorLayout(getActivity());
             netErrorLayout.setOnNetErrorClickListener(new NetErrorLayout.OnNetErrorClickListener() {

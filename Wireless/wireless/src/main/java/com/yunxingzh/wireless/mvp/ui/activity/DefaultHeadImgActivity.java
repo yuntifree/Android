@@ -155,7 +155,7 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                 if (width <= 720 && height <= 1280) {
                     femaleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 130, 130, 0, 0, 0, 0));
                 } else {
-                    femaleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 240, 240, 0, 0, 0, 0));
+                    femaleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 220, 220, 0, 0, 0, 0));
                 }
                 femaleItems.addView(name, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
                 femaleItems.addView(age, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));

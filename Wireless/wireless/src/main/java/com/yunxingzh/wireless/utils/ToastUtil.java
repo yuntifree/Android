@@ -20,10 +20,12 @@ public class ToastUtil {
         if (mToast != null) {
             mToast.cancel();
         }
-        mToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-        mToast.setText(text);
-        //mToast.setGravity(Gravity.BOTTOM, 0, 0);
-        mToast.show();
+        if (context != null) {
+            mToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+            mToast.setText(text);
+            //mToast.setGravity(Gravity.BOTTOM, 0, 0);
+            mToast.show();
+        }
     }
 
     public static void wifiSpiritedshow(Context context, int resId) {

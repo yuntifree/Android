@@ -207,32 +207,33 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     }
 
     public void initData() {
-        wifiUtils = new WifiUtils(getActivity());
-        //注册EventBus
-        EventBus.getDefault().register(this);
-        // mBadgeView.set
-        iWirelessPresenter = new WirelessPresenterImpl(this);
-        iWirelessPresenter.weatherNews();
+        if (isAdded() && getActivity() != null) {
+            wifiUtils = new WifiUtils(getActivity());
+            //注册EventBus
+            EventBus.getDefault().register(this);
+            // mBadgeView.set
+            iWirelessPresenter = new WirelessPresenterImpl(this);
+            iWirelessPresenter.weatherNews();
 
-        FWManager.getInstance().addWifiObserver(wifiObserver);
-        //获取屏幕宽高
-        if (getActivity() == null) {
-            return;
-        }
-        wm = getActivity().getWindowManager();
-        int width = wm.getDefaultDisplay().getWidth();//720,1536
-        int height = wm.getDefaultDisplay().getHeight();//1280,2560
-        if (width <= 720 && height <= 1280) {
-            mAnimationTv.setCoreRadius(100);
-            mAnimationTv.setMaxWidth(300);
-            mAnimationTv.setDiffuseWidth(5);
-        } else {
-            mAnimationTv.setCoreRadius(208);
-            mAnimationTv.setMaxWidth(2000);
-            mAnimationTv.setDiffuseWidth(30);
-        }
+            FWManager.getInstance().addWifiObserver(wifiObserver);
+            //获取屏幕宽高
+            if (getActivity() == null) {
+                return;
+            }
+            wm = getActivity().getWindowManager();
+            int width = wm.getDefaultDisplay().getWidth();//720,1536
+            int height = wm.getDefaultDisplay().getHeight();//1280,2560
+            if (width <= 720 && height <= 1280) {
+                mAnimationTv.setCoreRadius(100);
+                mAnimationTv.setMaxWidth(300);
+                mAnimationTv.setDiffuseWidth(5);
+            } else {
+                mAnimationTv.setCoreRadius(208);
+                mAnimationTv.setMaxWidth(2000);
+                mAnimationTv.setDiffuseWidth(30);
+            }
 
-        timeChanged();
+            timeChanged();
 //        String nickName = MainApplication.get().getNick();
 //        String headurl = MainApplication.get().getHeadUrl();
 //        if (!StringUtils.isEmpty(nickName)) {
@@ -249,6 +250,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 //            Glide.with(getActivity()).load(R.drawable.my_ico_pic).into(mWirelessHeadImgIv);
 //        }
 //        }
+        }
     }
 
     @Override
@@ -291,10 +293,11 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
         //新闻
         mainNewsVos = weatherNewsVo.news;
-        mainNewsAdapter = new MainNewsAdapter(getActivity(), mainNewsVos);
-        mMainNewsLv.setAdapter(mainNewsAdapter);
-        Utility.setListViewHeight(mMainNewsLv);
-
+        if (isAdded() && getActivity() != null) {
+            mainNewsAdapter = new MainNewsAdapter(getActivity(), mainNewsVos);
+            mMainNewsLv.setAdapter(mainNewsAdapter);
+            Utility.setListViewHeight(mMainNewsLv);
+        }
     }
 
     @Override
@@ -317,7 +320,9 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             if (wifiUtils.getWlanState()) {//是否打开
                 checkDGWifi();
             } else {//是否跳转系统设置的wifi列表？
-                ToastUtil.showMiddle(getActivity(), R.string.please_open_wifi);
+                if (isAdded() && getActivity() != null) {
+                    ToastUtil.showMiddle(getActivity(), R.string.please_open_wifi);
+                }
                 //startActivity(WifiManagerActivity.class, "", "", "", "");
             }
         } else if (mWeatherLay == v) {// 天气
@@ -325,23 +330,31 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 startActivity(WebViewActivity.class, Constants.URL, weatherNewsData.dst, Constants.TITLE, "东莞天气");
             }
         } else if (mMoreNewsLay == v) {//本地热点
-            MobclickAgent.onEvent(getActivity(), "Index_QR");
+            if (isAdded() && getActivity() != null) {
+                MobclickAgent.onEvent(getActivity(), "Index_QR");
+            }
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } /*else if (mMainWifiManager == v) {//wifi管理
             startActivity(WifiManagerActivity.class, "", "", "", "");
         } else if (mMainMapLay == v) {//wifi地图
             startActivity(WifiMapActivity.class, "", "", "", "");
         } */ else if (mTitleRightIv == v) {//扫码连接东莞wifi
-            MobclickAgent.onEvent(getActivity(), "Index_QR");
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), ScanCodeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
+            if (isAdded() && getActivity() != null) {
+                MobclickAgent.onEvent(getActivity(), "Index_QR");
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), ScanCodeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
+            }
         } else if (mSpeedIv == v) { // wifi 测速
-            MobclickAgent.onEvent(getActivity(), "Index_speedtest");
+            if (isAdded() && getActivity() != null) {
+                MobclickAgent.onEvent(getActivity(), "Index_speedtest");
+            }
             startActivity(SpeedTestActivity.class, "", "", "", "");
         } else if (mSpiritedIv == v) {//wifi共享
-            MobclickAgent.onEvent(getActivity(), "Index_share_wifi");
+            if (isAdded() && getActivity() != null) {
+                MobclickAgent.onEvent(getActivity(), "Index_share_wifi");
+            }
             if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid)) {
                 startActivity(WifiSpiritedActivity.class, "ssid", currentAp.ssid, "", "");
             } else {
@@ -361,7 +374,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
         } else if (mFontPlayingTv == v) { //同城直播
 
-        } */else if (mNoResourceTv == v) { //无网络时点击刷新底部新闻
+        } */ else if (mNoResourceTv == v && isAdded() && getActivity() != null) { //无网络时点击刷新底部新闻
             if (NetUtils.isNetworkAvailable(getActivity())) {
                 if (iWirelessPresenter != null) {
                     iWirelessPresenter.weatherNews();
@@ -370,7 +383,9 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 ToastUtil.showMiddle(getActivity(), R.string.net_error);
             }
         } else if (mWirelessMineLay == v) {//个人中心
-            MobclickAgent.onEvent(getActivity(), "Index_userinfo");
+            if (isAdded() && getActivity() != null) {
+                MobclickAgent.onEvent(getActivity(), "Index_userinfo");
+            }
             EventBus.getDefault().post(new EventBusType(Constants.MINE));
         } else if (mMachineErrorIv == v) {//不可抗力异常关闭
             mMachineErrorLay.setVisibility(View.GONE);
@@ -399,7 +414,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 mWirelessNumTv.setText(recLen + "");
                 isCountTime = false;
                 updateConnectState(false);
-                if (wifiState == WifiState.CONNECTING) {
+                if (wifiState == WifiState.CONNECTING && isAdded() && getActivity() != null) {
                     ToastUtil.showMiddle(getActivity(), R.string.connect_time_out);
                 }
             }
@@ -485,9 +500,11 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                     } else {
                         // 不是东莞无线
                         if (URLUtil.isHttpsUrl(url) || URLUtil.isHttpUrl(url)) {
-                            Intent intent = new Intent(getActivity(), WebViewActivity.class);
-                            intent.putExtra(Constants.URL, url);
-                            startActivity(intent);
+                            if (isAdded() && getActivity() != null) {
+                                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                                intent.putExtra(Constants.URL, url);
+                                startActivity(intent);
+                            }
                         } /*else {
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://"+url));
                             getActivity().startActivity(intent);
@@ -518,7 +535,9 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             if (success) {
                 switch (mCheckRet) {
                     case Constants.UNKNOW_ERROR://-1:未知异常
-                        ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                        if (isAdded() && getActivity() != null) {
+                            ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                        }
                         // 判断下按钮的状态
                         updateConnectState(false);
                         break;
@@ -532,7 +551,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                         updateConnectState(true);
                         break;
                     case Constants.NEED_VALIDATE://2：须要认证的网络
-                        if (iWirelessPresenter != null && isAdded()) {
+                        if (iWirelessPresenter != null && isAdded() && getActivity() != null) {
                             String wlanacname = SPUtils.get(getActivity(), "wlanacname", "");
                             String wlanuserip = SPUtils.get(getActivity(), "wlanuserip", "");
                             String wlanacip = SPUtils.get(getActivity(), "wlanacip", "");
@@ -541,11 +560,15 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                         }
                         break;
                     default:
-                        ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                        if (isAdded() && getActivity() != null) {
+                            ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                        }
                         break;
                 }
             } else {
-                ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                if (isAdded() && getActivity() != null) {
+                    ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+                }
             }
         }
 
@@ -565,7 +588,9 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
     @Override
     public void wifiConnectFailed() {
-        ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+        if (isAdded() && getActivity() != null) {
+            ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
+        }
         // 判断下按钮的状态
         updateConnectState(false);
     }
@@ -654,20 +679,22 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     public void checkDGWifi() {
         AccessPoint DGFreeAp = getDGWifiFromList();
         // 1. 未联网，有DG-Free: 连接DG-Free
-        if (!NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
-            if (DGFreeAp != null) {//不为空表示周围有东莞wifi
-                FWManager.getInstance().connect(DGFreeAp);//先连接上wifi,再认证
-            } else { // 4. 未联网，没有DG-Free：跳转到wifi地图
-                startActivity(WifiMapActivity.class, "", "", "", "");
-            }
-        } else {
-            //已连上wifi
-            currentAp = FWManager.getInstance().getCurrent();
-            // 3. 已经连上DG-Free的情况
-            if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid) && currentAp.ssid.equals(Constants.SSID)) {
-                CheckAndLogon();
+        if (isAdded() && getActivity() != null) {
+            if (!NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
+                if (DGFreeAp != null) {//不为空表示周围有东莞wifi
+                    FWManager.getInstance().connect(DGFreeAp);//先连接上wifi,再认证
+                } else { // 4. 未联网，没有DG-Free：跳转到wifi地图
+                    startActivity(WifiMapActivity.class, "", "", "", "");
+                }
             } else {
-                updateConnectState(false);
+                //已连上wifi
+                currentAp = FWManager.getInstance().getCurrent();
+                // 3. 已经连上DG-Free的情况
+                if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid) && currentAp.ssid.equals(Constants.SSID)) {
+                    CheckAndLogon();
+                } else {
+                    updateConnectState(false);
+                }
             }
         }
     }
@@ -675,12 +702,14 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     @Override
     public void onRefresh() {
         mMainRefreshLay.setRefreshing(false);
-        if (NetUtils.isNetworkAvailable(getActivity())) {
-            if (iWirelessPresenter != null) {
-                iWirelessPresenter.weatherNews();
+        if (isAdded() && getActivity() != null) {
+            if (NetUtils.isNetworkAvailable(getActivity())) {
+                if (iWirelessPresenter != null) {
+                    iWirelessPresenter.weatherNews();
+                }
+            } else {
+                ToastUtil.showMiddle(getActivity(), R.string.net_error);
             }
-        } else {
-            ToastUtil.showMiddle(getActivity(), R.string.net_error);
         }
     }
 
@@ -690,10 +719,12 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 public void run() {
-                    if (NetUtils.isNetworkAvailable(getActivity())) {
-                        Message message = new Message();
-                        message.what = 1;
-                        refreshNewsHandler.sendMessage(message);
+                    if (isAdded() && getActivity() != null) {
+                        if (NetUtils.isNetworkAvailable(getActivity())) {
+                            Message message = new Message();
+                            message.what = 1;
+                            refreshNewsHandler.sendMessage(message);
+                        }
                     }
                 }
             }, 2000);
@@ -765,10 +796,12 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     }
 
     public void startActivity(Class activity, String key, String videoUrl, String titleKey, String title) {
-        Intent intent = new Intent(getActivity(), activity);
-        intent.putExtra(key, videoUrl);
-        intent.putExtra(titleKey, title);
-        startActivity(intent);
+       if (isAdded() && getActivity() != null) {
+           Intent intent = new Intent(getActivity(), activity);
+           intent.putExtra(key, videoUrl);
+           intent.putExtra(titleKey, title);
+           startActivity(intent);
+       }
     }
 
     public void timeChanged() {
@@ -776,13 +809,13 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         String hour = StringUtils.getTime();
         int h = Integer.parseInt(hour);
         if (h >= 6 && h < 19) {
-            if (isAdded()) {
+            if (isAdded() && getActivity() != null) {
                 StatusBarColor.compat(getActivity(), getResources().getColor(R.color.blue_009CFB));
             }
             mTitleLay.setBackgroundColor(Color.parseColor("#009CFB"));
             mMainHeadImg.setBackgroundResource(R.drawable.main_bg);
         } else {
-            if (isAdded()) {
+            if (isAdded() && getActivity() != null) {
                 StatusBarColor.compat(getActivity(), getResources().getColor(R.color.blue_236EC5));
             }
             mTitleLay.setBackgroundColor(Color.parseColor("#236EC5"));

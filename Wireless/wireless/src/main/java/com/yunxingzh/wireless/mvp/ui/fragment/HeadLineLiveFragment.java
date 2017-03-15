@@ -72,7 +72,9 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
         mListRv = findView(view, R.id.live_rv);
         mSwipeRefreshLay = findView(view, R.id.swipe_refresh_live);
         mSwipeRefreshLay.setOnRefreshListener(this);
-        mListRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        if (isAdded() && getActivity() != null) {
+            mListRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        }
         mListRv.setHasFixedSize(true);
         mListRv.addItemDecoration(new SpacesItemDecoration(4));
         mNetErrorLay = findView(view, R.id.net_error_lay);
@@ -82,19 +84,21 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
         headLineLiveAdapter = new HeadLineLiveAdapter(new ArrayList<LiveVo>());
         headLineLiveAdapter.openLoadMore(Constants.PAGE_SIZE);
         headLineLiveAdapter.setOnLoadMoreListener(this);
-       // headLineLiveAdapter.setEmptyView(emptyView(mListRv));
+        // headLineLiveAdapter.setEmptyView(emptyView(mListRv));
         mListRv.setAdapter(headLineLiveAdapter);
 
         iWirelessPresenter = new WirelessPresenterImpl(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iHeadLinePresenter.getLiveList(0);
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            mSwipeRefreshLay.setVisibility(View.GONE);
-            netErrorLayout = new NetErrorLayout(getActivity());
-            netErrorLayout.setOnNetErrorClickListener(this);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(0);
-            mNetErrorLay.addView(netErrorView);
+        if (isAdded() && getActivity() != null) {
+            if (!NetUtils.isNetworkAvailable(getActivity())) {
+                mSwipeRefreshLay.setVisibility(View.GONE);
+                netErrorLayout = new NetErrorLayout(getActivity());
+                netErrorLayout.setOnNetErrorClickListener(this);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+                View netErrorView = netErrorLayout.netErrorLay(0);
+                mNetErrorLay.addView(netErrorView);
+            }
         }
         headLineLiveAdapter.setOnLiveItemClickListener(new HeadLineLiveAdapter.onLiveItemClickListener() {
             @Override
@@ -102,7 +106,7 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
                 if (iWirelessPresenter != null) {
                     iWirelessPresenter.clickCount(0, LIVE_TYPE, "livedetail");
                 }
-                if (liveVo != null) {
+                if (liveVo != null && isAdded() && getActivity() != null) {
                     if (liveId != liveVo.live_id) {
                         countThree++;
                         if (countThree == 3) {
@@ -136,10 +140,14 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
             } else {
                 // 数据全部加载完毕就调用 loadComplete
                 headLineLiveAdapter.loadComplete();
-                ToastUtil.showMiddle(getActivity(), R.string.no_resource);
+                if (isAdded() && getActivity() != null) {
+                    ToastUtil.showMiddle(getActivity(), R.string.no_resource);
+                }
             }
         } else {
-            ToastUtil.showMiddle(getActivity(), R.string.re_error);
+            if (isAdded() && getActivity() != null) {
+                ToastUtil.showMiddle(getActivity(), R.string.re_error);
+            }
         }
     }
 
@@ -148,18 +156,20 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
         if (mSwipeRefreshLay != null) {
             mSwipeRefreshLay.setRefreshing(false);
         }
-        ToastUtil.showMiddle(getActivity(), R.string.net_error);
+        if (isAdded() && getActivity() != null) {
+            ToastUtil.showMiddle(getActivity(), R.string.net_error);
 
-        if (netErrorLayout == null) {
-            mSwipeRefreshLay.setVisibility(View.GONE);
-            netErrorLayout = new NetErrorLayout(getActivity());
-            netErrorLayout.setOnNetErrorClickListener(this);
-            mNetErrorLay.setVisibility(View.VISIBLE);
-            View netErrorView = netErrorLayout.netErrorLay(0);
-            mNetErrorLay.addView(netErrorView);
-        } else {
-            mSwipeRefreshLay.setVisibility(View.GONE);
-            mNetErrorLay.setVisibility(View.VISIBLE);
+            if (netErrorLayout == null) {
+                mSwipeRefreshLay.setVisibility(View.GONE);
+                netErrorLayout = new NetErrorLayout(getActivity());
+                netErrorLayout.setOnNetErrorClickListener(this);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+                View netErrorView = netErrorLayout.netErrorLay(0);
+                mNetErrorLay.addView(netErrorView);
+            } else {
+                mSwipeRefreshLay.setVisibility(View.GONE);
+                mNetErrorLay.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -178,13 +188,15 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
 
     @Override
     public void netErrorClick() {
-        if (!NetUtils.isNetworkAvailable(getActivity())) {
-            ToastUtil.showMiddle(getActivity(), R.string.net_set);
-        } else {
-            mNetErrorLay.setVisibility(View.GONE);
-            mSwipeRefreshLay.setVisibility(View.VISIBLE);
-            isFirstRefresh = true;
-            iHeadLinePresenter.getLiveList(0);
+        if (isAdded() && getActivity() != null) {
+            if (!NetUtils.isNetworkAvailable(getActivity())) {
+                ToastUtil.showMiddle(getActivity(), R.string.net_set);
+            } else {
+                mNetErrorLay.setVisibility(View.GONE);
+                mSwipeRefreshLay.setVisibility(View.VISIBLE);
+                isFirstRefresh = true;
+                iHeadLinePresenter.getLiveList(0);
+            }
         }
     }
 
@@ -211,6 +223,9 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
     }
 
     private View emptyView(ViewGroup viewGroup) {
+        if (!isAdded() && getActivity() == null) {
+            return null;
+        }
         View netView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, viewGroup, false);
         TextView netErrorBtn = (TextView) netView.findViewById(R.id.video_net_error_btn);
         netErrorBtn.setOnClickListener(new View.OnClickListener() {
@@ -220,6 +235,7 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
                 iHeadLinePresenter.getLiveList(0);
             }
         });
+
         return netView;
     }
 
