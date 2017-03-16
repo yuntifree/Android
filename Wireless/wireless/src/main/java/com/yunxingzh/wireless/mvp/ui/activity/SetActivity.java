@@ -145,4 +145,11 @@ public class SetActivity extends BaseActivity implements View.OnClickListener, I
     public void getAdvertSuccess(AdvertVo advertData) {
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (iGetAdvertPresenter != null) {
+            iGetAdvertPresenter.onDestroy();
+        }
+    }
 }

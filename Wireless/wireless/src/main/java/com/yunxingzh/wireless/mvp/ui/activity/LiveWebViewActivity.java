@@ -229,7 +229,6 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
         mOverFrameLay.removeView(mLiveOverView);
         mLiveNumTv.clearAnimation();
         handler.removeCallbacks(runnable);
-        destroyWebView();
         if (taskThree != null) {
             taskThree.cancel();
             taskThree = null;
@@ -243,6 +242,7 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
             timer.purge();
             timer = null;
         }
+        destroyWebView();
     }
 
     @Override

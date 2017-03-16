@@ -252,7 +252,6 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        baiduMap.setMyLocationEnabled(false);//关闭定位图层
         if(mineBitmap != null){
             mineBitmap.recycle();
             mineBitmap = null;
@@ -277,6 +276,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
         if (locationHandler != null) {
             locationHandler.removeCallbacksAndMessages(null);
         }
+        baiduMap.setMyLocationEnabled(false);//关闭定位图层
     }
 
     @Override

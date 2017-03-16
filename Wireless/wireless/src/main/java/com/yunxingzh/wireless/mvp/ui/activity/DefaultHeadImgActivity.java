@@ -203,6 +203,9 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
         if (iDefHeadPresenter != null) {
             iDefHeadPresenter.onDestroy();
         }
+        if (mHeadFemaleParentLay != null) {
+            mHeadFemaleParentLay.removeAllViews();
+        }
     }
 
     public LinearLayout.LayoutParams getLayoutParams(int weight, int isGravity, int width, int height, int left, int top, int right, int bottom) {

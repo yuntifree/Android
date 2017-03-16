@@ -465,6 +465,9 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             iServicePresenter.onDestroy();
             iWirelessPresenter.onDestroy();
         }
+        if (mServiceParentGroup != null) {
+            mServiceParentGroup.removeAllViews();
+        }
         EventBus.getDefault().unregister(this);//反注册EventBus
     }
 

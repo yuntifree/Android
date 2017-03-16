@@ -108,7 +108,9 @@ public class AdvertActivity extends BaseActivity implements View.OnClickListener
             img.recycle();
             img = null;
         }
-        handler.removeCallbacks(runnable);
+        if (handler != null) {
+            handler.removeCallbacks(runnable);
+        }
     }
 
     public void startActivity(Class activity, String urlKey, String url, String titleKey, String title, String advertFlag) {

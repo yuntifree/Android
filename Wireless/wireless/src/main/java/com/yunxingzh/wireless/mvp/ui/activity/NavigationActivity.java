@@ -45,6 +45,7 @@ public class NavigationActivity extends BaseActivity implements View.OnClickList
     private LinearLayout mNavLay;
     private double myLat;
     private double myLon;
+    private BitmapDescriptor bitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,7 +94,7 @@ public class NavigationActivity extends BaseActivity implements View.OnClickList
                     .longitude(wifiMapVo.longitude).build();
             // 设置定位数据
             baiduMap.setMyLocationData(locData);
-            BitmapDescriptor bitmap = BitmapDescriptorFactory
+            bitmap = BitmapDescriptorFactory
                     .fromResource(R.drawable.mine_location);
             MyLocationConfiguration config = new MyLocationConfiguration(
                     MyLocationConfiguration.LocationMode.NORMAL, true, bitmap);
@@ -155,6 +156,10 @@ public class NavigationActivity extends BaseActivity implements View.OnClickList
     protected void onDestroy() {
         super.onDestroy();
         baiduMap.setMyLocationEnabled(false);//关闭定位图层
+        if (bitmap != null) {
+            bitmap.recycle();
+            bitmap = null;
+        }
         if (mapView != null) {
             mapView.onDestroy();
             mapView = null;

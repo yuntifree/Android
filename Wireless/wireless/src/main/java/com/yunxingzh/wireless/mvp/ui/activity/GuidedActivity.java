@@ -122,5 +122,13 @@ public class GuidedActivity extends BaseActivity implements View.OnClickListener
             container.removeView(viewList.get(position));
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (imgIdArray != null && imgIdArray.length > 0) {
+            imgIdArray = null;
+        }
+    }
 }
 

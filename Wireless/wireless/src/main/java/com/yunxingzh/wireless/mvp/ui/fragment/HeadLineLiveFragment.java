@@ -59,7 +59,6 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
     private NetErrorLayout netErrorLayout;
     private long liveId;
     private int countThree = 0;
-    private int countFive = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
