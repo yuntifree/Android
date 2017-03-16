@@ -244,7 +244,12 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             }
         });
         if (count == 10) {
-            mHandler.sendMessage(mHandler.obtainMessage(MSG_RESULT, (long) realTimeSpeed));
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mHandler.sendMessage(mHandler.obtainMessage(MSG_RESULT, (long) realTimeSpeed));
+                }
+            });
             shutdownAll();
             count = 0;
         }
