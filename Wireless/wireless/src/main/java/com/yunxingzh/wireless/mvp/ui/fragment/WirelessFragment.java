@@ -686,6 +686,8 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 } else { // 4. 未联网，没有DG-Free：跳转到wifi地图
                     startActivity(WifiMapActivity.class, "", "", "", "");
                 }
+            } else if (wifiState == WifiState.CONNECTING_IPADDR) {
+                startActivity(WifiMapActivity.class, "", "", "", "");
             } else {
                 //已连上wifi
                 currentAp = FWManager.getInstance().getCurrent();
@@ -731,7 +733,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         }
     }
 
-    public Handler refreshNewsHandler = new Handler() {
+    private Handler refreshNewsHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -777,6 +779,12 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             iWirelessPresenter.onDestroy();
         }
         mAnimationTv.destroyBitMap();
+        if (handler != null) {
+            handler.removeCallbacks(runnable);
+        }
+        if (refreshNewsHandler != null) {
+            refreshNewsHandler.removeCallbacksAndMessages(null);
+        }
         FWManager.getInstance().removeWifiObserver(wifiObserver);
         EventBus.getDefault().unregister(this);//反注册EventBus
     }

@@ -35,6 +35,7 @@ import com.yunxingzh.wireless.utils.WifiUtils;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.WifiState;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -65,6 +66,7 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
     private List<AccessPoint> list;
     private LinearLayout mWifiCloseLay, mWifiListLay;
     private View wifiClosedView;
+    private Handler mHandler = new MsgHandler(this);
 
 
     private List<WifiInfoVo> mWifiInfos;
@@ -225,16 +227,24 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
 
     private static final int MSG_REFRESH_LIST = 1;
     private static final int MSG_AUTH_ERROR = 2;
-    private Handler mHandler = new Handler() {
+    private static class MsgHandler extends Handler {
+        private final WeakReference<WifiManagerActivity> mActivity;
+
+        public MsgHandler(WifiManagerActivity activity) {
+            mActivity = new WeakReference<WifiManagerActivity>(activity);
+        }
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_REFRESH_LIST:
-                    refreshList(msg.arg1);
-                    break;
-                case MSG_AUTH_ERROR:
-                    dialogActivity.showInuptPWD(WifiManagerActivity.this, (AccessPoint) msg.obj, true);
-                    break;
+            WifiManagerActivity activity = mActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case MSG_REFRESH_LIST:
+                        activity.refreshList(msg.arg1);
+                        break;
+                    case MSG_AUTH_ERROR:
+                        activity.dialogActivity.showInuptPWD(activity, (AccessPoint) msg.obj, true);
+                        break;
+                }
             }
         }
     };
@@ -294,6 +304,9 @@ public class WifiManagerActivity extends BaseActivity implements IWifiManagerVie
             iWifiManagerPresenter.onDestroy();
         }
         locationUtils.stopMonitor();
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
         FWManager.getInstance().removeWifiObserver(wifiObserver);
     }
 }

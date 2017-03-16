@@ -47,6 +47,7 @@ import com.yunxingzh.wireless.zxing.decoding.RGBLuminanceSource;
 import com.yunxingzh.wireless.zxing.view.ViewfinderView;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -67,7 +68,7 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
     private boolean playBeep;
     private static final float BEEP_VOLUME = 0.10f;
     private boolean vibrate;
-
+    private Handler mHandler = new Mhandler(this);
 
     private static final int REQUEST_CODE = 100;
     private static final int PARSE_BARCODE_SUC = 300;
@@ -116,19 +117,27 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
     }
 
 
-    private Handler mHandler = new Handler() {
+    //使用软引用方式创建handler，防止内存泄漏
+    private static class Mhandler extends Handler {
+        private final WeakReference<ScanCodeActivity> mActivity;
 
+        public Mhandler(ScanCodeActivity activity) {
+            mActivity = new WeakReference<ScanCodeActivity>(activity);
+        }
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            mProgress.dismiss();
-            switch (msg.what) {
-                case PARSE_BARCODE_SUC:
-                    onResultHandler((String) msg.obj, scanBitmap);
-                    break;
-                case PARSE_BARCODE_FAIL:
-                    Toast.makeText(ScanCodeActivity.this, (String) msg.obj, Toast.LENGTH_LONG).show();
-                    break;
+            ScanCodeActivity activity = mActivity.get();
+            if (activity != null) {
+                activity.mProgress.dismiss();
+                switch (msg.what) {
+                    case PARSE_BARCODE_SUC:
+                        activity.onResultHandler((String) msg.obj, activity.scanBitmap);
+                        break;
+                    case PARSE_BARCODE_FAIL:
+                        Toast.makeText(activity, (String) msg.obj, Toast.LENGTH_LONG).show();
+                        break;
+                }
             }
         }
 
@@ -247,6 +256,12 @@ public class ScanCodeActivity extends BaseActivity implements Callback, View.OnC
     @Override
     protected void onDestroy() {
         inactivityTimer.shutdown();
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
         if(scanBitmap != null && !scanBitmap.isRecycled()){
             scanBitmap.recycle();
             scanBitmap = null;

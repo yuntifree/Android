@@ -21,6 +21,7 @@ import com.yunxingzh.wireless.utils.FileUtil;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -40,6 +41,7 @@ public class WelcomActivity extends BaseActivity {
     private Timer timer;
     private TimerTask task;
     private ImageView mSpinnerIv;
+    private Handler handler = new JumpHandler(this);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,12 +78,20 @@ public class WelcomActivity extends BaseActivity {
         }
     }
 
-    protected Handler handler = new Handler() {
+    private static class JumpHandler extends Handler {
+        private final WeakReference<WelcomActivity> mActivity;
+
+        public JumpHandler(WelcomActivity activity) {
+            mActivity = new WeakReference<WelcomActivity>(activity);
+        }
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == 1) {
-                advertJump();
+            WelcomActivity activity = mActivity.get();
+            if (activity != null) {
+                if (msg.what == 1) {
+                    activity.advertJump();
+                }
             }
         }
     };
@@ -130,6 +140,9 @@ public class WelcomActivity extends BaseActivity {
             timer.cancel();
             timer.purge();
             timer = null;
+        }
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
         }
     }
 

@@ -45,6 +45,7 @@ import com.yunxingzh.wireless.utils.LocationUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
+import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -70,6 +71,7 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     private double lon;
     private IWifiMapPresenter iWifiMapPresenter;
     private List<WifiMapVo> wifiMapInfo;
+    private Handler locationHandler = new LocationHandler(this);
 
     private boolean flag = true;
     private InfoWindow mInfoWindow;
@@ -175,38 +177,46 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
     }
 
 
-    final Handler locationHandler = new Handler() {
+    private static class LocationHandler extends Handler {
+        private final WeakReference<WifiMapActivity> mActivity;
+
+        public LocationHandler(WifiMapActivity activity) {
+            mActivity = new WeakReference<WifiMapActivity>(activity);
+        }
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == 0) {
-                lat = locationUtils.getBaseLocation().latitude;
-                lon = locationUtils.getBaseLocation().longitude;
-                initMap();
-            } else if (msg.what == BDLocation.TypeServerError) {
-                if (isFirst) {
-                    isFirst = false;
-                    ToastUtil.showMiddle(WifiMapActivity.this, R.string.location_error);
-                    alertView = new AlertView("温馨提示", "亲,定位失败,请打开定位权限", "取消", new String[]{"去设置"}, null, WifiMapActivity.this, AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(Object o, int position) {
-                            if (position != AlertView.CANCELPOSITION) {
-                                Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                                startActivity(intent);
+            final WifiMapActivity activity = mActivity.get();
+            if (activity != null) {
+                if (msg.what == 0) {
+                    activity.lat = activity.locationUtils.getBaseLocation().latitude;
+                    activity.lon = activity.locationUtils.getBaseLocation().longitude;
+                    activity.initMap();
+                } else if (msg.what == BDLocation.TypeServerError) {
+                    if (activity.isFirst) {
+                        activity.isFirst = false;
+                        ToastUtil.showMiddle(activity, R.string.location_error);
+                        activity.alertView = new AlertView("温馨提示", "亲,定位失败,请打开定位权限", "取消", new String[]{"去设置"}, null, activity, AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(Object o, int position) {
+                                if (position != AlertView.CANCELPOSITION) {
+                                    Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                                    activity.startActivity(intent);
+                                }
                             }
-                        }
-                    }).setOnDismissListener(new OnDismissListener() {
-                        @Override
-                        public void onDismiss(Object o) {
-                            if (alertView != null) {
-                                alertView.dismiss();
+                        }).setOnDismissListener(new OnDismissListener() {
+                            @Override
+                            public void onDismiss(Object o) {
+                                if (activity.alertView != null) {
+                                    activity.alertView.dismiss();
+                                }
                             }
-                        }
-                    });
-                    alertView.show();
+                        });
+                        activity.alertView.show();
+                    }
+                } else {
+                    LogUtils.i("lsd", "location error:" + msg.what);
                 }
-            } else {
-                LogUtils.i("lsd", "location error:" + msg.what);
             }
         }
     };
@@ -264,6 +274,9 @@ public class WifiMapActivity extends BaseActivity implements IWifiMapView, View.
             mapView = null;
         }
         locationUtils.stopMonitor();
+        if (locationHandler != null) {
+            locationHandler.removeCallbacksAndMessages(null);
+        }
     }
 
     @Override

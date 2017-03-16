@@ -228,6 +228,7 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
         super.onDestroy();
         mOverFrameLay.removeView(mLiveOverView);
         mLiveNumTv.clearAnimation();
+        handler.removeCallbacks(runnable);
         destroyWebView();
         if (taskThree != null) {
             taskThree.cancel();

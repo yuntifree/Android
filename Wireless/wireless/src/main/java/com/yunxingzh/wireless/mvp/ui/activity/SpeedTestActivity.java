@@ -33,6 +33,7 @@ import com.yunxingzh.wireless.utils.Util;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -85,6 +86,7 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
     private float realTimeSpeed;
     private int count = 0;
     private int speedCount = 0;
+    private final Handler mHandler = new ResultHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -376,6 +378,9 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
             timer.purge();
             timer = null;
         }
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
     }
 
     private void shutdownRunnable() {
@@ -409,18 +414,26 @@ public class SpeedTestActivity extends BaseActivity implements View.OnClickListe
         return (long) (bytesReceived / f);
     }
 
-    private final Handler mHandler = new Handler() {
+    private static class ResultHandler extends Handler {
+        private final WeakReference<SpeedTestActivity> mActivity;
+
+        public ResultHandler(SpeedTestActivity activity) {
+            mActivity = new WeakReference<SpeedTestActivity>(activity);
+        }
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what) {
-                case MSG_RESULT:
-                    showResult((Long) msg.obj, true);
-                    break;
-                case MSG_TANGLE:
-                    int currentAngle = msg.arg1;
-                    mRotatePointer.setsecondSweepAngle(currentAngle);
-                    break;
+            SpeedTestActivity activity = mActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case MSG_RESULT:
+                        activity.showResult((Long) msg.obj, true);
+                        break;
+                    case MSG_TANGLE:
+                        int currentAngle = msg.arg1;
+                        activity.mRotatePointer.setsecondSweepAngle(currentAngle);
+                        break;
+                }
             }
         }
     };
