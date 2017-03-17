@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,6 +38,7 @@ import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mview.MyListview;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
+import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.DialogActivity;
@@ -123,8 +125,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         View view = inflater.inflate(R.layout.fragment_wireless, null);
         initView(view);
         initData();
-        currentAp = FWManager.getInstance().getCurrent();
-        if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid) && currentAp.ssid.equals(Constants.SSID)) {
+        if (isDGWifi()) {
             CheckAndLogon();
         }
         return view;
@@ -257,6 +258,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
     @Override
     public void weatherNewsSuccess(WeatherNewsList weatherNewsVo) {
+        mNoResourceLay.setVisibility(View.GONE);
         if (weatherNewsVo == null) {
             return;
         }
@@ -323,7 +325,20 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 checkDGWifi();
             } else {//是否跳转系统设置的wifi列表？
                 if (isAdded() && getActivity() != null) {
-                    ToastUtil.showMiddle(getActivity(), R.string.please_open_wifi);
+                    AlertView alertView = new AlertView("温馨提示", "请打开WiFi", "取消", new String[]{"去设置"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position != AlertView.CANCELPOSITION) {
+                                Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                                startActivity(intent);
+                            }
+                        }
+                    }).setOnDismissListener(new OnDismissListener() {
+                        @Override
+                        public void onDismiss(Object o) {
+                        }
+                    });
+                    alertView.show();
                 }
                 //startActivity(WifiManagerActivity.class, "", "", "", "");
             }
@@ -374,9 +389,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         } else if (mFontZhiTv == v) { //智慧服务
             AppUtils.animation(mFontZhiTv);
             EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
-        } else if (mFontPlayingTv == v) { //同城直播
-
-        } */ else if (mNoResourceTv == v && isAdded() && getActivity() != null) { //无网络时点击刷新底部新闻
+        } */else if (mNoResourceTv == v && isAdded() && getActivity() != null) { //无网络时点击刷新底部新闻
             if (NetUtils.isNetworkAvailable(getActivity())) {
                 if (iWirelessPresenter != null) {
                     iWirelessPresenter.weatherNews();
@@ -449,18 +462,15 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         @Override
         public void onStateChanged(WifiState new_state, WifiState old_state) {
             if (new_state == WifiState.CONNECTING) { // 连接中
-                currentAp = FWManager.getInstance().getCurrent();
-                if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
-                    countTime();
+                if (isDGWifi()) {
+                    countTime();//连接东莞wifi倒计时
                 }
             } else if (new_state == WifiState.CONNECTED) {  // 连上网
-                currentAp = FWManager.getInstance().getCurrent();
-                if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
+                if (isDGWifi()) {
                     CheckAndLogon();
                 } else {
                     updateConnectState(true);
                 }
-
             } else if (new_state == WifiState.DISABLED || new_state == WifiState.DISCONNECTED) {
                 // 断开网
                 updateConnectState(false);
@@ -479,6 +489,14 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         public void onAuthError(AccessPoint ap) {
         }
     };
+
+    public boolean isDGWifi() {
+        currentAp = FWManager.getInstance().getCurrent();
+        if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid) && currentAp.ssid.equals(Constants.SSID)) {
+            return true;
+        }
+        return false;
+    }
 
     //扫码
     @Override
@@ -548,7 +566,9 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                         // ToastUtil.showMiddle(getActivity(), R.string.internet_error);
                         break;
                     case Constants.NET_OK://1：无须认证的网络（可以上网）
-                        isValidate = true;
+                        if (currentAp != null && currentAp.ssid.equals(Constants.SSID)) {
+                            isValidate = true;
+                        }
                         // 判断下按钮的状态
                         updateConnectState(true);
                         break;
@@ -602,7 +622,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         currentAp = FWManager.getInstance().getCurrent();//当前连接的wifi
         wifiState = FWManager.getInstance().getState();
         mDGFreeConnected = false;
-        if (currentAp != null && wifiState == WifiState.CONNECTED) {//当前已连接wifi
+        if (currentAp != null) {//当前已连接wifi
             if (currentAp.ssid.equals(Constants.SSID) && isValidate) {//当前已连接东莞wifi并且认证成功
                 mConnectText.setText("已连接免费WiFi");
                 mDGFreeConnected = true;
@@ -638,7 +658,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         if (updateNews) {
             // 网络更新时尝试刷新新闻
             new Thread(new RefreshNewsThread()).start();
-            mNoResourceLay.setVisibility(View.GONE);
         }
     }
 
@@ -692,9 +711,9 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 startActivity(WifiMapActivity.class, "", "", "", "");
             } else {
                 //已连上wifi
-                currentAp = FWManager.getInstance().getCurrent();
+
                 // 3. 已经连上DG-Free的情况
-                if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid) && currentAp.ssid.equals(Constants.SSID)) {
+                if (isDGWifi()) {
                     CheckAndLogon();
                 } else {
                     updateConnectState(false);
@@ -806,12 +825,12 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     }
 
     public void startActivity(Class activity, String key, String videoUrl, String titleKey, String title) {
-       if (isAdded() && getActivity() != null) {
-           Intent intent = new Intent(getActivity(), activity);
-           intent.putExtra(key, videoUrl);
-           intent.putExtra(titleKey, title);
-           startActivity(intent);
-       }
+        if (isAdded() && getActivity() != null) {
+            Intent intent = new Intent(getActivity(), activity);
+            intent.putExtra(key, videoUrl);
+            intent.putExtra(titleKey, title);
+            startActivity(intent);
+        }
     }
 
     public void timeChanged() {

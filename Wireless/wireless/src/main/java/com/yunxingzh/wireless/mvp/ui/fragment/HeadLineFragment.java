@@ -259,7 +259,7 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
             mViewPager.setAdapter(adapter);
             tabStrip.setViewPager(mViewPager);
 
-            if (loadCount < 1) {
+            if (loadCount < 1) {//首次进入应用
                 loadCount++;
                 String hour = StringUtils.getTime();
                 int h = Integer.parseInt(hour);

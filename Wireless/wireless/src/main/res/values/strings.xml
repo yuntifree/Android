@@ -114,7 +114,7 @@
     <string name="find_near_wifi">寻找身边免费WiFi</string>
     <string name="turn_on_wifi">开启WiFi</string>
     <string name="connect_success">恭喜您连接成功</string>
-    <string name="please_open_wifi">请先打开WiFi</string>
+    <string name="please_open_wifi">请打开WiFi</string>
     <string name="jump">立即体验</string>
     <string name="network_error">网络跑路啦</string>
     <string name="network_need_login">已连接,点我登录验证</string>
