@@ -101,7 +101,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                     case RecyclerView.SCROLL_STATE_IDLE:
                         //滑动完成
                         if (!mMainNewsRv.canScrollVertically(1)) {//false:到底部
-                            if (data != null && isAdded() && getActivity() != null) {
+                            if (isAdded() && getActivity() != null && data != null) {
                                 if (data.hasmore == 0) {
                                     ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
                                 } else {

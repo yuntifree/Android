@@ -81,7 +81,7 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
                     case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
                         // 判断滚动到底部
                         if (mListLv.getLastVisiblePosition() == (mListLv.getCount() - 1)) {
-                            if (jokeList.hasmore == 0 && isAdded() && getActivity() != null) {
+                            if (isAdded() && getActivity() != null && jokeList.hasmore == 0) {
                                 ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
                             } else {
                                 if (isFastClick) {
@@ -131,7 +131,7 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
 
         if (jokeList.infos != null) {
             jokeVos.addAll(jokeList.infos);
-            if (episodeAdapter == null && isAdded() && getActivity() != null) {
+            if (isAdded() && getActivity() != null && episodeAdapter == null) {
                 episodeAdapter = new EpisodeAdapter(getActivity(), jokeVos);
                 mListLv.setAdapter(episodeAdapter);
             }

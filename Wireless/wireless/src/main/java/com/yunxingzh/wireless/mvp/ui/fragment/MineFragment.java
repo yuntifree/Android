@@ -146,27 +146,29 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
 
     @Override
     public void onClick(View v) {
-        if (mMineHeadIv == v && isAdded() && getActivity() != null) {
-            MobclickAgent.onEvent(getActivity(),"Me_profile_photo");
-            new AlertView("修改头像", null, "取消", null,
-                    new String[]{"自定义头像", "经典头像"},
-                    getActivity(), AlertView.Style.ActionSheet, this).show();
-        } else if (mMineFeedBackLay == v && isAdded() && getActivity() != null) {//反馈问题
-            MobclickAgent.onEvent(getActivity(),"Me_feedback");
-            startActivity(FeedBackActivity.class, "");
-        } else if (mMineSetLay == v && isAdded() && getActivity() != null) {//设置
-            MobclickAgent.onEvent(getActivity(),"Me_setting");
-            startActivity(SetActivity.class, "");
-        } else if (mMineNameTv == v && isAdded() && getActivity() != null) {//修改昵称
-            MobclickAgent.onEvent(getActivity(),"Me_profile_name");
-            if (!StringUtils.isEmpty(nick)) {
-                startActivity(NickNameActivity.class, nick);
-            } else {
-                if (MainApplication.get().getUserMine() != null && !StringUtils.isEmpty(MainApplication.get().getUserMine().nickname)) {
-                    nick = MainApplication.get().getUserMine().nickname;
-                    startActivity(NickNameActivity.class, nick + "");
+        if (isAdded() && getActivity() != null) {
+            if (mMineHeadIv == v) {
+                MobclickAgent.onEvent(getActivity(), "Me_profile_photo");
+                new AlertView("修改头像", null, "取消", null,
+                        new String[]{"自定义头像", "经典头像"},
+                        getActivity(), AlertView.Style.ActionSheet, this).show();
+            } else if (mMineFeedBackLay == v) {//反馈问题
+                MobclickAgent.onEvent(getActivity(), "Me_feedback");
+                startActivity(FeedBackActivity.class, "");
+            } else if (mMineSetLay == v) {//设置
+                MobclickAgent.onEvent(getActivity(), "Me_setting");
+                startActivity(SetActivity.class, "");
+            } else if (mMineNameTv == v) {//修改昵称
+                MobclickAgent.onEvent(getActivity(), "Me_profile_name");
+                if (!StringUtils.isEmpty(nick)) {
+                    startActivity(NickNameActivity.class, nick);
                 } else {
-                    startActivity(NickNameActivity.class, "");
+                    if (MainApplication.get().getUserMine() != null && !StringUtils.isEmpty(MainApplication.get().getUserMine().nickname)) {
+                        nick = MainApplication.get().getUserMine().nickname;
+                        startActivity(NickNameActivity.class, nick + "");
+                    } else {
+                        startActivity(NickNameActivity.class, "");
+                    }
                 }
             }
         }
@@ -199,7 +201,7 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     @Override
     public void getUserInfoFailed() {
         UserInfoVo infoVo = MainApplication.get().getUserMine();
-        if (infoVo != null && isAdded() && getActivity() != null) {
+        if (isAdded() && getActivity() != null && infoVo != null) {
             mMineNameTv.setText(infoVo.nickname);
             Glide.with(getActivity()).load(infoVo.headurl).into(mMineHeadIv);
         }
@@ -225,7 +227,7 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
 
     @Subscribe
     public void onEventMainThread(MineHeadImg event) {
-        if (event.getmFlag() == Constants.HEAD_IMG_FLAG && isAdded() && getActivity() != null) {//更换头像
+        if (isAdded() && getActivity() != null && event.getmFlag() == Constants.HEAD_IMG_FLAG) {//更换头像
             Glide.with(getActivity()).load(event.getmMsg()).into(mMineHeadIv);
         }
         if (event.getmFlag() == Constants.NICK_NAME_FLAG) {//更换昵称

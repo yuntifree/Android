@@ -116,9 +116,11 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
 
     @Override
     public void onClick(View v) {
-        if (mSearchTv == v && isAdded() && getActivity() != null) {//搜索
-            MobclickAgent.onEvent(getActivity(),"life_search");
-            startActivity(SearchActivity.class, "", "", "", "");
+        if (isAdded() && getActivity() != null) {
+            if (mSearchTv == v) {//搜索
+                MobclickAgent.onEvent(getActivity(), "life_search");
+                startActivity(SearchActivity.class, "", "", "", "");
+            }
         }
     }
 
@@ -501,7 +503,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     }
 
     private void netErrorState() {
-        if (netErrorLayout == null && isAdded() && getActivity() != null) {
+        if (isAdded() && getActivity() != null && netErrorLayout == null) {
             viewVisibile(false);
             netErrorLayout = new NetErrorLayout(getActivity());
             final View netErrorView = netErrorLayout.netErrorLay(0);

@@ -118,7 +118,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 final List<HotInfo> data2 = data;
                 HotInfo item = data.get(i);
 
-                if (itemId != item.id && isAdded() && getActivity() != null) {
+                if (isAdded() && getActivity() != null && itemId != item.id) {
                     countUmeng++;
                     if (countUmeng == 3) {
                         MobclickAgent.onEvent(getActivity(), "video_triple_view");

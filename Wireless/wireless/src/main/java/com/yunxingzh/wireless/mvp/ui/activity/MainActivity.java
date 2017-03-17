@@ -194,11 +194,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     @Subscribe
     public void onEventMainThread(EventBusType event) {
-//        //跳转头条（新闻）
-//        if (event.getMsg() == Constants.HEAD_LINE) {
-//            mHeadLineRadio.setChecked(true);
-//        }
-//
+        //跳转头条（新闻）
+        if (event.getMsg() == Constants.HEAD_LINE) {
+            mHeadLineRadio.setChecked(true);
+        }
+
 //        //跳转视频-首页先跳转到头条父fragment再指定viewpager中的setCurrentItem
 //        if (event.getChildMsg() == Constants.VIDEO) {
 //            mHeadLineRadio.setChecked(true);

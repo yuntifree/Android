@@ -105,7 +105,7 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
                 if (iWirelessPresenter != null) {
                     iWirelessPresenter.clickCount(0, LIVE_TYPE, "livedetail");
                 }
-                if (liveVo != null && isAdded() && getActivity() != null) {
+                if (isAdded() && getActivity() != null && liveVo != null) {
                     if (liveId != liveVo.live_id) {
                         countThree++;
                         if (countThree == 3) {

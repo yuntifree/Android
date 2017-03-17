@@ -160,6 +160,7 @@
     <string name="concect_faild">亲,连接东莞无限超时哦,请重试</string>
     <string name="problem">反馈问题</string>
     <string name="no_resource_text">网络请求失败，请检查你的网络</string>
+    <string name="has_dgwifi">检测到免费WiFi热点</string>
 
 
 

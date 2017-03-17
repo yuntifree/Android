@@ -25,15 +25,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.util.Util;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
-import com.yunxingzh.wireless.config.MainApplication;
-import com.yunxingzh.wireless.config.MineHeadImg;
 import com.yunxingzh.wireless.mview.CircleWaveView;
 import com.yunxingzh.wireless.mview.MyListview;
 import com.yunxingzh.wireless.mview.StatusBarColor;
@@ -41,11 +37,9 @@ import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
-import com.yunxingzh.wireless.mvp.ui.activity.DialogActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.ScanCodeActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.SpeedTestActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
-import com.yunxingzh.wireless.mvp.ui.activity.WifiManagerActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiMapActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WifiSpiritedActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
@@ -68,7 +62,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import wireless.libs.bean.resp.WeatherNewsList;
 import wireless.libs.bean.vo.MainNewsVo;
 import wireless.libs.bean.vo.NoticeVo;
@@ -320,11 +313,11 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
     @Override
     public void onClick(View v) {
-        if (mConnectIv == v) {//一键连接
-            if (wifiUtils.getWlanState()) {//是否打开
-                checkDGWifi();
-            } else {//是否跳转系统设置的wifi列表？
-                if (isAdded() && getActivity() != null) {
+        if (isAdded() && getActivity() != null) {
+            if (mConnectIv == v) {//一键连接
+                if (wifiUtils.getWlanState()) {//是否打开
+                    checkDGWifi();
+                } else {//是否跳转系统设置的wifi列表？
                     AlertView alertView = new AlertView("温馨提示", "请打开WiFi", "取消", new String[]{"去设置"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
                         @Override
                         public void onItemClick(Object o, int position) {
@@ -339,45 +332,36 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                         }
                     });
                     alertView.show();
+                    //startActivity(WifiManagerActivity.class, "", "", "", "");
                 }
-                //startActivity(WifiManagerActivity.class, "", "", "", "");
-            }
-        } else if (mWeatherLay == v) {// 天气
-            if (weatherNewsData != null) {
-                startActivity(WebViewActivity.class, Constants.URL, weatherNewsData.dst, Constants.TITLE, "东莞天气");
-            }
-        } else if (mMoreNewsLay == v) {//本地热点
-            if (isAdded() && getActivity() != null) {
+            } else if (mWeatherLay == v) {// 天气
+                if (weatherNewsData != null) {
+                    startActivity(WebViewActivity.class, Constants.URL, weatherNewsData.dst, Constants.TITLE, "东莞天气");
+                }
+            } else if (mMoreNewsLay == v) {//本地热点
                 MobclickAgent.onEvent(getActivity(), "Index_QR");
-            }
-            EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
-        } /*else if (mMainWifiManager == v) {//wifi管理
+                EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
+            } /*else if (mMainWifiManager == v) {//wifi管理
             startActivity(WifiManagerActivity.class, "", "", "", "");
         } else if (mMainMapLay == v) {//wifi地图
             startActivity(WifiMapActivity.class, "", "", "", "");
         } */ else if (mTitleRightIv == v) {//扫码连接东莞wifi
-            if (isAdded() && getActivity() != null) {
                 MobclickAgent.onEvent(getActivity(), "Index_QR");
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), ScanCodeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
-            }
-        } else if (mSpeedIv == v) { // wifi 测速
-            if (isAdded() && getActivity() != null) {
+            } else if (mSpeedIv == v) { // wifi 测速
                 MobclickAgent.onEvent(getActivity(), "Index_speedtest");
-            }
-            startActivity(SpeedTestActivity.class, "", "", "", "");
-        } else if (mSpiritedIv == v) {//wifi共享
-            if (isAdded() && getActivity() != null) {
+                startActivity(SpeedTestActivity.class, "", "", "", "");
+            } else if (mSpiritedIv == v) {//wifi共享
                 MobclickAgent.onEvent(getActivity(), "Index_share_wifi");
-            }
-            if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid)) {
-                startActivity(WifiSpiritedActivity.class, "ssid", currentAp.ssid, "", "");
-            } else {
-                startActivity(WifiSpiritedActivity.class, "", "", "", "");
-            }
-        } /*else if (mFontNewsTv == v) { // 东莞头条
+                if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid)) {
+                    startActivity(WifiSpiritedActivity.class, "ssid", currentAp.ssid, "", "");
+                } else {
+                    startActivity(WifiSpiritedActivity.class, "", "", "", "");
+                }
+            } /*else if (mFontNewsTv == v) { // 东莞头条
             AppUtils.animation(mFontNewsTv);
             EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
         } else if (mFontVideoTv == v) { //热门视频
@@ -389,27 +373,28 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         } else if (mFontZhiTv == v) { //智慧服务
             AppUtils.animation(mFontZhiTv);
             EventBus.getDefault().post(new EventBusType(Constants.SERVICE));
-        } */else if (mNoResourceTv == v && isAdded() && getActivity() != null) { //无网络时点击刷新底部新闻
-            if (NetUtils.isNetworkAvailable(getActivity())) {
-                if (iWirelessPresenter != null) {
-                    iWirelessPresenter.weatherNews();
+        } */ else if (mNoResourceTv == v) { //无网络时点击刷新底部新闻
+                if (NetUtils.isNetworkAvailable(getActivity())) {
+                    if (iWirelessPresenter != null) {
+                        iWirelessPresenter.weatherNews();
+                    }
+                } else {
+                    ToastUtil.showMiddle(getActivity(), R.string.net_error);
                 }
-            } else {
-                ToastUtil.showMiddle(getActivity(), R.string.net_error);
-            }
-        } else if (mWirelessMineLay == v) {//个人中心
-            if (isAdded() && getActivity() != null) {
+            } else if (mWirelessMineLay == v) {//个人中心
                 MobclickAgent.onEvent(getActivity(), "Index_userinfo");
-            }
-            EventBus.getDefault().post(new EventBusType(Constants.MINE));
-        } else if (mMachineErrorIv == v) {//不可抗力异常关闭
-            mMachineErrorLay.setVisibility(View.GONE);
-        } else if (mMachineErrorLay == v) {
-            if (!StringUtils.isEmpty(noticeVo.content)) {
-                AlertView dialog = new AlertView("通知", noticeVo.content, null, new String[]{"我知道了"}, null, getActivity(), AlertView.Style.Alert, null);
-                dialog.show();
-            } else if (!StringUtils.isEmpty(noticeVo.dst)) {
-                startActivity(WebViewActivity.class, Constants.TITLE, noticeVo.title, Constants.URL, noticeVo.dst);
+                EventBus.getDefault().post(new EventBusType(Constants.MINE));
+            } else if (mMachineErrorIv == v) {//不可抗力异常关闭
+                mMachineErrorLay.setVisibility(View.GONE);
+            } else if (mMachineErrorLay == v) {
+                if (noticeVo != null) {
+                    if (!StringUtils.isEmpty(noticeVo.content)) {
+                        AlertView dialog = new AlertView("通知", noticeVo.content, null, new String[]{"我知道了"}, null, getActivity(), AlertView.Style.Alert, null);
+                        dialog.show();
+                    } else if (!StringUtils.isEmpty(noticeVo.dst)) {
+                        startActivity(WebViewActivity.class, Constants.TITLE, noticeVo.title, Constants.URL, noticeVo.dst);
+                    }
+                }
             }
         }
     }
@@ -429,7 +414,8 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 mWirelessNumTv.setText(recLen + "");
                 isCountTime = false;
                 updateConnectState(false);
-                if (wifiState == WifiState.CONNECTING && isAdded() && getActivity() != null) {
+                if (isAdded() && getActivity() != null && wifiState == WifiState.CONNECTING) {
+                    mConnectText.setText(R.string.has_dgwifi);
                     ToastUtil.showMiddle(getActivity(), R.string.connect_time_out);
                 }
             }
@@ -489,14 +475,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         public void onAuthError(AccessPoint ap) {
         }
     };
-
-    public boolean isDGWifi() {
-        currentAp = FWManager.getInstance().getCurrent();
-        if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid) && currentAp.ssid.equals(Constants.SSID)) {
-            return true;
-        }
-        return false;
-    }
 
     //扫码
     @Override
@@ -624,27 +602,31 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         mDGFreeConnected = false;
         if (currentAp != null) {//当前已连接wifi
             if (currentAp.ssid.equals(Constants.SSID) && isValidate) {//当前已连接东莞wifi并且认证成功
-                mConnectText.setText("已连接免费WiFi");
-                mDGFreeConnected = true;
-                lineViewVisible(true);
+                if (!isCountTime && wifiState == WifiState.CONNECTED) {//倒计时完毕
+                    mWirelessConnectedBtnLay.setVisibility(View.VISIBLE);
+                    mCenterCircleLay.setVisibility(View.GONE);//连接wifi后中间圆圈等按钮隐藏
+                    mConnectText.setText("已连接免费WiFi");
+                    mDGFreeConnected = true;
+                    lineViewVisible(true);
+                }
             } else {//连接其他的wifi
                 lineViewVisible(false);
-                if (isAdded()) {
-                    if (currentAp != null) {
+                if (isAdded() && currentAp != null) {
+                    if (wifiState != WifiState.CONNECTING) {//如果
                         mConnectText.setText(getResources().getString(R.string.connect_wifi) + currentAp.ssid);
+                        mWirelessConnectedBtnLay.setVisibility(View.VISIBLE);
+                        mCenterCircleLay.setVisibility(View.GONE);//连接wifi后中间圆圈等按钮隐藏
                     }
                 }
             }
-            mWirelessConnectedBtnLay.setVisibility(View.VISIBLE);
-            mCenterCircleLay.setVisibility(View.GONE);//连接wifi后中间圆圈等按钮隐藏
         } else {// 当前未连接wifi
             mWirelessConnectedBtnLay.setVisibility(View.GONE);
             mCenterCircleLay.setVisibility(View.VISIBLE);
             lineViewVisible(false);
-            AccessPoint DGWifiAp = getDGWifiFromList();//找出附近wifi列表中的东莞wifi
-            if (DGWifiAp != null) {//周围有东莞wifi
+            AccessPoint dgWifiAp = getDGWifiFromList();//找出附近wifi列表中的东莞wifi
+            if (dgWifiAp != null) {//周围有东莞wifi
                 mConnectTv.setText("一键连接");
-                mConnectText.setText("检测到免费WiFi热点");
+                mConnectText.setText(R.string.has_dgwifi);
             } else {
                 mConnectTv.setText("找WiFi");
                 mConnectText.setText("寻找附近免费WiFi");
@@ -659,6 +641,38 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             // 网络更新时尝试刷新新闻
             new Thread(new RefreshNewsThread()).start();
         }
+    }
+
+    public void checkDGWifi() {
+        AccessPoint DGFreeAp = getDGWifiFromList();
+        // 1. 未联网，有DG-Free: 连接DG-Free
+        if (isAdded() && getActivity() != null) {
+            if (!NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
+                if (DGFreeAp != null) {//不为空表示周围有东莞wifi
+                    FWManager.getInstance().connect(DGFreeAp);//先连接上wifi,再认证
+                } else { // 4. 未联网，没有DG-Free：跳转到wifi地图
+                    startActivity(WifiMapActivity.class, "", "", "", "");
+                }
+            } else if (wifiState == WifiState.CONNECTING_IPADDR) {
+                startActivity(WifiMapActivity.class, "", "", "", "");
+            } else {
+                //已连上wifi
+                // 3. 已经连上DG-Free的情况
+                if (isDGWifi()) {
+                    CheckAndLogon();
+                } else {
+                    updateConnectState(false);
+                }
+            }
+        }
+    }
+
+    public boolean isDGWifi() {
+        currentAp = FWManager.getInstance().getCurrent();
+        if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid) && currentAp.ssid.equals(Constants.SSID)) {
+            return true;
+        }
+        return false;
     }
 
     public void lineViewVisible(boolean isVisible) {
@@ -695,31 +709,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             }
         }
         return DGFreeAp;
-    }
-
-    public void checkDGWifi() {
-        AccessPoint DGFreeAp = getDGWifiFromList();
-        // 1. 未联网，有DG-Free: 连接DG-Free
-        if (isAdded() && getActivity() != null) {
-            if (!NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
-                if (DGFreeAp != null) {//不为空表示周围有东莞wifi
-                    FWManager.getInstance().connect(DGFreeAp);//先连接上wifi,再认证
-                } else { // 4. 未联网，没有DG-Free：跳转到wifi地图
-                    startActivity(WifiMapActivity.class, "", "", "", "");
-                }
-            } else if (wifiState == WifiState.CONNECTING_IPADDR) {
-                startActivity(WifiMapActivity.class, "", "", "", "");
-            } else {
-                //已连上wifi
-
-                // 3. 已经连上DG-Free的情况
-                if (isDGWifi()) {
-                    CheckAndLogon();
-                } else {
-                    updateConnectState(false);
-                }
-            }
-        }
     }
 
     @Override
