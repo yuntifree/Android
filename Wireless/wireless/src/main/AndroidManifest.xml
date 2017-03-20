@@ -187,7 +187,7 @@
             android:exported="true"
             android:process="com.yunxingzh.wifi.service" />
 
-        <!-- 通知栏用的广播-->
+        <!-- 通知栏用于提示有东莞wifi的广播-->
         <receiver android:name=".broadcast.NotificationReceiver"
             android:process="com.yunxingzh.wifi.service"
             />

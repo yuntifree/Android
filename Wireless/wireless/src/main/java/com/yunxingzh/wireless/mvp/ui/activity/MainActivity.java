@@ -287,7 +287,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void getAdvertSuccess(AdvertVo advertData) {
         boolean removeAd = false;
         if (advertData != null) {
-            if (!StringUtils.isExpired(advertData.expire)) {
+            if (!StringUtils.isExpired(advertData.expire)) {//没有过期
                 SPUtils.put(this, Constants.ADVERT_DATE, advertData.expire);
                 url = SPUtils.get(MainApplication.get(), Constants.ADVERT_URL, "");
 
@@ -301,12 +301,16 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     new DownLoadFile().execute(advertData.img);//下载图片
                 }
 
-                if (advertData.dst != null) {
+                if (advertData.dst != null) {//如果活动地址为空
                     if (!(advertData.dst.equals(url) && FileUtil.isFileExist(path))) {
                         SPUtils.put(MainApplication.get(), Constants.ADVERT_URL, advertData.dst);
                         SPUtils.put(MainApplication.get(), Constants.TITLE, advertData.title);
                         new DownLoadFile().execute(advertData.img);//下载图片
                     }
+                } else {
+                    SPUtils.put(MainApplication.get(), Constants.ADVERT_URL, "");
+                    SPUtils.put(MainApplication.get(), Constants.TITLE, advertData.title);
+                    new DownLoadFile().execute(advertData.img);//下载图片
                 }
             } else {
                 // 广告到期

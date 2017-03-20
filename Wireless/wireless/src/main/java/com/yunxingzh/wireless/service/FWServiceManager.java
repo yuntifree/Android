@@ -11,6 +11,7 @@ import android.os.SystemClock;
 
 import com.yunxingzh.wireless.broadcast.ShowNotificationReceiver;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.IConnectWorker;
 import com.yunxingzh.wireless.wifi.IWifiListener;
@@ -21,6 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class FWServiceManager {
@@ -37,7 +40,8 @@ public class FWServiceManager {
     private static int mDay = 0;
     private final static int MAX_NOTIFY_COUNT = 1;
     private static int mNotifyCount = 0;
-
+    private Timer timer;
+    private TimerTask task;
 
     private ArrayList<FWServiceCallback> mCallbacks = new ArrayList<FWServiceCallback>();
     private class FWServiceCallback implements Binder.DeathRecipient {
@@ -152,9 +156,17 @@ public class FWServiceManager {
         }
 
         @Override
-        public void onListChanged(List<AccessPoint> aps) {
-            mHandler.removeMessages(MSG_LIST_CHANGE);
-            mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_LIST_CHANGE, aps));
+        public void onListChanged(final List<AccessPoint> aps) {
+//            timer = new Timer();
+//            task = new TimerTask() {
+//                @Override
+//                public void run() {
+                    mHandler.removeMessages(MSG_LIST_CHANGE);
+                    mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_LIST_CHANGE, aps));
+                    LogUtils.e("lsd" , "sssssssssss"+aps.size());
+//                }
+//            };
+//            timer.schedule(task, 0, 5000 * 60 * 5);
         }
 
         @Override
@@ -218,7 +230,7 @@ public class FWServiceManager {
             // 判断通知栏
             for (AccessPoint ap : aps) {
                 if (ap.ssid.equals(Constants.SSID)) {
-                    //checkNotify(ap);
+                    checkNotify(ap);
                     break;
                 }
             }
@@ -251,7 +263,6 @@ public class FWServiceManager {
 
     /**
      * 发现指定WiFi时，判断通知栏逻辑
-     *
      */
     private void checkNotify(AccessPoint ap) {
         // 当前连接的不是指定ap

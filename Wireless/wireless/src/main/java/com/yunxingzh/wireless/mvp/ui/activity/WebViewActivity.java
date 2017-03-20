@@ -1,7 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -59,7 +57,6 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         mTitleReturnIv = findView(R.id.web_return_iv);
         mTitleReturnIv.setOnClickListener(this);
         myWebView = findView(R.id.webView);
-        myWebView.setBackgroundColor(Color.parseColor("#000000")); //ok 不会闪黑屏
         myProgressBar = findView(R.id.progress_bar);
         mWebLine = findView(R.id.web_line);
     }

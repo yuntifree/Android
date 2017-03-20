@@ -71,7 +71,7 @@ public class MainApplication extends Application {
         }
 
         sInst = this;
-        if (!AppConfig.DEV_MODEL) {//reless包无需监测
+        if (AppConfig.DEV_MODEL) {//reless包无需监测
             //监测内存泄漏
             if (LeakCanary.isInAnalyzerProcess(this)) {
                 // This process is dedicated to LeakCanary for heap analysis.

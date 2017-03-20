@@ -112,7 +112,7 @@ public class WelcomActivity extends BaseActivity {
                     if (!StringUtils.isExpired(expireDate)) {
                         imgPath = SPUtils.get(MainApplication.get(), Constants.ADVERT_IMG, "");
                         url = SPUtils.get(MainApplication.get(), Constants.ADVERT_URL, "");
-                        if (FileUtil.isFileExist(imgPath) && !StringUtils.isEmpty(url)) {
+                        if (!StringUtils.isEmpty(imgPath) && FileUtil.isFileExist(imgPath)) {
                             startActivity(AdvertActivity.class, Constants.ADVERT_URL, url, Constants.ADVERT_IMG, imgPath);
                         } else {
                             //本地没有直接跳首页
