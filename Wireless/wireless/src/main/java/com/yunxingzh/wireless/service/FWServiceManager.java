@@ -18,9 +18,7 @@ import com.yunxingzh.wireless.wifi.IWifiListener;
 import com.yunxingzh.wireless.wifi.WifiMachine;
 import com.yunxingzh.wireless.wifi.WifiState;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,17 +31,12 @@ public class FWServiceManager {
     private Context mContext;
 
     private WifiMachine mMachine;
+    private boolean isFirst = true;
 
     private final byte[] mLock = new byte[1];
 
-    // 通知栏
-    private static int mDay = 0;
-    private final static int MAX_NOTIFY_COUNT = 1;
-    private static int mNotifyCount = 0;
-    private Timer timer;
-    private TimerTask task;
-
     private ArrayList<FWServiceCallback> mCallbacks = new ArrayList<FWServiceCallback>();
+
     private class FWServiceCallback implements Binder.DeathRecipient {
 
         private IFWServiceCallback binder;
@@ -65,64 +58,62 @@ public class FWServiceManager {
         }
     }
 
-    public FWServiceManager(Context context){
+    public FWServiceManager(Context context) {
         this.mContext = context;
         this.mMachine = new WifiMachine(context);
         this.mMachine.registerWiFiListener(wifiListener);
-        // 格式化初始时间
-        mDay = getToday();
     }
 
-    public void dispose(){
+    public void dispose() {
         this.mMachine.unregisterWiFiListener(wifiListener);
         this.mMachine.release();
     }
 
-    public void connect(AccessPoint accessPoint){
+    public void connect(AccessPoint accessPoint) {
         this.mMachine.connect(accessPoint);
     }
 
-    public void disconnect(){
+    public void disconnect() {
         this.mMachine.disconnect();
     }
 
-    public void scan(){
+    public void scan() {
         this.mMachine.scan();
     }
 
-    public void checkState(){
+    public void checkState() {
         this.mMachine.checkState();
     }
 
-    public boolean setEnabled(boolean enable){
+    public boolean setEnabled(boolean enable) {
         return this.mMachine.setEnable(enable);
     }
 
-    public List<AccessPoint> getList(){
+    public List<AccessPoint> getList() {
         return this.mMachine.getList();
     }
 
-    public AccessPoint getCurrent(){
+    public AccessPoint getCurrent() {
         IConnectWorker worker = this.mMachine.getCurrentWorker();
-        if(worker != null){
+        if (worker != null) {
             return worker.getAccessPoint();
         }
         return null;
     }
 
-    public int getState(){
+    public int getState() {
         return this.mMachine.getState().ordinal();
     }
 
-    public boolean isEnabled(){
+    public boolean isEnabled() {
         return this.mMachine.isEnabled();
     }
 
-    public void ignore(String ssid){
+    public void ignore(String ssid) {
         this.mMachine.ignore(ssid);
     }
 
-    public void registerCallback(IFWServiceCallback callback){
+    public void registerCallback(IFWServiceCallback callback) {
         synchronized (mLock) {
             if (getCallback(callback) == null) {
                 mCallbacks.add(new FWServiceCallback(callback));
@@ -130,7 +121,7 @@ public class FWServiceManager {
         }
     }
 
-    public void unregisterCallback(IFWServiceCallback callback){
+    public void unregisterCallback(IFWServiceCallback callback) {
         synchronized (mLock) {
             mCallbacks.remove(callback);
         }
@@ -157,16 +148,22 @@ public class FWServiceManager {
 
         @Override
         public void onListChanged(final List<AccessPoint> aps) {
-//            timer = new Timer();
-//            task = new TimerTask() {
-//                @Override
-//                public void run() {
+            LogUtils.e("lsd", "lsd:");
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
                     mHandler.removeMessages(MSG_LIST_CHANGE);
                     mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_LIST_CHANGE, aps));
-                    LogUtils.e("lsd" , "sssssssssss"+aps.size());
-//                }
-//            };
-//            timer.schedule(task, 0, 5000 * 60 * 5);
+                    LogUtils.e("lsd", "onListChanged:" + aps.size());
+                }
+            };
+            if (isFirst) {//第一次进入应用直接通知，后续每5分钟通知一次
+                isFirst = false;
+                timer.schedule(task, 0, 1000 * 60 * 5);// 0s后执行task,经过**s再次执行
+            } else {
+                timer.schedule(task, 1000 * 60 * 5, 1000 * 60 * 5);// 0s后执行task,经过**s再次执行
+            }
         }
 
         @Override
@@ -206,7 +203,7 @@ public class FWServiceManager {
         }
     };
 
-    private void dispatchWiFiStateChanged(int new_state, int old_state){
+    private void dispatchWiFiStateChanged(int new_state, int old_state) {
         synchronized (mLock) {
             for (FWServiceCallback callback : mCallbacks) {
                 try {
@@ -218,7 +215,7 @@ public class FWServiceManager {
         }
     }
 
-    private void dispatchWiFiScaned(List<AccessPoint> aps){
+    private void dispatchWiFiScaned(List<AccessPoint> aps) {
         synchronized (mLock) {
             for (FWServiceCallback callback : mCallbacks) {
                 try {
@@ -237,7 +234,7 @@ public class FWServiceManager {
         }
     }
 
-    private void dispatchRSSIChanged(int rssi){
+    private void dispatchRSSIChanged(int rssi) {
         synchronized (mLock) {
             for (FWServiceCallback callback : mCallbacks) {
                 try {
@@ -249,7 +246,7 @@ public class FWServiceManager {
         }
     }
 
-    private void dispatchAuthError(AccessPoint ap){
+    private void dispatchAuthError(AccessPoint ap) {
         synchronized (mLock) {
             for (FWServiceCallback callback : mCallbacks) {
                 try {
@@ -268,40 +265,15 @@ public class FWServiceManager {
         // 当前连接的不是指定ap
         AccessPoint current = getCurrent();
         if (current == null || !current.ssid.equals(ap.ssid)) {
-            int day = getToday();
-            if (day > mDay) {
-                mDay = day;
-                mNotifyCount = 0;
-            }
-            mNotifyCount++;
-            if (mNotifyCount <= MAX_NOTIFY_COUNT) {
-                createInform();
-            } else {
-                // 防止持续++，导致溢出
-                mNotifyCount = MAX_NOTIFY_COUNT + 1;
-            }
+            createInform();
         }
-    }
-
-    /**
-     * 获取格式的日期
-     * @return yyyyMMdd
-     */
-    private int getToday() {
-        int ret = 0;
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-        try {
-            ret = Integer.parseInt(format.format(new Date()));
-        } catch (RuntimeException e) {
-        }
-        return ret;
     }
 
     /**
      * 创建通知栏
      */
     public void createInform() {
-        AlarmManager am = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(mContext, ShowNotificationReceiver.class);
         PendingIntent pendingIntent =
                 PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

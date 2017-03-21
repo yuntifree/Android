@@ -141,6 +141,9 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         /***
          * 顶部广告
          */
+        if (advertBannerVo != null && advertBannerVo.size() > 0) {//防止数据重复
+            advertBannerVo.clear();
+        }
         advertBannerVo = findList.banners;
         if (advertBannerVo != null) {
             int advertSize = advertBannerVo.size();
@@ -170,6 +173,9 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         /***
          * 精品推荐
          */
+        if (recommendsBannerVo != null && recommendsBannerVo.size() > 0) {//防止数据重复
+            recommendsBannerVo.clear();
+        }
         recommendsBannerVo = findList.recommends;
         if (recommendsBannerVo != null) {
             int recomSize = recommendsBannerVo.size();

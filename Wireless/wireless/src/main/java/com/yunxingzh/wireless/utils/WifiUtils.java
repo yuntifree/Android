@@ -5,6 +5,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 
 import java.util.List;
 
@@ -129,7 +130,7 @@ public class WifiUtils {
             if (wifi.networkId == wifiId) {
                 while (!(localWifiManager.enableNetwork(wifiId, true))) {//激活该Id，建立连接
                     //status:0--已经连接，1--不可连接，2--可以连接
-                    //  Log.i("ConnectWifi",String.valueOf(wifiConfigList.get(wifiId).status));
+                      Log.i("ConnectWifi",String.valueOf(wifiConfigList.get(wifiId).status));
                 }
                 return true;
             }

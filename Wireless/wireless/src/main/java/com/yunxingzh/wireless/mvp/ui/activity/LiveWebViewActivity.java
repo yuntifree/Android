@@ -142,16 +142,17 @@ public class LiveWebViewActivity extends BaseActivity implements View.OnClickLis
                         @Override
                         public void run() {
                             MobclickAgent.onEvent(LiveWebViewActivity.this, "stream_view_3min");
+                            LogUtils.e("lsd", "ssssss");
                         }
                     };
-                    timer.schedule(taskThree, 3000 * 60 * 3);//三分钟上报友盟
+                    timer.schedule(taskThree, 1000 * 60 * 3);//三分钟上报友盟
                     taskFive = new TimerTask() {
                         @Override
                         public void run() {
                             MobclickAgent.onEvent(LiveWebViewActivity.this, "stream_view_5min");
                         }
                     };
-                    timer.schedule(taskFive, 3000 * 60 * 5);//五分钟上报友盟
+                    timer.schedule(taskFive, 1000 * 60 * 5);//五分钟上报友盟
                 }
             }
         });

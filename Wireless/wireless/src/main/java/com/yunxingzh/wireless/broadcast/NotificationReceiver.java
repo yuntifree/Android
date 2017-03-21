@@ -4,10 +4,7 @@ package com.yunxingzh.wireless.broadcast;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
-import com.baidu.location.LLSInterface;
-import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mvp.ui.activity.MainActivity;
 import com.yunxingzh.wireless.utils.AppUtils;
 import com.yunxingzh.wireless.utils.LogUtils;
@@ -19,6 +16,7 @@ import com.yunxingzh.wireless.utils.LogUtils;
 public class NotificationReceiver extends BroadcastReceiver {
     private static final String TAG = "NotificationReceiver";
     private static final String UI_APPLICATION = "com.yunxingzh.wireless";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         //判断app进程是否存活
@@ -33,8 +31,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             //如果Task栈中有MainActivity的实例，就会把它移到栈顶，把在它之上的Activity都清理出栈，
             //如果Task栈不存在MainActivity实例，则在栈顶创建
             mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            Intent[] intents = {mainIntent};
-            context.startActivities(intents);
+            context.startActivity(mainIntent);
         } else {
             LogUtils.d(TAG, "~~Notify~~ out app start");
             //如果app进程已经被杀死，先重新启动app，将DetailActivity的启动参数传入Intent中，参数经过
