@@ -1,12 +1,8 @@
 package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,7 +28,6 @@ import android.widget.TextView;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.FWManager;
 import com.yunxingzh.wireless.R;
-import com.yunxingzh.wireless.broadcast.NotificationReceiver;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mview.CircleWaveView;
@@ -50,7 +45,7 @@ import com.yunxingzh.wireless.mvp.ui.activity.WifiSpiritedActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IWirelessView;
-import com.yunxingzh.wireless.utils.AppUtils;
+import com.yunxingzh.wireless.service.FWServiceManager;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
@@ -117,7 +112,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
     private boolean isValidate = false;//东莞wifi是否认证通过
     private boolean isCountTime = false;//true打开（start），false关闭（stop）
-    private NotificationReceiver notificationReceiver;
+    private AlertView alertView;
 
     @Nullable
     @Override
@@ -325,7 +320,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 if (wifiUtils.getWlanState()) {//是否打开wifi
                     checkDGWifi();
                 } else {//是否跳转系统设置的wifi列表？
-                    showDialog();
+                    showDialog("请打开WiFi", "去设置");
                 }
             } else if (mWeatherLay == v) {// 天气
                 if (weatherNewsData != null) {
@@ -394,13 +389,14 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         }
     }
 
-    public void showDialog() {
-        AlertView alertView = new AlertView("温馨提示", "请打开WiFi", "取消", new String[]{"去设置"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+    public void showDialog(String content, String query) {
+        alertView = new AlertView("温馨提示", content, "取消", new String[]{query}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
             @Override
             public void onItemClick(Object o, int position) {
                 if (position != AlertView.CANCELPOSITION) {
                     Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                     startActivity(intent);
+                    alertView.dismiss();
                 }
             }
         }).setOnDismissListener(new OnDismissListener() {
@@ -419,15 +415,18 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 recLen--;
                 mWirelessNumTv.setText(recLen + "");//倒计时数字
                 handler.postDelayed(this, 1000);
-            } else {
+            } else if (recLen == 1) {
                 countDown();
                 mConnectIv.setVisibility(View.VISIBLE);
+                recLen = 5;
                 mWirelessNumTv.setText(recLen + "");
                 isCountTime = false;
-                if (isAdded() && getActivity() != null && wifiState == WifiState.CONNECTING) {
-                    mConnectText.setText(R.string.has_dgwifi);
-                    ToastUtil.showMiddle(getActivity(), R.string.connect_time_out);
-                    recLen = 5;
+                if (isAdded() && getActivity() != null) {
+                    if (wifiState == WifiState.CONNECTING || wifiState == WifiState.IDLE) {
+                        mConnectText.setText(R.string.has_dgwifi);
+                        showDialog("连接失败，请手动在设置中连接", "去连接");
+                        MobclickAgent.onEvent(getActivity(), "connect_error");
+                    }
                 }
                 updateConnectState(false);
             }
@@ -460,11 +459,12 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         @Override
         public void onStateChanged(WifiState new_state, WifiState old_state) {
             if (new_state == WifiState.CONNECTING) { // 连接中
-                // if (isDGWifi()) {
-                countTime();//连接东莞wifi倒计时
-                // }
+                 if (isDGWifi()) {
+                    countTime();//连接东莞wifi倒计时
+                 }
             } else if (new_state == WifiState.CONNECTED) {  // 连上网
-                if (isDGWifi()) {
+                if (isAdded() && getActivity() != null && isDGWifi()) {
+                    FWServiceManager.createInform(getActivity(), Constants.VALIDATE_FLAG);//连上东莞wifi后创建通知栏进行wifi认证
                     CheckAndLogon();
                 } else {
                     updateConnectState(true);
@@ -662,21 +662,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             if (!NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
                 if (DGFreeAp != null) {//不为空表示周围有东莞wifi
                     FWManager.getInstance().connect(DGFreeAp);//先连接上wifi,再认证
-//                    WifiManager manager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
-//                    List<ScanResult> re = manager.getScanResults();
-//                    List<WifiConfiguration> wifiConfigurations = manager.getConfiguredNetworks();
-//                    String resultSsid = getDgWifiSSID(wifiConfigurations);
-//                    for (int i = 0; i < re.size(); i ++) {
-//                        String ssid = re.get(i).SSID;
-//                        if (ssid.equals(Constants.SSID)) {
-//                            int netid = 0;
-//                            if (resultSsid.equals(ssid)) {//地址相同
-//                                netid =  wifiConfigurations.get(i).networkId;
-//                            }
-//                            manager.enableNetwork(netid, true);
-//                            break;
-//                        }
-//                    }
                 } else { // 4. 未联网，没有DG-Free：跳转到wifi地图
                     startActivity(WifiMapActivity.class, "", "", "", "");
                 }
@@ -693,18 +678,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             }
         }
     }
-
-//    public String getDgWifiSSID(List<WifiConfiguration> wifiConfigurations){
-//        String resultSsid = "";
-//        for (int i = 0; i < wifiConfigurations.size(); i++) {
-//            String splitStr = wifiConfigurations.get(i).SSID;
-//            resultSsid = splitStr.replaceAll("\"", "");
-//            if (resultSsid.equals(Constants.SSID)) {
-//                return resultSsid;
-//            }
-//        }
-//        return "";
-//    }
 
     public boolean isDGWifi() {
         currentAp = FWManager.getInstance().getCurrent();
@@ -883,7 +856,11 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     @Override
     public void onResume() {
         super.onResume();
-        updateConnectState(false);
+        if (isDGWifi()) {
+            CheckAndLogon();
+        } else {
+            updateConnectState(false);
+        }
     }
 
 }

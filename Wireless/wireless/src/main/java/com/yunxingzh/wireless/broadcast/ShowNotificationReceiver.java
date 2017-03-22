@@ -26,12 +26,14 @@ public class ShowNotificationReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.
                 getBroadcast(context, 0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        String content = intent.getStringExtra("content");
+        String title = intent.getStringExtra("title");
         //创建一个通知
         //Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
         //            R.drawable.state_title_notice);
         Notification noti = new Notification.Builder(context)
-                .setContentTitle("发现东莞无限免费WiFi")
-                .setContentText("一键连接东莞无限~")
+                .setContentTitle(title)
+                .setContentText(content)
                 .setDefaults(Notification.DEFAULT_ALL)
                 //.setLargeIcon(icon)
                 .setSmallIcon(R.drawable.state_title_notice)

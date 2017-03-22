@@ -46,8 +46,9 @@ public class Constants {
     public static final int JOKE_ZAN_FLAG = 102;//段子点赞
     public static final int JOKE_CAI_FLAG = 103;//段子点踩
 
-    //0、网络正常，可以发起调用认证、下线等接口。1、已经认证成功。
-
+    //通知栏：0、发现东莞wifi 1、连接东莞wifi后认证
+    public static final int FIND_FLAG = 0;
+    public static final int VALIDATE_FLAG = 1;
 
     // -1:未知异常，0：无网络，1：无须认证的网络（可以上网），2：须要认证的网络
     public static final int UNKNOW_ERROR = -1;

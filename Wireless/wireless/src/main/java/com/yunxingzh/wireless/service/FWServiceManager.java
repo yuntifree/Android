@@ -32,6 +32,7 @@ public class FWServiceManager {
 
     private WifiMachine mMachine;
     private boolean isFirst = true;
+    private boolean isNotice = true;
 
     private final byte[] mLock = new byte[1];
 
@@ -265,16 +266,27 @@ public class FWServiceManager {
         // 当前连接的不是指定ap
         AccessPoint current = getCurrent();
         if (current == null || !current.ssid.equals(ap.ssid)) {
-            createInform();
+            createInform(mContext, Constants.FIND_FLAG);
         }
     }
 
     /**
      * 创建通知栏
      */
-    public void createInform() {
+    public static void createInform(Context mContext, int fromFlag) {
         AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(mContext, ShowNotificationReceiver.class);
+        String content;
+        String title;
+        if (fromFlag == Constants.FIND_FLAG) {
+            content = "一键连接东莞无限";
+            title = "发现东莞无限免费WiFi";
+        } else {
+            content = "点击回到APP认证，开始上网";
+            title = "连接成功!";
+        }
+        intent.putExtra("content",content);
+        intent.putExtra("title",title);
         PendingIntent pendingIntent =
                 PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         am.set(AlarmManager.ELAPSED_REALTIME, SystemClock.currentThreadTimeMillis(), pendingIntent);
