@@ -46,6 +46,7 @@ import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IWirelessView;
 import com.yunxingzh.wireless.service.FWServiceManager;
+import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
@@ -345,7 +346,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             } else if (mSpiritedIv == v) {//wifi共享
                 MobclickAgent.onEvent(getActivity(), "Index_share_wifi");
                 if (isDGWifi()) {
-                    ToastUtil.showMiddle(getActivity(),"您连接的是东莞无限免费WIFI，无需分享噢");
+                    ToastUtil.showMiddle(getActivity(), "您连接的是东莞无限免费WIFI，无需分享噢");
                 } else if (currentAp != null && !StringUtils.isEmpty(currentAp.ssid)) {
                     startActivity(WifiSpiritedActivity.class, "ssid", currentAp.ssid, "", "");
                 } else {
@@ -459,9 +460,9 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         @Override
         public void onStateChanged(WifiState new_state, WifiState old_state) {
             if (new_state == WifiState.CONNECTING) { // 连接中
-                 if (isDGWifi()) {
+                if (isDGWifi()) {
                     countTime();//连接东莞wifi倒计时
-                 }
+                }
             } else if (new_state == WifiState.CONNECTED) {  // 连上网
                 if (isAdded() && getActivity() != null && isDGWifi()) {
                     FWServiceManager.createInform(getActivity(), Constants.VALIDATE_FLAG);//连上东莞wifi后创建通知栏进行wifi认证
@@ -600,6 +601,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
     @Override
     public void wifiConnectFailed() {
+        isValidate = false;
         if (isAdded() && getActivity() != null) {
             ToastUtil.showMiddle(getActivity(), R.string.validate_faild);
         }
@@ -620,6 +622,12 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                     mConnectText.setText("已连接免费WiFi");
                     mDGFreeConnected = true;
                     lineViewVisible(true);
+                } else if (!isCountTime && !isValidate && isDGWifi()) {// 认证失败
+                    mWirelessConnectedBtnLay.setVisibility(View.GONE);
+                    mCenterCircleLay.setVisibility(View.VISIBLE);
+                    lineViewVisible(false);
+                    mConnectTv.setText("一键连接");
+                    mConnectText.setText(R.string.has_dgwifi);
                 }
             } else {//连接其他的wifi
                 lineViewVisible(false);
@@ -856,11 +864,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     @Override
     public void onResume() {
         super.onResume();
-        if (isDGWifi()) {
-            CheckAndLogon();
-        } else {
-            updateConnectState(false);
-        }
+        updateConnectState(false);
     }
 
 }

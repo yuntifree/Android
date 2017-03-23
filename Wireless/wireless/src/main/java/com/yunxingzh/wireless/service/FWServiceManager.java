@@ -12,6 +12,7 @@ import android.os.SystemClock;
 import com.yunxingzh.wireless.broadcast.ShowNotificationReceiver;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.utils.LogUtils;
+import com.yunxingzh.wireless.utils.StringUtils;
 import com.yunxingzh.wireless.wifi.AccessPoint;
 import com.yunxingzh.wireless.wifi.IConnectWorker;
 import com.yunxingzh.wireless.wifi.IWifiListener;
@@ -19,9 +20,8 @@ import com.yunxingzh.wireless.wifi.WifiMachine;
 import com.yunxingzh.wireless.wifi.WifiState;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class FWServiceManager {
@@ -32,7 +32,7 @@ public class FWServiceManager {
 
     private WifiMachine mMachine;
     private boolean isFirst = true;
-    private boolean isNotice = true;
+    private Date startDate;
 
     private final byte[] mLock = new byte[1];
 
@@ -149,22 +149,8 @@ public class FWServiceManager {
 
         @Override
         public void onListChanged(final List<AccessPoint> aps) {
-            LogUtils.e("lsd", "lsd:");
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-                    mHandler.removeMessages(MSG_LIST_CHANGE);
-                    mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_LIST_CHANGE, aps));
-                    LogUtils.e("lsd", "onListChanged:" + aps.size());
-                }
-            };
-            if (isFirst) {//第一次进入应用直接通知，后续每5分钟通知一次
-                isFirst = false;
-                timer.schedule(task, 0, 1000 * 60 * 5);// 0s后执行task,经过**s再次执行
-            } else {
-                timer.schedule(task, 1000 * 60 * 5, 1000 * 60 * 5);// 0s后执行task,经过**s再次执行
-            }
+            mHandler.removeMessages(MSG_LIST_CHANGE);
+            mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_LIST_CHANGE, aps));
         }
 
         @Override
@@ -225,6 +211,7 @@ public class FWServiceManager {
                     e.printStackTrace();
                 }
             }
+
             // 判断通知栏
             for (AccessPoint ap : aps) {
                 if (ap.ssid.equals(Constants.SSID)) {
@@ -232,6 +219,7 @@ public class FWServiceManager {
                     break;
                 }
             }
+
         }
     }
 
@@ -263,10 +251,27 @@ public class FWServiceManager {
      * 发现指定WiFi时，判断通知栏逻辑
      */
     private void checkNotify(AccessPoint ap) {
-        // 当前连接的不是指定ap
+        if (startDate == null) {//开始时间
+            startDate = new Date();
+        }
+        // 当前连接的不是指定ap(如果屏幕休眠不会进行wifi扫描,屏幕亮后在间隔时间内恢复正常推送)
         AccessPoint current = getCurrent();
         if (current == null || !current.ssid.equals(ap.ssid)) {
-            createInform(mContext, Constants.FIND_FLAG);
+            if (isFirst) {
+                isFirst = false;
+                LogUtils.e("lsd", "isFirst:");
+                createInform(mContext, Constants.FIND_FLAG);
+            } else {
+                int btwDate = StringUtils.minDistance(startDate, new Date());
+                if (btwDate == 1) {//间隔5分钟
+                    createInform(mContext, Constants.FIND_FLAG);
+                    startDate = null;
+                    LogUtils.e("lsd", "date:" + btwDate);
+                } else if (btwDate >= 1) {
+                    startDate = null;
+                }
+            }
+            LogUtils.e("lsd", "outside:");
         }
     }
 
@@ -285,8 +290,8 @@ public class FWServiceManager {
             content = "点击回到APP认证，开始上网";
             title = "连接成功!";
         }
-        intent.putExtra("content",content);
-        intent.putExtra("title",title);
+        intent.putExtra("content", content);
+        intent.putExtra("title", title);
         PendingIntent pendingIntent =
                 PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         am.set(AlarmManager.ELAPSED_REALTIME, SystemClock.currentThreadTimeMillis(), pendingIntent);
