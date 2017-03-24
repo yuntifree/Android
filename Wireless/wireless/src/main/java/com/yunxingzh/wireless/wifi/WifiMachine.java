@@ -449,7 +449,7 @@ public class WifiMachine {
     }
 
     private void systemListChanged(List<ScanResult> scanResults){
-//        LogUtils.d(TAG, "systemListChanged");
+        LogUtils.d("lsd", "systemListChanged");
         mAccessPoints.clear();
         if(scanResults != null){
             for(ScanResult scanResult : scanResults){

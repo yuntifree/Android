@@ -149,6 +149,7 @@ public class FWServiceManager {
 
         @Override
         public void onListChanged(final List<AccessPoint> aps) {
+            LogUtils.e("lsd", "notice1");
             mHandler.removeMessages(MSG_LIST_CHANGE);
             mHandler.sendMessageAtFrontOfQueue(mHandler.obtainMessage(MSG_LIST_CHANGE, aps));
         }
@@ -203,6 +204,7 @@ public class FWServiceManager {
     }
 
     private void dispatchWiFiScaned(List<AccessPoint> aps) {
+        LogUtils.e("lsd", "notice2");
         synchronized (mLock) {
             for (FWServiceCallback callback : mCallbacks) {
                 try {
@@ -215,7 +217,8 @@ public class FWServiceManager {
             // 判断通知栏
             for (AccessPoint ap : aps) {
                 if (ap.ssid.equals(Constants.SSID)) {
-                    checkNotify(ap);
+                    LogUtils.e("lsd", "notice3");
+                    //checkNotify(ap);
                     break;
                 }
             }
@@ -251,10 +254,14 @@ public class FWServiceManager {
      * 发现指定WiFi时，判断通知栏逻辑
      */
     private void checkNotify(AccessPoint ap) {
+        LogUtils.e("lsd", "notice4");
         if (startDate == null) {//开始时间
             startDate = new Date();
         }
-        // 当前连接的不是指定ap(如果屏幕休眠不会进行wifi扫描,屏幕亮后在间隔时间内恢复正常推送)
+        // 当前连接的不是指定ap(
+        // 1.如果屏幕休眠不会进行wifi扫描,
+        // 2.屏幕亮后在间隔时间内恢复正常推送
+        // 3.连接东莞wifi切换至其他秒推)
         AccessPoint current = getCurrent();
         if (current == null || !current.ssid.equals(ap.ssid)) {
             if (isFirst) {

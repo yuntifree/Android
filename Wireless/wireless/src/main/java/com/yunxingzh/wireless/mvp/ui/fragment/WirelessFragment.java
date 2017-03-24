@@ -465,7 +465,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 }
             } else if (new_state == WifiState.CONNECTED) {  // 连上网
                 if (isAdded() && getActivity() != null && isDGWifi()) {
-                    FWServiceManager.createInform(getActivity(), Constants.VALIDATE_FLAG);//连上东莞wifi后创建通知栏进行wifi认证
+                   // FWServiceManager.createInform(getActivity(), Constants.VALIDATE_FLAG);//连上东莞wifi后创建通知栏进行wifi认证
                     CheckAndLogon();
                 } else {
                     updateConnectState(true);

@@ -80,6 +80,7 @@ public class MainApplication extends Application {
             }
             LeakCanary.install(this);
         }
+        //开启wifi状态监控服务
         if (isUIApplication(this)) {
             try {
                 startService(new Intent(this, FWService.class));
