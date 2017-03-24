@@ -72,10 +72,10 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     private static final int HEAD_IMG_URL = 10;//选择默认头像requestCode
 
     private ImageView mTitleReturnIv;
-    private TextView mTitleNameTv, mMineNameTv, mMineCountTv, mMineMoneyTv;
+    private TextView mTitleNameTv, mMineNameTv, mMineContentTv;
     private CircleImageView mMineHeadIv;
     private IMinePresenter iMinePresenter;
-    private LinearLayout mMineFeedBackLay, mMineSetLay;
+    private LinearLayout mMineFeedBackLay, mMineSetLay, mMinePhoneLay;
 
     private String filePath;//相册选择的图片路径
     private ImageTokenVo imageTokenVo;
@@ -105,8 +105,9 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
         mMineSetLay.setOnClickListener(this);
         mMineNameTv = findView(view, R.id.mine_name_tv);
         mMineNameTv.setOnClickListener(this);
-        mMineCountTv = findView(view, R.id.mine_count_tv);
-        mMineMoneyTv = findView(view, R.id.mine_money_tv);
+        mMineContentTv = findView(view, R.id.mine_content_tv);
+        mMinePhoneLay = findView(view, R.id.mine_phone_lay);
+        mMinePhoneLay.setOnClickListener(this);
     }
 
     public void initData() {
@@ -170,6 +171,9 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
                         startActivity(NickNameActivity.class, "");
                     }
                 }
+            } else if (mMinePhoneLay == v) {//客服热线
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:0769-21660569"));
+                startActivity(intent);
             }
         }
     }
@@ -193,8 +197,7 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
             MainApplication.get().setNick(userInfoVo.nickname);
             MainApplication.get().setHeadUrl(userInfoVo.headurl);
             EventBus.getDefault().post(new MineHeadImg(Constants.USER_MINE_FLAG, "", userInfoVo));
-            mMineCountTv.setText(mMineCountTv.getText().toString() + userInfoVo.total + "次，");
-            mMineMoneyTv.setText(mMineMoneyTv.getText().toString() + userInfoVo.save + "元");
+            mMineContentTv.setText(userInfoVo.tip.toString());
         }
     }
 

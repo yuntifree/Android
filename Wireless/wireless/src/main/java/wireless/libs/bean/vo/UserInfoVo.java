@@ -11,4 +11,5 @@ public class UserInfoVo implements Serializable {
     public String nickname;
     public int total;
     public int save;
+    public String tip;
 }
