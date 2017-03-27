@@ -243,6 +243,8 @@ public class MainApplication extends Application {
     public void loginOut() {
         MainApplication.sInst.setToken("");
         MainApplication.sInst.setUser(null);
+        MainApplication.sInst.setPrivdata("");
+        MainApplication.sInst.setExpire("");
     }
 
     public static boolean isUIApplication(Context context) {

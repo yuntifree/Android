@@ -152,6 +152,17 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/switch_phone_tv"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@drawable/listview_selector"
+        android:text="切换号码"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/blue_009CFB"
+        android:gravity="center"
+        android:textSize="16sp"/>
+
+    <TextView
         android:id="@+id/set_use_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

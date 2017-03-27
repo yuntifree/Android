@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,8 +16,11 @@ import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.BuildConfig;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.CheckUpdateDialog;
 import com.yunxingzh.wireless.mview.StatusBarColor;
+import com.yunxingzh.wireless.mview.alertdialog.AlertView;
+import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mview.loading.ACProgressConstant;
 import com.yunxingzh.wireless.mview.loading.ACProgressFlower;
 import com.yunxingzh.wireless.mvp.presenter.IGetAdvertPresenter;
@@ -38,12 +42,13 @@ import wireless.libs.bean.vo.UpdateVo;
 public class SetActivity extends BaseActivity implements View.OnClickListener, IGetAdvertView {
 
     private ImageView mTitleReturnIv;
-    private TextView mTitleNameTv, mSetCacheSizeTv, mSetUseTv, mSetVersionTv, mSetUpdateNumTv;
+    private TextView mTitleNameTv, mSetCacheSizeTv, mSetUseTv, mSetVersionTv, mSetUpdateNumTv, mSwitchPhoneTv;
     private LinearLayout mSetCleanLay, mSetAboutLay, mSetUpdateLay;
     private ACProgressFlower acProgressPie;
     private IGetAdvertPresenter iGetAdvertPresenter;
     private CheckUpdateDialog checkUpdateDialog;
     private UpdateVo data;
+    private AlertView alertView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +74,8 @@ public class SetActivity extends BaseActivity implements View.OnClickListener, I
         mSetUpdateLay = findView(R.id.set_update_lay);
         mSetUpdateLay.setOnClickListener(this);
         mSetUpdateNumTv = findView(R.id.set_update_num_tv);
+        mSwitchPhoneTv = findView(R.id.switch_phone_tv);
+        mSwitchPhoneTv.setOnClickListener(this);
     }
 
     public void initData() {
@@ -122,6 +129,25 @@ public class SetActivity extends BaseActivity implements View.OnClickListener, I
             } else {
                 ToastUtil.showMiddle(this, "当前已是最新版本");
             }
+        } else if (mSwitchPhoneTv == v) {//切换号码
+            alertView = new AlertView("温馨提示", "确定切换？", "取消", new String[]{"确定"}, null, this, AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                @Override
+                public void onItemClick(Object o, int position) {
+                    if (position != AlertView.CANCELPOSITION) {
+                        MainApplication.get().loginOut();
+                        Constants.FRAGMENT = Constants.WIRELESS_FLAG;//回到首页
+                        Intent intent = new Intent(SetActivity.this,RegisterActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        alertView.dismiss();
+                    }
+                }
+            }).setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onDismiss(Object o) {
+                }
+            });
+            alertView.show();
         }
     }
 

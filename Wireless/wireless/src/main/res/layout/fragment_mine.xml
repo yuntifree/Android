@@ -29,16 +29,16 @@
                 android:id="@+id/mine_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_marginTop="8dp"
                 android:drawableLeft="@drawable/ico_write"
                 android:drawablePadding="3dp"
+                android:layout_marginTop="5dp"
                 android:maxLines="1"
                 android:paddingRight="20dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="东莞无限"
                 android:textColor="@color/white"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -117,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="55dp"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/my_ico_problem"
+                android:drawableLeft="@drawable/my_ico_call"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
