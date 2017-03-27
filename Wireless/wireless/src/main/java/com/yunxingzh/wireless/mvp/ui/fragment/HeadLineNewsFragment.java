@@ -8,12 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.EventBusType;
+import com.yunxingzh.wireless.mview.BackToTopView;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IHeadLinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
@@ -62,10 +64,11 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     private boolean isFastClick = true;
     //友盟统计下拉刷新
     private int countUmeng = 0;
-
+    private BackToTopView mBackTopIv;
 
     private int newsTypes;
     private boolean firstLoad = true;
+    private FrameLayout mNewsListLay;
 
     public static HeadLineNewsFragment getInstance(int type) {
         HeadLineNewsFragment headLineNewsFragment = new HeadLineNewsFragment();
@@ -90,6 +93,10 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         mMainNewsRv.addItemDecoration(new SpacesItemDecoration(1));
         swipeRefreshLayout.setOnRefreshListener(this);
         mNetErrorLay = findView(view, R.id.net_error_lay);
+        mNewsListLay = findView(view, R.id.news_list_lay);
+
+        mBackTopIv = findView(view, R.id.back_top_iv);
+        mBackTopIv.setRecyclerView(mMainNewsRv, Constants.MY_PAGE_SIZE / 6);
 
         // RecyclerView.canScrollVertically(1)的值表示是否能向上滚动，false表示已经滚动到底部
         // RecyclerView.canScrollVertically(-1)的值表示是否能向下滚动，false表示已经滚动到顶部
@@ -176,7 +183,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         }
         if (isAdded() && getActivity() != null) {
             if (!NetUtils.isNetworkAvailable(getActivity())) {
-                swipeRefreshLayout.setVisibility(View.GONE);
+                mNewsListLay.setVisibility(View.GONE);
                 netErrorLayout = new NetErrorLayout(getActivity());
                 netErrorLayout.setOnNetErrorClickListener(this);
                 mNetErrorLay.setVisibility(View.VISIBLE);
@@ -257,14 +264,14 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
             ToastUtil.showMiddle(getActivity(), R.string.net_error);
 
             if (netErrorLayout == null) {
-                swipeRefreshLayout.setVisibility(View.GONE);
+                mNewsListLay.setVisibility(View.GONE);
                 netErrorLayout = new NetErrorLayout(getActivity());
                 netErrorLayout.setOnNetErrorClickListener(this);
                 mNetErrorLay.setVisibility(View.VISIBLE);
                 View netErrorView = netErrorLayout.netErrorLay(0);
                 mNetErrorLay.addView(netErrorView);
             } else {
-                swipeRefreshLayout.setVisibility(View.GONE);
+                mNewsListLay.setVisibility(View.GONE);
                 mNetErrorLay.setVisibility(View.VISIBLE);
             }
         }
@@ -291,7 +298,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
                 ToastUtil.showMiddle(getActivity(), R.string.net_set);
             } else {
                 mNetErrorLay.setVisibility(View.GONE);
-                swipeRefreshLayout.setVisibility(View.VISIBLE);
+                mNewsListLay.setVisibility(View.VISIBLE);
                 iHeadLinePresenter.getHeadLine(newsTypes, HEAD_LINE_SEQ);
             }
         }

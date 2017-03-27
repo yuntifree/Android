@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.MainApplication;
+import com.yunxingzh.wireless.mview.BackToTopView;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
 import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
@@ -68,6 +70,8 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private NetErrorLayout netErrorLayout;
     private int itemId;
     private int countUmeng = 0;
+    private FrameLayout mVideoListLay;
+    private BackToTopView mBackTopIv;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -86,6 +90,10 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         mSwipeRefreshLay = findView(view, R.id.swipe_refresh_news);
         mSwipeRefreshLay.setOnRefreshListener(this);
         mNetErrorLay = findView(view, R.id.net_error_lay);
+        mVideoListLay = findView(view, R.id.video_list_lay);
+
+        mBackTopIv = findView(view, R.id.back_top_iv);
+        mBackTopIv.setRecyclerView(mListRv, Constants.MY_PAGE_SIZE / 6);
     }
 
     public void initData() {
@@ -102,7 +110,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
             }
             if (!NetUtils.isNetworkAvailable(getActivity())) {
-                mSwipeRefreshLay.setVisibility(View.GONE);
+                mVideoListLay.setVisibility(View.GONE);
                 netErrorLayout = new NetErrorLayout(getActivity());
                 netErrorLayout.setOnNetErrorClickListener(this);
                 mNetErrorLay.setVisibility(View.VISIBLE);
@@ -200,14 +208,14 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             ToastUtil.showMiddle(getActivity(), R.string.net_error);
 
             if (netErrorLayout == null) {
-                mSwipeRefreshLay.setVisibility(View.GONE);
+                mVideoListLay.setVisibility(View.GONE);
                 netErrorLayout = new NetErrorLayout(getActivity());
                 netErrorLayout.setOnNetErrorClickListener(this);
                 mNetErrorLay.setVisibility(View.VISIBLE);
                 View netErrorView = netErrorLayout.netErrorLay(0);
                 mNetErrorLay.addView(netErrorView);
             } else {
-                mSwipeRefreshLay.setVisibility(View.GONE);
+                mVideoListLay.setVisibility(View.GONE);
                 mNetErrorLay.setVisibility(View.VISIBLE);
             }
         }
@@ -234,7 +242,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 ToastUtil.showMiddle(getActivity(), R.string.net_set);
             } else {
                 mNetErrorLay.setVisibility(View.GONE);
-                mSwipeRefreshLay.setVisibility(View.VISIBLE);
+                mVideoListLay.setVisibility(View.VISIBLE);
                 isFirstRefresh = true;
                 iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
             }

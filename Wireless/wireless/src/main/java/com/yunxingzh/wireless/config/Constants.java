@@ -23,6 +23,7 @@ public class Constants {
 
     public static final int ITEM_HEIGHT = 10;//recylerview的item间隔
     public static final int PAGE_SIZE = 5;
+    public static final int MY_PAGE_SIZE = 18;
     public static final String VIDEO_URL = "video_url";
     public static final String URL = "url";
     public static final String TITLE = "title";
