@@ -14,12 +14,13 @@
             android:id="@+id/swipe_refresh_news"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp">
+            android:layout_margin="10dp">
 
             <ListView
                 android:id="@+id/video_lv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:dividerHeight="10dp"
                 android:scrollbars="none"/>
 
         </android.support.v4.widget.SwipeRefreshLayout>

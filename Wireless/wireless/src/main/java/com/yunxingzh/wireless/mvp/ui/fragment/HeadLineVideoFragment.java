@@ -2,6 +2,8 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,15 +37,18 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
 import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wireless.utils.NetUtils;
+import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import wireless.libs.bean.resp.HotInfoList;
 import wireless.libs.bean.vo.HotInfo;
+import wireless.libs.bean.vo.User;
 
 /**
  * Created by stephon_ on 2016/11/2.
@@ -76,6 +81,9 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private FrameLayout mVideoListLay;
     private BackToTopView mBackTopIv;
     private View headerView;
+    private TextView headerViewTitle;
+    private ImageView headerViewImg;
+    private boolean isFirstLoad = true;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -86,17 +94,28 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     public void initView(View view) {
         mListLv = findView(view, R.id.video_lv);
-
         mSwipeRefreshLay = findView(view, R.id.swipe_refresh_news);
         mSwipeRefreshLay.setOnRefreshListener(this);
         mNetErrorLay = findView(view, R.id.net_error_lay);
         mVideoListLay = findView(view, R.id.video_list_lay);
 
         mBackTopIv = findView(view, R.id.back_top_iv);
+
+        if (isAdded() && getActivity() != null) {
+            headerView = View.inflate(getActivity(), R.layout.list_item_videos, null);
+            ImageView playIv = (ImageView) headerView.findViewById(R.id.video_play);
+            playIv.setVisibility(View.INVISIBLE);
+            TextView timeTv = (TextView) headerView.findViewById(R.id.video_time);
+            timeTv.setVisibility(View.INVISIBLE);
+            TextView countTv = (TextView) headerView.findViewById(R.id.video_play_count);
+            countTv.setVisibility(View.INVISIBLE);
+
+            headerViewTitle = (TextView) headerView.findViewById(R.id.video_title);
+            headerViewImg = (ImageView) headerView.findViewById(R.id.video_img);
+        }
     }
 
     public void initData() {
-        headerView = getHeaderView();
         mListLv.setOnScrollListener(scrollViewListener);
         mListLv.addHeaderView(headerView);
         mBackTopIv.setListView(mListLv, Constants.MY_PAGE_SIZE / 6, scrollViewListener);
@@ -105,7 +124,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (newsVo != null) {
                     final HotInfo hotInfo = (HotInfo) parent.getAdapter().getItem(position);//添加header之后需要这样获取当前点击的item
-                    if (isAdded() && getActivity() != null && itemId != hotInfo.id) {
+                    if (isAdded() && getActivity() != null && hotInfo != null && itemId != hotInfo.id) {
                         countUmeng++;
                         if (countUmeng == 3) {
                             MobclickAgent.onEvent(getActivity(), "video_triple_view");
@@ -162,10 +181,9 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             count = true;
             item.play++;
         }
-//        View currentView = mListLv.getChildAt(position);
-//        if (currentView != null) {
-//            currentView.invalidate();//刷新view
-//        }
+        if (headLineVideoAdapter != null) {
+            headLineVideoAdapter.notifyDataSetChanged();
+        }
         iWirelessPresenter.clickCount(item.id, CLICK_COUNT, "");//上报
         startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, item.dst);
     }
@@ -174,23 +192,49 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     public void getHeadLineSuccess(HotInfoList newsVoList) {
         mSwipeRefreshLay.setRefreshing(false);
         isFastClick = true;
-        if (newsVoList != null) {
-            infoList = newsVoList;
-
-            if (newsVo == null) {
-                newsVo = new ArrayList<HotInfo>();
-            }
-
-            if (infoList.infos != null) {
-                newsVo.addAll(infoList.infos);
-                if (isAdded() && getActivity() != null && headLineVideoAdapter == null) {
-                    headLineVideoAdapter = new HeadLineVideoAdapter(getActivity(), newsVo);
-                    mListLv.setAdapter(headLineVideoAdapter);
+        if (isAdded() && getActivity() != null) {
+            if (newsVoList != null) {
+                infoList = newsVoList;
+                if (newsVo == null) {
+                    newsVo = new ArrayList<HotInfo>();
                 }
-                headLineVideoAdapter.notifyDataSetChanged();
-            } else {
-                if (isAdded() && getActivity() != null) {
+
+                if (infoList.infos != null) {
+                    newsVo.addAll(infoList.infos);
+                    if (isAdded() && getActivity() != null && headLineVideoAdapter == null) {
+                        headLineVideoAdapter = new HeadLineVideoAdapter(getActivity(), newsVo);
+                        mListLv.setAdapter(headLineVideoAdapter);
+                    }
+                    headLineVideoAdapter.notifyDataSetChanged();
+                } else {
                     ToastUtil.showMiddle(getActivity(), R.string.no_resource);
+                }
+
+                if (isFirstLoad) {//如果第一次进来就为空则隐藏headerview
+                    isFirstLoad = false;
+                    if (newsVoList.top == null) {
+                        mListLv.removeHeaderView(headerView);
+                    }
+                }
+
+                if (infoList.top != null) {
+                    SPUtils.putObject(getActivity(), "headViewData", infoList.top);
+                    final HotInfoList.TopVo topVo = (HotInfoList.TopVo) SPUtils.getObject(getActivity(), "headViewData");
+                    if (topVo != null) {
+                        headerViewTitle.setText(topVo.title);
+                        Glide.with(getActivity()).load(topVo.img).placeholder(R.drawable.img_default).into(headerViewImg);
+                    }
+                    headerView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (MainApplication.get() != null && MainApplication.get().getUser() != null) {
+                                if (topVo != null) {
+                                    User user = MainApplication.get().getUser();
+                                    startActivity(WebViewActivity.class, Constants.URL, topVo.dst + "?uid=" + user.uid + "&token=" + user.token);
+                                }
+                            }
+                        }
+                    });
                 }
             }
         }
@@ -237,19 +281,6 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
             }
         }
-    }
-
-    private View getHeaderView() {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_videos, null, false);
-        TextView title = (TextView) view.findViewById(R.id.video_title);
-        ImageView img = (ImageView) view.findViewById(R.id.video_img);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(WebViewActivity.class, Constants.URL, "http://wx.yunxingzh.com/app/video.html?uid=137&token=6ba9ac5a422d4473b337d57376dd3488");
-            }
-        });
-        return view;
     }
 
     private View emptyView(ViewGroup viewGroup) {
@@ -337,4 +368,5 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
         }
     };
+
 }

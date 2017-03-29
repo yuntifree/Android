@@ -14,7 +14,7 @@ public class HotInfoList implements Serializable {
     public List<HotInfo> infos;
     public int hasmore;
 
-    public class TopVo {
+    public class TopVo implements Serializable {
         public String title;
         public String dst;
         public String img;

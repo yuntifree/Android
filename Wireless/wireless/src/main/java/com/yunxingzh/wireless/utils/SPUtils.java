@@ -2,11 +2,14 @@ package com.yunxingzh.wireless.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
 
 import com.yunxingzh.wireless.config.MainApplication;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -69,6 +72,71 @@ public class SPUtils {
         return null;
 
     }
+
+    public static void saveObject(Context context, String name, Object sod){
+        FileOutputStream fos = null;
+        ObjectOutputStream oos = null;
+        try {
+            fos = context.openFileOutput(name, Context.MODE_PRIVATE);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(sod);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //这里是保存文件产生异常
+        } finally {
+            if (fos != null){
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    //fos流关闭异常
+                    e.printStackTrace();
+                }
+            }
+            if (oos != null){
+                try {
+                    oos.close();
+                } catch (IOException e) {
+                    //oos流关闭异常
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static Object getObjects(Context context, String name){
+        FileInputStream fis = null;
+        ObjectInputStream ois = null;
+        try {
+            fis = context.openFileInput(name);
+            ois = new ObjectInputStream(fis);
+            Object o = ois.readObject();
+            return o;
+        } catch (Exception e) {
+            e.printStackTrace();
+            //这里是读取文件产生异常
+        } finally {
+            if (fis != null){
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    //fis流关闭异常
+                    e.printStackTrace();
+                }
+            }
+            if (ois != null){
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    //ois流关闭异常
+                    e.printStackTrace();
+                }
+            }
+        }
+        //读取产生异常，返回null
+        return null;
+    }
+
+
 
     /**
      * desc:将16进制的数据转为数组

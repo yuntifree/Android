@@ -1,12 +1,13 @@
 package wireless.libs.bean.vo;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by hzg on 16/12/6.
  */
 
-public class HotInfo {
+public class HotInfo implements Serializable {
 
     public int id;//新闻/视频id
     public int seq;//分页用
