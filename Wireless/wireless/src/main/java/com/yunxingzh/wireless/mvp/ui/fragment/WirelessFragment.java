@@ -11,6 +11,7 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -564,7 +565,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                         updateConnectState(true);
                         break;
                     case Constants.NEED_VALIDATE://2：须要认证的网络
-                        if (iWirelessPresenter != null && isAdded() && getActivity() != null) {
+                        if (isAdded() && getActivity() != null && iWirelessPresenter != null) {
                             String wlanacname = SPUtils.get(getActivity(), "wlanacname", "");
                             String wlanuserip = SPUtils.get(getActivity(), "wlanuserip", "");
                             String wlanacip = SPUtils.get(getActivity(), "wlanacip", "");

@@ -90,8 +90,8 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
 
     public void initData() {
         headLineLiveAdapter = new HeadLineLiveAdapter(new ArrayList<LiveVo>());
-        headLineLiveAdapter.openLoadMore(Constants.PAGE_SIZE);
-        headLineLiveAdapter.setOnLoadMoreListener(this);
+        //headLineLiveAdapter.openLoadMore(Constants.PAGE_SIZE);
+        headLineLiveAdapter.setOnLoadMoreListener(this,mListRv);
         // headLineLiveAdapter.setEmptyView(emptyView(mListRv));
         mListRv.setAdapter(headLineLiveAdapter);
 
@@ -147,7 +147,7 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
                 }
             } else {
                 // 数据全部加载完毕就调用 loadComplete
-                headLineLiveAdapter.loadComplete();
+                headLineLiveAdapter.loadMoreComplete();
                 if (isAdded() && getActivity() != null) {
                     ToastUtil.showMiddle(getActivity(), R.string.no_resource);
                 }

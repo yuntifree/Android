@@ -168,7 +168,9 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
     @Override
     public void onRefresh() {
         iHeadLinePresenter.getJokes(0);
-        jokeVos.clear();
+        if (jokeVos != null && jokeVos.size() > 0) {
+            jokeVos.clear();
+        }
     }
 
     @Subscribe

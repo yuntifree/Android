@@ -82,120 +82,136 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
             int width = wm.getDefaultDisplay().getWidth();//720,1536
             int height = wm.getDefaultDisplay().getHeight();//1280,2560
 
-            for (int i = 0; i < maleVos.size(); i++) {
-                LinearLayout maleItems = new LinearLayout(this);
-                maleItems.setOrientation(LinearLayout.VERTICAL);
+            int size = maleVos.size();
+            int num = ((size % 3) > 0) ? 1 : 0;
+            int lines = size / 3 + num;//得到行数
 
-                ImageView headImg = new ImageView(this);
-                Glide.with(this).load(maleVos.get(i).headurl).into(headImg);
+            for (int i = 0; i < lines; i++) {//遍历行数
+                LinearLayout lineLay = new LinearLayout(this);//每一行的容器
+                for (int j = 0; j < 3; j++) {
+                    LinearLayout maleItems = new LinearLayout(this);
+                    maleItems.setOrientation(LinearLayout.VERTICAL);
+                    int positon = i * 3 + j;//得到item当前position
+                    if (positon >= size) {//一行不足3个时填充空view
+                        TextView nullView = new TextView(this);
+                        maleItems.addView(nullView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
+                        lineLay.addView(maleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                    } else {
+                        ImageView headImg = new ImageView(this);
+                        Glide.with(this).load(maleVos.get(positon).headurl).into(headImg);
 
-                TextView name = new TextView(this);
-                name.setTextColor(getResources().getColor(R.color.gray_aaaaaa));
-                name.setTextSize(12);
-                name.setText(maleVos.get(i).desc);
+                        TextView name = new TextView(this);
+                        name.setTextColor(getResources().getColor(R.color.gray_aaaaaa));
+                        name.setTextSize(12);
+                        name.setText(maleVos.get(positon).desc);
 
-                TextView age = new TextView(this);
-                age.setTextColor(getResources().getColor(R.color.gray_aaaaaa));
-                age.setTextSize(10);
-                age.setText(maleVos.get(i).age);
-
-                if (width <= 720 && height <= 1280) {
-                    maleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 130, 130, 0, 0, 0, 0));
-                } else {
-                    maleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 220, 220, 0, 0, 0, 0));
-                }
-                maleItems.addView(name, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
-                maleItems.addView(age, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
-
-                maleItems.setTag(maleVos.get(i));
-                maleItems.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AppUtils.animation(v);
-                        DefHeadMaleVo maleVo = (DefHeadMaleVo) v.getTag();
-                        //友盟上报
-                        switch (maleVo.desc) {
-                            case "小正太":
-                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_1");
-                                break;
-                            case "假小子":
-                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_2");
-                                break;
-                            case "型男范":
-                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_3");
-                                break;
+                        if (width <= 720 && height <= 1280) {
+                            maleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 130, 130, 0, 0, 0, 0));
+                        } else {
+                            maleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 220, 220, 0, 0, 0, 0));
                         }
+                        maleItems.addView(name, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
 
-                        Intent mIntent = new Intent();
-                        mIntent.putExtra("headUrl", maleVo.headurl);
-                        DefaultHeadImgActivity.this.setResult(Activity.RESULT_OK, mIntent);
-                        finish();
+                        maleItems.setTag(maleVos.get(positon));
+                        maleItems.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AppUtils.animation(v);
+                                DefHeadMaleVo maleVo = (DefHeadMaleVo) v.getTag();
+                                //友盟上报
+                                switch (maleVo.desc) {
+                                    case "小正太":
+                                        MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_1");
+                                        break;
+                                    case "假小子":
+                                        MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_2");
+                                        break;
+                                    case "型男范":
+                                        MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_3");
+                                        break;
+                                }
+                                Intent mIntent = new Intent();
+                                mIntent.putExtra("headUrl", maleVo.headurl);
+                                DefaultHeadImgActivity.this.setResult(Activity.RESULT_OK, mIntent);
+                                finish();
+                            }
+                        });
+                        lineLay.addView(maleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                     }
-                });
-                mHeadMaleParentLay.addView(maleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                }
+                mHeadMaleParentLay.addView(lineLay, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
             }
 
-            for (int i = 0; i < femaleVos.size(); i++) {
-                LinearLayout femaleItems = new LinearLayout(this);
-                femaleItems.setOrientation(LinearLayout.VERTICAL);
+            int femaleSize = femaleVos.size();
+            int femaleNum = ((femaleSize % 3) > 0) ? 1 : 0;
+            int femaleLines = femaleSize / 3 + femaleNum;//得到行数
 
-                ImageView headImg = new ImageView(this);
-                Glide.with(this).load(femaleVos.get(i).headurl).into(headImg);
+            for (int i = 0; i < femaleLines; i++) {//遍历行数
+                LinearLayout lineLay = new LinearLayout(this);//每一行的容器
+                for (int j = 0; j < 3; j++) {
+                    LinearLayout femaleItems = new LinearLayout(this);
+                    femaleItems.setOrientation(LinearLayout.VERTICAL);
+                    int positon = i * 3 + j;//得到item当前position
+                    if (positon >= size) {//一行不足3个时填充空view
+                        TextView nullView = new TextView(this);
+                        femaleItems.addView(nullView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
+                        lineLay.addView(femaleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                    } else {
+                        ImageView headImg = new ImageView(this);
+                        Glide.with(this).load(femaleVos.get(positon).headurl).into(headImg);
 
-                TextView name = new TextView(this);
-                name.setTextColor(getResources().getColor(R.color.gray_aaaaaa));
-                name.setTextSize(12);
-                name.setText(femaleVos.get(i).desc);
+                        TextView name = new TextView(this);
+                        name.setTextColor(getResources().getColor(R.color.gray_aaaaaa));
+                        name.setTextSize(12);
+                        name.setText(femaleVos.get(positon).desc);
 
-                TextView age = new TextView(this);
-                age.setTextColor(getResources().getColor(R.color.gray_aaaaaa));
-                age.setTextSize(10);
-                age.setText(femaleVos.get(i).age);
-
-                if (width <= 720 && height <= 1280) {
-                    femaleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 130, 130, 0, 0, 0, 0));
-                } else {
-                    femaleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 220, 220, 0, 0, 0, 0));
-                }
-                femaleItems.addView(name, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
-                femaleItems.addView(age, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
-
-                femaleItems.setTag(femaleVos.get(i));
-                femaleItems.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AppUtils.animation(v);
-                        DefHeadFemaleVo femaleVo = (DefHeadFemaleVo) v.getTag();
-                        //友盟上报
-                        switch (femaleVo.desc) {
-                            case "小萝莉":
-                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_4");
-                                break;
-                            case "女汉子":
-                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_5");
-                                break;
-                            case "御姐范":
-                                MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_6");
-                                break;
+                        if (width <= 720 && height <= 1280) {
+                            femaleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 130, 130, 0, 0, 0, 0));
+                        } else {
+                            femaleItems.addView(headImg, getLayoutParams(0, Gravity.CENTER, 220, 220, 0, 0, 0, 0));
                         }
+                        femaleItems.addView(name, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
 
-                        Intent mIntent = new Intent();
-                        mIntent.putExtra("headUrl", femaleVo.headurl);
-                        DefaultHeadImgActivity.this.setResult(Activity.RESULT_OK, mIntent);
-                        finish();
+                        femaleItems.setTag(femaleVos.get(positon));
+                        femaleItems.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                AppUtils.animation(v);
+                                DefHeadFemaleVo femaleVo = (DefHeadFemaleVo) v.getTag();
+                                //友盟上报
+                                switch (femaleVo.desc) {
+                                    case "小萝莉":
+                                        MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_4");
+                                        break;
+                                    case "女汉子":
+                                        MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_5");
+                                        break;
+                                    case "御姐范":
+                                        MobclickAgent.onEvent(DefaultHeadImgActivity.this, "sys_profile_photo_select_6");
+                                        break;
+                                }
+
+                                Intent mIntent = new Intent();
+                                mIntent.putExtra("headUrl", femaleVo.headurl);
+                                DefaultHeadImgActivity.this.setResult(Activity.RESULT_OK, mIntent);
+                                finish();
+                            }
+                        });
+                        lineLay.addView(femaleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                     }
-                });
-                mHeadFemaleParentLay.addView(femaleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                }
+                mHeadFemaleParentLay.addView(lineLay, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
             }
-
         }
     }
 
     @Override
-    public void getRandNickSuccess(NickNameList nickNameList) {}
+    public void getRandNickSuccess(NickNameList nickNameList) {
+    }
 
     @Override
-    public void updateUserInfoSuccess() {}
+    public void updateUserInfoSuccess() {
+    }
 
     @Override
     protected void onDestroy() {

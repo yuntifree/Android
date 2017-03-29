@@ -3,18 +3,19 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
@@ -28,11 +29,12 @@ import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.HeadLinePresenterImpl;
 import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.VideoPlayActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.HeadLineVideoAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IHeadLineView;
+import com.yunxingzh.wireless.mvp.view.ScrollViewListener;
 import com.yunxingzh.wireless.utils.NetUtils;
-import com.yunxingzh.wireless.utils.SpacesItemDecoration;
 import com.yunxingzh.wireless.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,22 +50,23 @@ import wireless.libs.bean.vo.HotInfo;
  * 头条-视频
  */
 
-public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener,
-        NetErrorLayout.OnNetErrorClickListener{
+public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener,
+        NetErrorLayout.OnNetErrorClickListener {
 
     private final static int HEAD_LINE_TYPE = 1;// 0-新闻 1-视频 2-应用 3-游戏 4-本地 5-娱乐
     private final static int HEAD_LINE_SEQ = 0;//序列号，分页拉取用
     private final static int CLICK_COUNT = 0;//0- 视频播放 1-新闻点击 2-广告展示 3-广告点击 4-服务
     private final static int SECONDS = 60 * 1000;
 
-    private RecyclerView mListRv;
+    private boolean isFastClick;
+    private ListView mListLv;
     private IHeadLinePresenter iHeadLinePresenter;
     private IWirelessPresenter iWirelessPresenter;
     private HeadLineVideoAdapter headLineVideoAdapter;
     //下拉刷新
     private SwipeRefreshLayout mSwipeRefreshLay;
     private List<HotInfo> newsVo;
-    private boolean isFirstRefresh = true;
+    private HotInfoList infoList;
     private boolean count = false;
     private AlertView alertView;
     private LinearLayout mNetErrorLay;
@@ -72,6 +75,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private int countUmeng = 0;
     private FrameLayout mVideoListLay;
     private BackToTopView mBackTopIv;
+    private View headerView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -81,28 +85,61 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     }
 
     public void initView(View view) {
-        mListRv = findView(view, R.id.list_rv);
-        if (isAdded() && getActivity() != null) {
-            mListRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        }
-        mListRv.setHasFixedSize(true);
-        mListRv.addItemDecoration(new SpacesItemDecoration(Constants.ITEM_HEIGHT));
+        mListLv = findView(view, R.id.video_lv);
+
         mSwipeRefreshLay = findView(view, R.id.swipe_refresh_news);
         mSwipeRefreshLay.setOnRefreshListener(this);
         mNetErrorLay = findView(view, R.id.net_error_lay);
         mVideoListLay = findView(view, R.id.video_list_lay);
 
         mBackTopIv = findView(view, R.id.back_top_iv);
-        mBackTopIv.setRecyclerView(mListRv, Constants.MY_PAGE_SIZE / 6);
     }
 
     public void initData() {
-        headLineVideoAdapter = new HeadLineVideoAdapter(new ArrayList<HotInfo>());
-        headLineVideoAdapter.openLoadMore(Constants.PAGE_SIZE);
-        headLineVideoAdapter.setOnLoadMoreListener(this);
-        //headLineVideoAdapter.setEmptyView(emptyView(mListRv));
-        mListRv.setAdapter(headLineVideoAdapter);
-
+        headerView = getHeaderView();
+        mListLv.setOnScrollListener(scrollViewListener);
+        mListLv.addHeaderView(headerView);
+        mBackTopIv.setListView(mListLv, Constants.MY_PAGE_SIZE / 6, scrollViewListener);
+        mListLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (newsVo != null) {
+                    final HotInfo hotInfo = (HotInfo) parent.getAdapter().getItem(position);//添加header之后需要这样获取当前点击的item
+                    if (isAdded() && getActivity() != null && itemId != hotInfo.id) {
+                        countUmeng++;
+                        if (countUmeng == 3) {
+                            MobclickAgent.onEvent(getActivity(), "video_triple_view");
+                        }
+                        if (countUmeng == 5) {
+                            MobclickAgent.onEvent(getActivity(), "video_penta_view");
+                        }
+                    }
+                    itemId = hotInfo.id;
+                    if (isAdded() && getActivity() != null) {
+                        if (!NetUtils.isWifi(getActivity())) {
+                            alertView = new AlertView("温馨提示", "亲,您当前处于流量状态下,继续观看需要花费少许流量哦!", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(Object o, int position) {
+                                    if (position != AlertView.CANCELPOSITION) {
+                                        videoItemClick(hotInfo, position);
+                                    }
+                                }
+                            }).setOnDismissListener(new OnDismissListener() {
+                                @Override
+                                public void onDismiss(Object o) {
+                                    if (alertView != null) {
+                                        alertView.dismiss();
+                                    }
+                                }
+                            });
+                            alertView.show();
+                        } else {
+                            videoItemClick(hotInfo, position);
+                        }
+                    }
+                }
+            }
+        });
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iWirelessPresenter = new WirelessPresenterImpl(this);
         if (isAdded() && getActivity() != null) {
@@ -118,49 +155,6 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                 mNetErrorLay.addView(netErrorView);
             }
         }
-        mListRv.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void SimpleOnItemClick(BaseQuickAdapter baseQuickAdapter, View view, final int i) {
-                List<HotInfo> data = baseQuickAdapter.getData();
-                // TODO: 临时用final来满足dialog的要求，找更好的方法替代
-                final List<HotInfo> data2 = data;
-                HotInfo item = data.get(i);
-
-                if (isAdded() && getActivity() != null && itemId != item.id) {
-                    countUmeng++;
-                    if (countUmeng == 3) {
-                        MobclickAgent.onEvent(getActivity(), "video_triple_view");
-                    }
-                    if (countUmeng == 5) {
-                        MobclickAgent.onEvent(getActivity(), "video_penta_view");
-                    }
-                }
-                itemId = item.id;
-                if (isAdded() && getActivity() != null) {
-                    if (!NetUtils.isWifi(getActivity())) {
-                        alertView = new AlertView("温馨提示", "亲,您当前处于流量状态下,继续观看需要花费少许流量哦!", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(Object o, int position) {
-                                if (position != AlertView.CANCELPOSITION) {
-                                    HotInfo item = data2.get(i);
-                                    videoItemClick(item, i);
-                                }
-                            }
-                        }).setOnDismissListener(new OnDismissListener() {
-                            @Override
-                            public void onDismiss(Object o) {
-                                if (alertView != null) {
-                                    alertView.dismiss();
-                                }
-                            }
-                        });
-                        alertView.show();
-                    } else {
-                        videoItemClick(item, i);
-                    }
-                }
-            }
-        });
     }
 
     private void videoItemClick(HotInfo item, int position) {
@@ -168,7 +162,10 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             count = true;
             item.play++;
         }
-        headLineVideoAdapter.notifyItemChanged(position);
+//        View currentView = mListLv.getChildAt(position);
+//        if (currentView != null) {
+//            currentView.invalidate();//刷新view
+//        }
         iWirelessPresenter.clickCount(item.id, CLICK_COUNT, "");//上报
         startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, item.dst);
     }
@@ -176,25 +173,25 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     @Override
     public void getHeadLineSuccess(HotInfoList newsVoList) {
         mSwipeRefreshLay.setRefreshing(false);
+        isFastClick = true;
         if (newsVoList != null) {
-            newsVo = newsVoList.infos;
-            if (newsVoList.hasmore == 1) {
-                if (isFirstRefresh){
-                    isFirstRefresh = false;
-                    headLineVideoAdapter.setNewData(newsVo);
-                } else {
-                    headLineVideoAdapter.addData(newsVo);
+            infoList = newsVoList;
+
+            if (newsVo == null) {
+                newsVo = new ArrayList<HotInfo>();
+            }
+
+            if (infoList.infos != null) {
+                newsVo.addAll(infoList.infos);
+                if (isAdded() && getActivity() != null && headLineVideoAdapter == null) {
+                    headLineVideoAdapter = new HeadLineVideoAdapter(getActivity(), newsVo);
+                    mListLv.setAdapter(headLineVideoAdapter);
                 }
+                headLineVideoAdapter.notifyDataSetChanged();
             } else {
-                // 数据全部加载完毕就调用 loadComplete
-                headLineVideoAdapter.loadComplete();
                 if (isAdded() && getActivity() != null) {
                     ToastUtil.showMiddle(getActivity(), R.string.no_resource);
                 }
-            }
-        } else {
-            if (isAdded() && getActivity() != null) {
-                ToastUtil.showMiddle(getActivity(), R.string.re_error);
             }
         }
     }
@@ -223,15 +220,9 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
 
     @Override
     public void onRefresh() {
-       // newsVo.clear();
-        isFirstRefresh = true;
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
-    }
-
-    @Override
-    public void onLoadMoreRequested() {
-        if (iHeadLinePresenter != null && newsVo != null) {
-            iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, newsVo.get(newsVo.size() - 1).seq);
+        if (newsVo != null && newsVo.size() > 0) {
+            newsVo.clear();
         }
     }
 
@@ -243,14 +234,26 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             } else {
                 mNetErrorLay.setVisibility(View.GONE);
                 mVideoListLay.setVisibility(View.VISIBLE);
-                isFirstRefresh = true;
                 iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
             }
         }
     }
 
+    private View getHeaderView() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.list_item_videos, null, false);
+        TextView title = (TextView) view.findViewById(R.id.video_title);
+        ImageView img = (ImageView) view.findViewById(R.id.video_img);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(WebViewActivity.class, Constants.URL, "http://wx.yunxingzh.com/app/video.html?uid=137&token=6ba9ac5a422d4473b337d57376dd3488");
+            }
+        });
+        return view;
+    }
+
     private View emptyView(ViewGroup viewGroup) {
-        if (!isAdded() && getActivity() == null){
+        if (!isAdded() && getActivity() == null) {
             return null;
         }
         View netView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, viewGroup, false);
@@ -258,7 +261,6 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         netErrorBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isFirstRefresh = true;
                 iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
             }
         });
@@ -294,7 +296,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         }
     }
 
-    public void startActivity(Class activity,String key,String videoUrl) {
+    public void startActivity(Class activity, String key, String videoUrl) {
         if (isAdded() && getActivity() != null) {
             Intent intent = new Intent(getActivity(), activity);
             intent.putExtra(key, videoUrl);
@@ -302,4 +304,37 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         }
     }
 
+    public OnScrollListener scrollViewListener = new OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+            switch (scrollState) {
+                // 当不滚动时
+                case OnScrollListener.SCROLL_STATE_IDLE:
+                    // 判断滚动到底部
+                    if (mListLv.getLastVisiblePosition() == (mListLv.getCount() - 1)) {
+                        if (isAdded() && getActivity() != null && infoList.hasmore == 0) {
+                            ToastUtil.showMiddle(getActivity(), R.string.no_resourse);
+                        } else {
+                            if (isFastClick) {
+                                isFastClick = false;
+                                if (infoList != null && infoList.infos.size() > 0) {
+                                    iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, infoList.infos.get(infoList.infos.size() - 1).seq);
+                                }
+                            }
+                        }
+                    }
+                    // 判断滚动到顶部
+                    if (mListLv.getFirstVisiblePosition() == 0) {
+                        // ToastUtil.showMiddle(getActivity(), "顶部");
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                             int totalItemCount) {
+
+        }
+    };
 }

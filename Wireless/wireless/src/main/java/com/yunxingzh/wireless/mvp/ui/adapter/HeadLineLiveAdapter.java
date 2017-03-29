@@ -18,7 +18,7 @@ import wireless.libs.bean.vo.LiveVo;
  * Created by stephen on 2017/2/8.
  */
 
-public class HeadLineLiveAdapter extends BaseQuickAdapter<LiveVo> {
+public class HeadLineLiveAdapter extends BaseQuickAdapter<LiveVo,BaseViewHolder> {
 
     private onLiveItemClickListener onLiveItemClickListener;
 

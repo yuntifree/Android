@@ -322,13 +322,13 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             //  mServiceItem.addView(lineSmall, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, 1, 0, 0, 0, 0));
 
             for (int j = 0; j < lines; j++) {//循环行数
-                LinearLayout childLay = new LinearLayout(getActivity());
+                LinearLayout childLay = new LinearLayout(getActivity());//每一行的容器
                 for (int k = 0; k < 4; k++) {//循环子item
                     LinearLayout itemLay = new LinearLayout(getActivity());
                     itemLay.setBackground(getResources().getDrawable(R.drawable.view_selector));
                     itemLay.setOrientation(LinearLayout.VERTICAL);
                     int positon = j * 4 + k;//得到item当前position
-                    if (positon >= size) {//一行不足3个时填充空view
+                    if (positon >= size) {//一行不足4个时填充空view
                         TextView nullView = new TextView(getActivity());
                         itemLay.addView(nullView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
                         childLay.addView(itemLay, getLayoutParams(1, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
