@@ -95,7 +95,7 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                     if (positon >= size) {//一行不足3个时填充空view
                         TextView nullView = new TextView(this);
                         maleItems.addView(nullView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
-                        lineLay.addView(maleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                        lineLay.addView(maleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
                     } else {
                         ImageView headImg = new ImageView(this);
                         Glide.with(this).load(maleVos.get(positon).headurl).into(headImg);
@@ -136,7 +136,11 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                                 finish();
                             }
                         });
-                        lineLay.addView(maleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                        if (i == 0) {//如果是第一行就无需添加顶部高度
+                            lineLay.addView(maleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                        } else {
+                            lineLay.addView(maleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 20, 0, 0));
+                        }
                     }
                 }
                 mHeadMaleParentLay.addView(lineLay, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
@@ -155,7 +159,7 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                     if (positon >= size) {//一行不足3个时填充空view
                         TextView nullView = new TextView(this);
                         femaleItems.addView(nullView, getLayoutParams(0, Gravity.CENTER, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
-                        lineLay.addView(femaleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                        lineLay.addView(femaleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 15, 0, 0));
                     } else {
                         ImageView headImg = new ImageView(this);
                         Glide.with(this).load(femaleVos.get(positon).headurl).into(headImg);
@@ -197,7 +201,12 @@ public class DefaultHeadImgActivity extends BaseActivity implements IDefHeadView
                                 finish();
                             }
                         });
-                        lineLay.addView(femaleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+
+                        if (i == 0) {//如果是第一行就无需添加顶部高度
+                            lineLay.addView(femaleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));
+                        } else {
+                            lineLay.addView(femaleItems, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 20, 0, 0));
+                        }
                     }
                 }
                 mHeadFemaleParentLay.addView(lineLay, getLayoutParams(1, Gravity.CENTER, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));

@@ -34,6 +34,7 @@ import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.config.MineHeadImg;
 import com.yunxingzh.wireless.mview.alertdialog.AlertView;
+import com.yunxingzh.wireless.mview.alertdialog.OnDismissListener;
 import com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener;
 import com.yunxingzh.wireless.mvp.presenter.IMinePresenter;
 import com.yunxingzh.wireless.mvp.presenter.impl.MinePresenterImpl;
@@ -84,6 +85,7 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     private int headImgFrom = 0;//=1表示从相册选择上传
     private String mHeadUrl;
     private String nick;
+    private AlertView alertView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
@@ -172,8 +174,21 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
                     }
                 }
             } else if (mMinePhoneLay == v) {//客服热线
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:0769-21660569"));
-                startActivity(intent);
+                alertView = new AlertView("拨打客服热线", "0769-21660569", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        if (position != AlertView.CANCELPOSITION) {
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:0769-21660569"));
+                            startActivity(intent);
+                            alertView.dismiss();
+                        }
+                    }
+                }).setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(Object o) {
+                    }
+                });
+                alertView.show();
             }
         }
     }

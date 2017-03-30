@@ -130,7 +130,7 @@ public class SetActivity extends BaseActivity implements View.OnClickListener, I
                 ToastUtil.showMiddle(this, "当前已是最新版本");
             }
         } else if (mSwitchPhoneTv == v) {//切换号码
-            alertView = new AlertView("温馨提示", "确定切换？", "取消", new String[]{"确定"}, null, this, AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+            alertView = new AlertView("温馨提示", "确定退出当前帐号？", "取消", new String[]{"确定"}, null, this, AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
                 @Override
                 public void onItemClick(Object o, int position) {
                     if (position != AlertView.CANCELPOSITION) {
