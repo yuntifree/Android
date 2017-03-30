@@ -229,6 +229,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                         public void onClick(View v) {
                             if (MainApplication.get() != null && MainApplication.get().getUser() != null) {
                                 if (topVo != null) {
+                                    MobclickAgent.onEvent(getActivity(), "video_360");
                                     User user = MainApplication.get().getUser();
                                     startActivity(WebViewActivity.class, Constants.URL, topVo.dst + "?uid=" + user.uid + "&token=" + user.token);
                                 }

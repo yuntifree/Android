@@ -11,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yunxingzh.wireless.R;
+import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.StatusBarColor;
 import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
+import com.yunxingzh.wireless.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,8 +65,13 @@ public class GuidedActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if (v == enter) {
-            startActivity(new Intent(GuidedActivity.this, RegisterActivity.class));
-            finish();
+            if (StringUtils.isEmpty(MainApplication.get().getToken()) || MainApplication.get().needLogin()) {
+                startActivity(new Intent(GuidedActivity.this, RegisterActivity.class));
+                finish();
+            } else {
+                startActivity(new Intent(GuidedActivity.this, MainActivity.class));
+                finish();
+            }
         }
     }
 
