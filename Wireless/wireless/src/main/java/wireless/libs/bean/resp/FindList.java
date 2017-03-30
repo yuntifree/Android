@@ -18,6 +18,7 @@ public class FindList implements Serializable {
         public int id;//report_click使用 type=10
         public String img;
         public String dst;
+        public int type;//跳转： 0-网页 1-APP内部
     }
 
     public class CityServiceVo implements Serializable {

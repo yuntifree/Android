@@ -19,6 +19,7 @@ import com.yunxingzh.wireless.config.MainApplication;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mview.PagerSlidingTabStrip;
 import com.yunxingzh.wireless.mvp.presenter.impl.GetHeadLineMenuPresenterImpl;
+import com.yunxingzh.wireless.mvp.ui.activity.MainActivity;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IGetHeadLineMenuView;
 import com.yunxingzh.wireless.utils.AppUtils;
@@ -80,10 +81,13 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
     }
 
     public void initData() {
+        if (!EventBus.getDefault().hasSubscriberForEvent(MainActivity.class)) {
+            EventBus.getDefault().register(this);
+        }
         //注册EventBus
-        EventBus.getDefault().register(this);
+        //EventBus.getDefault().register(this);
         getHeadLineMenuPresenter = new GetHeadLineMenuPresenterImpl(this);
-        if (isAdded() && getActivity() != null){
+        if (isAdded() && getActivity() != null) {
             if (!NetUtils.isNetworkAvailable(getActivity())) {
                 netErrorState();
             }
@@ -112,6 +116,15 @@ public class HeadLineFragment extends BaseFragment implements IGetHeadLineMenuVi
 //        IntentFilter intentFilter = new IntentFilter("com.yunxingzh.wireless.mvp.ui.fragment");
 //        //注册广播
 //        getActivity().registerReceiver(rec, intentFilter);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && WirelessFragment.localClick) {
+            WirelessFragment.localClick = false;
+            mViewPager.setCurrentItem(INDEX_ONE);
+        }
     }
 
     public void reportUmeng(int lastType, int currentType) {

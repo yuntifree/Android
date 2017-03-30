@@ -21,8 +21,8 @@ import com.yunxingzh.wireless.config.EventBusType;
 import com.yunxingzh.wireless.mview.NetErrorLayout;
 import com.yunxingzh.wireless.mvp.presenter.IServicePresenter;
 import com.yunxingzh.wireless.mvp.presenter.IWirelessPresenter;
-import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.presenter.impl.ServicePresenterImpl;
+import com.yunxingzh.wireless.mvp.presenter.impl.WirelessPresenterImpl;
 import com.yunxingzh.wireless.mvp.ui.activity.SearchActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.NetworkImageHolderView;
@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wireless.libs.bean.resp.FindList;
-import wireless.libs.bean.vo.BannerVo;
 import wireless.libs.bean.vo.Service;
 import wireless.libs.convenientbanner.ConvenientBanner;
 import wireless.libs.convenientbanner.holder.CBViewHolderCreator;
@@ -67,6 +66,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
     private ConvenientBanner mBannerAdvert, mBannerRecommend;
     private List<FindList.FindBannerVo> advertBannerVo;
     private List<FindList.RecommendVo> recommendsBannerVo;
+    private List<FindList.CityServiceVo> cityServiceVos;
 
     @Nullable
     @Override
@@ -161,8 +161,14 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                         iWirelessPresenter.clickCount(advertBannerVo.get(position).id, 10, "");//上报
                     }
                     String url = advertBannerVo.get(position).dst;
+                    int type = advertBannerVo.get(position).type;
                     if (!StringUtils.isEmpty(url)) {
-                        startActivity(WebViewActivity.class, Constants.URL, url, "", "");
+                        if (url.trim().equals("dgnews") && type == 1) {
+                            WirelessFragment.localClick = true;
+                            EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
+                        } else {
+                            startActivity(WebViewActivity.class, Constants.URL, url, "", "");
+                        }
                     }
                 }
             });
@@ -206,8 +212,11 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
         /***
          * 城市服务
          */
+        if (cityServiceVos != null && cityServiceVos.size() > 0) {
+            cityServiceVos.clear();
+        }
+        cityServiceVos = findList.urbanservices;
         if (findList.urbanservices != null && findList.urbanservices.size() > 0) {
-            List<FindList.CityServiceVo> cityServiceVos = findList.urbanservices;
             for (int i = 0; i < cityServiceVos.size(); i++) {
 
                 LinearLayout cityLay = new LinearLayout(getActivity());
@@ -245,19 +254,19 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                         //友盟上报
                         switch (cityServiceVo.title) {
                             case "更多":
-                                MobclickAgent.onEvent(getActivity(),"life_more");
+                                MobclickAgent.onEvent(getActivity(), "life_more");
                                 break;
                             case "招聘":
-                                MobclickAgent.onEvent(getActivity(),"life_recruit");
+                                MobclickAgent.onEvent(getActivity(), "life_recruit");
                                 break;
                             case "租房":
-                                MobclickAgent.onEvent(getActivity(),"life_rental");
+                                MobclickAgent.onEvent(getActivity(), "life_rental");
                                 break;
                             case "二手":
-                                MobclickAgent.onEvent(getActivity(),"life_secondhand");
+                                MobclickAgent.onEvent(getActivity(), "life_secondhand");
                                 break;
                             case "家政":
-                                MobclickAgent.onEvent(getActivity(),"life_service");
+                                MobclickAgent.onEvent(getActivity(), "life_service");
                                 break;
                         }
                         startActivity(WebViewActivity.class, Constants.URL, cityServiceVo.dst, Constants.TITLE, cityServiceVo.title);
@@ -355,37 +364,37 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
                                 //友盟上报
                                 switch (dv.title) {
                                     case "公交查询":
-                                        MobclickAgent.onEvent(getActivity(),"life_bus");
+                                        MobclickAgent.onEvent(getActivity(), "life_bus");
                                         break;
                                     case "汽车票":
-                                        MobclickAgent.onEvent(getActivity(),"life_busticket");
+                                        MobclickAgent.onEvent(getActivity(), "life_busticket");
                                         break;
                                     case "预约挂号":
-                                        MobclickAgent.onEvent(getActivity(),"life_docappointment");
+                                        MobclickAgent.onEvent(getActivity(), "life_docappointment");
                                         break;
                                     case "医院查询":
-                                        MobclickAgent.onEvent(getActivity(),"life_hospitical");
+                                        MobclickAgent.onEvent(getActivity(), "life_hospitical");
                                         break;
                                     case "积分入户":
-                                        MobclickAgent.onEvent(getActivity(),"life_integralhome");
+                                        MobclickAgent.onEvent(getActivity(), "life_integralhome");
                                         break;
                                     case "积分入学":
-                                        MobclickAgent.onEvent(getActivity(),"life_integralstudy");
+                                        MobclickAgent.onEvent(getActivity(), "life_integralstudy");
                                         break;
                                     case "发票真伪":
-                                        MobclickAgent.onEvent(getActivity(),"life_invoice");
+                                        MobclickAgent.onEvent(getActivity(), "life_invoice");
                                         break;
                                     case "违章查询":
-                                        MobclickAgent.onEvent(getActivity(),"life_peccancy");
+                                        MobclickAgent.onEvent(getActivity(), "life_peccancy");
                                         break;
                                     case "飞机票":
-                                        MobclickAgent.onEvent(getActivity(),"life_planeticket");
+                                        MobclickAgent.onEvent(getActivity(), "life_planeticket");
                                         break;
                                     case "社保查询":
-                                        MobclickAgent.onEvent(getActivity(),"life_socialinsurance");
+                                        MobclickAgent.onEvent(getActivity(), "life_socialinsurance");
                                         break;
                                     case "火车票":
-                                        MobclickAgent.onEvent(getActivity(),"life_trainticket");
+                                        MobclickAgent.onEvent(getActivity(), "life_trainticket");
                                         break;
                                 }
 
@@ -412,7 +421,7 @@ public class ServiceFragment extends BaseFragment implements IServiceView, View.
             }
             mServiceParentGroup.addView(mServiceItem);
 
-            if (i == list.size() - 1){
+            if (i == list.size() - 1) {
                 return;
             }
             mServiceItem.addView(line, getLayoutParams(0, 0, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0, 0, 0, 0));

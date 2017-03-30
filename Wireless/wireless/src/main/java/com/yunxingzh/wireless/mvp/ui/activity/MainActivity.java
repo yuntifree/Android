@@ -1,7 +1,6 @@
 package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -44,8 +42,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import rx.Observable;
-import rx.Subscriber;
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.UpdateVo;
 import wireless.libs.bean.vo.User;
@@ -54,7 +50,7 @@ import wireless.libs.bean.vo.User;
  * 首页底部导航
  */
 
-public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, IGetAdvertView {
+public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, IGetAdvertView,WirelessFragment.JumpHeadLine {
 
     private final static int SECONDS = 2000;//按下的间隔秒数
     private final static int STATUS = 0;//0 正常结束程序;1 异常关闭程序
@@ -129,6 +125,12 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         getAdvertPresenter.getAdvert();// 拉取广告
         getAdvertPresenter.checkUpdate();//检查版本更新
+        wirelessFragment.setJumpListener(this);
+    }
+
+    @Override
+    public void jumpDgNews() {
+        mHeadLineRadio.setChecked(true);
     }
 
     @Override
@@ -196,7 +198,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void onEventMainThread(EventBusType event) {
         //跳转头条（新闻）
         if (event.getMsg() == Constants.HEAD_LINE) {
-            mHeadLineRadio.setChecked(true);
+          //  mHeadLineRadio.setChecked(true);
+            jumpDgNews();
         }
 
 //        //跳转视频-首页先跳转到头条父fragment再指定viewpager中的setCurrentItem
@@ -214,6 +217,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mMineRadio.setChecked(true);
         }
     }
+
 
     @Override
     protected void onDestroy() {

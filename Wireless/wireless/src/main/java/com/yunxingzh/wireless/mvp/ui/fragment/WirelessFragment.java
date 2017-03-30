@@ -11,7 +11,6 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +45,6 @@ import com.yunxingzh.wireless.mvp.ui.activity.WifiSpiritedActivity;
 import com.yunxingzh.wireless.mvp.ui.adapter.MainNewsAdapter;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IWirelessView;
-import com.yunxingzh.wireless.service.FWServiceManager;
-import com.yunxingzh.wireless.utils.LogUtils;
 import com.yunxingzh.wireless.utils.NetUtils;
 import com.yunxingzh.wireless.utils.SPUtils;
 import com.yunxingzh.wireless.utils.StringUtils;
@@ -115,6 +112,8 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     private boolean isValidate = false;//东莞wifi是否认证通过
     private boolean isCountTime = false;//true打开（start），false关闭（stop）
     private AlertView alertView;
+    private JumpHeadLine jumpHeadLine;
+    public static boolean localClick = false;
 
     @Nullable
     @Override
@@ -330,7 +329,9 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 }
             } else if (mMoreNewsLay == v) {//本地热点
                 MobclickAgent.onEvent(getActivity(), "Index_QR");
-                EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
+               // EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
+                jumpHeadLine.jumpDgNews();
+                localClick = true;
             } /*else if (mMainWifiManager == v) {//wifi管理
             startActivity(WifiManagerActivity.class, "", "", "", "");
         } else if (mMainMapLay == v) {//wifi地图
@@ -389,24 +390,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 }
             }
         }
-    }
-
-    public void showDialog(String content, String query) {
-        alertView = new AlertView("温馨提示", content, "取消", new String[]{query}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
-            @Override
-            public void onItemClick(Object o, int position) {
-                if (position != AlertView.CANCELPOSITION) {
-                    Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                    startActivity(intent);
-                    alertView.dismiss();
-                }
-            }
-        }).setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss(Object o) {
-            }
-        });
-        alertView.show();
     }
 
     public Runnable runnable = new Runnable() {
@@ -866,6 +849,32 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     public void onResume() {
         super.onResume();
         updateConnectState(false);
+    }
+
+    public interface JumpHeadLine {
+        void jumpDgNews();//跳转东莞新闻
+    }
+
+    public void setJumpListener(JumpHeadLine jumpHeadLine) {
+        this.jumpHeadLine = jumpHeadLine;
+    }
+
+    public void showDialog(String content, String query) {
+        alertView = new AlertView("温馨提示", content, "取消", new String[]{query}, null, getActivity(), AlertView.Style.Alert, new com.yunxingzh.wireless.mview.alertdialog.OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {
+                if (position != AlertView.CANCELPOSITION) {
+                    Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                    startActivity(intent);
+                    alertView.dismiss();
+                }
+            }
+        }).setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(Object o) {
+            }
+        });
+        alertView.show();
     }
 
 }
