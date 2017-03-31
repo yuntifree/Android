@@ -42,14 +42,23 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int TYPE_NULL = 0;//没有图片
     private final int TYPE_ADVIER = 5;//广告
     private HotInfo source;
+    private ReportClickListener reportClickListener;
 
     public NewsAdapter(Context context, List<HotInfo> data) {
         this.context = context;
         this.hotInfos = data;
     }
 
+    public interface ReportClickListener {
+        void reportClick(int position);
+    }
+
+    public void setReportClickListener(ReportClickListener reportClickListener) {
+        this.reportClickListener = reportClickListener;
+    }
+
     public void startActivity(Class activity, int position, HotInfo result) {
-        EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE_NEWS_FLAG, position));
+        reportClickListener.reportClick(position);
         Intent intent = new Intent(context, activity);
         intent.putExtra(Constants.URL, result.dst);
         intent.putExtra(Constants.TITLE, result.title);

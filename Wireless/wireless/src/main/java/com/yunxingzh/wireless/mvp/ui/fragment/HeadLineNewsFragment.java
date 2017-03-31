@@ -45,7 +45,7 @@ import wireless.libs.network.ErrorType;
  */
 
 public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView, SwipeRefreshLayout.OnRefreshListener,
-        NetErrorLayout.OnNetErrorClickListener {
+        NetErrorLayout.OnNetErrorClickListener, NewsAdapter.ReportClickListener {
 
     private static final String ARG_CTYPE = "ctype";
     private final static int HEAD_LINE_TYPE = 0;// 0-新闻 1-视频 2-应用 3-游戏 4-本地 5-娱乐
@@ -173,8 +173,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     }
 
     public void initData() {
-        //注册EventBus
-        EventBus.getDefault().register(this);
         iHeadLinePresenter = new HeadLinePresenterImpl(this);
         iWirelessPresenter = new WirelessPresenterImpl(this);
         if (firstLoad) {
@@ -193,18 +191,13 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         }
     }
 
-    @Subscribe
-    public void onEventMainThread(EventBusType event) {
-        int index = event.getChildMsg();
-        if (event.getMsg() == Constants.HEAD_LINE_NEWS_FLAG && index != -1) {//上报
+    @Override
+    public void reportClick(int position) {
+        if (position != -1) {
             if (iWirelessPresenter != null && data != null) {
-                iWirelessPresenter.clickCount(data.infos.get(index).id, CLICK_COUNT, "");
+                iWirelessPresenter.clickCount(data.infos.get(position).id, CLICK_COUNT, "");
             }
         }
-//        if (event.getMsg() == Constants.NET_ERROR) {//网络不可用（无法上网）
-//            errorno = event.getChildMsg();
-//            showErrorLay();
-//        }
     }
 
     @Override
@@ -214,7 +207,6 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
             iWirelessPresenter.onDestroy();
             iHeadLinePresenter.onDestroy();
         }
-        EventBus.getDefault().unregister(this);//反注册EventBus
     }
 
 
@@ -242,6 +234,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
             if (headLineNewsAdapter == null) {
                 if (isAdded() && getActivity() != null) {
                     headLineNewsAdapter = new NewsAdapter(getActivity(), newsListNext);
+                    headLineNewsAdapter.setReportClickListener(this);
                 }
                 mMainNewsRv.setAdapter(headLineNewsAdapter);
             }
