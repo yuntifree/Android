@@ -84,6 +84,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private TextView headerViewTitle;
     private ImageView headerViewImg;
     private boolean isFirstLoad = true;
+    private int lastPosition;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_child, container, false);
@@ -140,6 +141,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                                 @Override
                                 public void onItemClick(Object o, int position) {
                                     if (position != AlertView.CANCELPOSITION) {
+                                        count = false;
                                         videoItemClick(hotInfo, position);
                                     }
                                 }
@@ -153,6 +155,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
                             });
                             alertView.show();
                         } else {
+                            count = false;
                             videoItemClick(hotInfo, position);
                         }
                     }
@@ -179,7 +182,10 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     private void videoItemClick(HotInfo item, int position) {
         if (!count) {
             count = true;
-            item.play++;
+            if (lastPosition != position) {
+                item.play++;
+                lastPosition = position;
+            }
         }
         if (headLineVideoAdapter != null) {
             headLineVideoAdapter.notifyDataSetChanged();
