@@ -3,6 +3,7 @@ package com.yunxingzh.wireless.mvp.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -91,6 +92,7 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
         }
         mMainNewsRv.setHasFixedSize(true);
         mMainNewsRv.addItemDecoration(new SpacesItemDecoration(1));
+        swipeRefreshLayout.setColorSchemeResources(R.color.blue_009CFB);
         swipeRefreshLayout.setOnRefreshListener(this);
         mNetErrorLay = findView(view, R.id.net_error_lay);
         mNewsListLay = findView(view, R.id.news_list_lay);

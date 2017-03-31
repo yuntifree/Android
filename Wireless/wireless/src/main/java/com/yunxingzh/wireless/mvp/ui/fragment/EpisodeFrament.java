@@ -63,6 +63,7 @@ public class EpisodeFrament extends BaseFragment implements IGetJokesView, Swipe
     public void initView(View view) {
         mListLv = findView(view, R.id.epi_lv);
         mSwipeRefreshLay = findView(view, R.id.epi_sw);
+        mSwipeRefreshLay.setColorSchemeResources(R.color.blue_009CFB);
         mSwipeRefreshLay.setOnRefreshListener(this);
         mNetErrorLay = findView(view, R.id.net_error_lay);
     }

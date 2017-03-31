@@ -166,6 +166,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
         mConnectIv = findView(view, R.id.connect_iv);
         mConnectIv.setOnClickListener(this);
         mMainRefreshLay = findView(view, R.id.main_refresh_lay);
+        mMainRefreshLay.setColorSchemeResources(R.color.blue_009CFB);
         mMainRefreshLay.setOnRefreshListener(this);
         mMachineErrorTv = findView(view, R.id.machine_error_tv);
         mMachineErrorIv = findView(view, R.id.machine_error_iv);

@@ -96,6 +96,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
     public void initView(View view) {
         mListLv = findView(view, R.id.video_lv);
         mSwipeRefreshLay = findView(view, R.id.swipe_refresh_news);
+        mSwipeRefreshLay.setColorSchemeResources(R.color.blue_009CFB);
         mSwipeRefreshLay.setOnRefreshListener(this);
         mNetErrorLay = findView(view, R.id.net_error_lay);
         mVideoListLay = findView(view, R.id.video_list_lay);

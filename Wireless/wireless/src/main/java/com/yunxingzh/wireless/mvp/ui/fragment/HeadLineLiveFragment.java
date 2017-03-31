@@ -74,6 +74,7 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
     public void initView(View view) {
         mListRv = findView(view, R.id.live_rv);
         mSwipeRefreshLay = findView(view, R.id.swipe_refresh_live);
+        mSwipeRefreshLay.setColorSchemeResources(R.color.blue_009CFB);
         mSwipeRefreshLay.setOnRefreshListener(this);
         if (isAdded() && getActivity() != null) {
             mListRv.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -90,8 +91,8 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
 
     public void initData() {
         headLineLiveAdapter = new HeadLineLiveAdapter(new ArrayList<LiveVo>());
-        //headLineLiveAdapter.openLoadMore(Constants.PAGE_SIZE);
-        headLineLiveAdapter.setOnLoadMoreListener(this,mListRv);
+        headLineLiveAdapter.setOnLoadMoreListener(this, mListRv);
+       // headLineLiveAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
         // headLineLiveAdapter.setEmptyView(emptyView(mListRv));
         mListRv.setAdapter(headLineLiveAdapter);
 
@@ -144,10 +145,11 @@ public class HeadLineLiveFragment extends BaseFragment implements IGetLiveListVi
                     headLineLiveAdapter.setNewData(liveVos);
                 } else {
                     headLineLiveAdapter.addData(liveVos);
+                    headLineLiveAdapter.loadMoreComplete();
                 }
             } else {
-                // 数据全部加载完毕就调用 loadComplete
-                headLineLiveAdapter.loadMoreComplete();
+                // 数据全部加载完毕就调用 loadMoreEnd
+                headLineLiveAdapter.loadMoreEnd();
                 if (isAdded() && getActivity() != null) {
                     ToastUtil.showMiddle(getActivity(), R.string.no_resource);
                 }
