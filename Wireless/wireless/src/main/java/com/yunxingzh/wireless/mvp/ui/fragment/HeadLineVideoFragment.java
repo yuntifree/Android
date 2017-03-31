@@ -271,6 +271,7 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
         iHeadLinePresenter.getHeadLine(HEAD_LINE_TYPE, HEAD_LINE_SEQ);
         if (newsVo != null && newsVo.size() > 0) {
             newsVo.clear();
+            headLineVideoAdapter.notifyDataSetChanged();
         }
     }
 
