@@ -194,8 +194,8 @@ public class HeadLineNewsFragment extends BaseFragment implements IHeadLineView,
     @Override
     public void reportClick(int position) {
         if (position != -1) {
-            if (iWirelessPresenter != null && data != null) {
-                iWirelessPresenter.clickCount(data.infos.get(position).id, CLICK_COUNT, "");
+            if (iWirelessPresenter != null && newsListNext != null) {
+                iWirelessPresenter.clickCount(newsListNext.get(position).id, CLICK_COUNT, "");
             }
         }
     }
