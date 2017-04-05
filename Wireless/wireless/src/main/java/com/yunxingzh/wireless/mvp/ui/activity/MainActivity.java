@@ -120,7 +120,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         fragmentManager = getSupportFragmentManager();
         wirelessFragment = new WirelessFragment();
         currentFragment = wirelessFragment;
-        fragmentManager.beginTransaction().replace(R.id.main_fragment_parent, currentFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.main_fragment_parent, currentFragment).commitAllowingStateLoss();
         getStatusOnTimes();
 
         getAdvertPresenter.getAdvert();// 拉取广告
@@ -259,9 +259,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         if (currentFragment != fragment) {
             FragmentTransaction ft = fragmentManager.beginTransaction();
             if (!fragment.isAdded()) {
-                ft.hide(currentFragment).add(R.id.main_fragment_parent, fragment).commit();
+                ft.hide(currentFragment).add(R.id.main_fragment_parent, fragment).commitAllowingStateLoss();
             } else {
-                ft.hide(currentFragment).show(fragment).commit();
+                ft.hide(currentFragment).show(fragment).commitAllowingStateLoss();
             }
             currentFragment = fragment;
         }

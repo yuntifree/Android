@@ -449,7 +449,7 @@ public class WifiMachine {
     }
 
     private void systemListChanged(List<ScanResult> scanResults){
-        LogUtils.d("lsd", "systemListChanged");
+        LogUtils.e("lsd", "systemListChanged");
         mAccessPoints.clear();
         if(scanResults != null){
             for(ScanResult scanResult : scanResults){
@@ -596,6 +596,7 @@ public class WifiMachine {
 
     private void dispatchListChanged(List<AccessPoint> aps){
         if (mListeners != null) {
+            LogUtils.e("lsd", "dddddd!!!!!!");
             ArrayList<IWifiListener> listeners = new ArrayList<IWifiListener>(mListeners);
             for (IWifiListener mListener : listeners) {
                 mListener.onListChanged(aps);

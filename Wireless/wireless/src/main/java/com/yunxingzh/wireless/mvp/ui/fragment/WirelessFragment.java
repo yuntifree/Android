@@ -217,9 +217,6 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
 
             FWManager.getInstance().addWifiObserver(wifiObserver);
             //获取屏幕宽高
-            if (getActivity() == null) {
-                return;
-            }
             wm = getActivity().getWindowManager();
             int width = wm.getDefaultDisplay().getWidth();//720,1536
             int height = wm.getDefaultDisplay().getHeight();//1280,2560
@@ -330,7 +327,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
                 }
             } else if (mMoreNewsLay == v) {//本地热点
                 MobclickAgent.onEvent(getActivity(), "Index_QR");
-               // EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
+                // EventBus.getDefault().post(new EventBusType(Constants.HEAD_LINE));
                 jumpHeadLine.jumpDgNews();
                 localClick = true;
             } /*else if (mMainWifiManager == v) {//wifi管理
@@ -444,13 +441,9 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
     private FWManager.WifiObserver wifiObserver = new FWManager.WifiObserver() {
         @Override
         public void onStateChanged(WifiState new_state, WifiState old_state) {
-            if (new_state == WifiState.CONNECTING) { // 连接中
-                if (isDGWifi()) {
-                    countTime();//连接东莞wifi倒计时
-                }
-            } else if (new_state == WifiState.CONNECTED) {  // 连上网
+            if (new_state == WifiState.CONNECTED) {  // 连上网
                 if (isAdded() && getActivity() != null && isDGWifi()) {
-                   // FWServiceManager.createInform(getActivity(), Constants.VALIDATE_FLAG);//连上东莞wifi后创建通知栏进行wifi认证
+                    // FWServiceManager.createInform(getActivity(), Constants.VALIDATE_FLAG);//连上东莞wifi后创建通知栏进行wifi认证
                     CheckAndLogon();
                 } else {
                     updateConnectState(true);
@@ -655,6 +648,7 @@ public class WirelessFragment extends BaseFragment implements IWirelessView, Vie
             if (!NetUtils.isWifi(getActivity())) {//true为已打开但未连接wifi
                 if (DGFreeAp != null) {//不为空表示周围有东莞wifi
                     FWManager.getInstance().connect(DGFreeAp);//先连接上wifi,再认证
+                    countTime();//连接东莞wifi倒计时
                 } else { // 4. 未联网，没有DG-Free：跳转到wifi地图
                     startActivity(WifiMapActivity.class, "", "", "", "");
                 }
