@@ -12,6 +12,8 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Looper;
 
+import com.yunxingzh.wireless.utils.LogUtils;
+
 import java.util.List;
 
 import rx.Observable;
@@ -129,6 +131,7 @@ public class WifiObservable{
                 final BroadcastReceiver receiver = new BroadcastReceiver(){
                     @Override
                     public void onReceive(Context ctx, Intent intent){
+                        LogUtils.e("lsd", "systemListCall");
                         subscriber.onNext(wifiManager.getScanResults());
                     }
                 };
