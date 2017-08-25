@@ -15,7 +15,7 @@
     <string name="json_parse_error">JSON解析错误</string>
 
     <string name="wireless">无线</string>
-    <string name="entertainment">娱乐</string>
+    <string name="entertainment">资讯</string>
     <string name="life">生活</string>
     <string name="buy">抢购</string>
     <string name="self">我</string>
@@ -159,6 +159,7 @@
     <string name="concect_dg_free">正在连接免费WiFi</string>
     <string name="concect_faild">亲,连接东莞无限超时哦,请重试</string>
     <string name="problem">反馈问题</string>
+    <string name="mine_point">我的积分</string>
     <string name="phone_num">客服热线</string>
     <string name="no_resource_text">网络请求失败，请检查你的网络</string>
     <string name="has_dgwifi">检测到免费WiFi热点</string>

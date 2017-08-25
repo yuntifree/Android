@@ -28,6 +28,7 @@ import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bumptech.glide.Glide;
+import com.dgwx.app.lib.common.util.StringUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
@@ -42,6 +43,7 @@ import com.yunxingzh.wireless.mvp.ui.activity.DefaultHeadImgActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.FeedBackActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.NickNameActivity;
 import com.yunxingzh.wireless.mvp.ui.activity.SetActivity;
+import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
 import com.yunxingzh.wireless.mvp.ui.base.BaseFragment;
 import com.yunxingzh.wireless.mvp.view.IMineView;
 import com.yunxingzh.wireless.utils.BitmapUtils;
@@ -55,8 +57,11 @@ import org.greenrobot.eventbus.Subscribe;
 import de.hdodenhof.circleimageview.CircleImageView;
 import wireless.libs.bean.vo.ImageTokenVo;
 import wireless.libs.bean.vo.ImageUploadVo;
+import wireless.libs.bean.vo.User;
 import wireless.libs.bean.vo.UserInfoVo;
 import wireless.libs.network.request.NetWorkWarpper;
+
+import static com.yunxingzh.wireless.config.Constants.URL_POINT;
 
 /**
  * Created by stephen on 2017/2/22.
@@ -76,7 +81,7 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
     private TextView mTitleNameTv, mMineNameTv, mMineContentTv;
     private CircleImageView mMineHeadIv;
     private IMinePresenter iMinePresenter;
-    private LinearLayout mMineFeedBackLay, mMineSetLay, mMinePhoneLay;
+    private LinearLayout mMineFeedBackLay, mMineSetLay, mMinePhoneLay, mMinePointLay;
 
     private String filePath;//相册选择的图片路径
     private ImageTokenVo imageTokenVo;
@@ -110,6 +115,8 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
         mMineContentTv = findView(view, R.id.mine_content_tv);
         mMinePhoneLay = findView(view, R.id.mine_phone_lay);
         mMinePhoneLay.setOnClickListener(this);
+        mMinePointLay = findView(view, R.id.mine_point_lay);
+        mMinePointLay.setOnClickListener(this);
     }
 
     public void initData() {
@@ -189,6 +196,15 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
                     }
                 });
                 alertView.show();
+            } else if (mMinePointLay == v) { // 我的积分
+                // webview
+                User user = MainApplication.get().getUser();
+                if (user != null) {
+                    String url = String.format(URL_POINT, user.uid, user.token);
+                    startActivity(WebViewActivity.class, Constants.URL, url, "", "");
+                } else {
+                    // 重新登录
+                }
             }
         }
     }
@@ -366,6 +382,15 @@ public class MineFragment extends BaseFragment implements IMineView, View.OnClic
         if (isAdded() && getActivity() != null) {
             Intent intent = new Intent(getActivity(), activity);
             intent.putExtra("nickName", value);
+            startActivity(intent);
+        }
+    }
+
+    public void startActivity(Class activity, String key, String value, String titleKey, String titleValue) {
+        if (isAdded() && getActivity() != null) {
+            Intent intent = new Intent(getActivity(), activity);
+            intent.putExtra(key, value);
+            intent.putExtra(titleKey, titleValue);
             startActivity(intent);
         }
     }

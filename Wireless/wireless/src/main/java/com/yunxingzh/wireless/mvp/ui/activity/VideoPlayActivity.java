@@ -82,14 +82,15 @@ public class VideoPlayActivity extends BaseActivity {
                 //super.onPageFinished(view, url);
                 //view.loadUrl("javascript:try{autoplay();}catch(e){}");
                 // 页面做了跳转，loadCount最后一次再注入脚本
-                loadCount++;
-                if (loadCount > 1) {
+                //loadCount++;
+                //if (loadCount > 1)
+                {
                     view.loadUrl("javascript:(function() { " +
+                            "document.getElementById('youkuplayer').style.height = document.documentElement.clientHeight + 'px';" +
                             "var videos = document.getElementsByTagName('video'); " +
                                 "for(var i=0;i<videos.length;i++){" +
-                                    "videos[i].play();" +
-                             "videos[i].addEventListener('ended', function () { JSHost.closeWindow(); }, false);"+
-                            "}" +
+                                   "videos[i].addEventListener('ended', function () { JSHost.closeWindow(); }, false);"+
+                                "}" +
                             "})()");
                 }
                 mProgressBar.setVisibility(View.GONE);

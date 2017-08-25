@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -192,7 +195,9 @@ public class HeadLineVideoFragment extends BaseFragment implements IHeadLineView
             headLineVideoAdapter.notifyDataSetChanged();
         }
         iWirelessPresenter.clickCount(item.id, CLICK_COUNT, "");//上报
-        startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, item.dst);
+        DisplayMetrics dm =getResources().getDisplayMetrics();
+        int w_screen = (int)(dm.widthPixels * 0.77);
+        startActivity(VideoPlayActivity.class, Constants.VIDEO_URL, item.dst + "&height="+w_screen+"px");
     }
 
     @Override

@@ -43,12 +43,12 @@ android {
     }
 
     compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.yunxingzh.wireless"
         minSdkVersion 17
         targetSdkVersion 22
-        versionName = "1.0.9"
+        versionName = "1.0.10"
         versionCode = 10
         ndk {
             abiFilters "armeabi-v7a" // 例如：abiFilter 'armeabi, x86'
