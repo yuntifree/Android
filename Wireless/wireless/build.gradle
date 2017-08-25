@@ -49,7 +49,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 22
         versionName = "1.0.10"
-        versionCode = 10
+        versionCode = 11
         ndk {
             abiFilters "armeabi-v7a" // 例如：abiFilter 'armeabi, x86'
         }
