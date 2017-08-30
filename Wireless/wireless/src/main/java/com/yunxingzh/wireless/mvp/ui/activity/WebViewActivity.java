@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.GeolocationPermissions;
@@ -89,6 +90,10 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
                     return true;
                 } else if (url.startsWith("sms:")) {
                     Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(url));
+                    startActivity(intent);
+                    return true;
+                } else if (url.startsWith("alipays:")) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                     return true;
                 }
