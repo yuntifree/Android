@@ -11,23 +11,20 @@
         layout="@layout/title_for_webview"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
-
     <ProgressBar
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:background="@drawable/progress_bg" />
-
+        android:background="@drawable/progress_bg"
+        android:visibility="gone"/>
     <FrameLayout
         android:id="@+id/over_lay"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </FrameLayout>
 </LinearLayout>

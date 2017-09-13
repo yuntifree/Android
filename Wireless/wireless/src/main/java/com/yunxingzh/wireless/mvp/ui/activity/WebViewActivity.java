@@ -2,6 +2,7 @@ package com.yunxingzh.wireless.mvp.ui.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -41,6 +43,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
     private String mTitle;
     private String advertFlag;
     private View mWebLine;
+    private Boolean mFixTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         mUrl = getIntent().getStringExtra(Constants.URL);
         mTitle = getIntent().getStringExtra(Constants.TITLE);
         advertFlag = getIntent().getStringExtra(Constants.ADVERT_FLAG);
+        mFixTitle = getIntent().getBooleanExtra(Constants.FIX_TITLE, false);
         if (!StringUtils.isEmpty(mTitle)) {
             mTitleNameTv.setText(mTitle);
         }
@@ -77,27 +81,17 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         settings.setDomStorageEnabled(true);
 
         myWebView.setWebViewClient(new WebViewClient() {
-//            @Override
-//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-//                return false;
-//            }
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    return parseSelfSchema(request.getUrl().toString());
+                }
+                return false;
+            }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith("tel:")) {//调起系统拨打电话和发送短信
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
-                    startActivity(intent);
-                    return true;
-                } else if (url.startsWith("sms:")) {
-                    Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(url));
-                    startActivity(intent);
-                    return true;
-                } else if (url.startsWith("alipays:")) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(intent);
-                    return true;
-                }
-                return false;
+                return parseSelfSchema(url);
             }
 
             @Override
@@ -128,6 +122,8 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
+                if (mFixTitle) return;
+
                 if (!StringUtils.isEmpty(title)) {
                     mTitle = title;
                     mTitleNameTv.setText(title);
@@ -139,9 +135,9 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (newProgress == 100) {//进度100
-                    myProgressBar.setVisibility(View.INVISIBLE);
+                    myProgressBar.setVisibility(View.GONE);
                 } else {
-                    if (View.INVISIBLE == myProgressBar.getVisibility()) {
+                    if (View.GONE == myProgressBar.getVisibility()) {
                         myProgressBar.setVisibility(View.VISIBLE);
                     }
                     myProgressBar.setProgress(newProgress);
@@ -151,6 +147,23 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         });
 
         myWebView.loadUrl(mUrl);
+    }
+
+    public boolean parseSelfSchema(String url) {
+        if (url.startsWith("tel:")) {//调起系统拨打电话和发送短信
+            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(url));
+            startActivity(intent);
+            return true;
+        } else if (url.startsWith("sms:")) {
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse(url));
+            startActivity(intent);
+            return true;
+        } else if (url.startsWith("alipays:")) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -177,6 +190,7 @@ public class WebViewActivity extends BaseActivity implements View.OnClickListene
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
             if (keyCode == KeyEvent.KEYCODE_BACK && myWebView.canGoBack()) {
+                myWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
                 myWebView.goBack(); // goBack()表示返回WebView的上一页面
             } else {
                 if (!StringUtils.isEmpty(advertFlag)) {

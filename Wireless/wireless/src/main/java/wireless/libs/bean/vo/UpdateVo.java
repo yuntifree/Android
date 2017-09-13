@@ -7,4 +7,6 @@ package wireless.libs.bean.vo;
 public class UpdateVo {
     public String version;
     public String downurl;
+    public String title;
+    public String desc;
 }

@@ -50,6 +50,18 @@
             android:textSize="12sp" />
 
         <RadioButton
+            android:id="@+id/shop_radio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/main_class_img_radio5_selector"
+            android:gravity="center"
+            android:text="@string/shop"
+            android:textColor="@drawable/main_class_text_selector"
+            android:textSize="12sp" />
+
+        <RadioButton
             android:id="@+id/service_radio"
             android:layout_width="0dp"
             android:layout_height="match_parent"

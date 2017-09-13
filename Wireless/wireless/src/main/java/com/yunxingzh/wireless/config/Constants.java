@@ -32,6 +32,7 @@ public class Constants {
     public static final String ADVERT_URL = "advertUrl";
     public static final String ADVERT_DATE = "advertDate";
     public static final String ADVERT_FLAG = "advertFlag";
+    public static final String FIX_TITLE = "fixTitle";
 
 
     //eventBus flag
@@ -89,6 +90,7 @@ public class Constants {
     public static final String ABOUT_US = "http://yunxingzh.com/app/about.html";//关于我们
     public static final String LIVE_NUM = "http://h.huajiao.com/l/index?liveid=";//直播间
     public static final String URL_POINT = "http://api.yunxingzh.com/app/mall.html?uid=%d&token=%s";
+    public static final String URL_SHOP = "http://api.yunxingzh.com/app/malllist.html?name=malllist&uid=%d&token=%s&ts=%d";
 
 
     // fragment flag
@@ -97,6 +99,7 @@ public class Constants {
     public static final int HEADLINE_FLAG = 2;//头条
     public static final int SERVICE_FLAG = 3;//服务
     public static final int MINE_FLAG = 4;//我
+    public static final int SHOP_FLAG = 5;// 商城
 
     //我flag
     public static final int HEAD_IMG_FLAG = 1;//更换头像flag

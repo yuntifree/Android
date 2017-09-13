@@ -25,5 +25,9 @@ public class WebViewUtil {
         webSettings.setLoadWithOverviewMode(true);// 和setUseWideViewPort(true)一起解决网页自适应问题
         webSettings.setAppCacheEnabled(true);// 是否使用缓存
         webSettings.setDomStorageEnabled(true);// DOM Storage
+        android.webkit.CookieManager.getInstance().setAcceptCookie(true);
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            android.webkit.CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+        }
     }
 }

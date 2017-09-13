@@ -268,7 +268,7 @@ public class HttpUtils {
                     parseUrl(agr);
                     result= 2;
                 }
-            } else if (code >= 200 && code < 300) {//可以上网，无须认证
+            } else if (code >= 200 && code < 300 || code == 405) {//可以上网，无须认证
                 result = 1;
             }
         } catch (MalformedURLException e) {

@@ -209,7 +209,7 @@ public class NetWorkWarpper {
      * 东莞wifi--checkEnv:检查网络状况
      */
     public static int checkEnv() {
-        String path = "http://www.baidu.com";
+        String path = "http://apps.bdimg.com/favicon.ico";
         //String path = "http://xw.qq.com/index.html";
         //String path = "http://captive.apple.com/hotspot-detect.html";
         //String path = "http://120.76.236.185/portal?wlanacname=100&wlanuserip=lisi&ssid=100&wlanacip=100";

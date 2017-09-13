@@ -6,24 +6,50 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@drawable/img_bg_update"
-    android:padding="10dp">
+    android:paddingLeft="17dp"
+    android:paddingRight="17dp">
 
     <TextView
         android:id="@+id/version_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="95dp"
-        android:layout_marginLeft="10dp"
-        android:textSize="14sp"
-        android:textColor="@color/blue_009CFB"
-        android:text="v1.1"/>
+        android:layout_marginTop="102dp"
+        android:textSize="15sp"
+        android:textColor="@color/gray_5A5A5A"
+        android:textStyle="bold"
+        android:text="【新内容】"/>
+    <TextView
+        android:id="@+id/version_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:layout_marginLeft="22dp"
+        android:textStyle="bold"
+        android:textColor="@color/gray_5A5A5A"
+        android:text="*东莞无限商城"/>
+
+    <TextView
+        android:id="@+id/version_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="6dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
+        android:textSize="15sp"
+        android:textColor="@color/gray_5A5A5A"
+        android:ellipsize="none"
+        android:maxLines="100"
+        android:scrollHorizontally="false"
+        android:text="更新即可用积分领取的优惠券在零食商城买买买啦！"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
         <TextView

@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.Text;
 import com.yunxingzh.wireless.R;
 import com.yunxingzh.wireless.config.Constants;
 import com.yunxingzh.wireless.mvp.ui.activity.WebViewActivity;
+import com.yunxingzh.wireless.utils.StringUtils;
 
 import wireless.libs.bean.vo.UpdateVo;
 
@@ -21,7 +23,7 @@ import wireless.libs.bean.vo.UpdateVo;
 
 public class CheckUpdateDialog extends Dialog {
     private Context context;
-    private TextView mUpdateQueryTv, mUpdateCancelTv, mVersionTv;
+    private TextView mUpdateQueryTv, mUpdateCancelTv, mTitleTv, mDescTv;
     private UpdateVo updateVo;
 
     public CheckUpdateDialog(Context context, UpdateVo updateVo) {
@@ -34,9 +36,15 @@ public class CheckUpdateDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_check_update);
-        mVersionTv = (TextView)findViewById(R.id.version_tv);
-        if (updateVo != null) {
-            mVersionTv.setText(updateVo.version.toString());
+        mTitleTv = (TextView)findViewById(R.id.version_title);
+        mDescTv = (TextView)findViewById(R.id.version_desc);
+        if (this.updateVo != null) {
+            if (!StringUtils.isEmpty(this.updateVo.title)) {
+                mTitleTv.setText(this.updateVo.title);
+            }
+            if (!StringUtils.isEmpty(this.updateVo.desc)) {
+                mDescTv.setText(this.updateVo.desc);
+            }
         }
         mUpdateCancelTv = (TextView)findViewById(R.id.update_cancel_tv);
         mUpdateCancelTv.setOnClickListener(buttonDialogListener);

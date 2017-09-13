@@ -11,6 +11,9 @@ def Properties mVersionProps = getVersionProperty();
  */
 def mVersionName = buildRelease() ? mVersionProps['VERSION_NAME'] : "build_" + buildTime('yyyyMMdd')
 
+def mVersion =  mVersionProps[buildRelease() ? 'VERSION_NAME' : 'DEBUG_NAME']
+def mVersionCode = Integer.parseInt(mVersionProps[buildRelease() ? 'VERSION_CODE' : 'DEBUG_CODE'])
+
 /**
  * 输出目录
  */
@@ -48,8 +51,8 @@ android {
         applicationId "com.yunxingzh.wireless"
         minSdkVersion 17
         targetSdkVersion 22
-        versionName = "1.0.10"
-        versionCode = 11
+        versionName = mVersion
+        versionCode = mVersionCode
         ndk {
             abiFilters "armeabi-v7a" // 例如：abiFilter 'armeabi, x86'
         }

@@ -27,6 +27,7 @@ import com.yunxingzh.wireless.mvp.ui.base.BaseActivity;
 import com.yunxingzh.wireless.mvp.ui.fragment.HeadLineFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.MineFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.ServiceFragment;
+import com.yunxingzh.wireless.mvp.ui.fragment.WebViewFragment;
 import com.yunxingzh.wireless.mvp.ui.fragment.WirelessFragment;
 import com.yunxingzh.wireless.mvp.view.IGetAdvertView;
 import com.yunxingzh.wireless.utils.FileUtil;
@@ -41,6 +42,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Time;
+import java.util.Calendar;
 
 import wireless.libs.bean.vo.AdvertVo;
 import wireless.libs.bean.vo.UpdateVo;
@@ -60,10 +63,11 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private ServiceFragment serviceFragment;
     private WirelessFragment wirelessFragment;
     private MineFragment mineFragment;
+    private WebViewFragment shopFragment;
     private Fragment currentFragment;
     private FragmentManager fragmentManager;
     private long exitTime = 0;
-    private RadioButton mHeadLineRadio, mWirelessRadio, mServiceRadio, mMineRadio;
+    private RadioButton mHeadLineRadio, mWirelessRadio, mServiceRadio, mMineRadio, mShopRadio;
     private GetAdvertPresenterImpl getAdvertPresenter;
 
     private String url;
@@ -111,6 +115,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         mWirelessRadio = findView(R.id.wireless_radio);
         mServiceRadio = findView(R.id.service_radio);
         mMineRadio = findView(R.id.stretch_radio);
+        mShopRadio = findView(R.id.shop_radio);
     }
 
     public void initData() {
@@ -175,6 +180,27 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 getStatusBarColor(R.color.blue_009CFB);
                 Constants.FRAGMENT = Constants.MINE_FLAG;
                 showFragment(mineFragment);//我
+                break;
+            case R.id.shop_radio:
+                MobclickAgent.onEvent(this, "tab_shop");
+                if (shopFragment == null) {
+                    shopFragment = new WebViewFragment();
+                    Bundle bundle = new Bundle();
+                    User user = MainApplication.get().getUser();
+                    if (user != null) {
+                        Calendar rightNow = Calendar.getInstance();
+                        String uri = String.format(Constants.URL_SHOP, user.uid, user.token, rightNow.getTimeInMillis());
+                        bundle.putString(Constants.URL, uri);
+                        bundle.putString(Constants.TITLE, "无限商城");
+                        bundle.putBoolean("noBack", true);
+                    }
+                    shopFragment.setArguments(bundle);
+                }
+                getStatusBarColor(R.color.blue_009CFB);
+                Constants.FRAGMENT = Constants.SHOP_FLAG;
+                showFragment(shopFragment);//shop
+                break;
+            default:
                 break;
         }
     }
@@ -248,6 +274,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 break;
             case Constants.MINE_FLAG:
                 mMineRadio.setChecked(true);
+                break;
+            case Constants.SHOP_FLAG:
+                mShopRadio.setChecked(true);
                 break;
             default:
                 mWirelessRadio.setChecked(true);
